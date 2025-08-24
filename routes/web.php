@@ -45,3 +45,11 @@ Route::get('/access-denied', function () {
 Route::get('/debug-log', function () {
     return nl2br(file_get_contents(storage_path('logs/laravel.log')));
 });
+Route::get('/db-test', function () {
+    try {
+        DB::connection()->getPdo();
+        return 'DB connection OK';
+    } catch (\Exception $e) {
+        return 'DB connection failed: ' . $e->getMessage();
+    }
+});
