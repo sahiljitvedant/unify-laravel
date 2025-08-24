@@ -89,7 +89,7 @@ $(document).ready(function () {
 
 
             previousRequest = $.ajax({
-                url: '{{ route("login_post") }}',
+                url: '{{ url("/login") }}',
                 type: 'POST',
                 data: formData,
                 processData: false,
