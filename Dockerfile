@@ -28,6 +28,12 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
+# Clear Laravel caches so it picks up environment variables
+RUN php artisan config:clear
+RUN php artisan cache:clear
+RUN php artisan route:clear
+
+
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
