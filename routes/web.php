@@ -23,23 +23,25 @@ Route::get('/access-denied', function () {
 
 
 
-Route::middleware(['auth.custom', 'session.timeout'])->group(function () 
-{
+// Route::middleware(['auth.custom', 'session.timeout'])->group(function () 
+// {
  
     Route::get('/list_member', [GymPackageController::class, 'list'])->name('list_member');
     Route::get('/add_member', [GymPackageController::class, 'add'])->name('add_member');
     Route::get('/edit_member/{id}', [GymPackageController::class, 'edit'])->name('edit_package');
    
-    Route::middleware(['web'])->group(function () 
-    {
+    // Route::middleware(['web'])->group(function () 
+    // {
         Route::post('/stepper-submit', [GymPackageController::class, 'submit'])->name('stepper.submit');
         Route::post('/stepper-update/{id}', [GymPackageController::class, 'update'])->name('stepper.update');
         Route::get('/members/fetch', [GymPackageController::class, 'fetchMemberList'])
         ->name('fetch_member_list');
-    });
-
+    // });
 
    
+   
+// });
+
+Route::get('/debug-log', function () {
+    return nl2br(file_get_contents(storage_path('logs/laravel.log')));
 });
-
-
