@@ -19,6 +19,9 @@ RUN a2enmod rewrite
 # Copy project files
 COPY . .
 
+# Set Apache document root to Laravel's public folder
+RUN sed -i 's#/var/www/html#/var/www/html/public#g' /etc/apache2/sites-available/000-default.conf
+
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
