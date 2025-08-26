@@ -28,7 +28,7 @@
             margin: 0;
             padding: 0;
             font-family: 'Inter', sans-serif;
-            background-color: #f5f6f8;
+            background-color: #e3e3e3;
         }
 
         .topbar {
@@ -52,7 +52,7 @@
             left: 0;
             width: 220px;
             height: calc(100% - 60px);
-            background-color: #f8f9fa;
+            background-color: #0B1061;
             border-right: 1px solid #ddd;
             padding-top: 20px;
             transition: transform 0.3s ease;
@@ -62,12 +62,16 @@
         .sidebar a {
             padding: 10px 20px;
             display: block;
-            color: #333;
+            color: #ffffff;
             text-decoration: none;
+            border-radius: 6px;
+            margin: 4px 10px;
+            transition: background-color 0.4s ease; /* smooth only bg color */
         }
 
         .sidebar a:hover {
-            background-color: #e9ecef;
+            background-color: rgba(255, 255, 255, 0.15); /* hover effect */
+            color: #fff;
         }
 
         #mainContent {
@@ -102,8 +106,8 @@
         }
 
         table.dataTable th {
-            background: #f8f9fa;
-            color: #333;
+            background: #0B1061;
+            color: #fff;
             font-weight: 600;
             padding: 12px;
             text-align: left;
@@ -135,7 +139,7 @@
             display: flex;
             align-items: center;
             font-size: 14px;
-            padding: 6px 12px;
+            padding: 0px 0px;
             transition: 0.2s;
         }
 
@@ -166,10 +170,10 @@
 
         /* Pagination styling */
         .dataTables_wrapper .dataTables_paginate .paginate_button {
-            padding: 6px 12px;
+            padding: 0px 0px;
             margin: 0 2px;
             border-radius: 6px;
-            background: #f8f9fa;
+            background: #ddd;
             border: 1px solid #ddd;
             color: #333 !important;
         }

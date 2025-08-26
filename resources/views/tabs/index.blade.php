@@ -24,7 +24,7 @@
     body {
         display: block !important;   /* stop flex centering */
     padding: 0;                  /* let your layout handle spacing */
-    background: #f8f9fa;         /* same base as other page */
+    background: #0B1061;         /* same base as other page */
     color: #212529;
     }
 
@@ -36,7 +36,7 @@
     border-radius: 8px;
     box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
     margin: 0 auto;
-    background: #f8f9fa;  /* same as .bg-light */
+    background: #0B1061;  /* same as .bg-light */
     padding: 1.5rem;      /* same as p-4 */
     border-radius: 0.375rem; /* same as .rounded */
     box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15); /* same as .shadow */
@@ -73,7 +73,7 @@
 
     /* Content box */
     .tab-content {
-        background: #f8f9fa;
+        background: #0B1061;
         padding: 20px;
         border-radius: 6px;
         border: 1px solid #dee2e6;

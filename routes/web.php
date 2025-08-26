@@ -46,9 +46,6 @@ Route::middleware(['auth.custom', 'session.timeout'])->group(function ()
 
         Route::post('/add_membership', [GymMembershipController::class, 'submit'])->name('add_membership');
     });
-
-   
-   
 });
 
 Route::get('/debug-log', function () {

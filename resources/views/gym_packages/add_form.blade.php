@@ -131,11 +131,11 @@
         <div class="row g-3">
             <div class="col-md-6 col-12">
                 <label class="form-label">{{ __('global.membership_type_label') }}</label>
-                <select class="form-select" name="membership_type" id="membership_type">
+                <select class="form-select" name="membership_type" id="membership_type" required>
                     <option selected disabled>{{ __('global.select_option') }}</option>
-                    <option value="basic">{{ __('global.basic') }}</option>
-                    <option value="premium">{{ __('global.premium') }}</option>
-                    <option value="vip">{{ __('global.vip') }}</option>
+                    @foreach($memberships as $id => $name)
+                        <option value="{{ $id }}">{{ $name }}</option>
+                    @endforeach
                 </select>
                 <div class="text-danger error-message" data-error-for="membership_type"></div>
             </div>

@@ -35,7 +35,11 @@ class GymPackageController extends Controller
     
     public function add()
     {
-        return view('gym_packages.add_form');
+        $memberships = DB::table('tbl_gym_membership')
+        ->where('is_active', 1)
+        ->pluck('membership_name', 'id'); 
+
+        return view('gym_packages.add_form', compact('memberships'));
     }
 
     public function submit(Request $request)
@@ -59,7 +63,7 @@ class GymPackageController extends Controller
             'state' => 'required|string',
             'country' => 'required|string',
     
-            'membership_type' => 'required|string',
+            'membership_type' => 'required|int',
             'joining_date' => 'required|date',
             'expiry_date' => 'required|date',
             'amount_paid' => 'required|numeric',
