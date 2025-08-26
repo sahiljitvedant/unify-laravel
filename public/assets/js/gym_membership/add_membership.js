@@ -1,0 +1,119 @@
+// Validation Rules
+const validationRules = {
+    membership_name: { required: true },
+    description: { required: true },
+    duration_in_days: { required: true, number: true },
+    price: { required: true, number: true },
+    trainer_included: { required: true },
+    facilities_included: { required: true },
+    is_active: { required: true }
+};
+
+// Validation Messages
+const validationMessages = {
+    membership_name: { required: "Membership name is required" },
+    description: { required: "Description is required" },
+    duration_in_days: { 
+        required: "Duration is required", 
+        number: "Duration must be numeric" 
+    },
+    price: { 
+        required: "Price is required", 
+        number: "Price must be numeric" 
+    },
+    trainer_included: { required: "Please select if trainer included" },
+    facilities_included: { required: "Facilities are required" },
+    is_active: { required: "Please select status" }
+};
+
+
+// Validate all form fields
+function validateForm() 
+{
+    let isValid = true;
+
+    // Clear previous errors
+    $('.error-message').text('');
+
+    $('#gym_member_add_form :input').each(function () {
+        const name = $(this).attr('name');
+        const value = $(this).val();
+        const rules = validationRules[name];
+        const messages = validationMessages[name];
+        const errorDiv = $(`.error-message[data-error-for="${name}"]`);
+
+        if (!rules) return true; // skip if no rules
+
+        // Required check
+        if (rules.required && (!value || value.trim() === '')) {
+            errorDiv.text(messages.required);
+            isValid = false;
+            return;
+        }
+
+        // Number check
+        if (rules.number && value && isNaN(value)) {
+            errorDiv.text(messages.number);
+            isValid = false;
+            return;
+        }
+    });
+
+    return isValid;
+}
+
+// Image preview
+$('#profileImage').on('change', function (e) 
+{
+    const file = e.target.files[0];
+    if (file) {
+        $('#previewImage').attr('src', URL.createObjectURL(file));
+    }
+});
+
+// Submit button
+$('#submitBtn').on('click', function (e) {
+    // alert(1);
+    e.preventDefault();
+   
+    if (!validateForm()) return;
+
+    let formData = new FormData($('#gym_member_add_form')[0]);
+
+    $.ajax({
+        url: stepperSubmitUrl,
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (response) {
+            alert('Success: ' + response);
+        },
+        error: function (xhr) {
+            console.log(xhr.status);
+            console.log(xhr.responseText);
+            alert("An error occurred. Check console for details.");
+        }
+    });
+});
+
+// Live error removal
+$('#gym_member_add_form :input').on('input change', function () {
+    const name = $(this).attr('name');
+    const value = $(this).val();
+    const rules = validationRules[name];
+    const messages = validationMessages[name];
+    const errorDiv = $(`.error-message[data-error-for="${name}"]`);
+
+    if (!rules) return true;
+
+    let valid = true;
+
+    if (rules.required && (!value || value.trim() === '')) valid = false;
+    if (rules.number && value && isNaN(value)) valid = false;
+
+    if (valid) errorDiv.text('');
+});

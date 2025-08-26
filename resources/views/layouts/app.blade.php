@@ -17,12 +17,17 @@
     <link href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/searchpanes/2.2.0/css/searchPanes.bootstrap5.min.css" rel="stylesheet" />
 
+    <!-- Font librry -->
+<!-- Google Fonts: Inter -->
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <!-- Custom CSS -->
     <style>
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Inter', sans-serif;
             background-color: #f5f6f8;
         }
 
@@ -213,8 +218,28 @@
 
         <!-- Sidebar -->
         <div id="sidebar" class="sidebar d-lg-block">
-            <a href="#"><i class="fas fa-home me-2"></i>Dashboard</a>
-            <a href="#"><i class="fas fa-users me-2"></i>Users</a>
+            <a href="#">
+                <i class="fas fa-home me-2"></i>
+                Dashboard
+            </a>
+            <a href="{{ route('list_member') }}"><i class="fas fa-users me-2"></i>Members</a>
+            <a class="d-flex justify-content-between align-items-center" 
+            data-bs-toggle="collapse" 
+            href="#modulesDropdown" 
+            role="button" 
+            aria-expanded="false" 
+            aria-controls="modulesDropdown">
+            <span><i class="fas fa-layer-group me-2"></i>Modules</span><i class="fas fa-chevron-down small"></i>
+            </a>
+            <div class="collapse ps-4" id="modulesDropdown">
+                <a href="#" class="d-block py-1">
+                    <i class="fas fa-id-card me-2"></i>Membership
+                </a>
+                <a href="#" class="d-block py-1">
+                    <i class="fas fa-user-tie me-2"></i>Trainer
+                </a>
+            </div>
+
             <a href="#"><i class="fas fa-cogs me-2"></i>Settings</a>
             <a href="{{ route('logout') }}">
                 <i class="fas fa-sign-out-alt me-2"></i>Logout

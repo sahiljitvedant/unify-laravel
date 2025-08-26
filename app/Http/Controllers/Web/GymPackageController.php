@@ -18,20 +18,20 @@ class GymPackageController extends Controller
     }
 
     public function fetchMemberList(Request $request)
-{
-    // ONE variable that fetches everything you need
-    $fetch_data = DB::table('tbl_gym_members')
-        ->select('id','membership_type','joining_date','expiry_date','amount_paid','payment_method','trainer_assigned');
+    {
+        // ONE variable that fetches everything you need
+        $fetch_data = DB::table('tbl_gym_members')
+            ->select('id','membership_type','joining_date','expiry_date','amount_paid','payment_method','trainer_assigned');
 
-    // Send to DataTables (server-side)
-    return DataTables::of($fetch_data)
-        ->addColumn('action', function ($row) {
-            return '<a href="/members/edit/'.$row->id.'" class="btn btn-sm btn-primary">Edit</a>
-                    <a href="/members/delete/'.$row->id.'" class="btn btn-sm btn-danger">Delete</a>';
-        })
-        ->rawColumns(['action'])
-        ->make(true);
-}
+        // Send to DataTables (server-side)
+        return DataTables::of($fetch_data)
+            ->addColumn('action', function ($row) {
+                return '<a href="/members/edit/'.$row->id.'" class="btn btn-sm btn-primary">Edit</a>
+                        <a href="/members/delete/'.$row->id.'" class="btn btn-sm btn-danger">Delete</a>';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
     
     public function add()
     {
@@ -40,6 +40,7 @@ class GymPackageController extends Controller
 
     public function submit(Request $request)
     {
+        // dd($request->all());
         // Validation rules
         $arr_rules = 
         [

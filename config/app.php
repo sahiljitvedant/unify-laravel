@@ -185,4 +185,19 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+
+    'gender_options' => [
+        1 => 'male',
+        2 => 'female',
+        3 => 'other',
+    ],
+
+    'facilities'=> [
+        1 => 'Cardio',
+        2 => 'Zumba',
+        3 => 'Yoga',
+        4 => 'Steam Bath',
+    ],
+    
+
 ];
