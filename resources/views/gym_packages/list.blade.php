@@ -39,6 +39,7 @@
         ({
             processing: true,
             serverSide: true,
+            searching: false,
             ajax: function (requestData, callback) 
             {
                 $.ajax

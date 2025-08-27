@@ -34,7 +34,7 @@ Route::middleware(['auth.custom', 'session.timeout'])->group(function ()
     Route::get('/edit_member/{id}', [GymPackageController::class, 'edit'])->name('edit_package');
 
     // Membersip Route:-
-    Route::get('/list_membership', [GymPackageController::class, 'list'])->name('list_member');
+    Route::get('/list_membership', [GymMembershipController::class, 'list'])->name('list_membership');
     Route::get('/add_membership', [GymMembershipController::class, 'add'])->name('add_membership');
    
     Route::middleware(['web'])->group(function () 
@@ -45,6 +45,8 @@ Route::middleware(['auth.custom', 'session.timeout'])->group(function ()
         ->name('fetch_member_list');
 
         Route::post('/add_membership', [GymMembershipController::class, 'submit'])->name('add_membership');
+        Route::get('/fetch_membership', [GymMembershipController::class, 'fetchMembership'])
+        ->name('fetch_membership');
     });
 });
 

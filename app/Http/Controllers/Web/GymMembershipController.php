@@ -15,9 +15,10 @@ class GymMembershipController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function list()
     {
-        //
+        return view('gym_membership.list_membership');
+       
     }
 
     /**
@@ -29,6 +30,28 @@ class GymMembershipController extends Controller
         return view('gym_membership.add_form');
     }
 
+    public function fetchMembership(Request $request)
+    {
+        // dd(1);
+        // ONE variable that fetches everything you need
+        $fetch_data = DB::table('tbl_gym_membership')
+            ->select('*')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        // Send to DataTables (server-side)
+        return DataTables::of($fetch_data)
+            ->addColumn('action', function ($row) {
+                return ' <a href="/members/edit/'.$row->id.'" class="btn btn-sm" data-bs-toggle="tooltip" title="Edit">
+                <i class="bi bi-pencil-square"></i>
+            </a>
+            <a href="/members/delete/'.$row->id.'" class="btn btn-sm" data-bs-toggle="tooltip" title="Delete">
+                <i class="bi bi-trash"></i>
+            </a>';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
     public function submit(Request $request)
     {
         // dd($request->all());

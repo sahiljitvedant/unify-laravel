@@ -21,6 +21,7 @@
 <!-- Google Fonts: Inter -->
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
     <!-- Custom CSS -->
     <style>
@@ -203,6 +204,126 @@
         .badge-deleted {
             background-color: #dc3545;
         }
+
+        .form-label 
+        {
+            font-size: 14px;     
+            font-weight: 500;     
+            color: #333;          
+            margin-bottom: 4px;  
+          
+        }
+        .form-control::placeholder 
+        {
+            font-size: 13px; 
+            color: #777;     
+            opacity: 1;      
+        }
+        .error-message
+        {
+            font-size: 14px;     
+            font-weight: 500; 
+        }
+        .form-label.required::after {
+            content: "*";
+            color: #d32f2f;   /* light red shade */
+            font-size: 0.85em; /* slightly smaller than label text */
+            font-weight: normal; /* not bold */
+        
+        }
+        #submitBtn
+        {
+            background-color: #0B1061;
+            color: #ffffff;
+        }
+        .btn-add
+        {
+            background-color: #0B1061;
+            color: #ffffff;
+            border-radius: 8px;   /* rounded corners */
+            padding: 6px 16px;    /* optional: better spacing */
+            border: none; 
+            text-decoration: none;
+        }
+        .form-label {
+            font-size: 14px;     
+            font-weight: 500;     
+            color: #333;          
+            margin-bottom: 4px;  
+        }
+
+        .form-label.required::after {
+            content: " *";
+            color: #d32f2f;     /* medium-dark red */
+            font-size: 0.85em;  /* smaller than label */
+            font-weight: normal;
+        }
+
+        .form-select {
+            font-size: 13px;           /* font size */
+            color: #0B1061;            /* text color */
+            background-color: #fff;    /* dropdown background */
+        
+        }
+        .form-select option {
+            color: #0B1061;   /* text color of options */
+            background-color: #fff; /* background of options */
+        }
+        /* Container for breadcrumb + form */
+        .container-custom {
+            max-width: 95%;
+            margin: 0 auto;
+        }
+
+        /* Remove all default ol padding/margin */
+        .breadcrumb {
+            background-color: transparent;
+            padding: 0;
+            margin-bottom: 1rem;
+            font-size: 13px;
+            font-weight: 500;
+            color: #0B1061;
+        }
+
+        /* Remove left margin/padding from ol and li to align with form */
+        .breadcrumb ol {
+            padding-left: 0;
+            margin-left: 0;
+        }
+
+        .breadcrumb-item {
+            padding: 0;   /* remove default li padding */
+            margin: 0;    /* remove default li margin */
+        }
+
+        /* Links */
+        .breadcrumb a {
+            color: #0B1061;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Active item */
+        .breadcrumb-item.active {
+            color: #0B1061;
+            font-weight: 600;
+        }
+
+        #members-table td,
+        #members-table th {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        /* Smaller font for table header */
+        #members-table thead th {
+            font-size: 12px;  /* adjust as needed */
+            font-weight: 500; /* optional: make header slightly bold */
+        }
+
     </style>
 </head>
 
@@ -236,7 +357,7 @@
             <span><i class="fas fa-layer-group me-2"></i>Modules</span><i class="fas fa-chevron-down small"></i>
             </a>
             <div class="collapse ps-4" id="modulesDropdown">
-                <a href="#" class="d-block py-1">
+                <a href="{{ route('list_membership') }}" class="d-block py-1">
                     <i class="fas fa-id-card me-2"></i>Membership
                 </a>
                 <a href="#" class="d-block py-1">
