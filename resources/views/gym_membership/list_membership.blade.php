@@ -7,7 +7,7 @@
     <!-- Heading + Add Button -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
         <h4 class="mb-0">Membership</h4>
-        <a href="" class="btn-add">Add Membership</a>
+        <a  href="{{ route('add_membership') }}" class="btn-add">Add Membership</a>
     </div>
 
     <!-- Table -->
