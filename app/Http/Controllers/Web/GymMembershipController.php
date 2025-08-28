@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables; 
+use Illuminate\Support\Facades\Crypt;
 
 class GymMembershipController extends Controller
 {
@@ -33,11 +34,12 @@ class GymMembershipController extends Controller
         return DataTables::of($fetch_data)
             ->addColumn('action', function ($row) 
             {
+                $encryptedId = Crypt::encryptString($row->id);
                 return ' 
-                <a href="'.route('edit_membership', $row->id).'" class="btn btn-sm" data-bs-toggle="tooltip" title="Edit">
+                <a href="'.route('edit_membership', $encryptedId).'" class="btn btn-sm" data-bs-toggle="tooltip" title="Edit">
                     <i class="bi bi-pencil-square"></i>
                 </a>
-                <button type="button" class="btn btn-sm text-danger" onclick="deleteMembershipById('.$row->id.')">
+                <button type="button" class="btn btn-sm" onclick="deleteMembershipById('.$row->id.')">
                     <i class="bi bi-trash"></i>
                 </button>';
             })
@@ -45,6 +47,37 @@ class GymMembershipController extends Controller
             ->make(true);
     }
 
+    public function list_deleted_membership()
+    {
+        return view('gym_membership.list_deleted_membership');
+
+    }
+
+    public function fetch_deleted_membership(Request $request)
+    {
+        // dd(1);
+        // ONE variable that fetches everything you need
+        $fetch_data = DB::table('tbl_gym_membership')
+            ->select('*')
+            ->where('is_deleted', '=', 9) 
+            ->orderBy('id', 'desc')
+            ->get();
+
+        // Send to DataTables (server-side)
+        return DataTables::of($fetch_data)
+            ->addColumn('action', function ($row) 
+            {
+                $encryptedId = Crypt::encryptString($row->id);
+                return ' 
+                
+                <button type="button" class="btn btn-sm" onclick="activateMembershipID('.$row->id.')">
+                <i class="bi bi-check-circle"></i>
+
+                </button>';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
     public function add()
     {
         // dd(1);
@@ -150,8 +183,15 @@ class GymMembershipController extends Controller
 
     public function edit($id)
     {
+
+        // dd($id);
         // dd('This is edit page');
-        $member = DB::table('tbl_gym_membership')->where('id', $id)->first();
+
+        // dd($id);
+
+        $decryptedId = Crypt::decryptString($id);
+        // dd($decryptedId);
+        $member = DB::table('tbl_gym_membership')->where('id', $decryptedId)->first();
 
         if (!$member) {
             abort(404, 'Member not found');
@@ -198,23 +238,45 @@ class GymMembershipController extends Controller
             return response()->json(['success' => true, 'message' => 'Membership updated successfully!']);
         } 
         catch (\Illuminate\Validation\ValidationException $e) 
-    {
-        // Return validation errors as JSON
-        return response()->json([
-            'success' => false, 
-            'errors'  => $e->errors()
-        ], 422);
-    }
-    catch (\Exception $e) 
-    {
-        return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
-    }
+        {
+            // Return validation errors as JSON
+            return response()->json([
+                'success' => false, 
+                'errors'  => $e->errors()
+            ], 422);
+        }
+        catch (\Exception $e) 
+        {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
         catch (\Exception $e) 
         {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
     
+
+    public function activate_membership($id)
+    {
+        // dd(1);
+        $membership = DB::table('tbl_gym_membership')->where('id', $id)->first();
+        // dd($membership);
+        if (!$membership) 
+        {
+            return response()->json(['status' => false, 'message' => 'Membership not found'], 404);
+        }
+
+        DB::table('tbl_gym_membership')
+        ->where('id', $id)
+        ->update([
+            'is_deleted' => 1,  
+        ]);
+        return response()->json
+        ([
+            'status' => true,
+            'message' => 'Membership activated successfully'
+        ]);
+    }
 
       
 }

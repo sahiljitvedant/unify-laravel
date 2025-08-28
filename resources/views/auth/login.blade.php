@@ -60,55 +60,65 @@
     };
 
     $(document).ready(function () {
-        $('#login_post').validate({
-            rules: addValidationRules,
-            messages: addValidationMessages,
-            errorPlacement: function (error, element) {
-                $(".error-" + element.attr("name")).html(error);
-            },
-            submitHandler: function (form) {
-                let formData = new FormData(form);
-                if (previousRequest) return false;
+    $('#login_post').validate({
+        rules: addValidationRules,
+        messages: addValidationMessages,
+        errorPlacement: function (error, element) {
+            $(".error-" + element.attr("name")).html(error);
+        },
+        submitHandler: function (form) {
+            let formData = new FormData(form);
 
-                previousRequest = $.ajax({
-                    url: '{{ url("/login") }}',
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-                      // Show loader before sending request
-                    beforeSend: function () {
-                        Swal.fire({
-                            title: 'Please wait...',
-                            allowOutsideClick: false,
-                            didOpen: () => {
-                                Swal.showLoading();
-                            }
-                        });
-                    },
+            // Disable the submit button to prevent multiple clicks
+            let $submitBtn = $(form).find('button[type="submit"]');
+            $submitBtn.prop('disabled', true);
 
-                    success: function (response) {
-                        Swal.close(); // Close loader
-                        // Redirect to Laravel route
-                        window.location.href = '{{ route("list_dashboard") }}';
-                    },
-                    error: function (xhr) {
-                        Swal.close();
-                        if (xhr.status === 422) {
-                            let response = xhr.responseJSON;
-                            $(".error-email").text(response.message);
-                        } else {
-                            console.log('Error occurred');
+            if (previousRequest) return false;
+
+            previousRequest = $.ajax({
+                url: '{{ url("/login") }}',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                
+                beforeSend: function () {
+                    Swal.fire({
+                        title: 'Please wait...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
                         }
-                    },
-                    complete: function () {
-                        previousRequest = null;
+                    });
+                },
+
+                success: function (response) {
+                    // No need to re-enable button because page will redirect
+                    Swal.close();
+                    window.location.href = '{{ route("list_dashboard") }}';
+                },
+                error: function (xhr) {
+                    Swal.close();
+
+                    // Re-enable the button on error
+                    $submitBtn.prop('disabled', false);
+
+                    if (xhr.status === 422) {
+                        let response = xhr.responseJSON;
+                        $(".error-email").text(response.message);
+                    } else {
+                        console.log('Error occurred');
                     }
-                });
-            }
-        });
+                },
+                complete: function () {
+                    previousRequest = null;
+                }
+            });
+        }
     });
+});
+
 
     $(document).ready(function() 
     {

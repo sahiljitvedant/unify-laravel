@@ -307,3 +307,11 @@ table.dataTable tbody tr:hover {
     font-size: 12px;  /* adjust as needed */
     font-weight: 500; /* optional: make header slightly bold */
 }
+.btn-link
+{
+    color : var(--sidebar_color);
+}
+.btn-link:hover
+{
+    color : var(--sidebar_color);
+}

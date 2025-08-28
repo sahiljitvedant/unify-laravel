@@ -38,6 +38,7 @@ Route::middleware(['auth.custom', 'session.timeout'])->group(function ()
     Route::get('/list_membership', [GymMembershipController::class, 'list'])->name('list_membership');
     Route::get('/add_membership', [GymMembershipController::class, 'add'])->name('add_membership');
     Route::get('/edit_membership/{id}', [GymMembershipController::class, 'edit'])->name('edit_membership');
+    Route::get('/list_deleted_membership', [GymMembershipController::class, 'list_deleted_membership'])->name('list_deleted_membership');
 
     Route::middleware(['web'])->group(function () 
     {
@@ -46,12 +47,16 @@ Route::middleware(['auth.custom', 'session.timeout'])->group(function ()
         Route::get('/members/fetch', [GymPackageController::class, 'fetchMemberList'])
         ->name('fetch_member_list');
 
+
         Route::post('/add_membership', [GymMembershipController::class, 'submit'])->name('add_membership');
         Route::get('/fetch_membership', [GymMembershipController::class, 'fetchMembership'])
         ->name('fetch_membership');
+
         Route::post('/delete_membership/{id}', [GymMembershipController::class, 'deleteMembership'])->name('delete_membership');
         Route::post('/update_membership/{id}', [GymMembershipController::class, 'update'])->name('update_membership');
-
+        Route::get('/fetch_deleted_membership', [GymMembershipController::class, 'fetch_deleted_membership'])
+        ->name('fetch_deleted_membership');
+        Route::post('/activate_membership/{id}', [GymMembershipController::class, 'activate_membership'])->name('activate_membership');
 
     });
 });

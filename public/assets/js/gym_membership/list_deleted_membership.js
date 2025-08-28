@@ -29,18 +29,18 @@ $(document).ready(function ()
     });
 });
 
-function deleteMembershipById(id) 
+function activateMembershipID(id) 
 {
     $.ajax({
-        url: deleteMembershipUrl.replace(':id', id), 
+        url: activateMembershipUrl.replace(':id', id), 
         type: "POST",
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         beforeSend: function () {
             Swal.fire({
-                title: 'Deleting...',
-                text: 'Please wait while we delete the membership.',
+                title: 'Activating...',
+                text: 'Please wait while we activate the membership.',
                 allowOutsideClick: false,
                 didOpen: () => {
                     Swal.showLoading();
@@ -50,12 +50,12 @@ function deleteMembershipById(id)
         success: function (response) {
             Swal.fire({
                 icon: 'success',
-                title: 'Deleted!',
+                title: 'Activated!',
                 text: response.message,
                 confirmButtonText: 'OK',
                 allowOutsideClick: false
             }).then(() => {
-                $('#members-table').DataTable().ajax.reload(); // refresh table
+                window.location.href = "/list_membership"; // refresh table
             });
         },
         error: function (xhr) {

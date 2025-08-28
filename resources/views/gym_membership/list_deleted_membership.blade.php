@@ -1,16 +1,14 @@
 @extends('layouts.app')
 
-@section('title', 'Membership List')
+@section('title', 'Deletd Membership List')
 
 @section('content')
 <div class="container">
-    <!-- Heading + Add Button -->
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-2 gap-2">
-        <h4 class="mb-2 mb-md-0">Membership</h4>
-        <div class="d-flex flex-column align-items-start align-items-md-end gap-2">
-            <a href="{{ route('add_membership') }}" class="btn-add">Add Membership</a>
-            <a href="{{ route('list_deleted_membership') }}" class="btn-link">Show Deleted Membership</a>
-        </div>
+    
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
+        <h4 class="mb-0">Deleted Membership</h4>
+        
+        
     </div>
     <!-- Table -->
     <div class="table-responsive">
@@ -70,8 +68,8 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <script>
-        const fetchMembership = "{{ route('fetch_membership') }}";
-        const deleteMembershipUrl = "{{ route('delete_membership', ':id') }}";
+        const fetchMembership = "{{ route('fetch_deleted_membership') }}";
+        const activateMembershipUrl = "{{ route('activate_membership', ':id') }}";
     </script>
-    <script src="{{ asset('assets/js/gym_membership/list_membership.js') }}"></script>
+    <script src="{{ asset('assets/js/gym_membership/list_deleted_membership.js') }}"></script>
 @endpush

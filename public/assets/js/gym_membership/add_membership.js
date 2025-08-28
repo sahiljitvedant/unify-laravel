@@ -124,7 +124,8 @@ $('#submitBtn').on('click', function (e) {
                 icon: 'success',
                 title: 'Form Submitted!',
                 text: 'Your membership has been submitted successfully.',
-                confirmButtonText: 'OK'
+                confirmButtonText: 'OK',
+                allowOutsideClick: false
             }).then(() => {
                 // Redirect on OK
                 window.location.href = "/list_membership";
