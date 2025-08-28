@@ -32,6 +32,12 @@
             --theme-color: {{ config('app.theme_color') }};
             --sidebar_color: {{ config('app.sidebar_color') }};
         }
+        .no-sidebar {
+            margin-left: 0 !important;
+            padding: 100px 20px 20px 20px !important;
+            max-width: 500px;
+            margin: 100px auto 0 auto !important;
+        }
 
     </style>
 </head>
@@ -43,41 +49,51 @@
 
     @if (!in_array(Route::currentRouteName(), $hideSidebarRoutes))
         <!-- Header -->
-        <div class="topbar">
+       
+        <div class="topbar d-flex justify-content-between align-items-center px-3">
+            <!-- Mobile Menu Button -->
             <button id="menuToggle" class="btn btn-outline-secondary d-lg-none">
                 <i class="fas fa-bars"></i>
             </button>
-            <span class="fw-bold">Admin Dashboard</span>
+
+            <!-- Logo & Brand -->
+           
+            <a href="{{ route('list_dashboard') }}" class="d-flex align-items-center text-decoration-none">
+                <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" 
+                    style="height:60px; width:180px; object-fit:cover; border-radius:10px; border:1px solid var(--sidebar_color)">
+            </a>
         </div>
+        
 
         <!-- Sidebar -->
         <div id="sidebar" class="sidebar d-lg-block">
+          
             <a href="{{ route('list_dashboard') }}">
             
-                <i class="fas fa-home me-2"></i>
+                <i class="bi bi-speedometer2 me-2"></i>
                 Dashboard
             </a>
-            <a href="{{ route('list_member') }}"><i class="fas fa-users me-2"></i>Members</a>
-            <a class="d-flex justify-content-between align-items-center" 
+            <a href="{{ route('list_member') }}"><i class="bi bi-people me-2"></i>Members</a>
+            <a class="d-flex justify-content-start align-items-center" 
             data-bs-toggle="collapse" 
             href="#modulesDropdown" 
             role="button" 
             aria-expanded="false" 
             aria-controls="modulesDropdown">
-            <span><i class="fas fa-layer-group me-2"></i>Modules</span><i class="fas fa-chevron-down small"></i>
+            <span><i class="bi bi-briefcase me-2"></i>Modules</span><i class="fas fa-chevron-down small ms-2 mt-1"></i>
             </a>
             <div class="collapse ps-4" id="modulesDropdown">
                 <a href="{{ route('list_membership') }}" class="d-block py-1">
-                    <i class="fas fa-id-card me-2"></i>Membership
+                    <i class="bi bi-book me-2"></i>Membership
                 </a>
                 <a href="#" class="d-block py-1">
-                    <i class="fas fa-user-tie me-2"></i>Trainer
+                    <i class="bi bi-person-plus me-2"></i>Trainer
                 </a>
             </div>
 
-            <a href="#"><i class="fas fa-cogs me-2"></i>Settings</a>
+            <a href="#"><i class="bi bi-gear me-2"></i>Settings</a>
             <a href="{{ route('logout') }}">
-                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                <i class="bi bi-box-arrow-right me-2"></i>Logout
             </a>
         </div>
     @endif
