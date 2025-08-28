@@ -1,6 +1,6 @@
 // Validation Rules
 const validationRules = {
-    membership_name: { required: true },
+    membership_name: { required: true, minlength: 3, maxlength: 5 },
     description: { required: true },
     duration_in_days: { required: true, number: true },
     price: { required: true, number: true },
@@ -11,7 +11,11 @@ const validationRules = {
 
 // Validation Messages
 const validationMessages = {
-    membership_name: { required: "Membership name is required" },
+    membership_name: { 
+        required: "Membership name is required", 
+        minlength: "Membership name must be at least 3 characters", 
+        maxlength: "Membership name must not exceed 5 characters" 
+    },
     description: { required: "Description is required" },
     duration_in_days: { 
         required: "Duration is required", 
@@ -57,6 +61,20 @@ function validateForm()
             isValid = false;
             return;
         }
+
+        // Min length check
+        if (rules.minlength && value.length < rules.minlength) {
+            errorDiv.text(messages.minlength);
+            isValid = false;
+            return;
+        }
+
+        // Max length check
+        if (rules.maxlength && value.length > rules.maxlength) {
+            errorDiv.text(messages.maxlength);
+            isValid = false;
+            return;
+        }
     });
 
     return isValid;
@@ -72,15 +90,17 @@ $('#profileImage').on('change', function (e)
 });
 
 // Submit button
-$('#submitBtn').on('click', function (e) {
-    alert(1);
+$('#submitBtn').on('click', function (e) 
+{
+    // alert(1);
     e.preventDefault();
    
     if (!validateForm()) return;
 
     let formData = new FormData($('#gym_member_edit_form')[0]);
 
-    $.ajax({
+    $.ajax
+    ({
         url: stepperSubmitUrl,
         type: "POST",
         data: formData,
@@ -112,16 +132,24 @@ $('#submitBtn').on('click', function (e) {
                 window.location.href = "/list_membership";
             });
         },
-        error: function (xhr) {
-            console.log(xhr.status);
-            console.log(xhr.responseText);
-            
-
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Something went wrong! Please try again.'
-            });
+        error: function (xhr) 
+        {
+            Swal.close(); // close loader
+        
+            if (xhr.status === 422) 
+            {
+                let errors = xhr.responseJSON.errors;
+                for (let key in errors) {
+                    $(`.error-message[data-error-for="${key}"]`).text(errors[key][0]);
+                }
+            } 
+            else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong! Please try again.'
+                });
+            }
         }
     });
 });
@@ -140,6 +168,11 @@ $('#gym_member_edit_form :input').on('input change', function () {
 
     if (rules.required && (!value || value.trim() === '')) valid = false;
     if (rules.number && value && isNaN(value)) valid = false;
+     // Min length
+     if (rules.minlength && value && value.length < rules.minlength) valid = false;
+
+     // Max length
+     if (rules.maxlength && value && value.length > rules.maxlength) valid = false;
 
     if (valid) errorDiv.text('');
 });

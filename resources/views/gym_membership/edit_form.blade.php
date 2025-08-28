@@ -76,34 +76,34 @@
                 </div>
 
                 @php
-    $selectedFacilities = $member->facilities_included 
-                            ? json_decode($member->facilities_included, true) 
-                            : [];
-    if (!is_array($selectedFacilities)) $selectedFacilities = [];
-@endphp
+                    $selectedFacilities = $member->facilities_included 
+                                            ? json_decode($member->facilities_included, true) 
+                                            : [];
+                    if (!is_array($selectedFacilities)) $selectedFacilities = [];
+                @endphp
 
-<div class="col-md-6 col-12">
-    <label class="form-label">{{ __('membership.facilities_label') }}</label>
-    @foreach(config('app.facilities') as $id => $label)
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" 
-                name="facilities_included[]" 
-                id="facility_{{ $id }}" 
-                value="{{ $id }}"
-                {{ in_array($id, $selectedFacilities) ? 'checked' : '' }}
-                @if($id == 3) disabled @endif>
-            <label class="form-check-label" for="facility_{{ $id }}">
-                {{ $label }}
-            </label>
+                <div class="col-md-6 col-12">
+                    <label class="form-label">{{ __('membership.facilities_label') }}</label>
+                    @foreach(config('app.facilities') as $id => $label)
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" 
+                                name="facilities_included[]" 
+                                id="facility_{{ $id }}" 
+                                value="{{ $id }}"
+                                {{ in_array($id, $selectedFacilities) ? 'checked' : '' }}
+                                @if($id == 3) disabled @endif>
+                            <label class="form-check-label" for="facility_{{ $id }}">
+                                {{ $label }}
+                            </label>
 
-            @if($id == 3)
-                <input type="hidden" name="facilities_included[]" value="{{ $id }}">
-            @endif
-        </div>
-    @endforeach
-    <div class="text-danger error-message" data-error-for="facilities_included"></div>
-</div>
-
+                            @if($id == 3)
+                                <input type="hidden" name="facilities_included[]" value="{{ $id }}">
+                            @endif
+                        </div>
+                    @endforeach
+                    <div class="text-danger error-message" data-error-for="facilities_included"></div>
+                </div>
+            </div>
 
         <div class="text-end mt-4">
             <a href="{{ route('list_membership') }}" class="btn btn-secondary me-2">

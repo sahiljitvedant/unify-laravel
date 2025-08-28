@@ -56,7 +56,7 @@ class GymMembershipController extends Controller
         // dd($request->all());
         // Validation rules
         $arr_rules = [
-            'membership_name' => 'required|string|max:150',
+            'membership_name' => 'required|string|max:150|unique:tbl_gym_membership,membership_name',
             'description' => 'nullable|string|max:500',
             'duration_in_days' => 'required|integer|min:1',
             'price' => 'required|numeric|min:0',
@@ -69,12 +69,13 @@ class GymMembershipController extends Controller
         $validator = Validator::make($request->all(), $arr_rules);
         // dd($validator);
     
-        if ($validator->fails()) 
-        {
-            $arr_resp['status'] = 'error';
-            $arr_resp['message'] = $validator->messages();
-            return response()->json($arr_resp, 400);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->messages()
+            ], 422);
         }
+    
     
         DB::beginTransaction();
     
@@ -165,6 +166,16 @@ class GymMembershipController extends Controller
     {
         try 
         {
+            $request->validate([
+                'membership_name' => 'required|string|min:3|max:5|unique:tbl_gym_membership,membership_name,' . $id,
+                'description'     => 'required|string',
+                'duration_in_days'=> 'required|numeric',
+                'price'           => 'required|numeric',
+                'trainer_included'=> 'required',
+                'facilities_included' => 'required|array',
+                'is_active'       => 'required',
+            ]);
+    
             // Ensure facilities is always array, even if only one checkbox selected
             $facilities = $request->facilities_included ?? [];
             if (!is_array($facilities)) {
@@ -186,6 +197,18 @@ class GymMembershipController extends Controller
     
             return response()->json(['success' => true, 'message' => 'Membership updated successfully!']);
         } 
+        catch (\Illuminate\Validation\ValidationException $e) 
+    {
+        // Return validation errors as JSON
+        return response()->json([
+            'success' => false, 
+            'errors'  => $e->errors()
+        ], 422);
+    }
+    catch (\Exception $e) 
+    {
+        return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+    }
         catch (\Exception $e) 
         {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);

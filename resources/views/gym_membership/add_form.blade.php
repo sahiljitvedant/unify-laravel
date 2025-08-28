@@ -7,7 +7,7 @@
     <!-- Breadcrumb -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('list_dashboard') }}">Dashboard</a></li>
             <li class="breadcrumb-item"><a href="{{ route('list_membership') }}">Memberships</a></li>
             <li class="breadcrumb-item" aria-current="page">Add Membership</li>
         </ol>
@@ -102,8 +102,6 @@
             </a>
             <button type="submit" class="btn " id="submitBtn">{{ __('membership.submit_button') }}</button>
         </div>
-
-    
     </form>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

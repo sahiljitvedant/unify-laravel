@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Web\GymPackageController;
 use App\Http\Controllers\Web\GymMembershipController;
-
+use App\Http\Controllers\Web\DashboardController;
 
 Route::get('/register', [AuthController::class, 'register'])->name('register_get');
 Route::post('/register', [AuthController::class, 'registerPost'])->name('register_post');
@@ -27,7 +27,8 @@ Route::get('/access-denied', function () {
 
 Route::middleware(['auth.custom', 'session.timeout'])->group(function () 
 {
- 
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'list'])->name('list_dashboard');
     // Members Route:-
     Route::get('/list_member', [GymPackageController::class, 'list'])->name('list_member');
     Route::get('/add_member', [GymPackageController::class, 'add'])->name('add_member');

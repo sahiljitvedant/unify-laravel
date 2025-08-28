@@ -344,7 +344,8 @@
 
         <!-- Sidebar -->
         <div id="sidebar" class="sidebar d-lg-block">
-            <a href="#">
+            <a href="{{ route('list_dashboard') }}">
+            
                 <i class="fas fa-home me-2"></i>
                 Dashboard
             </a>

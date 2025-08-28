@@ -113,15 +113,20 @@ $('#submitBtn').on('click', function (e) {
             });
         },
         error: function (xhr) {
-            console.log(xhr.status);
-            console.log(xhr.responseText);
-            
-
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Something went wrong! Please try again.'
-            });
+            Swal.close(); // close loader
+        
+            if (xhr.status === 422) {
+                let errors = xhr.responseJSON.errors;
+                for (let key in errors) {
+                    $(`.error-message[data-error-for="${key}"]`).text(errors[key][0]);
+                }
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong! Please try again.'
+                });
+            }
         }
     });
 });
