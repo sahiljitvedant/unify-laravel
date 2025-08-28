@@ -47,18 +47,18 @@
     }
     .table-responsive {
     overflow-x: auto;
-}
+    }
 
-#members-table {
-    width: 100% !important;
-    table-layout: auto; /* allows columns to shrink */
-    font-size: 14px; /* optional: smaller text for better fit */
-}
+    #members-table {
+        width: 100% !important;
+        table-layout: auto; /* allows columns to shrink */
+        font-size: 14px; /* optional: smaller text for better fit */
+    }
 
-#members-table thead th {
-    font-size: 13px; /* smaller header text */
-    text-align: center; /* optional: center headers */
-}
+    #members-table thead th {
+        font-size: 13px; /* smaller header text */
+        text-align: center; /* optional: center headers */
+    }
 </style>
 @endpush
 
@@ -67,36 +67,9 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-
     <script>
-    $(document).ready(function () {
-        $('#members-table').DataTable({
-            processing: true,
-            serverSide: true,
-            searching: false,
-            ajax: "{{ route('fetch_membership') }}",
-
-            columns: [
-                { data: 'id', name: 'id' },
-                { data: 'membership_name', name: 'membership_name' },
-                { data: 'duration_in_days', name: 'duration_in_days' },
-                { data: 'price', name: 'price' },
-                { data: 'trainer_included', name: 'trainer_included' },
-                { 
-                    data: 'is_active', 
-                    render: function(data) {
-                        return data == 1 ? 'Yes' : 'No';
-                    }
-                },
-                { data: 'action', orderable: false, searchable: false },
-            ],
-
-            order: [[0, 'desc']],
-            pageLength: 10,
-            responsive: true,
-            autoWidth: false
-            
-        });
-    });
+        const fetchMembership = "{{ route('fetch_membership') }}";
+        const deleteMembershipUrl = "{{ route('delete_membership', ':id') }}";
     </script>
+    <script src="{{ asset('assets/js/gym_membership/list_membership.js') }}"></script>
 @endpush

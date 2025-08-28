@@ -35,7 +35,7 @@ function validateForm()
     // Clear previous errors
     $('.error-message').text('');
 
-    $('#gym_member_add_form :input').each(function () {
+    $('#gym_member_edit_form :input').each(function () {
         const name = $(this).attr('name');
         const value = $(this).val();
         const rules = validationRules[name];
@@ -73,12 +73,12 @@ $('#profileImage').on('change', function (e)
 
 // Submit button
 $('#submitBtn').on('click', function (e) {
-    // alert(1);
+    alert(1);
     e.preventDefault();
    
     if (!validateForm()) return;
 
-    let formData = new FormData($('#gym_member_add_form')[0]);
+    let formData = new FormData($('#gym_member_edit_form')[0]);
 
     $.ajax({
         url: stepperSubmitUrl,
@@ -127,7 +127,7 @@ $('#submitBtn').on('click', function (e) {
 });
 
 // Live error removal
-$('#gym_member_add_form :input').on('input change', function () {
+$('#gym_member_edit_form :input').on('input change', function () {
     const name = $(this).attr('name');
     const value = $(this).val();
     const rules = validationRules[name];

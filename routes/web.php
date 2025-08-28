@@ -36,7 +36,8 @@ Route::middleware(['auth.custom', 'session.timeout'])->group(function ()
     // Membersip Route:-
     Route::get('/list_membership', [GymMembershipController::class, 'list'])->name('list_membership');
     Route::get('/add_membership', [GymMembershipController::class, 'add'])->name('add_membership');
-   
+    Route::get('/edit_membership/{id}', [GymMembershipController::class, 'edit'])->name('edit_membership');
+
     Route::middleware(['web'])->group(function () 
     {
         Route::post('/stepper-submit', [GymPackageController::class, 'submit'])->name('stepper.submit');
@@ -47,6 +48,10 @@ Route::middleware(['auth.custom', 'session.timeout'])->group(function ()
         Route::post('/add_membership', [GymMembershipController::class, 'submit'])->name('add_membership');
         Route::get('/fetch_membership', [GymMembershipController::class, 'fetchMembership'])
         ->name('fetch_membership');
+        Route::post('/delete_membership/{id}', [GymMembershipController::class, 'deleteMembership'])->name('delete_membership');
+        Route::post('/update_membership/{id}', [GymMembershipController::class, 'update'])->name('update_membership');
+
+
     });
 });
 

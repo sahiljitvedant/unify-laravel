@@ -12,46 +12,45 @@ use Yajra\DataTables\Facades\DataTables;
 
 class GymMembershipController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+   
     public function list()
     {
         return view('gym_membership.list_membership');
        
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function add()
-    {
-        // dd(1);
-        return view('gym_membership.add_form');
-    }
-
+    
     public function fetchMembership(Request $request)
     {
         // dd(1);
         // ONE variable that fetches everything you need
         $fetch_data = DB::table('tbl_gym_membership')
             ->select('*')
+            ->where('is_deleted', '!=', 9) 
             ->orderBy('id', 'desc')
             ->get();
 
         // Send to DataTables (server-side)
         return DataTables::of($fetch_data)
-            ->addColumn('action', function ($row) {
-                return ' <a href="/members/edit/'.$row->id.'" class="btn btn-sm" data-bs-toggle="tooltip" title="Edit">
-                <i class="bi bi-pencil-square"></i>
-            </a>
-            <a href="/members/delete/'.$row->id.'" class="btn btn-sm" data-bs-toggle="tooltip" title="Delete">
-                <i class="bi bi-trash"></i>
-            </a>';
+            ->addColumn('action', function ($row) 
+            {
+                return ' 
+                <a href="'.route('edit_membership', $row->id).'" class="btn btn-sm" data-bs-toggle="tooltip" title="Edit">
+                    <i class="bi bi-pencil-square"></i>
+                </a>
+                <button type="button" class="btn btn-sm text-danger" onclick="deleteMembershipById('.$row->id.')">
+                    <i class="bi bi-trash"></i>
+                </button>';
             })
             ->rawColumns(['action'])
             ->make(true);
     }
+
+    public function add()
+    {
+        // dd(1);
+        return view('gym_membership.add_form');
+    }
+
     public function submit(Request $request)
     {
         // dd($request->all());
@@ -126,35 +125,73 @@ class GymMembershipController extends Controller
         }
     }
 
-       /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function deleteMembership($id)
     {
-        //
+        // dd(1);
+        $membership = DB::table('tbl_gym_membership')->where('id', $id)->first();
+        // dd($membership);
+        if (!$membership) 
+        {
+            return response()->json(['status' => false, 'message' => 'Membership not found'], 404);
+        }
+
+        DB::table('tbl_gym_membership')
+        ->where('id', $id)
+        ->update([
+            'is_deleted' => 9,  
+        ]);
+        return response()->json
+        ([
+            'status' => true,
+            'message' => 'Membership deleted successfully'
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        // dd('This is edit page');
+        $member = DB::table('tbl_gym_membership')->where('id', $id)->first();
+
+        if (!$member) {
+            abort(404, 'Member not found');
+        }
+
+        // Pass existing member data into the form
+        return view('gym_membership.edit_form', compact('member'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    // Handle update
+    public function update(Request $request, $id)
     {
-        //
+        try 
+        {
+            // Ensure facilities is always array, even if only one checkbox selected
+            $facilities = $request->facilities_included ?? [];
+            if (!is_array($facilities)) {
+                $facilities = [$facilities];
+            }
+    
+            DB::table('tbl_gym_membership')
+                ->where('id', $id)
+                ->update([
+                    'membership_name'     => $request->membership_name,
+                    'is_active'           => $request->is_active,
+                    'description'         => $request->description,
+                    'duration_in_days'    => $request->duration_in_days,
+                    'price'               => $request->price,
+                    'trainer_included'    => $request->trainer_included,
+                    'facilities_included' => json_encode($facilities),
+                    'updated_at'          => now(),
+                ]);
+    
+            return response()->json(['success' => true, 'message' => 'Membership updated successfully!']);
+        } 
+        catch (\Exception $e) 
+        {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
     }
+    
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
+      
 }
