@@ -168,11 +168,11 @@ $('#gym_member_edit_form :input').on('input change', function () {
 
     if (rules.required && (!value || value.trim() === '')) valid = false;
     if (rules.number && value && isNaN(value)) valid = false;
-     // Min length
-     if (rules.minlength && value && value.length < rules.minlength) valid = false;
+    // Min length
+    if (rules.minlength && value && value.length < rules.minlength) valid = false;
 
-     // Max length
-     if (rules.maxlength && value && value.length > rules.maxlength) valid = false;
+    // Max length
+    if (rules.maxlength && value && value.length > rules.maxlength) valid = false;
 
     if (valid) errorDiv.text('');
 });

@@ -117,10 +117,15 @@
                     url: '{{ route("register_post") }}',  
                     type: 'POST',
                     data: formData,
-                    //   beforeSend: function (xhr)
-                    //   {
-                    //     xhr.setRequestHeader("Authorization", "Bearer " + ACCESS_TOKEN);
-                    //   },
+                    beforeSend: function () {
+                        Swal.fire({
+                            title: 'Please wait...',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+                    },
                     processData: false,
                     contentType: false,
                     headers:
@@ -129,11 +134,13 @@
                     },
                     success: function (response)
                     {
+                        Swal.close(); 
                         console.log('sucess occured');
                         window.location.href = '{{ route("login_get") }}';
                     },
                     error: function (xhr, status, error)
                     {
+                        Swal.close(); 
                         console.log('error occured');
                     },
                     complete: function ()

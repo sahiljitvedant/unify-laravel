@@ -72,22 +72,23 @@
                     contentType: false,
                     headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                       // Show loader before sending request
-                beforeSend: function () {
-                    Swal.fire({
-                        title: 'Please wait...',
-                        allowOutsideClick: false,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
-                    });
-                },
+                    beforeSend: function () {
+                        Swal.fire({
+                            title: 'Please wait...',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+                    },
 
                     success: function (response) {
                         Swal.close(); // Close loader
-        // Redirect to Laravel route
-        window.location.href = '{{ route("list_dashboard") }}';
+                        // Redirect to Laravel route
+                        window.location.href = '{{ route("list_dashboard") }}';
                     },
                     error: function (xhr) {
+                        Swal.close();
                         if (xhr.status === 422) {
                             let response = xhr.responseJSON;
                             $(".error-email").text(response.message);

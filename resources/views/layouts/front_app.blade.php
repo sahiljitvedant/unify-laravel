@@ -60,12 +60,12 @@
             <div class="shape-circle shape-circle-2"></div>
             <div class="shape-circle shape-circle-3"></div>
             <div class="shape-circle shape-circle-4"></div>
-
+            <div class="logo-center d-flex flex-column align-items-center justify-content-center position-absolute top-50 start-50 translate-middle">
             <!-- Logo & Tagline -->
             <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" 
                 style="height: 65px; width:200px; object-fit:cover; border-radius:10px; border:1px solid #0B1061" class="mt-2">
             <h6 class="mt-3">Crafting Digital Solutions</h6>
-
+            </div>
           
             <!-- Social Icons (Vertically Centered) -->
             <div class="social-links d-flex flex-column position-absolute" style="top: 50%; left: 50px; transform: translateY(-50%);">
