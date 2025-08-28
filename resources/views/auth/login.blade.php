@@ -24,158 +24,168 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 <!-- Swal Js -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <style>
-        html, body {
-    height: 100%;
-    margin: 0;
-    overflow: hidden; /* prevent vertical scroll */
-}
-        .left-section {
-            background-color: #0B1061;
-            color: #fff;
-        }
-        .right-section {
-            background-color: #0B1061;
-        }
-        .container-fluid {
-    height: 100vh; /* full viewport height */
-    padding: 0;
-}
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden; /* prevent vertical scroll */
+    }
+    .left-section {
+        background-color: #0B1061;
+        color: #fff;
+    }
+    .right-section {
+        background-color: #0B1061;
+    }
+    .container-fluid {
+        height: 100vh; /* full viewport height */
+        padding: 0;
+    }
 
-.left-section, .right-section {
-    height: 100vh; /* full height for both sections */
-}
+    .left-section, .right-section {
+        height: 100vh; /* full height for both sections */
+    }
 
-.login-box {
-    max-height: 90%; /* optional: keep it inside view */
-    overflow: auto;  /* allow scrolling inside login-box if needed */
-}
-        .login-box {
-            background: #fff;
-            border-radius: 12px;
-            padding: 40px;
-            box-shadow: 6px 0 18px rgba(0, 0, 0, 0.35);
-            width: 100%;
-            max-width: 520px;
-        }
-        .login-box h3 {
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-        .register-link {
-            margin-top: 15px;
-            text-align: center;
-        }
-        .register-link a {
-            text-decoration: none;
-            color: #0B1061;
-            font-weight: 500;
-        }
-        .login_btn
-        {
-            background-color: #0B1061;
-            color: #ffffff;
-        }
-        .login_btn:hover
-        {
-            background-color: #0B1061;
-            color: #ffffff;
-        }
-    </style>
-    <style>
-/* Left Section Styles */
-.left-section {
-    background: linear-gradient(135deg, #0B1061 0%, #1a1f7f 100%);
-    color: #fff;
-    position: relative;
-    overflow: hidden;
-}
+    .login-box {
+        max-height: 90%; /* optional: keep it inside view */
+        overflow: auto;  /* allow scrolling inside login-box if needed */
+    }
+    .login-box {
+        background: #fff;
+        border-radius: 12px;
+        padding: 40px;
+        box-shadow: 6px 0 18px rgba(0, 0, 0, 0.35);
+        width: 100%;
+        max-width: 520px;
+    }
+    .login-box h3 {
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+    .register-link {
+        margin-top: 15px;
+        text-align: center;
+    }
+    .register-link a {
+        text-decoration: none;
+        color: #0B1061;
+        font-weight: 500;
+    }
+    .login_btn
+    {
+        background-color: #0B1061;
+        color: #ffffff;
+    }
+    .login_btn:hover
+    {
+        background-color: #0B1061;
+        color: #ffffff;
+    }
+</style>
+<style>
+    /* Left Section Styles */
+    .left-section {
+        background: linear-gradient(135deg, #0B1061 0%, #1a1f7f 100%);
+        color: #fff;
+        position: relative;
+        overflow: hidden;
+    }
 
-/* Abstract Circles */
-.shape-circle {
+    /* Abstract Circles */
+    .shape-circle {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.05);
+    }
+
+    .shape-circle-1 {
+        width: 200px;
+        height: 200px;
+        top: 50px;
+        right: -50px;
+    }
+
+    .shape-circle-2 {
+        width: 300px;
+        height: 300px;
+        bottom: -100px;
+        left: -50px;
+    }
+
+    .shape-circle-3 {
+        width: 150px; 
+        height: 150px; 
+        top: 150px; 
+        left: -75px; 
+    }
+
+    .shape-circle-4 {
+    width: 180px;
+    height: 180px;
+    bottom: 50px;  /* distance from bottom */
+    right: 30px;   /* distance from right */
+    background: rgba(255,255,255,0.05);
     position: absolute;
     border-radius: 50%;
-    background: rgba(255,255,255,0.05);
-}
+    }
 
-.shape-circle-1 {
-    width: 200px;
-    height: 200px;
-    top: 50px;
-    right: -50px;
-}
+    /* Quote */
+    .quote {
+        font-size: 1rem;
+        line-height: 1.5;
+        max-width: 280px;
+    }
 
-.shape-circle-2 {
-    width: 300px;
-    height: 300px;
-    bottom: -100px;
-    left: -50px;
-}
+    /* Services */
+    .service-box p {
+        margin: 0;
+        font-size: 0.85rem;
+    }
 
-.shape-circle-3 {
-    width: 150px; 
-    height: 150px; 
-    top: 150px; 
-    left: -75px; 
-}
+    /* Bubble Link */
+    .bubble-link {
+        background-color: #1a1f7f;
+        border-radius: 50px;
+        font-weight: 500;
+        transition: background-color 0.3s, transform 0.3s;
+    }
 
-/* Quote */
-.quote {
-    font-size: 1rem;
-    line-height: 1.5;
-    max-width: 280px;
-}
+    .bubble-link:hover {
+        background-color: #0f1470;
+        transform: translateY(-2px);
+        text-decoration: none;
+    }
 
-/* Services */
-.service-box p {
-    margin: 0;
-    font-size: 0.85rem;
-}
+    /* Footer */
+    .bottom-footer {
+        bottom: 10px;
+        padding: 0 20px;
+    }
 
-/* Bubble Link */
-.bubble-link {
-    background-color: #1a1f7f;
-    border-radius: 50px;
-    font-weight: 500;
-    transition: background-color 0.3s, transform 0.3s;
-}
+    /* Social Icons */
+    .social-links a:hover {
+        color: #ffd700;
+        transform: scale(1.1);
+        transition: 0.3s;
+    }
+    .top-feature-icons {
+        position: absolute;
+        top: 20px;
+        width: 100%;
+        gap: 25px;
+    }
 
-.bubble-link:hover {
-    background-color: #0f1470;
-    transform: translateY(-2px);
-    text-decoration: none;
-}
+    .icon-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: rgba(255,255,255,0.3); /* subtle but visible */
+        font-size: 0.7rem;
+    }
 
-/* Footer */
-.bottom-footer {
-    bottom: 10px;
-    padding: 0 20px;
-}
-
-/* Social Icons */
-.social-links a:hover {
-    color: #ffd700;
-    transform: scale(1.1);
-    transition: 0.3s;
-}
-.top-feature-icons {
-    position: absolute;
-    top: 20px;
-    width: 100%;
-    gap: 25px;
-}
-
-.icon-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: rgba(255,255,255,0.3); /* subtle but visible */
-    font-size: 0.7rem;
-}
-
-.icon-box i {
-    margin-bottom: 4px;
-}
+    .icon-box i {
+        margin-bottom: 4px;
+    }
 </style>
     
 </head>
@@ -183,81 +193,63 @@
 <div class="container-fluid">
     <div class="row">
        <!-- Left Section -->
-<div class="col-md-6 left-section d-none d-md-flex p-0 flex-column justify-content-center align-items-center text-center position-relative">
-<!-- Top Feature Icons -->
-<div class="top-feature-icons d-flex justify-content-center gap-4 flex-wrap">
-    <div class="icon-box">
-        <i class="fas fa-laptop-code fa-2x"></i>
-        <p>Dev</p>
-    </div>
-    <div class="icon-box">
-        <i class="fas fa-mobile-alt fa-2x"></i>
-        <p>Apps</p>
-    </div>
-    <div class="icon-box">
-        <i class="fas fa-cloud fa-2x"></i>
-        <p>Cloud</p>
-    </div>
-    <div class="icon-box">
-        <i class="fas fa-chart-line fa-2x"></i>
-        <p>Analytics</p>
-    </div>
-    <div class="icon-box">
-        <i class="fas fa-bullhorn fa-2x"></i>
-        <p>Marketing</p>
-    </div>
-</div>
-<!-- Background Shapes -->
-<div class="shape-circle shape-circle-1"></div>
-<div class="shape-circle shape-circle-2"></div>
-<div class="shape-circle shape-circle-3"></div>
+        <div class="col-md-6 left-section d-none d-md-flex p-0 flex-column justify-content-center align-items-center text-center position-relative">
+            <!-- Top Feature Icons -->
+            <div class="top-feature-icons d-flex justify-content-center gap-4 flex-wrap">
+                <div class="icon-box">
+                    <i class="bi bi-bicycle fa-2x mb-2"></i>
+                    <p>Cardio</p>
+                </div>
+                <div class="icon-box">
+                <i class="bi bi-heart-pulse fa-2x mb-2"></i>
+                    <p>Yoga</p>
+                </div>
+                <div class="icon-box">
+                <i class="bi bi-person fa-2x mb-2"></i>
+                    <p>Bodybuilding</p>
+                </div>
+                <div class="icon-box">
+                <i class="bi bi-activity fa-2x mb-2"></i>
+                    <p>Crossfit</p>
+                </div>
+                <div class="icon-box">
+                <i class="bi bi-emoji-smile fa-2x mb-2"></i>
+                    <p>Mindfulness</p>
+                </div>
+            </div>
+            <!-- Background Shapes -->
+            <div class="shape-circle shape-circle-1"></div>
+            <div class="shape-circle shape-circle-2"></div>
+            <div class="shape-circle shape-circle-3"></div>
+            <div class="shape-circle shape-circle-4"></div>
 
-<!-- Logo & Tagline -->
-<img src="{{ asset('assets/img/logo.png') }}" alt="Logo" 
-     style="height: 65px; width:200px; object-fit:cover; border-radius:10px; border:1px solid #0B1061" class="mt-2">
-<h6 class="mt-3">Crafting Digital Solutions</h6>
+            <!-- Logo & Tagline -->
+            <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" 
+                style="height: 65px; width:200px; object-fit:cover; border-radius:10px; border:1px solid #0B1061" class="mt-2">
+            <h6 class="mt-3">Crafting Digital Solutions</h6>
 
+          
+            <!-- Social Icons (Vertically Centered) -->
+            <div class="social-links d-flex flex-column position-absolute" style="top: 50%; left: 50px; transform: translateY(-50%);">
+                <a href="#" class="text-white mb-3 fs-5"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="text-white mb-3 fs-5"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-white mb-3 fs-5"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="text-white mb-3 fs-5"><i class="fab fa-instagram"></i></a>
+            </div>
 
+            <!-- Bottom Footer: Corporate Website (left) & Copyright (right) -->
 
-<!-- Service Highlights -->
-<div class="d-flex justify-content-center gap-4 mt-4">
-    <div class="text-center text-white service-box">
-        <i class="fas fa-laptop-code fa-2x mb-2"></i>
-        <p>Web Development</p>
-    </div>
-    <div class="text-center text-white service-box">
-        <i class="fas fa-mobile-alt fa-2x mb-2"></i>
-        <p>Mobile Apps</p>
-    </div>
-    <div class="text-center text-white service-box">
-        <i class="fas fa-bullhorn fa-2x mb-2"></i>
-        <p>Digital Marketing</p>
-    </div>
-</div>
+            <div class="d-flex justify-content-between w-100 position-absolute bottom-0 px-4 py-2">
+                <!-- Left: Corporate Website -->
+                <a href="https://www.corporatewebsite.com" target="_blank" class="bubble-link text-white text-decoration-none d-inline-flex align-items-center px-3 py-2">
+                    Corporate Website
+                    <i class="bi bi-arrow-right ms-2"></i>
+                </a>
 
-<!-- Footer: Bubble Link + Contact -->
-<div class="d-flex justify-content-between w-100 position-absolute bottom-footer px-4">
-    <a href="https://www.corporatewebsite.com" target="_blank" class="bubble-link text-white text-decoration-none d-inline-flex align-items-center px-3 py-2">
-        Corporate Website
-        <i class="bi bi-arrow-right ms-2"></i>
-    </a>
-
-    <span class="text-white contact-info">
-        Support: sachii@gmail.com | Contact: 97653453
-    </span>
-</div>
-
-<!-- Social Icons -->
-<div class="social-links d-flex flex-column position-absolute" style="bottom: 120px; left: 20px;">
-    <a href="#" class="text-white mb-3 fs-5"><i class="fab fa-facebook-f"></i></a>
-    <a href="#" class="text-white mb-3 fs-5"><i class="fab fa-twitter"></i></a>
-    <a href="#" class="text-white mb-3 fs-5"><i class="fab fa-linkedin-in"></i></a>
-    <a href="#" class="text-white mb-3 fs-5"><i class="fab fa-instagram"></i></a>
-</div>
-
-</div>
-
-
+                <!-- Right: Copyright -->
+                <p class="text-white small mt-3">&copy; 2025 YourCompanyName. All rights reserved.</p>
+            </div>
+        </div>
 
         <!-- Right section -->
         <div class="col-md-6 d-flex align-items-center justify-content-center ">
