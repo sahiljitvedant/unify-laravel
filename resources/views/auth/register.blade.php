@@ -24,11 +24,19 @@
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password">
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="password" name="password">
+                        <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
                     <span class="text-danger error-password small"></span>
                 </div>
             
                 <button type="submit" class="btn login_btn w-100">Submit</button>
+                <div class="register-link">
+                    <p>Already a User? <a href="{{ url('/login') }}">Login here</a></p>
+                </div>
             </form> 
         </div>
     </div>
@@ -148,6 +156,22 @@
                         previousRequest = null;
                     }
                 });
+            }
+        });
+    });
+
+    $(document).ready(function() 
+    {
+        $('#togglePassword').click(function() {
+            var passwordInput = $('#password');
+            var icon = $(this).find('i');
+
+            if (passwordInput.attr('type') === 'password') {
+                passwordInput.attr('type', 'text');
+                icon.removeClass('bi-eye').addClass('bi-eye-slash');
+            } else {
+                passwordInput.attr('type', 'password');
+                icon.removeClass('bi-eye-slash').addClass('bi-eye');
             }
         });
     });

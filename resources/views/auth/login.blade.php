@@ -16,10 +16,16 @@
             </div>
 
             <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" name="password">
-                <span class="text-danger error-password"></span>
-            </div>
+    <label for="password" class="form-label">Password</label>
+    <div class="input-group">
+        <input type="password" class="form-control" id="password" name="password">
+        <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+            <i class="bi bi-eye"></i>
+        </button>
+    </div>
+    <span class="text-danger error-password"></span>
+</div>
+
 
             <button type="submit" class="btn login_btn w-100">Submit</button>
 
@@ -38,7 +44,7 @@
     let previousRequest = null;
     var addValidationRules = {
         'email': { 'required': true, 'email': true, 'maxlength': 100 },
-        'password': { 'required': true, 'minlength': 6, 'maxlength': 30 }
+        'password': { 'required': true, 'minlength': 6, 'maxlength': 10 }
     };
     var addValidationMessages = {
         'email': {
@@ -49,7 +55,7 @@
         'password': {
             'required': 'Password field is required',
             'minlength': 'Password must be at least 6 characters long',
-            'maxlength': 'Password cannot exceed 30 characters'
+            'maxlength': 'Password cannot exceed 10 characters'
         }
     };
 
@@ -102,6 +108,23 @@
                 });
             }
         });
+    });
+
+    $(document).ready(function() 
+    {
+        $('#togglePassword').click(function() {
+            var passwordInput = $('#password');
+            var icon = $(this).find('i');
+
+            if (passwordInput.attr('type') === 'password') {
+                passwordInput.attr('type', 'text');
+                icon.removeClass('bi-eye').addClass('bi-eye-slash');
+            } else {
+                passwordInput.attr('type', 'password');
+                icon.removeClass('bi-eye-slash').addClass('bi-eye');
+            }
+        });
+
     });
 </script>
 
