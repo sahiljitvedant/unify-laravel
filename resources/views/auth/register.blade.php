@@ -1,38 +1,37 @@
-@extends('layouts.app')
+
+@extends('layouts.front_app')
 
 @section("title","Register")
 
 
-@section("content")
-    <div class="container">
-        <div class="row justify-content-center mt-5">
-            <div class="col-md-6">
-                <div class="card shadow-lg rounded-4 p-4">
-                    <h3 class="text-center mb-4 text-primary fw-bold">Register</h3>
-                    <form id="registration_add">
-                        <div class="mb-3">
-                            <label for="name" class="form-label fw-semibold">Name</label>
-                            <input type="text" class="form-control rounded-pill border-primary" id="name" name="name">
-                            <span class="text-danger error-name small"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label fw-semibold">Email address</label>
-                            <input type="email" class="form-control rounded-pill border-primary" id="email" name="email">
-                            <span class="text-danger error-email small"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label fw-semibold">Password</label>
-                            <input type="password" class="form-control rounded-pill border-primary" id="password" name="password">
-                            <span class="text-danger error-password small"></span>
-                        </div>
-                       
-                        <button type="submit" class="btn btn-primary w-100 rounded-pill fw-bold">Submit</button>
-                    </form>
+@section('right-section')
+    <div class="d-flex flex-column align-items-center w-100 px-4">
+        <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" 
+        style="height: 65px; width:200px; object-fit:cover; border-radius:10px; border:1px solid #0B1061" class="mt-2">
+
+        <div class="login-box mt-4">
+            <h5 class="text-center mb-4">Register</h5>
+            <form id="registration_add">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" name="name">
+                    <span class="text-danger error-name small"></span>
                 </div>
-            </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email address</label>
+                    <input type="email" class="form-control" id="email" name="email">
+                    <span class="text-danger error-email small"></span>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password">
+                    <span class="text-danger error-password small"></span>
+                </div>
+            
+                <button type="submit" class="btn login_btn w-100">Submit</button>
+            </form> 
         </div>
     </div>
-
 
 @endsection
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

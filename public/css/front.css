@@ -1,0 +1,175 @@
+
+    html, body {
+    height: 100%;
+    overflow-x: hidden; /* prevent horizontal scroll only */
+    overflow-y: auto;   /* allow vertical scroll */
+    }
+    .left-section {
+        min-height: 100vh;   /* at least full height */
+        height: auto;        /* grow with content */
+        overflow-y: auto;    /* scroll if content overflows */
+    }
+    .left-section, .right-section {
+        min-height: 100vh; /* at least full viewport height */
+        height: auto;       /* grow with content if needed */
+    }
+    .login-box {
+        max-height: 90vh; /* keep inside viewport */
+        overflow-y: auto; /* scroll if content overflows */
+    }
+    .left-section {
+        background-color: #0B1061;
+        color: #fff;
+    }
+    .right-section {
+        background-color: #0B1061;
+    }
+    .container-fluid {
+        height: 100vh; /* full viewport height */
+        padding: 0;
+    }
+
+    .left-section, .right-section {
+        height: 100vh; /* full height for both sections */
+    }
+
+    .login-box {
+        max-height: 90%; /* optional: keep it inside view */
+        overflow: auto;  /* allow scrolling inside login-box if needed */
+    }
+    .login-box {
+        background: #fff;
+        border-radius: 12px;
+        padding: 40px;
+        box-shadow: 6px 0 18px rgba(0, 0, 0, 0.35);
+        width: 100%;
+        max-width: 520px;
+    }
+    .login-box h3 {
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+    .register-link {
+        margin-top: 15px;
+        text-align: center;
+    }
+    .register-link a {
+        text-decoration: none;
+        color: #0B1061;
+        font-weight: 500;
+    }
+    .login_btn
+    {
+        background-color: #0B1061;
+        color: #ffffff;
+    }
+    .login_btn:hover
+    {
+        background-color: #0B1061;
+        color: #ffffff;
+    }
+
+
+    /* Left Section Styles */
+    .left-section {
+        background: linear-gradient(135deg, #0B1061 0%, #1a1f7f 100%);
+        color: #fff;
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Abstract Circles */
+    .shape-circle {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.05);
+    }
+
+    .shape-circle-1 {
+        width: 200px;
+        height: 200px;
+        top: 50px;
+        right: -50px;
+    }
+
+    .shape-circle-2 {
+        width: 300px;
+        height: 300px;
+        bottom: -100px;
+        left: -50px;
+    }
+
+    .shape-circle-3 {
+        width: 150px; 
+        height: 150px; 
+        top: 150px; 
+        left: -75px; 
+    }
+
+    .shape-circle-4 {
+    width: 180px;
+    height: 180px;
+    bottom: 50px;  /* distance from bottom */
+    right: 30px;   /* distance from right */
+    background: rgba(255,255,255,0.05);
+    position: absolute;
+    border-radius: 50%;
+    }
+
+    /* Quote */
+    .quote {
+        font-size: 1rem;
+        line-height: 1.5;
+        max-width: 280px;
+    }
+
+    /* Services */
+    .service-box p {
+        margin: 0;
+        font-size: 0.85rem;
+    }
+
+    /* Bubble Link */
+    .bubble-link {
+        background-color: #1a1f7f;
+        border-radius: 50px;
+        font-weight: 500;
+        transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .bubble-link:hover {
+        background-color: #0f1470;
+        transform: translateY(-2px);
+        text-decoration: none;
+    }
+
+    /* Footer */
+    .bottom-footer {
+        bottom: 10px;
+        padding: 0 20px;
+    }
+
+    /* Social Icons */
+    .social-links a:hover {
+        color: #ffd700;
+        transform: scale(1.1);
+        transition: 0.3s;
+    }
+    .top-feature-icons {
+        position: absolute;
+        top: 20px;
+        width: 100%;
+        gap: 25px;
+    }
+
+    .icon-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: rgba(255,255,255,0.3); /* subtle but visible */
+        font-size: 0.7rem;
+    }
+
+    .icon-box i {
+        margin-bottom: 4px;
+    }
