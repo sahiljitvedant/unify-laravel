@@ -142,14 +142,46 @@
                     },
                     success: function (response)
                     {
-                        Swal.close(); 
-                        console.log('sucess occured');
-                        window.location.href = '{{ route("login_get") }}';
+                        
+                        // Close loader & show success popup
+                        Swal.close();
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'User Registered Sucessfully',
+                            text: 'Please log in to continue to your dashboard',
+                            confirmButtonText: 'OK',
+                            allowOutsideClick: false
+                        }).then(() => {
+                            // Redirect on OK
+                            window.location.href = '{{ route("login_get") }}';
+                        });
                     },
                     error: function (xhr, status, error)
                     {
-                        Swal.close(); 
-                        console.log('error occured');
+                        // Keep loader visible here
+                        Swal.close(); // close loader
+        
+                        if (xhr.status === 422) 
+                        {
+                            Swal.fire
+                            ({
+                                icon: 'error',
+                                title: 'Registration Failed',
+                                text: 'Email is alredy registered.Please try with different Email',
+                                confirmButtonText: 'OK',
+                                allowOutsideClick: false
+                            });
+                        } 
+                        else {
+                            Swal.fire
+                            ({
+                                icon: 'error',
+                                title: 'Registration Failed',
+                                text: 'Something went wrong. Please try again.',
+                                confirmButtonText: 'OK',
+                                allowOutsideClick: false
+                            });
+                        }
                     },
                     complete: function ()
                     {

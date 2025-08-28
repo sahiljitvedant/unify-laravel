@@ -6,7 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
@@ -24,26 +25,42 @@ class AuthController extends Controller
 
     public function registerPost(Request $request)
     {
-        // dd($request);
-
-
-        $request->validate
-        ([
-            'name' => 'required|string|max:255',
-            'email' => 'required',
-            'password' => 'required',
-        ]);
-
-
-        $user = User::create
-        ([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-
-        return response()->json(['message' => 'User registered successfully!', 'user' => $user]);
+        try {
+            // Custom validation rules
+            $validator = Validator::make($request->all(), [
+                'name'     => 'required|string|max:255',
+                'email'    => 'required|email|unique:users,email',
+                'password' => 'required|min:6',
+            ]);
+    
+            if ($validator->fails()) {
+                // Validation error or duplicate email → 422
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $validator->errors()
+                ], 422);
+            }
+    
+            // Create user
+            $user = User::create([
+                'name'     => $request->name,
+                'email'    => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
+    
+            return response()->json([
+                'status' => 'success',
+                'message' => 'User registered successfully!',
+                'user' => $user
+            ]);
+    
+        } catch (\Exception $e) {
+            // Something went wrong → 500
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Something went wrong. Please try again later.'
+            ], 500);
+        }
     }
 
     public function loginPost(Request $request)
