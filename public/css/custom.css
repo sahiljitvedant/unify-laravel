@@ -1,0 +1,298 @@
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--theme-color);
+}
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 60px;
+    width: 100%;
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+.sidebar {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 220px;
+    height: calc(100% - 60px);
+    background-color:var(--sidebar_color);
+    border-right: 1px solid #ddd;
+    padding-top: 20px;
+    transition: transform 0.3s ease;
+    z-index: 999;
+}
+
+.sidebar a {
+    padding: 10px 20px;
+    display: block;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 6px;
+    margin: 4px 10px;
+    transition: background-color 0.4s ease; /* smooth only bg color */
+}
+
+.sidebar a:hover {
+    background-color: rgba(255, 255, 255, 0.15); /* hover effect */
+    color: #fff;
+}
+
+#mainContent {
+    margin-left: 220px;
+    padding: 100px 20px 20px 20px;
+}
+
+/* Responsive */
+@media (max-width: 991.98px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    #mainContent {
+        margin-left: 0;
+        padding-top: 100px;
+    }
+}
+
+/* ==========================
+    DataTable Styling
+========================== */
+table.dataTable {
+    border-collapse: collapse !important;
+    width: 100% !important;
+    margin-top: 1rem !important;
+    border: 1px solid #e0e0e0 !important;
+}
+
+table.dataTable th {
+    background: var(--sidebar_color);
+    color: #fff;
+    font-weight: 600;
+    padding: 12px;
+    text-align: left;
+    border-bottom: 2px solid #dee2e6;
+}
+
+table.dataTable td {
+    padding: 10px 12px;
+    vertical-align: middle;
+    border-bottom: 1px solid #f1f1f1;
+    font-size: 14px;
+    color: #444;
+}
+
+table.dataTable tbody tr:hover {
+    background-color: #f9f9f9;
+    transition: 0.2s ease-in-out;
+}
+
+/* Action button dropdown */
+.dropdown.actionbtn .dropdown-menu {
+    min-width: 150px;
+    padding: 0.5rem 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.dropdown.actionbtn .dropdown-item {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    padding: 0px 0px;
+    transition: 0.2s;
+}
+
+.dropdown.actionbtn .dropdown-item:hover {
+    background-color: #f1f1f1;
+}
+
+/* Search box + filter row styling */
+#custom-searchPanes {
+    background: #fff;
+    padding: 1rem;
+    border-radius: 10px;
+    border: 1px solid #e5e5e5;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+#custom-searchPanes input,
+#custom-searchPanes select {
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+#custom-searchPanes .btn {
+    border-radius: 8px;
+    padding: 6px 14px;
+}
+
+/* Pagination styling */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 0px 0px;
+    margin: 0 2px;
+    border-radius: 6px;
+    background: #ddd;
+    border: 1px solid #ddd;
+    color: #333 !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: #007bff !important;
+    color: #fff !important;
+    border-color: #007bff;
+}
+
+.dataTables_wrapper .dataTables_info {
+    font-size: 13px;
+    color: #555;
+}
+
+/* Status badges */
+.badge-active {
+    background-color: #28a745;
+}
+.badge-inactive {
+    background-color: #6c757d;
+}
+.badge-draft {
+    background-color: #ffc107;
+    color: #000;
+}
+.badge-deleted {
+    background-color: #dc3545;
+}
+
+.form-label 
+{
+    font-size: 14px;     
+    font-weight: 500;     
+    color: #333;          
+    margin-bottom: 4px;  
+    
+}
+.form-control::placeholder 
+{
+    font-size: 13px; 
+    color: #777;     
+    opacity: 1;      
+}
+.error-message
+{
+    font-size: 14px;     
+    font-weight: 500; 
+}
+.form-label.required::after {
+    content: "*";
+    color: #d32f2f;   /* light red shade */
+    font-size: 0.85em; /* slightly smaller than label text */
+    font-weight: normal; /* not bold */
+
+}
+#submitBtn
+{
+    background-color: var(--sidebar_color);
+    color: #ffffff;
+}
+.btn-add
+{
+    background-color: var(--sidebar_color);
+    color: #ffffff;
+    border-radius: 8px;   /* rounded corners */
+    padding: 6px 16px;    /* optional: better spacing */
+    border: none; 
+    text-decoration: none;
+}
+.form-label {
+    font-size: 14px;     
+    font-weight: 500;     
+    color: #333;          
+    margin-bottom: 4px;  
+}
+
+.form-label.required::after {
+    content: " *";
+    color: #d32f2f;     /* medium-dark red */
+    font-size: 0.85em;  /* smaller than label */
+    font-weight: normal;
+}
+
+.form-select {
+    font-size: 13px;           /* font size */
+    color: var(--sidebar_color);            /* text color */
+    background-color: #fff;    /* dropdown background */
+
+}
+.form-select option {
+    color: var(--sidebar_color);   /* text color of options */
+    background-color: #fff; /* background of options */
+}
+/* Container for breadcrumb + form */
+.container-custom {
+    max-width: 95%;
+    margin: 0 auto;
+}
+
+/* Remove all default ol padding/margin */
+.breadcrumb {
+    background-color: transparent;
+    padding: 0;
+    margin-bottom: 1rem;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--sidebar_color);
+}
+
+/* Remove left margin/padding from ol and li to align with form */
+.breadcrumb ol {
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.breadcrumb-item {
+    padding: 0;   /* remove default li padding */
+    margin: 0;    /* remove default li margin */
+}
+
+/* Links */
+.breadcrumb a {
+    color:var(--sidebar_color);
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+/* Active item */
+.breadcrumb-item.active {
+    color: var(--sidebar_color);
+    font-weight: 600;
+}
+
+#members-table td,
+#members-table th {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Smaller font for table header */
+#members-table thead th {
+    font-size: 12px;  /* adjust as needed */
+    font-weight: 500; /* optional: make header slightly bold */
+}

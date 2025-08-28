@@ -198,6 +198,11 @@ return [
         3 => 'Yoga',
         4 => 'Steam Bath',
     ],
+
+    // Body color
+    'theme_color' => '#e3e3e3',
+    //Dattable Header,Sidebar, Add button on listing page,breadcrum, submit bt on add&edit form
+    'sidebar_color'=> '#0B1061',   
     
 
 ];
