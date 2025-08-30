@@ -17,7 +17,13 @@
         </nav>
         <div class="p-4 bg-light rounded shadow">
             <!-- Heading + Add Button -->
-            
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 gap-2">
+                <h4 class="mb-2 mb-md-0">List Deleted Trainer</h4>
+                <!-- <div class="d-flex flex-column align-items-start align-items-md-end gap-2">
+                    <a href="{{ route('add_trainer') }}" class="btn-add">Add Trainer</a>
+                    <a href="{{ route('list_deleted_trainer') }}" class="btn-link">Show Deleted Trainer</a>
+                </div> -->
+            </div>
             <div class="data-wrapper">
                 <!-- Filters -->
                 <div class="filters p-3">
