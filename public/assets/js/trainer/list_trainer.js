@@ -17,8 +17,8 @@ $(document).ready(function ()
                 order: sortOrder,
                 active: $("#filterActive").val(),
                 trainer: $("#filterTrainer").val(),
-                min_price: $("#filterMinPrice").val(),
-                max_price: $("#filterMaxPrice").val(),
+                trainerName: $("#trainerName").val(),
+                joiningDate: $("#joiningDate").val(),
             },
             success: function (res) {
                 $("#loader").hide();
@@ -44,10 +44,10 @@ $(document).ready(function ()
                 rows += `
                     <tr>
                         <td>${m.id}</td>
-                        <td>${m.membership_name}</td>
-                        <td>${m.duration_in_days}</td>
-                        <td>${m.price}</td>
-                        <td>${m.trainer_included === 'yes' ? 'Yes' : 'No'}</td>
+                        <td>${m.trainer_name}</td>
+                        <td>${m.joining_date}</td>
+                        <td>${m.expiry_date}</td>
+                        
                         <td>${m.is_active ? 'Active' : 'Inactive'}</td>
                         <td>${m.action}</td>
                     </tr>
@@ -134,26 +134,26 @@ $("#btnCancel").on("click", function (e) {
     e.preventDefault();
     $("#filterActive").val('');
     $("#filterTrainer").val('');
-    $("#filterMinPrice").val('');
-    $("#filterMaxPrice").val('');
+    $("#trainerName").val('');
+    $("#joiningDate").val('');
     fetchData(1); // reload data with no filters
 });
 
     // Initial load
     fetchData();
 });
-function activateMembershipID(id) 
+function deleteMembershipById(id)
 {
     $.ajax({
-        url: activateMembershipUrl.replace(':id', id), 
+        url: deleteTrainer.replace(':id', id), 
         type: "POST",
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         beforeSend: function () {
             Swal.fire({
-                title: 'Activating...',
-                text: 'Please wait while we activate the Trainer.',
+                title: 'Deleting...',
+                text: 'Please wait while we delete the trainer.',
                 allowOutsideClick: false,
                 didOpen: () => {
                     Swal.showLoading();
@@ -163,12 +163,13 @@ function activateMembershipID(id)
         success: function (response) {
             Swal.fire({
                 icon: 'success',
-                title: 'Activated!',
+                title: 'Deleted!',
                 text: response.message,
                 confirmButtonText: 'OK',
                 allowOutsideClick: false
             }).then(() => {
-                window.location.href = "/list_trainer"; // refresh table
+                // alert('hii');
+                location.reload();
             });
         },
         error: function (xhr) {
@@ -182,7 +183,7 @@ function activateMembershipID(id)
                 confirmButtonText: 'OK',
                 allowOutsideClick: false
             }).then(() => {
-                $('#members-table').DataTable().ajax.reload(); // refresh table
+                location.reload();
             });
                
           

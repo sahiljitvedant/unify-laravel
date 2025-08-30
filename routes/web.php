@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Web\GymPackageController;
 use App\Http\Controllers\Web\GymMembershipController;
 use App\Http\Controllers\Web\DashboardController;
+use App\Http\Controllers\Web\TrainerController;
 
 Route::get('/register', [AuthController::class, 'register'])->name('register_get');
 Route::post('/register', [AuthController::class, 'registerPost'])->name('register_post');
@@ -39,15 +40,18 @@ Route::middleware(['auth.custom', 'session.timeout'])->group(function ()
     Route::get('/add_membership', [GymMembershipController::class, 'add'])->name('add_membership');
     Route::get('/edit_membership/{id}', [GymMembershipController::class, 'edit'])->name('edit_membership');
     Route::get('/list_deleted_membership', [GymMembershipController::class, 'list_deleted_membership'])->name('list_deleted_membership');
-
+    
+    // Trainer Route:-
+    Route::get('/list_trainer', [TrainerController::class, 'list'])->name('list_trainer');
+    Route::get('/add_trainer', [TrainerController::class, 'add'])->name('add_trainer');
+    Route::get('/list_deleted_trainer', [TrainerController::class, 'list_deleted_trainer'])->name('list_deleted_trainer');
+    
     Route::middleware(['web'])->group(function () 
     {
         Route::post('/stepper-submit', [GymPackageController::class, 'submit'])->name('stepper.submit');
         Route::post('/stepper-update/{id}', [GymPackageController::class, 'update'])->name('stepper.update');
         Route::get('/members/fetch', [GymPackageController::class, 'fetchMemberList'])
         ->name('fetch_member_list');
-
-
         Route::post('/add_membership', [GymMembershipController::class, 'submit'])->name('add_membership');
         Route::get('/fetch_membership', [GymMembershipController::class, 'fetchMembership'])
         ->name('fetch_membership');
@@ -57,6 +61,14 @@ Route::middleware(['auth.custom', 'session.timeout'])->group(function ()
         Route::get('/fetch_deleted_membership', [GymMembershipController::class, 'fetch_deleted_membership'])
         ->name('fetch_deleted_membership');
         Route::post('/activate_membership/{id}', [GymMembershipController::class, 'activate_membership'])->name('activate_membership');
+
+        Route::post('/add_trainer', [TrainerController::class, 'submit'])->name('add_trainer');
+        Route::get('/fetch_trainer', [TrainerController::class, 'fetch_trainer_list'])
+        ->name('fetch_trainer_list');
+        Route::post('/delete_trainer/{id}', [TrainerController::class, 'deleteTrainer'])->name('delete_trainer');
+        Route::get('/fetch_deleted_trainer', [TrainerController::class, 'fetch_deleted_trainer'])
+        ->name('fetch_deleted_trainer');
+        Route::post('/activate_trainer/{id}', [TrainerController::class, 'activate_trainer'])->name('activate_trainer');
 
     });
 });

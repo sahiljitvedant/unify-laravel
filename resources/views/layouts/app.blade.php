@@ -86,7 +86,7 @@
                 <a href="{{ route('list_membership') }}" class="d-block py-1">
                     <i class="bi bi-book me-2"></i>Membership
                 </a>
-                <a href="#" class="d-block py-1">
+                <a href="{{ route('list_trainer') }}" class="d-block py-1">
                     <i class="bi bi-person-plus me-2"></i>Trainer
                 </a>
             </div>

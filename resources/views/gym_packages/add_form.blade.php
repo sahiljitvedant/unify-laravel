@@ -49,15 +49,15 @@
                 <div class="text-danger error-message" data-error-for="dob"></div>
             </div>
             <div class="col-12 col-md-6 mb-3">
-    <label class="form-label">{{ __('global.gender_label') }}</label>
-    <select class="form-select" name="gender" id="gender">
-        <option value="" selected disabled>{{ __('global.gender_placeholder') }}</option>
-        @foreach (config('app.gender_options') as $id => $gender)
-            <option value="{{ $id }}">{{ __('global.' . $gender) }}</option>
-        @endforeach
-    </select>
-    <div class="text-danger error-message" data-error-for="gender"></div>
-</div>
+                <label class="form-label">{{ __('global.gender_label') }}</label>
+                <select class="form-select" name="gender" id="gender">
+                    <option value="" selected disabled>{{ __('global.gender_placeholder') }}</option>
+                    @foreach (config('app.gender_options') as $id => $gender)
+                        <option value="{{ $id }}">{{ __('global.' . $gender) }}</option>
+                    @endforeach
+                </select>
+                <div class="text-danger error-message" data-error-for="gender"></div>
+            </div>
 
         </div>
 

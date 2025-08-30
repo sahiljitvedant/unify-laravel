@@ -5,11 +5,12 @@ $(document).ready(function ()
     let sortColumn = 'id';
     let sortOrder = 'asc';
 
-    function fetchData(page = 1) {
+    function fetchData(page = 1) 
+    {
         $("#loader").show();
 
         $.ajax({
-            url: fetchMembership,
+            url: fetchDeletedTrainer,
             type: "GET",
             data: {
                 page: page,
@@ -17,8 +18,8 @@ $(document).ready(function ()
                 order: sortOrder,
                 active: $("#filterActive").val(),
                 trainer: $("#filterTrainer").val(),
-                min_price: $("#filterMinPrice").val(),
-                max_price: $("#filterMaxPrice").val(),
+                trainerName: $("#trainerName").val(),
+                joiningDate: $("#joiningDate").val(),
             },
             success: function (res) {
                 $("#loader").hide();
@@ -29,14 +30,15 @@ $(document).ready(function ()
         });
     }
 
-    function renderTable(data) {
+    function renderTable(data) 
+    {
         let rows = '';
     
         if (data.length === 0) {
-            // Show "No memberships found" message spanning all columns
+            // Show "No trainers found" message spanning all columns
             rows = `
                 <tr>
-                    <td colspan="7" class="text-center">No memberships found</td>
+                    <td colspan="7" class="text-center">No trainers found</td>
                 </tr>
             `;
         } else {
@@ -44,10 +46,10 @@ $(document).ready(function ()
                 rows += `
                     <tr>
                         <td>${m.id}</td>
-                        <td>${m.membership_name}</td>
-                        <td>${m.duration_in_days}</td>
-                        <td>${m.price}</td>
-                        <td>${m.trainer_included === 'yes' ? 'Yes' : 'No'}</td>
+                        <td>${m.trainer_name}</td>
+                        <td>${m.joining_date}</td>
+                        <td>${m.expiry_date}</td>
+                        
                         <td>${m.is_active ? 'Active' : 'Inactive'}</td>
                         <td>${m.action}</td>
                     </tr>
@@ -58,9 +60,7 @@ $(document).ready(function ()
         $("#membershipBody").html(rows);
     }
     
-    
-
-    function renderPagination(currentPage, lastPage) 
+    function renderPagination(currentPage, lastPage)  
     {
         let paginationHtml = "";
 
@@ -101,7 +101,8 @@ $(document).ready(function ()
 
     // Sorting
    
-    $(document).on("click", ".sort-link", function (e) {
+    $(document).on("click", ".sort-link", function (e) 
+    {
         e.preventDefault();
         let column = $(this).data("column");
 
@@ -124,28 +125,28 @@ $(document).ready(function ()
 
     // Filters change
    // Search button click
-   $("#submitBtn").on("click", function (e) {
-    e.preventDefault();
-    fetchData(1);
-});
+    $("#submitBtn").on("click", function (e) {
+        e.preventDefault();
+        fetchData(1);
+    });
 
-// Cancel button click - reset filters
-$("#btnCancel").on("click", function (e) {
-    e.preventDefault();
-    $("#filterActive").val('');
-    $("#filterTrainer").val('');
-    $("#filterMinPrice").val('');
-    $("#filterMaxPrice").val('');
-    fetchData(1); // reload data with no filters
-});
+    // Cancel button click - reset filters
+    $("#btnCancel").on("click", function (e) {
+        e.preventDefault();
+        $("#filterActive").val('');
+        $("#filterTrainer").val('');
+        $("#trainerName").val('');
+        $("#joiningDate").val('');
+        fetchData(1); // reload data with no filters
+    });
 
     // Initial load
     fetchData();
 });
-function activateMembershipID(id) 
+function activateTrainerID(id) 
 {
     $.ajax({
-        url: activateMembershipUrl.replace(':id', id), 
+        url: activateTrainerUrl.replace(':id', id), 
         type: "POST",
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -153,7 +154,7 @@ function activateMembershipID(id)
         beforeSend: function () {
             Swal.fire({
                 title: 'Activating...',
-                text: 'Please wait while we activate the Trainer.',
+                text: 'Please wait while we activate the Trainer',
                 allowOutsideClick: false,
                 didOpen: () => {
                     Swal.showLoading();

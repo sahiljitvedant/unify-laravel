@@ -206,8 +206,6 @@ class GymMembershipController extends Controller
             $encryptedId = Crypt::encryptString($row->id);
             $row->encrypted_id = $encryptedId;
             $row->action = '
-               
-                
                 <button type="button" class="btn btn-sm" onclick="activateMembershipID('.$row->id.')">
                     <i class="bi bi-check-circle"></i>
                 </button>
