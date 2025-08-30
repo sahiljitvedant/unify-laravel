@@ -97,10 +97,10 @@
         </div>
 
         <div class="text-end mt-4">
-            <a href="{{ route('list_membership') }}" class="btn btn-secondary me-2">
+            <a href="{{ route('list_membership') }}" class="btn btn-secondary me-2 cncl_btn">
                 Cancel
             </a>
-            <button type="submit" class="btn " id="submitBtn">{{ __('membership.submit_button') }}</button>
+            <button type="submit" class="btn" id="submitBtn">{{ __('membership.submit_button') }}</button>
         </div>
     </form>
 </div>

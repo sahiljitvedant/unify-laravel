@@ -1,35 +1,148 @@
+let currentPage = 1;
 $(document).ready(function () 
 {
-    $('#members-table').DataTable({
-        processing: true,
-        serverSide: true,
-        searching: false,
-        ajax: fetchMembership ,
+   
+    let sortColumn = 'id';
+    let sortOrder = 'asc';
 
-        columns: [
-            { data: 'id', name: 'id' },
-            { data: 'membership_name', name: 'membership_name' },
-            { data: 'duration_in_days', name: 'duration_in_days' },
-            { data: 'price', name: 'price' },
-            { data: 'trainer_included', name: 'trainer_included' },
-            { 
-                data: 'is_active', 
-                render: function(data) {
-                    return data == 1 ? 'Yes' : 'No';
-                }
+    function fetchData(page = 1) {
+        $("#loader").show();
+
+        $.ajax({
+            url: fetchMembership,
+            type: "GET",
+            data: {
+                page: page,
+                sort: sortColumn,
+                order: sortOrder,
+                active: $("#filterActive").val(),
+                trainer: $("#filterTrainer").val(),
+                min_price: $("#filterMinPrice").val(),
+                max_price: $("#filterMaxPrice").val(),
             },
-            { data: 'action', orderable: false, searchable: false },
-        ],
+            success: function (res) {
+                $("#loader").hide();
+                renderTable(res.data);
+                renderPagination(res.current_page, res.last_page);
+                currentPage = res.current_page;
+            }
+        });
+    }
 
-        order: [[0, 'desc']],
-        pageLength: 10,
-        responsive: true,
-        autoWidth: false
-        
+    function renderTable(data) {
+        let rows = '';
+    
+        if (data.length === 0) {
+            // Show "No memberships found" message spanning all columns
+            rows = `
+                <tr>
+                    <td colspan="7" class="text-center">No memberships found</td>
+                </tr>
+            `;
+        } else {
+            data.forEach(m => {
+                rows += `
+                    <tr>
+                        <td>${m.id}</td>
+                        <td>${m.membership_name}</td>
+                        <td>${m.duration_in_days}</td>
+                        <td>${m.price}</td>
+                        <td>${m.trainer_included === 'yes' ? 'Yes' : 'No'}</td>
+                        <td>${m.is_active ? 'Active' : 'Inactive'}</td>
+                        <td>${m.action}</td>
+                    </tr>
+                `;
+            });
+        }
+    
+        $("#membershipBody").html(rows);
+    }
+    
+    
+
+    function renderPagination(currentPage, lastPage) 
+    {
+        let paginationHtml = "";
+
+        // Prev Button
+        paginationHtml += `
+            <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                <a href="#" class="page-link" data-page="${currentPage - 1}">Prev</a>
+            </li>
+        `;
+
+        // Current Page (only one active page shown)
+        paginationHtml += `
+            <li class="page-item active">
+                <a href="#" class="page-link" data-page="${currentPage}">
+                    ${currentPage}
+                </a>
+            </li>
+        `;
+
+        // Next Button
+        paginationHtml += `
+            <li class="page-item ${currentPage === lastPage ? 'disabled' : ''}">
+                <a href="#" class="page-link" data-page="${currentPage + 1}">Next</a>
+            </li>
+        `;
+
+        $("#pagination").html(paginationHtml);
+    }
+
+    // Pagination click
+    $(document).on("click", "#pagination .page-link", function (e) {
+        e.preventDefault();
+        let page = $(this).data("page");
+        if (page && page > 0) {
+            fetchData(page);
+        }
     });
+
+    // Sorting
+   
+    $(document).on("click", ".sort-link", function (e) {
+        e.preventDefault();
+        let column = $(this).data("column");
+
+        // Toggle order
+        sortOrder = (sortColumn === column && sortOrder === 'asc') ? 'desc' : 'asc';
+        sortColumn = column;
+
+        // Reset all icons
+        $(".sort-icons i").removeClass("active");
+
+        // Highlight correct icon
+        if (sortOrder === "asc") {
+            $(this).find(".asc").addClass("active");
+        } else {
+            $(this).find(".desc").addClass("active");
+        }
+
+        fetchData(1);
+    });
+
+    // Filters change
+   // Search button click
+   $("#submitBtn").on("click", function (e) {
+    e.preventDefault();
+    fetchData(1);
 });
 
-function deleteMembershipById(id) 
+// Cancel button click - reset filters
+$("#btnCancel").on("click", function (e) {
+    e.preventDefault();
+    $("#filterActive").val('');
+    $("#filterTrainer").val('');
+    $("#filterMinPrice").val('');
+    $("#filterMaxPrice").val('');
+    fetchData(1); // reload data with no filters
+});
+
+    // Initial load
+    fetchData();
+});
+function deleteMembershipById(id)
 {
     $.ajax({
         url: deleteMembershipUrl.replace(':id', id), 
@@ -55,7 +168,8 @@ function deleteMembershipById(id)
                 confirmButtonText: 'OK',
                 allowOutsideClick: false
             }).then(() => {
-                $('#members-table').DataTable().ajax.reload(); // refresh table
+                // alert('hii');
+                location.reload();
             });
         },
         error: function (xhr) {
@@ -69,7 +183,7 @@ function deleteMembershipById(id)
                 confirmButtonText: 'OK',
                 allowOutsideClick: false
             }).then(() => {
-                $('#members-table').DataTable().ajax.reload(); // refresh table
+                location.reload();
             });
                
           

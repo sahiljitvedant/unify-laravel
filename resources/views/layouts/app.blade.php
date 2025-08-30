@@ -16,10 +16,7 @@
     <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/searchpanes/2.2.0/css/searchPanes.bootstrap5.min.css" rel="stylesheet" />
-
-    <!-- Font librry -->
     <!-- Google Fonts: Inter -->
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <!-- Swal Js -->
@@ -27,10 +24,13 @@
     <!-- Custom CSS -->
       <!-- Custom Admin CSS -->
       <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+      
     <style>
         :root {
             --theme-color: {{ config('app.theme_color') }};
             --sidebar_color: {{ config('app.sidebar_color') }};
+            --other_color_fff: {{ config('app.other_color_fff') }};
+            --font_size: {{ config('app.font_size') }};
         }
         .no-sidebar {
             margin-left: 0 !important;
@@ -80,7 +80,7 @@
             role="button" 
             aria-expanded="false" 
             aria-controls="modulesDropdown">
-            <span><i class="bi bi-briefcase me-2"></i>Modules</span><i class="fas fa-chevron-down small ms-2 mt-1"></i>
+            <span><i class="bi bi-briefcase me-2"></i>Modules</span><i class="fas fa-chevron-down small ms-2 mt-0"></i>
             </a>
             <div class="collapse ps-4" id="modulesDropdown">
                 <a href="{{ route('list_membership') }}" class="d-block py-1">

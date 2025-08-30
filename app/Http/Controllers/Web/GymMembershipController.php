@@ -20,32 +20,102 @@ class GymMembershipController extends Controller
        
     }
     
+    // public function fetchMembership(Request $request)
+    // {
+    //     // dd(1);
+    //     // ONE variable that fetches everything you need
+    //     $fetch_data = DB::table('tbl_gym_membership')
+    //         ->select('*')
+    //         ->where('is_deleted', '!=', 9) 
+    //         ->orderBy('id', 'desc')
+    //         ->get();
+
+    //     // Send to DataTables (server-side)
+    //     return DataTables::of($fetch_data)
+    //         ->addColumn('action', function ($row) 
+    //         {
+    //             $encryptedId = Crypt::encryptString($row->id);
+    //             return ' 
+    //             <a href="'.route('edit_membership', $encryptedId).'" class="btn btn-sm" data-bs-toggle="tooltip" title="Edit">
+    //                 <i class="bi bi-pencil-square"></i>
+    //             </a>
+    //             <button type="button" class="btn btn-sm" onclick="deleteMembershipById('.$row->id.')">
+    //                 <i class="bi bi-trash"></i>
+    //             </button>';
+    //         })
+    //         ->rawColumns(['action'])
+    //         ->make(true);
+    // }
+
     public function fetchMembership(Request $request)
     {
-        // dd(1);
-        // ONE variable that fetches everything you need
-        $fetch_data = DB::table('tbl_gym_membership')
+        // dd($request->all());
+        $query = DB::table('tbl_gym_membership')
             ->select('*')
-            ->where('is_deleted', '!=', 9) 
-            ->orderBy('id', 'desc')
-            ->get();
+            ->where('is_deleted', '!=', 9);
 
-        // Send to DataTables (server-side)
-        return DataTables::of($fetch_data)
-            ->addColumn('action', function ($row) 
-            {
-                $encryptedId = Crypt::encryptString($row->id);
-                return ' 
-                <a href="'.route('edit_membership', $encryptedId).'" class="btn btn-sm" data-bs-toggle="tooltip" title="Edit">
+        // Apply filters
+        if ($request->filled('active')) {
+            $query->where('is_active', $request->active);
+        }
+
+        if ($request->filled('trainer')) {
+            // Convert 1 => 'yes', 0 => 'no'
+            $trainerValue = $request->trainer == 1 ? 'yes' : 'no';
+            $query->where('trainer_included', $trainerValue);
+        }
+
+        if ($request->filled('min_price')) {
+            $query->where('price', '>=', $request->min_price);
+        }
+
+        if ($request->filled('max_price')) {
+            $query->where('price', '<=', $request->max_price);
+        }
+
+        // Sorting
+        $allowedSorts = [
+            'id',
+            'membership_name',
+            'duration_in_days',
+            'price',
+            'trainer_included',
+            'is_active',
+            'created_at'
+        ];
+
+        $sort = $request->get('sort', 'id');
+        $direction = $request->get('order', 'desc');
+
+        if (!in_array($sort, $allowedSorts)) {
+            $sort = 'id';
+        }
+        if (!in_array(strtolower($direction), ['asc', 'desc'])) {
+            $direction = 'desc';
+        }
+
+        $query->orderBy($sort, $direction);
+
+        // Pagination
+        $memberships = $query->paginate(10);
+
+        // Add action + encrypted_id
+        $memberships->getCollection()->transform(function ($row) {
+            $encryptedId = Crypt::encryptString($row->id);
+            $row->encrypted_id = $encryptedId;
+            $row->action = '
+                <a href="'.route('edit_membership', $encryptedId).'" class="btn btn-sm" title="Edit">
                     <i class="bi bi-pencil-square"></i>
                 </a>
                 <button type="button" class="btn btn-sm" onclick="deleteMembershipById('.$row->id.')">
                     <i class="bi bi-trash"></i>
                 </button>';
-            })
-            ->rawColumns(['action'])
-            ->make(true);
+            return $row;
+        });
+
+        return response()->json($memberships);
     }
+
 
     public function list_deleted_membership()
     {
@@ -53,31 +123,101 @@ class GymMembershipController extends Controller
 
     }
 
+    // public function fetch_deleted_membership(Request $request)
+    // {
+    //     // dd(1);
+    //     // ONE variable that fetches everything you need
+    //     $fetch_data = DB::table('tbl_gym_membership')
+    //         ->select('*')
+    //         ->where('is_deleted', '=', 9) 
+    //         ->orderBy('id', 'desc')
+    //         ->get();
+
+    //     // Send to DataTables (server-side)
+    //     return DataTables::of($fetch_data)
+    //         ->addColumn('action', function ($row) 
+    //         {
+    //             $encryptedId = Crypt::encryptString($row->id);
+    //             return ' 
+                
+    //             <button type="button" class="btn btn-sm" onclick="activateMembershipID('.$row->id.')">
+    //             <i class="bi bi-check-circle"></i>
+
+    //             </button>';
+    //         })
+    //         ->rawColumns(['action'])
+    //         ->make(true);
+    // }
+
     public function fetch_deleted_membership(Request $request)
     {
-        // dd(1);
-        // ONE variable that fetches everything you need
-        $fetch_data = DB::table('tbl_gym_membership')
+        // dd($request->all());
+        $query = DB::table('tbl_gym_membership')
             ->select('*')
-            ->where('is_deleted', '=', 9) 
-            ->orderBy('id', 'desc')
-            ->get();
+            ->where('is_deleted', '=', 9) ;
 
-        // Send to DataTables (server-side)
-        return DataTables::of($fetch_data)
-            ->addColumn('action', function ($row) 
-            {
-                $encryptedId = Crypt::encryptString($row->id);
-                return ' 
+        // Apply filters
+        if ($request->filled('active')) {
+            $query->where('is_active', $request->active);
+        }
+
+        if ($request->filled('trainer')) {
+            // Convert 1 => 'yes', 0 => 'no'
+            $trainerValue = $request->trainer == 1 ? 'yes' : 'no';
+            $query->where('trainer_included', $trainerValue);
+        }
+
+        if ($request->filled('min_price')) {
+            $query->where('price', '>=', $request->min_price);
+        }
+
+        if ($request->filled('max_price')) {
+            $query->where('price', '<=', $request->max_price);
+        }
+
+        // Sorting
+        $allowedSorts = [
+            'id',
+            'membership_name',
+            'duration_in_days',
+            'price',
+            'trainer_included',
+            'is_active',
+            'created_at'
+        ];
+
+        $sort = $request->get('sort', 'id');
+        $direction = $request->get('order', 'desc');
+
+        if (!in_array($sort, $allowedSorts)) {
+            $sort = 'id';
+        }
+        if (!in_array(strtolower($direction), ['asc', 'desc'])) {
+            $direction = 'desc';
+        }
+
+        $query->orderBy($sort, $direction);
+
+        // Pagination
+        $memberships = $query->paginate(10);
+
+        // Add action + encrypted_id
+        $memberships->getCollection()->transform(function ($row) {
+            $encryptedId = Crypt::encryptString($row->id);
+            $row->encrypted_id = $encryptedId;
+            $row->action = '
+               
                 
                 <button type="button" class="btn btn-sm" onclick="activateMembershipID('.$row->id.')">
-                <i class="bi bi-check-circle"></i>
+                    <i class="bi bi-check-circle"></i>
+                </button>
+                ';
+            return $row;
+        });
 
-                </button>';
-            })
-            ->rawColumns(['action'])
-            ->make(true);
+        return response()->json($memberships);
     }
+
     public function add()
     {
         // dd(1);
@@ -183,7 +323,7 @@ class GymMembershipController extends Controller
 
     public function edit($id)
     {
-
+        
         // dd($id);
         // dd('This is edit page');
 

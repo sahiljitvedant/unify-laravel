@@ -202,7 +202,12 @@ return [
     // Body color
     'theme_color' => '#e3e3e3',
     //Dattable Header,Sidebar, Add button on listing page,breadcrum, submit bt on add&edit form
-    'sidebar_color'=> '#0B1061',   
+    'sidebar_color'=> '#0B1061',  
+    // Sidebar menu color, button color,select drodpown bg color, datatale filter bg,datatable bg,select drodpdown bg
+    // Datatble icon color
+    'other_color_fff'=>'#fff' ,
+    // Font size variable:-
+    'font_size'=>'12px',
     
 
 ];
