@@ -44,6 +44,7 @@ Route::middleware(['auth.custom', 'session.timeout'])->group(function ()
     // Trainer Route:-
     Route::get('/list_trainer', [TrainerController::class, 'list'])->name('list_trainer');
     Route::get('/add_trainer', [TrainerController::class, 'add'])->name('add_trainer');
+    Route::get('/edit_trainer/{id}', [TrainerController::class, 'edit'])->name('edit_trainer');
     Route::get('/list_deleted_trainer', [TrainerController::class, 'list_deleted_trainer'])->name('list_deleted_trainer');
     
     Route::middleware(['web'])->group(function () 
@@ -69,7 +70,8 @@ Route::middleware(['auth.custom', 'session.timeout'])->group(function ()
         Route::get('/fetch_deleted_trainer', [TrainerController::class, 'fetch_deleted_trainer'])
         ->name('fetch_deleted_trainer');
         Route::post('/activate_trainer/{id}', [TrainerController::class, 'activate_trainer'])->name('activate_trainer');
-
+        Route::post('/update_trainer/{id}', [TrainerController::class, 'update'])->name('update_trainer');
+        
     });
 });
 

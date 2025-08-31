@@ -46,7 +46,8 @@ $(document).ready(function ()
                         <td>${m.id}</td>
                         <td>${m.trainer_name}</td>
                         <td>${m.joining_date}</td>
-                        <td>${m.expiry_date}</td>
+                        <td>${m.expiry_date ? m.expiry_date : '-'}</td>
+
                         
                         <td>${m.is_active ? 'Active' : 'Inactive'}</td>
                         <td>${m.action}</td>

@@ -76,7 +76,7 @@ class TrainerController extends Controller
             $encryptedId = Crypt::encryptString($row->id);
             $row->encrypted_id = $encryptedId;
             $row->action = '
-                <a href="'.route('edit_membership', $encryptedId).'" class="btn btn-sm" title="Edit">
+                <a href="'.route('edit_trainer', $encryptedId).'" class="btn btn-sm" title="Edit">
                     <i class="bi bi-pencil-square"></i>
                 </a>
                 <button type="button" class="btn btn-sm" onclick="deleteMembershipById('.$row->id.')">
@@ -145,6 +145,67 @@ class TrainerController extends Controller
         }
     }
 
+    public function edit($id)
+    {
+        
+        // dd($id);
+        // dd('This is edit page');
+
+        // dd($id);
+
+        $decryptedId = Crypt::decryptString($id);
+        // dd($decryptedId);
+        $member = DB::table('tbl_trainer')->where('id', $decryptedId)->first();
+
+        if (!$member) {
+            abort(404, 'Member not found');
+        }
+
+        // Pass existing member data into the form
+        return view('trainer.edit_trainer', compact('member'));
+       
+    }
+
+    // Handle update
+    public function update(Request $request, $id)
+    {
+        // dd('update');
+        // dd($request->all());
+        try 
+        {
+            $request->validate([
+                'trainer_name' => 'required|string|min:3|max:5',
+                'joining_date'     => 'required|date',
+                'is_active'       => 'required',
+            ]);
+
+    
+            DB::table('tbl_trainer')
+                ->where('id', $id)
+                ->update([
+                    'trainer_name'     => $request->trainer_name,
+                    'is_active'           => $request->is_active,
+                    'joining_date'         => $request->joining_date,
+                    'expiry_date'    => $request->expiry_date,
+                ]);
+    
+            return response()->json(['success' => true, 'message' => 'Trainer updated successfully!']);
+        } 
+        catch (\Illuminate\Validation\ValidationException $e) 
+        {
+            // Return validation errors as JSON
+            return response()->json([
+                'success' => false, 
+                'errors'  => $e->errors()
+            ], 422);
+        }
+        catch (\Exception $e) 
+        {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
+
+    }
+    
     public function deleteTrainer($id)
     {
         // dd(1);

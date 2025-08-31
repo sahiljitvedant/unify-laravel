@@ -41,7 +41,9 @@
                             <input type="text" id="trainerName" class="form-control" placeholder="Trainer Name">
                         </div>
                         <div class="col-md-3">
-                            <input type="date" id="joiningDate" class="form-control" placeholder="Max Price">
+                          
+                            <input type="date" id="joiningDate" class="form-control">
+                            <small class="form-text text-muted">Joining Date</small>
                         </div>
                         <div class="col-md-2">
                             <button id="submitBtn" class="btn ">
@@ -97,7 +99,7 @@
                                 </th>
                                 <th>
                                     <a href="#" class="sort-link" data-column="expiry_date">
-                                        Expiry Date
+                                        Leaving Date
                                         <span class="sort-icons">
                                             <i class="asc">▲</i>
                                             <i class="desc">▼</i>
