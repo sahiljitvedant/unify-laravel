@@ -1,4 +1,4 @@
-/* ========== RESET & BASE ========== */
+/* ========== RESET & GLOBAL ========== */
 * {
     margin: 0;
     padding: 0;
@@ -6,8 +6,10 @@
   }
   
   body {
-    font-family: "Poppins", sans-serif;
+    font-family: Arial, sans-serif;
     line-height: 1.6;
+    padding-top: 70px; /* offset for fixed header */
+    background: #fff;
     color: #333;
   }
   
@@ -20,111 +22,233 @@
     list-style: none;
   }
   
-  .container {
-    width: 90%;
-    max-width: 1200px;
-    margin: auto;
-  }
-  
   /* ========== HEADER ========== */
   .header {
-    background: #111;
+    background: #e3e3e3;
     padding: 15px 0;
-    color: #fff;
-    position: fixed;       /* always fixed */
+    color: #0B1061;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 1000;
+    box-shadow: 6px 0 18px rgba(0, 0, 0, 0.35);
   }
   
-  .navbar {
+  .navbar 
+  {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 90%;
+    margin: auto;
   }
   
   .logo {
-    font-size: 22px;
+    font-size: 24px;
     font-weight: bold;
-    color: #ff4b2b;
+    color: #fff;
+
   }
   
-  /* Desktop nav */
+  /* NAV LINKS */
   .nav-links {
     display: flex;
     gap: 20px;
   }
   
   .nav-links li a {
-    color: #fff;
-    font-weight: 500;
-    transition: 0.3s;
+    color: #0B1061;
+    font-weight: bold;
+    font-size: 14px;
+    transition: color 0.3s ease;
   }
   
   .nav-links li a:hover {
-    color: #ff4b2b;
+    color: #0B1061;
   }
   
-  /* Hamburger button */
+  /* HAMBURGER */
   .hamburger {
     display: none;
-    font-size: 26px;
+    font-size: 28px;
     cursor: pointer;
-    color: #fff;
+    color: #0B1061;
+    padding: 10px;          /* bigger click area */
+    line-height: 1;
+    position: relative;     /* prevents shift with logo */
+    z-index: 1100;  
   }
   
-  /* Mobile menu (full screen) */
+  /* FULLSCREEN MENU */
   .mobile-menu {
-    display: none;
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    top: 0;
+    left: -100%;
+    height: 100vh;
+    width: 100%;
     background: rgba(0,0,0,0.95);
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 30px;
+    transition: left 0.3s ease-in-out;
     z-index: 2000;
   }
   
   .mobile-menu.active {
-    display: flex;
+    left: 0;
   }
   
-  .mobile-menu li {
-    margin: 20px 0;
-  }
-  
-  .mobile-menu li a {
+  .mobile-menu a {
     color: #fff;
     font-size: 22px;
-    transition: 0.3s;
+    font-weight: bold;
+    transition: color 0.3s ease;
   }
   
-  .mobile-menu li a:hover {
-    color: #ff4b2b;
-  }
-  
-  .close-menu {
-    position: absolute;
-    top: 20px; right: 30px;
-    font-size: 30px;
-    color: #fff;
-    cursor: pointer;
+  .mobile-menu a:hover {
+    color: #0B1061;
   }
   
   /* ========== HERO ========== */
-  .hero {
-    margin-top: 50px; /* offset for fixed header */
-    background: url('https://images.unsplash.com/photo-1558611848-73f7eb4001a1?w=1200') center/cover no-repeat;
+  :root {
+    --header-height: 70px; /* adjust if your header is taller/shorter */
+  }
+  .hero-slider {
+    position: relative;
+    width: 100%;
+    min-height: calc(100vh - var(--header-height));
+    height: calc(100vh - var(--header-height));
+    overflow: hidden;
+    display: block;
     color: #fff;
+  }
+  
+  /* slides container */
+  .slides {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* single slide */
+  .slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 600ms ease-in-out, transform 600ms ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* dark overlay so background looks faint */
+  .slide::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.45); /* adjust opacity for faintness */
+    pointer-events: none;
+    z-index: 0;
+  }
+  
+  /* active slide */
+  .slide.active {
+    opacity: 1;
+    z-index: 1;
+  }
+  
+  /* slide content sits above overlay */
+  .slide-content {
+    position: relative;
+    z-index: 2;
+    max-width: 980px;
+    padding: 0 20px;
     text-align: center;
-    padding: 100px 20px;
+  }
+  
+  .slide-content h1 {
+    font-size: 48px;
+    line-height: 1.05;
+    margin-bottom: 16px;
+    color: #fff;
+  }
+  
+  .slide-content p {
+    font-size: 18px;
+    margin-bottom: 22px;
+    color: #f1f1f1;
+  }
+  
+  /* make CTA button visible above overlay */
+  .slide-content .btn {
+    display: inline-block;
+    padding: 12px 24px;
+    background: #0B1061;
+    color: #fff;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  
+  /* dots - bottom centered */
+  .slider-dots {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 24px;        /* distance from bottom */
+    display: flex;
+    gap: 12px;
+    z-index: 5;          /* above slides & overlay */
+    pointer-events: auto;
+  }
+  
+  /* single dot */
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.6);
+    border: 2px solid rgba(0,0,0,0.12);
+    cursor: pointer;
+    transition: transform 160ms ease, background 160ms ease, box-shadow 160ms ease;
+    padding: 0;
+  }
+  
+  /* active or hovered dot */
+  .dot.active,
+  .dot:hover {
+    background: #0B1061;              /* highlight color */
+    transform: scale(1.18);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.35);
+  }
+  
+  /* responsive tweaks */
+  @media (max-width: 992px) {
+    .slide-content h1 { font-size: 36px; }
+    .slide-content p  { font-size: 16px; }
+    .slider-dots { bottom: 18px; gap: 10px; }
+    .dot { width: 11px; height: 11px; }
+  }
+  
+  @media (max-width: 600px) {
+    .slide-content h1 { font-size: 24px; }
+    .slide-content p  { font-size: 14px; }
+    .slider-dots { bottom: 14px; }
+    .dot { width: 10px; height: 10px; }
+    .hero-slider { height: auto; min-height: calc(60vh - var(--header-height)); /* mobile-friendly */ }
   }
   
   .hero h1 {
-    font-size: 40px;
-    margin-bottom: 15px;
+    font-size: 48px;
+    margin-bottom: 20px;
   }
   
   .hero p {
@@ -133,114 +257,250 @@
   }
   
   .btn {
-    display: inline-block;
-    padding: 10px 25px;
-    background: #ff4b2b;
+    background: #0B1061;
     color: #fff;
+    padding: 12px 25px;
+    border: none;
     border-radius: 5px;
-    transition: 0.3s;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
   }
   
   .btn:hover {
-    background: #ff1c00;
+    background: #0B1061;
   }
   
   /* ========== ABOUT ========== */
   .about {
+    min-height: 100vh;
     padding: 80px 20px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;   /* align text block to top (same as image start) */
+    justify-content: center;   /* keep balance horizontally */
     gap: 40px;
-  }
-  
-  .about img {
-    width: 100%;
-    max-width: 450px;
-    border-radius: 10px;
+    background: #eee3fb;
   }
   
   .about-text {
     flex: 1;
+    text-align: justify;       /* justify paragraph text */
   }
   
   .about-text h2 {
-    font-size: 28px;
-    margin-bottom: 15px;
-    color: #111;
+    font-size: 32px;
+    margin-bottom: 20px;
+    color: #0B1061;
   }
   
-  /* ========== CLASSES ========== */
-  .classes {
-    padding: 80px 20px;
-    background: #f9f9f9;
-    text-align: center;
+  .about-text p {
+    font-size: 16px;
+    margin-bottom: 20px;       /* extra gap before button */
+    line-height: 1.6;
   }
   
-  .classes h2 {
-    font-size: 28px;
-    margin-bottom: 40px;
+  .about-text .btn {
+    display: inline-block;
+    padding: 10px 18px;
+    background: #0B1061;
+    color: #fff;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: 0.3s;
   }
   
-  .class-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+  .about-text .btn:hover {
+    background: #0B1061;
   }
   
-  .class-card {
-    background: #fff;
-    padding: 20px;
+  .about img {
+    flex: 1;
+    max-width: 100%;
     border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    object-fit: cover;
   }
   
-  .class-card img {
-    width: 100%;
-    border-radius: 10px;
-    margin-bottom: 15px;
+ /* ========== CLASSES ========== */
+.classes {
+  min-height: 100vh;
+  padding: 80px 20px;
+  background: #f4f4f4;
+  text-align: center;
+}
+
+.classes h2 {
+  font-size: 32px;
+  margin-bottom: 10px;
+  color: #0B1061;
+}
+
+.class-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.class-item {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.class-item img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.class-item h3 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.class-item p {
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.btn-read {
+  display: inline-block;
+  color: #0B1061;
+  text-decoration: none;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+
+
+  /* See More button */
+  .see-more-container {
+    margin-top: 10px;
   }
-  
-  .class-card h3 {
-    margin-bottom: 10px;
-    font-size: 20px;
+
+  .btn-see-more {
+    display: inline-block;
+    padding: 12px 12px;
+    background: #0B1061;
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    transition: 0.3s;
   }
+
+
   
   /* ========== CONTACT ========== */
-  .contact {
-    padding: 80px 20px;
-    text-align: center;
-  }
-  
-  .contact form {
-    max-width: 600px;
-    margin: auto;
-  }
-  
-  .contact input,
-  .contact textarea {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-  }
+/* ========== CONTACT ========== */
+.contact {
+  min-height: 100vh;
+  padding: 80px 20px;
+  text-align: center;
+  background: #eee3fb;
+}
+
+.contact h2 {
+  font-size: 32px;
+  margin-bottom: 30px;
+  color: #0B1061;
+}
+
+.contact-card {
+  max-width: 600px;
+  margin: auto;
+  padding: 30px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+}
+
+.contact form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.contact input,
+.contact textarea {
+  padding: 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact input:focus,
+.contact textarea:focus {
+  border: 1px solid #0B1061;
+  box-shadow: 0 0 6px rgba(11,16,97,0.3);
+}
+
+.contact button {
+  background: #0B1061;
+  color: #fff;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+
+
   
   /* ========== FOOTER ========== */
   .footer {
-    background: #111;
-    color: #fff;
+    background: #e3e3e3;
+    color: #0B1061;
     text-align: center;
-    padding: 20px;
+    padding: 20px 10px;
+    box-shadow: 6px 0 18px rgba(0, 0, 0, 0.35);
+  }
+  section {
+    scroll-margin-top: 70px; /* adjust if your header is taller */
   }
   
   /* ========== RESPONSIVE ========== */
   @media (max-width: 768px) {
     .nav-links { display: none; }
-    .hamburger { display: block; }
+    .hamburger {
+      display: block;
+      margin-left: auto;     /* push it to the right */
+    }
+    .logo img {
+      max-width: 150px;      /* shrink logo a bit for mobile */
+      height: auto;
+    }
+    .hero,
+    .about,
+    .classes,
+    .contact {
+      height: auto;
+      min-height: auto;
+      padding: 60px 20px;
+    }
   
     .about {
       flex-direction: column;
       text-align: center;
+      gap: 20px;
     }
   
     .class-grid {
@@ -249,9 +509,16 @@
   
     .hero h1 {
       font-size: 28px;
+      margin-top: 40px;
     }
+  
     .hero p {
       font-size: 16px;
     }
   }
-  
+    @media (max-width: 600px) {
+    .hero-slider {
+      height: calc(100vh - var(--header-height));
+      min-height: calc(100vh - var(--header-height));
+    }
+  }

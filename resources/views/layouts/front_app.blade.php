@@ -79,7 +79,7 @@
 
             <div class="d-flex justify-content-between w-100 position-absolute bottom-0 px-4 py-2">
                 <!-- Left: Corporate Website -->
-                <a href="https://www.corporatewebsite.com" target="_blank" class="bubble-link text-white text-decoration-none d-inline-flex align-items-center px-3 py-2">
+                <a href="{{ route('home') }}" target="_blank" class="bubble-link text-white text-decoration-none d-inline-flex align-items-center px-3 py-2">
                     Corporate Website
                     <i class="bi bi-arrow-right ms-2"></i>
                 </a>
