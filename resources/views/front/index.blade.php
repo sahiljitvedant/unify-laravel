@@ -45,7 +45,7 @@
 
   <!-- ABOUT -->
   <section class="about" id="about">
-    <img src="https://images.unsplash.com/photo-1599058917212-d750089bc07c?w=600" alt="About Us">
+    <img src="https://images.unsplash.com/photo-1558611848-73f7eb4001a1?w=600" alt="About Us">
     <div class="about-text">
       <h2>About Us</h2>
       <p>
@@ -71,7 +71,7 @@
         <p>Boost your stamina with high-energy cardio workouts.</p>
       </div>
       <div class="class-card">
-        <img src="https://images.unsplash.com/photo-1599058917212-d750089bc07c?w=600" alt="Strength">
+        <img src="https://images.unsplash.com/photo-1558611848-73f7eb4001a1?w=600" alt="Strength">
         <h3>Strength</h3>
         <p>Build muscle and power with guided strength training programs.</p>
       </div>
