@@ -8,6 +8,10 @@ use App\Http\Controllers\Web\GymMembershipController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\TrainerController;
 
+Route::get('', function () {
+    return view('front.index');
+})->name('home');
+
 Route::get('/register', [AuthController::class, 'register'])->name('register_get');
 Route::post('/register', [AuthController::class, 'registerPost'])->name('register_post');
 Route::get('/login', [AuthController::class, 'index'])->name('login_get');
