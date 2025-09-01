@@ -7,7 +7,6 @@
   Welcome Back, Admin
  <div class="container mt-4">
   <div class="row g-3">
-    
     <!-- Card 1 -->
     <div class="col-md-4">
         <div class="card shadow-sm border-0 rounded-3 h-100 card-hover">
@@ -74,8 +73,6 @@
             </div>
         </div>
     </div>
-
-
   </div>
 </div>
 
