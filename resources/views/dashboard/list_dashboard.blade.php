@@ -10,26 +10,31 @@
     
     <!-- Card 1 -->
     <div class="col-md-4">
-        <div class="card shadow-sm h-100">
-            <div class="card-body d-flex flex-column">
-            
-            <!-- Title & text (top-left) -->
-            <div>
-                <h5 class="card-title text-start"><i class="bi bi-people me-2"></i>100</h5>
-                <p class="card-text text-start">Members Count</p>
-            </div>
+  <div class="card shadow-sm border-0 rounded-3 h-100 card-hover">
+    <div class="card-body d-flex flex-column p-4">
 
-            <!-- Spacer + Button (bottom-right) -->
-            <div class="mt-auto d-flex justify-content-end">
-                <a href="#" class="text-link text-decoration-none">
-                    <i class="bi bi-box-arrow-up-right"></i>
-                </a>
-            </div>
+      <!-- Title & Text -->
+      <div>
+        <h5 class="card-title text-start fw-bold mb-2">
+          <i class="bi bi-people text-primary me-2 fs-4"></i>
+          <span class="fs-3">100</span>
+        </h5>
+        <p class="card-text text-muted text-start mb-0">Members Count</p>
+      </div>
 
+      <!-- Bottom Right Link -->
+      <div class="mt-auto d-flex justify-content-end">
+        <a href="{{ route('list_member') }}" 
+           class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm text-primary"
+           style="width: 36px; height: 36px; background-color: #f0f4ff;">
+          <i class="bi bi-box-arrow-up-right fs-5"></i>
+        </a>
+      </div>
 
-            </div>
-        </div>
     </div>
+  </div>
+</div>
+
 
 
     <!-- Card 2 -->
@@ -45,7 +50,7 @@
 
             <!-- Spacer + Button (bottom-right) -->
             <div class="mt-auto d-flex justify-content-end">
-                <a href="#" class="text-link text-decoration-none">
+                <a href="{{ route('list_membership') }}" class="text-link text-decoration-none">
                     <i class="bi bi-box-arrow-up-right"></i>
                 </a>
             </div>
@@ -63,12 +68,12 @@
             <!-- Title & text (top-left) -->
             <div>
                 <h5 class="card-title text-start"><i class="bi bi-person-plus me-2"></i>4</h5>
-                <p class="card-text text-start">Members Count</p>
+                <p class="card-text text-start">Trainers Count</p>
             </div>
 
             <!-- Spacer + Button (bottom-right) -->
             <div class="mt-auto d-flex justify-content-end">
-                <a href="#" class="text-link text-decoration-none">
+                <a href="{{ route('list_trainer') }}" class="text-link text-decoration-none">
                     <i class="bi bi-box-arrow-up-right"></i>
                 </a>
             </div>

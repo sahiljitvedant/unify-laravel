@@ -517,3 +517,13 @@ table td {
 {
     font-size:  12px;
 }
+
+.card-hover {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  
+  .card-hover:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+  
