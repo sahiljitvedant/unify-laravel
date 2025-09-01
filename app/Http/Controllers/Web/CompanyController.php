@@ -36,11 +36,11 @@ class CompanyController extends Controller
         // }
 
         if ($request->filled('mobile')) {
-            $query->where('mobile', '>=', $request->mobile);
+            $query->where('mobile', '=', $request->mobile);
         }
 
         if ($request->filled('email')) {
-            $query->where('email', '<=', $request->email);
+            $query->where('email', '=', $request->email);
         }
 
         // Sorting

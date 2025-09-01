@@ -41,24 +41,18 @@ class GymPackageController extends Controller
             ->where('is_deleted', '!=', 9);
 
         // Apply filters
-        if ($request->filled('active')) {
-            $query->where('is_active', $request->active);
+        if ($request->filled('first_name')) {
+            $query->where('first_name', 'like', "%{$request->first_name}%");
         }
-
-        if ($request->filled('trainer')) {
-            // Convert 1 => 'yes', 0 => 'no'
-            $trainerValue = $request->trainer == 1 ? 'yes' : 'no';
-            $query->where('trainer_included', $trainerValue);
+        
+        if ($request->filled('mobile')) {
+            $query->where('mobile', 'like', "%{$request->mobile}%");
         }
-
-        if ($request->filled('min_price')) {
-            $query->where('price', '>=', $request->min_price);
+        
+        if ($request->filled('email')) {
+            $query->where('email', 'like', "%{$request->email}%");
         }
-
-        if ($request->filled('max_price')) {
-            $query->where('price', '<=', $request->max_price);
-        }
-
+        
         // Sorting
         $allowedSorts = [
             'id',

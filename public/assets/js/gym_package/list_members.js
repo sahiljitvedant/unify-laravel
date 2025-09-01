@@ -15,9 +15,9 @@ $(document).ready(function ()
                 page: page,
                 sort: sortColumn,
                 order: sortOrder,
-                active: $("#filterActive").val(),
-                trainer: $("#filterTrainer").val(),
-                min_price: $("#filterMinPrice").val(),
+                first_name: $("#filterMemberName").val(),
+                email: $("#filterEmail").val(),
+                mobile: $("#filterMobile").val(),
                 max_price: $("#filterMaxPrice").val(),
             },
             success: function (res) {
@@ -134,9 +134,9 @@ $(document).ready(function ()
     $("#btnCancel").on("click", function (e)
     {
         e.preventDefault();
-        $("#filterActive").val('');
-        $("#filterTrainer").val('');
-        $("#filterMinPrice").val('');
+        $("#filterMemberName").val('');
+        $("#filterEmail").val('');
+        $("#filterMobile").val('');
         $("#filterMaxPrice").val('');
         fetchData(1); // reload data with no filters
     });
