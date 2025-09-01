@@ -29,20 +29,7 @@
                 <div class="filters p-3">
                     <div class="row g-3">
                         <!-- Row 1 -->
-                        <!-- <div class="col-md-3">
-                            <select id="filterActive" class="form-select">
-                                <option value="">Select Status</option>
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <select id="filterTrainer" class="form-select">
-                                <option value="">Select Trainer</option>
-                                <option value="1">Yes</option>
-                                <option value="0">No</option>
-                            </select>
-                        </div> -->
+                      
                         <div class="col-md-3">
                             <input type="text" id="filterComapnyName" class="form-control" placeholder="Enter Company Name">
                         </div>
@@ -53,10 +40,8 @@
                             <input type="number" id="filterMobile" class="form-control" placeholder="Enter Mobile Number">
                         </div>
                     </div>
-
                     <div class="row g-3 mt-2">
                         <!-- Row 2 -->
-                    
                         <div class="col-md-2">
                             <button id="submitBtn" class="btn ">
                                 <i class="bi bi-search"></i> 

@@ -47,7 +47,6 @@ $(document).ready(function ()
                         <td>${m.company_name}</td>
                         <td>${m.email}</td>
                         <td>${m.mobile}</td>
-                     
                         <td>${m.action}</td>
                     </tr>
                 `;
@@ -141,8 +140,7 @@ $("#btnCancel").on("click", function (e) {
     // Initial load
     fetchData();
 });
-function deleteMembershipById(id)
-{
+function deleteMembershipById(id){
     $.ajax({
         url: deleteCompanyUrl.replace(':id', id), 
         type: "POST",

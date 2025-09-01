@@ -17,7 +17,6 @@ class CompanyController extends Controller
     {
         return view('company.list_company');
     }
-
     public function fetch_comapny_list (Request $request)
     {
         // dd($request->all());
@@ -83,8 +82,6 @@ class CompanyController extends Controller
 
         return response()->json($memberships);
     }
-
-
     public function add()
     {
         $memberships = DB::table('tbl_gym_membership')
@@ -98,8 +95,6 @@ class CompanyController extends Controller
         return view('company.add_company', compact('memberships','trainer'));
        
     }
-
-  
     public function create_company(Request $request)
     {
         // dd($request->all());
@@ -177,9 +172,9 @@ class CompanyController extends Controller
             return response()->json($arr_resp, 500);
         }
     }
-
     public function edit($id)
     {
+        dd(1);
         try 
         {
             $member = DB::table('tbl_gym_members')->where('id', $id)->first();

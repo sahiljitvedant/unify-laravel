@@ -55,6 +55,7 @@ Route::middleware(['auth.custom', 'session.timeout'])->group(function ()
 
     Route::get('/add_company', [CompanyController::class, 'add'])->name('add_company');
     Route::get('/list_company', [CompanyController::class, 'list'])->name('list_company');
+    Route::get('/edit_company/{id}', [CompanyController::class, 'edit'])->name('edit_company');
 
     Route::middleware(['web'])->group(function () 
     {
