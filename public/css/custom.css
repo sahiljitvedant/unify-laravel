@@ -500,5 +500,11 @@ table td {
     font-size:  10px;
 }
 
-
-  
+.form-label
+{
+    font-size:  13px;
+}
+.error-message
+{
+    font-size:  12px;
+} 

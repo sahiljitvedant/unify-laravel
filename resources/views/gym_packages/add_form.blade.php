@@ -177,10 +177,13 @@
                 <label class="form-label">{{ __('global.trainer_assigned_label') }}</label>
                 <select class="form-select" name="trainer_assigned" id="trainer_assigned">
                     <option selected disabled>{{ __('global.select_option') }}</option>
-                    <option value="trainer1">{{ __('global.trainer1') }}</option>
-                    <option value="trainer2">{{ __('global.trainer2') }}</option>
-                    <option value="trainer3">{{ __('global.trainer3') }}</option>
+                    @foreach($trainer as $id => $name)
+                        <option value="{{ $id }}">{{ $name }}</option>
+                    @endforeach
                 </select>
+               
+                    
+                
                 <div class="text-danger error-message" data-error-for="trainer_assigned"></div>
             </div>
         </div>

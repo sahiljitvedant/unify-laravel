@@ -17,20 +17,87 @@ class GymPackageController extends Controller
         return view('gym_packages.list');
     }
 
+    // public function fetchMemberList(Request $request)
+    // {
+    //     // ONE variable that fetches everything you need
+    //     $fetch_data = DB::table('tbl_gym_members')
+    //         ->select('*');
+
+    //     // Send to DataTables (server-side)
+    //     return DataTables::of($fetch_data)
+    //         ->addColumn('action', function ($row) {
+    //             return '<a href="/edit_member'.$row->id.'" class="btn btn-sm btn-primary">Edit</a>
+    //                     <a href="/members/delete/'.$row->id.'" class="btn btn-sm btn-danger">Delete</a>';
+    //         })
+    //         ->rawColumns(['action'])
+    //         ->make(true);
+    // }
+
     public function fetchMemberList(Request $request)
     {
-        // ONE variable that fetches everything you need
-        $fetch_data = DB::table('tbl_gym_members')
-            ->select('id','membership_type','joining_date','expiry_date','amount_paid','payment_method','trainer_assigned');
+        // dd($request->all());
+        $query = DB::table('tbl_gym_members')
+            ->select('*');
+            // ->where('is_deleted', '!=', 9);
 
-        // Send to DataTables (server-side)
-        return DataTables::of($fetch_data)
-            ->addColumn('action', function ($row) {
-                return '<a href="/members/edit/'.$row->id.'" class="btn btn-sm btn-primary">Edit</a>
-                        <a href="/members/delete/'.$row->id.'" class="btn btn-sm btn-danger">Delete</a>';
-            })
-            ->rawColumns(['action'])
-            ->make(true);
+        // Apply filters
+        if ($request->filled('active')) {
+            $query->where('is_active', $request->active);
+        }
+
+        if ($request->filled('trainer')) {
+            // Convert 1 => 'yes', 0 => 'no'
+            $trainerValue = $request->trainer == 1 ? 'yes' : 'no';
+            $query->where('trainer_included', $trainerValue);
+        }
+
+        if ($request->filled('min_price')) {
+            $query->where('price', '>=', $request->min_price);
+        }
+
+        if ($request->filled('max_price')) {
+            $query->where('price', '<=', $request->max_price);
+        }
+
+        // Sorting
+        $allowedSorts = [
+            'id',
+            'first_name',
+            'email',
+            'mobile',
+            'membership_type',
+        ];
+
+        $sort = $request->get('sort', 'id');
+        $direction = $request->get('order', 'desc');
+
+        if (!in_array($sort, $allowedSorts)) {
+            $sort = 'id';
+        }
+        if (!in_array(strtolower($direction), ['asc', 'desc'])) {
+            $direction = 'desc';
+        }
+
+        $query->orderBy($sort, $direction);
+
+        // Pagination
+        $memberships = $query->paginate(10);
+
+        // Add action + encrypted_id
+        $memberships->getCollection()->transform(function ($row) {
+            $encryptedId = Crypt::encryptString($row->id);
+            $row->encrypted_id = $encryptedId;
+            $row->action = '
+                <a href="'.route('edit_membership', $encryptedId).'" class="btn btn-sm" title="Edit">
+                    <i class="bi bi-pencil-square"></i>
+                </a>
+                <button type="button" class="btn btn-sm" onclick="deleteMembershipById('.$row->id.')">
+                    <i class="bi bi-trash"></i>
+                </button>';
+            return $row;
+        });
+
+        return response()->json($memberships);
     }
 
    
@@ -40,8 +107,10 @@ class GymPackageController extends Controller
         $memberships = DB::table('tbl_gym_membership')
         ->where('is_active', 1)
         ->pluck('membership_name', 'id'); 
-
-        return view('gym_packages.add_form', compact('memberships'));
+        $trainer=DB::table('tbl_trainer')
+        ->where('is_active', 1)
+        ->pluck('trainer_name', 'id');
+        return view('gym_packages.add_form', compact('memberships','trainer'));
     }
 
     public function submit(Request $request)

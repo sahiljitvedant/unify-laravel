@@ -9,16 +9,16 @@ $(document).ready(function ()
         $("#loader").show();
 
         $.ajax({
-            url: fetchMembership,
+            url: fetchCompany,
             type: "GET",
             data: {
                 page: page,
                 sort: sortColumn,
                 order: sortOrder,
-                active: $("#filterActive").val(),
-                trainer: $("#filterTrainer").val(),
+                company_name: $("#filterComapnyName").val(),
+                email: $("#filterEmail").val(),
                 min_price: $("#filterMinPrice").val(),
-                max_price: $("#filterMaxPrice").val(),
+                mobile: $("#filterMobile").val(),
             },
             success: function (res) {
                 $("#loader").hide();
@@ -29,16 +29,14 @@ $(document).ready(function ()
         });
     }
 
-    function renderTable(data)
-    {
+    function renderTable(data) {
         let rows = '';
     
-        if (data.length === 0) 
-        {
+        if (data.length === 0) {
             // Show "No memberships found" message spanning all columns
             rows = `
                 <tr>
-                    <td colspan="7" class="text-center">No memberships found</td>
+                    <td colspan="7" class="text-center">No Comapny found</td>
                 </tr>
             `;
         } else {
@@ -46,11 +44,10 @@ $(document).ready(function ()
                 rows += `
                     <tr>
                         <td>${m.id}</td>
-                        <td>${m.membership_name}</td>
-                        <td>${m.duration_in_days}</td>
-                        <td>${m.price}</td>
-                        <td>${m.trainer_included === 'yes' ? 'Yes' : 'No'}</td>
-                        <td>${m.is_active ? 'Active' : 'Inactive'}</td>
+                        <td>${m.company_name}</td>
+                        <td>${m.email}</td>
+                        <td>${m.mobile}</td>
+                     
                         <td>${m.action}</td>
                     </tr>
                 `;
@@ -125,21 +122,21 @@ $(document).ready(function ()
     });
 
     // Filters change
-    $("#submitBtn").on("click", function (e) {
-        e.preventDefault();
-        fetchData(1);
-    });
+   // Search button click
+   $("#submitBtn").on("click", function (e) {
+    e.preventDefault();
+    fetchData(1);
+});
 
-    // Cancel button click - reset filters
-    $("#btnCancel").on("click", function (e)
-    {
-        e.preventDefault();
-        $("#filterActive").val('');
-        $("#filterTrainer").val('');
-        $("#filterMinPrice").val('');
-        $("#filterMaxPrice").val('');
-        fetchData(1); // reload data with no filters
-    });
+// Cancel button click - reset filters
+$("#btnCancel").on("click", function (e) {
+    e.preventDefault();
+    $("#filterComapnyName").val('');
+    $("#filterEmail").val('');
+    $("#filterMinPrice").val('');
+    $("#filterMobile").val('');
+    fetchData(1); // reload data with no filters
+});
 
     // Initial load
     fetchData();
@@ -147,7 +144,7 @@ $(document).ready(function ()
 function deleteMembershipById(id)
 {
     $.ajax({
-        url: deleteMembershipUrl.replace(':id', id), 
+        url: deleteCompanyUrl.replace(':id', id), 
         type: "POST",
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -155,7 +152,7 @@ function deleteMembershipById(id)
         beforeSend: function () {
             Swal.fire({
                 title: 'Deleting...',
-                text: 'Please wait while we delete the membership.',
+                text: 'Please wait while we delete the company.',
                 allowOutsideClick: false,
                 didOpen: () => {
                     Swal.showLoading();

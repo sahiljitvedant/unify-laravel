@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Web\GymPackageController;
 use App\Http\Controllers\Web\GymMembershipController;
+use App\Http\Controllers\Web\CompanyController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\TrainerController;
 
@@ -51,6 +52,10 @@ Route::middleware(['auth.custom', 'session.timeout'])->group(function ()
     Route::get('/edit_trainer/{id}', [TrainerController::class, 'edit'])->name('edit_trainer');
     Route::get('/list_deleted_trainer', [TrainerController::class, 'list_deleted_trainer'])->name('list_deleted_trainer');
     
+
+    Route::get('/add_company', [CompanyController::class, 'add'])->name('add_company');
+    Route::get('/list_company', [CompanyController::class, 'list'])->name('list_company');
+
     Route::middleware(['web'])->group(function () 
     {
         Route::post('/stepper-submit', [GymPackageController::class, 'submit'])->name('stepper.submit');
@@ -75,7 +80,12 @@ Route::middleware(['auth.custom', 'session.timeout'])->group(function ()
         ->name('fetch_deleted_trainer');
         Route::post('/activate_trainer/{id}', [TrainerController::class, 'activate_trainer'])->name('activate_trainer');
         Route::post('/update_trainer/{id}', [TrainerController::class, 'update'])->name('update_trainer');
+       
         
+        Route::post('/create_company', [CompanyController::class, 'create_company'])->name('create_company');
+        Route::get('/fetch_comapny_list', [CompanyController::class, 'fetch_comapny_list'])
+        ->name('fetch_comapny_list');
+        Route::post('/delete_company/{id}', [CompanyController::class, 'delete_comapny'])->name('delete_company');
     });
 });
 

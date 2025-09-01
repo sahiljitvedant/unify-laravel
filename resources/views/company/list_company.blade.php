@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Members List')
+@section('title', 'Company List')
 
 @section('content')
     <div id="loader">
@@ -11,17 +11,17 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('list_dashboard') }}">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('list_member') }}">Members</a></li>
-                <li class="breadcrumb-item" aria-current="page">List Members</li>
+                <li class="breadcrumb-item"><a href="{{ route('list_company') }}">Company</a></li>
+                <li class="breadcrumb-item" aria-current="page">List Company</li>
             </ol>
         </nav>
         <div class="p-4 bg-light rounded shadow">
             <!-- Heading + Add Button -->
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 gap-2">
-                <h4 class="mb-2 mb-md-0">List Members</h4>
+                <h4 class="mb-2 mb-md-0">List Company</h4>
                 <div class="d-flex flex-column align-items-start align-items-md-end gap-2">
-                    <a href="{{ route('add_member') }}" class="btn-add">Add Members</a>
-                    <a href="{{ route('list_deleted_membership') }}" class="btn-link">Show Deleted Membership</a>
+                    <a href="{{ route('add_company') }}" class="btn-add">Add Company</a>
+                    <!-- <a href="{{ route('list_deleted_membership') }}" class="btn-link">Show Deleted Company</a> -->
                 </div>
             </div>
             <div class="data-wrapper">
@@ -29,7 +29,7 @@
                 <div class="filters p-3">
                     <div class="row g-3">
                         <!-- Row 1 -->
-                        <div class="col-md-3">
+                        <!-- <div class="col-md-3">
                             <select id="filterActive" class="form-select">
                                 <option value="">Select Status</option>
                                 <option value="1">Active</option>
@@ -42,12 +42,15 @@
                                 <option value="1">Yes</option>
                                 <option value="0">No</option>
                             </select>
+                        </div> -->
+                        <div class="col-md-3">
+                            <input type="text" id="filterComapnyName" class="form-control" placeholder="Enter Company Name">
                         </div>
                         <div class="col-md-3">
-                            <input type="number" id="filterMinPrice" class="form-control" placeholder="Min Price">
+                            <input type="text" id="filterEmail" class="form-control" placeholder="Enter Email Address">
                         </div>
                         <div class="col-md-3">
-                            <input type="number" id="filterMaxPrice" class="form-control" placeholder="Max Price">
+                            <input type="number" id="filterMobile" class="form-control" placeholder="Enter Mobile Number">
                         </div>
                     </div>
 
@@ -84,7 +87,7 @@
                                 </th>
                                 <th>
                                     <a href="#" class="sort-link" data-column="membership_name">
-                                        Members Name
+                                        Company Name
                                         <span class="sort-icons">
                                             <i class="asc">▲</i>
                                             <i class="desc">▼</i>
@@ -93,7 +96,7 @@
                                 </th>
                                 <th>
                                     <a href="#" class="sort-link" data-column="duration_in_days">
-                                        Email
+                                        Email Address
                                         <span class="sort-icons">
                                             <i class="asc">▲</i>
                                             <i class="desc">▼</i>
@@ -109,7 +112,6 @@
                                         </span>
                                     </a>
                                 </th>
-                                <th>Membership Type</th>
                                
                                 <th>Action</th>
                             </tr>
@@ -147,11 +149,11 @@
 
 @push('scripts')
 <script>
-    const fetchMembership = "{{ route('fetch_member_list') }}";
-    const deleteMembershipUrl = "{{ route('delete_membership', ':id') }}";
+    const fetchCompany = "{{ route('fetch_comapny_list') }}";
+    const deleteCompanyUrl = "{{ route('delete_company', ':id') }}";
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="{{ asset('assets/js/gym_package/list_members.js') }}"></script>
+<script src="{{ asset('assets/js/company/list_company.js') }}"></script>
 
 <script>
 

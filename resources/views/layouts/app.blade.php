@@ -83,11 +83,15 @@
             <span><i class="bi bi-briefcase me-2"></i>Modules</span><i class="fas fa-chevron-down small ms-2 mt-0"></i>
             </a>
             <div class="collapse ps-4" id="modulesDropdown">
-                <a href="{{ route('list_membership') }}" class="d-block py-1">
+                <!-- <a href="{{ route('list_membership') }}" class="d-block py-1">
                     <i class="bi bi-book me-2"></i>Membership
                 </a>
                 <a href="{{ route('list_trainer') }}" class="d-block py-1">
                     <i class="bi bi-person-plus me-2"></i>Trainer
+                </a> -->
+
+                <a href="{{ route('list_company') }}" class="d-block py-1">
+                    <i class="bi bi-person-plus me-2"></i>Company
                 </a>
             </div>
 
