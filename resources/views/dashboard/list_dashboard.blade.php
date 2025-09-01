@@ -10,68 +10,69 @@
     
     <!-- Card 1 -->
     <div class="col-md-4">
-    <div class="card shadow-sm border-0 rounded-3 h-100 card-hover">
-        <div class="card-body d-flex flex-column p-4">
-        <div>
-            <h5 class="card-title text-start fw-bold mb-2">
-            <i class="bi bi-people text-icon me-2 fs-4"></i>
-            <span class="fs-3 counter" data-target="100" data-direction="up">0</span>
-            </h5>
-            <p class="card-text text-muted text-start mb-0">Members Count</p>
+        <div class="card shadow-sm border-0 rounded-3 h-100 card-hover">
+            <div class="card-body d-flex flex-column p-4">
+            <div>
+                <h5 class="card-title text-start fw-bold mb-2">
+                <i class="bi bi-people text-icon me-2 fs-4"></i>
+       
+                <span class="fs-3 counter" data-target="{{ $members }}">0</span>
+                </h5>
+                <p class="card-text text-muted text-start mb-0">Current Members</p>
+            </div>
+            <div class="mt-auto d-flex justify-content-end">
+                <a href="{{ route('list_member') }}" 
+                class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm text-icon"
+                style="width: 36px; height: 36px; background-color: #f0f4ff;">
+                <i class="bi bi-box-arrow-up-right fs-5"></i>
+                </a>
+            </div>
+            </div>
         </div>
-        <div class="mt-auto d-flex justify-content-end">
-            <a href="{{ route('list_member') }}" 
-            class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm text-icon"
-            style="width: 36px; height: 36px; background-color: #f0f4ff;">
-            <i class="bi bi-box-arrow-up-right fs-5"></i>
-            </a>
-        </div>
-        </div>
-    </div>
     </div>
 
     <!-- Card 2 -->
     <div class="col-md-4">
-    <div class="card shadow-sm border-0 rounded-3 h-100 card-hover">
-        <div class="card-body d-flex flex-column p-4">
-        <div>
-            <h5 class="card-title text-start fw-bold mb-2">
-            <i class="bi bi-book text-icon me-2 fs-4"></i>
-            <span class="fs-3 counter" data-target="100" data-direction="down">5</span>
-            </h5>
-            <p class="card-text text-muted text-start mb-0">Books Issued</p>
+        <div class="card shadow-sm border-0 rounded-3 h-100 card-hover">
+            <div class="card-body d-flex flex-column p-4">
+            <div>
+                <h5 class="card-title text-start fw-bold mb-2">
+                <i class="bi bi-book text-icon me-2 fs-4"></i>
+                <span class="fs-3 counter" data-target="{{ $memebership }}">0</span>
+                </h5>
+                <p class="card-text text-muted text-start mb-0">Membership Count</p>
+            </div>
+            <div class="mt-auto d-flex justify-content-end">
+                <a href="{{ route('list_membership') }}" 
+                class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm text-icon"
+                style="width: 36px; height: 36px; background-color: #f0f4ff;">
+                <i class="bi bi-box-arrow-up-right fs-5"></i>
+                </a>
+            </div>
+            </div>
         </div>
-        <div class="mt-auto d-flex justify-content-end">
-            <a href="{{ route('list_member') }}" 
-            class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm text-icon"
-            style="width: 36px; height: 36px; background-color: #f0f4ff;">
-            <i class="bi bi-box-arrow-up-right fs-5"></i>
-            </a>
-        </div>
-        </div>
-    </div>
     </div>
 
     <!-- Card 3 -->
     <div class="col-md-4">
-    <div class="card shadow-sm border-0 rounded-3 h-100 card-hover">
-        <div class="card-body d-flex flex-column p-4">
-        <div>
-            <h5 class="card-title text-start fw-bold mb-2">
-            <i class="bi bi-person-plus me-2 fs-4"></i>
-            <span class="fs-3 counter" data-target="10" data-direction="up">10</span>
-            </h5>
-            <p class="card-text text-muted text-start mb-0">New Joinees</p>
+        <div class="card shadow-sm border-0 rounded-3 h-100 card-hover">
+            <div class="card-body d-flex flex-column p-4">
+            <div>
+                <h5 class="card-title text-start fw-bold mb-2">
+                <i class="bi bi-person-plus me-2 fs-4"></i>
+                <span class="fs-3 counter" data-target="{{ $trainer }}">0</span>
+                </h5>
+                <p class="card-text text-muted text-start mb-0">Active Trainers</p>
+            </div>
+            <div class="mt-auto d-flex justify-content-end">
+                <a href="{{ route('list_trainer') }}" 
+                class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm text-icon"
+                style="width: 36px; height: 36px; background-color: #f0f4ff;">
+                <i class="bi bi-box-arrow-up-right fs-5"></i>
+                </a>
+            </div>
+            </div>
         </div>
-        <div class="mt-auto d-flex justify-content-end">
-            <a href="{{ route('list_member') }}" 
-            class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm text-icon"
-            style="width: 36px; height: 36px; background-color: #f0f4ff;">
-            <i class="bi bi-box-arrow-up-right fs-5"></i>
-            </a>
-        </div>
-        </div>
-    </div>
     </div>
 
 

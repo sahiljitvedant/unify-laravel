@@ -14,7 +14,22 @@ class DashboardController extends Controller
 {
     public function list()
     {
-        return view('dashboard.list_dashboard');
+        $members = DB::table('tbl_gym_members')
+        ->select('*')
+        ->where('is_deleted', '!=', 9)
+        ->count();
+
+        $memebership = DB::table('tbl_gym_membership')
+        ->select('*')
+        ->where('is_deleted', '!=', 9)
+        ->count();
+
+        $trainer = DB::table('tbl_trainer')
+        ->select('*')
+        ->where('is_deleted', '!=', 9)
+        ->count();
+
+        return view('dashboard.list_dashboard',compact('members','memebership','trainer'));
        
     }
 
