@@ -1,5 +1,5 @@
 let currentPage = 1;
-$(document).ready(function () 
+$(document).ready(function ()
 {
    
     let sortColumn = 'id';
@@ -46,11 +46,11 @@ $(document).ready(function ()
                 rows += `
                     <tr>
                         <td>${m.id}</td>
-                        <td>${m.membership_name}</td>
-                        <td>${m.duration_in_days}</td>
-                        <td>${m.price}</td>
-                        <td>${m.trainer_included === 'yes' ? 'Yes' : 'No'}</td>
-                        <td>${m.is_active ? 'Active' : 'Inactive'}</td>
+                        <td>${m.first_name} ${m.middle_name ?? ''} ${m.last_name ?? ''}</td>
+                        <td>${m.email}</td>
+                        <td>${m.mobile}</td>
+                        <td>${m.membership_type}</td>
+                     
                         <td>${m.action}</td>
                     </tr>
                 `;
@@ -144,7 +144,7 @@ $(document).ready(function ()
     // Initial load
     fetchData();
 });
-function deleteMembershipById(id)
+function delete_members(id)
 {
     $.ajax({
         url: deleteMembershipUrl.replace(':id', id), 

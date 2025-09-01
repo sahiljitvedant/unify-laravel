@@ -71,7 +71,7 @@ class CompanyController extends Controller
             $encryptedId = Crypt::encryptString($row->id);
             $row->encrypted_id = $encryptedId;
             $row->action = '
-                <a href="'.route('edit_membership', $encryptedId).'" class="btn btn-sm" title="Edit">
+                <a href="'.route('edit_company', $encryptedId).'" class="btn btn-sm" title="Edit">
                     <i class="bi bi-pencil-square"></i>
                 </a>
                 <button type="button" class="btn btn-sm" onclick="deleteMembershipById('.$row->id.')">
@@ -174,10 +174,15 @@ class CompanyController extends Controller
     }
     public function edit($id)
     {
-        dd(1);
+        // dd(1);
         try 
         {
-            $member = DB::table('tbl_gym_members')->where('id', $id)->first();
+            // dd($id);
+
+            $dec = Crypt::decryptString($id);
+
+            // dd($dec);
+            $member = DB::table('tbl_companies')->where('id', $dec)->first();
     
             if (!$member) 
             {
@@ -185,7 +190,7 @@ class CompanyController extends Controller
                 return redirect()->back()->with('error', 'Member not found!');
             }
     
-            return view('tabs.index', compact('member'));
+            return view('company.tabs.index', compact('member'));
         } 
         catch (\Exception $e)
         {
@@ -195,19 +200,21 @@ class CompanyController extends Controller
         }
     }
 
-    public function update(Request $request,$id)
+    public function update_company_profile (Request $request,$id)
     {
         // dd(1);
         // dd($request->all());
         // Validation rules
         $arr_rules = 
         [
-            'membership_type' => 'required|string',
-            'joining_date' => 'required|date',
-            'expiry_date' => 'required|date',
-            'amount_paid' => 'required|numeric',
-            'payment_method' => 'required|string',
-            'trainer_assigned' => 'required|string',
+            // New fields
+            'financial_year'            => 'required|date',
+            'books_begin'               => 'required|date|after_or_equal:financial_year',
+            'password'                  => 'nullable|string|min:6',
+            'confirm_password'          => 'nullable|string|same:password',
+            'use_security'              => 'required|in:yes,no',
+            'security_password'         => 'nullable|required_if:use_security,yes|string|min:6',
+            'confirm_security_password' => 'nullable|required_with:security_password|same:security_password',
         ];
     
         // Validate the inputs
@@ -227,25 +234,74 @@ class CompanyController extends Controller
         {
             // dd(111);
             // Insert all request data exactly as received
-
             $user_details_arr = $request->all();
             // dd( $user_details_arr);
-
-            
-            // if ($request->hasFile('profile_image')) 
-            // {
-            //     $image = $request->file('profile_image');
-            //     $imageName = time().'_'.$image->getClientOriginalName();
-            //     $image->move(public_path('uploads/profile_images'), $imageName);
-            //     $user_details_arr['profile_image'] = 'uploads/profile_images/' . $imageName;
-            // } 
-            // else 
-            // {
-            //     $user_details_arr['profile_image'] = null; // or default path
-            // }
     
             // Update existing record by ID
-            $updated = DB::table('tbl_gym_members')
+            $updated = DB::table('tbl_companies')
+            ->where('id', $id)
+            ->update($user_details_arr);
+
+            DB::commit();
+
+            return response()->json([
+                'status'  => 'success',
+                'message' => $updated ? 'Member updated successfully' : 'No record updated',
+                'id'      => $id
+            ], 200);
+           
+    
+        } 
+        catch (\Exception $e) 
+        {
+            DB::rollBack();
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Update failed: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function update_home_profile (Request $request,$id)
+    {
+        dd(1);
+        // dd($request->all());
+        // Validation rules
+        $arr_rules = 
+        [
+            // New fields
+            'financial_year'            => 'required|date',
+            'books_begin'               => 'required|date|after_or_equal:financial_year',
+            'password'                  => 'nullable|string|min:6',
+            'confirm_password'          => 'nullable|string|same:password',
+            'use_security'              => 'required|in:yes,no',
+            'security_password'         => 'nullable|required_if:use_security,yes|string|min:6',
+            'confirm_security_password' => 'nullable|required_with:security_password|same:security_password',
+        ];
+    
+        // Validate the inputs
+        $validator = Validator::make($request->all(), $arr_rules);
+        // dd($validator);
+    
+        if ($validator->fails()) 
+        {
+            $arr_resp['status'] = 'error';
+            $arr_resp['message'] = $validator->messages();
+            return response()->json($arr_resp, 400);
+        }
+    
+        DB::beginTransaction();
+    
+        try 
+        {
+            // dd(111);
+            // Insert all request data exactly as received
+            $user_details_arr = $request->all();
+            // dd( $user_details_arr);
+    
+            // Update existing record by ID
+            $updated = DB::table('tbl_companies')
             ->where('id', $id)
             ->update($user_details_arr);
 

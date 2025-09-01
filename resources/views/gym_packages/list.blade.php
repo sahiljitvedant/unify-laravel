@@ -148,7 +148,7 @@
 @push('scripts')
 <script>
     const fetchMembership = "{{ route('fetch_member_list') }}";
-    const deleteMembershipUrl = "{{ route('delete_membership', ':id') }}";
+    const deleteMembershipUrl = "{{ route('delete_members', ':id') }}";
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{{ asset('assets/js/gym_package/list_members.js') }}"></script>

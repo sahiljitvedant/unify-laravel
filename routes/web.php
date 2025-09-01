@@ -63,10 +63,11 @@ Route::middleware(['auth.custom', 'session.timeout'])->group(function ()
         Route::post('/stepper-update/{id}', [GymPackageController::class, 'update'])->name('stepper.update');
         Route::get('/members/fetch', [GymPackageController::class, 'fetchMemberList'])
         ->name('fetch_member_list');
+        Route::post('/delete_members/{id}', [GymPackageController::class, 'delete_members'])->name('delete_members');
+
         Route::post('/add_membership', [GymMembershipController::class, 'submit'])->name('add_membership');
         Route::get('/fetch_membership', [GymMembershipController::class, 'fetchMembership'])
         ->name('fetch_membership');
-
         Route::post('/delete_membership/{id}', [GymMembershipController::class, 'deleteMembership'])->name('delete_membership');
         Route::post('/update_membership/{id}', [GymMembershipController::class, 'update'])->name('update_membership');
         Route::get('/fetch_deleted_membership', [GymMembershipController::class, 'fetch_deleted_membership'])
@@ -87,6 +88,8 @@ Route::middleware(['auth.custom', 'session.timeout'])->group(function ()
         Route::get('/fetch_comapny_list', [CompanyController::class, 'fetch_comapny_list'])
         ->name('fetch_comapny_list');
         Route::post('/delete_company/{id}', [CompanyController::class, 'delete_comapny'])->name('delete_company');
+        Route::post('/update_home_profile/{id}', [CompanyController::class, 'update_home_profile'])->name('update_home_profile');
+        Route::post('/update_company_profile/{id}', [CompanyController::class, 'update_company_profile'])->name('update_company_profile');
     });
 });
 

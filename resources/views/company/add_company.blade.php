@@ -288,31 +288,30 @@ const addCompany = "{{ route('create_company') }}";
 </script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-    // Toggle password visibility
-    document.querySelectorAll(".toggle-password").forEach(btn => {
-        btn.addEventListener("click", function () {
-            const target = document.querySelector(this.getAttribute("data-target"));
-            if (target.type === "password") {
-                target.type = "text";
-                this.innerHTML = '<i class="bi bi-eye-slash"></i>';
+        // Toggle password visibility
+        document.querySelectorAll(".toggle-password").forEach(btn => {
+            btn.addEventListener("click", function () {
+                const target = document.querySelector(this.getAttribute("data-target"));
+                if (target.type === "password") {
+                    target.type = "text";
+                    this.innerHTML = '<i class="bi bi-eye-slash"></i>';
+                } else {
+                    target.type = "password";
+                    this.innerHTML = '<i class="bi bi-eye"></i>';
+                }
+            });
+        });
+
+        // Show/hide security fields
+        document.getElementById("use_security").addEventListener("change", function () {
+            const fields = document.getElementById("securityFields");
+            if (this.value === "yes") {
+                fields.classList.remove("d-none");
             } else {
-                target.type = "password";
-                this.innerHTML = '<i class="bi bi-eye"></i>';
+                fields.classList.add("d-none");
             }
         });
     });
-
-    // Show/hide security fields
-    document.getElementById("use_security").addEventListener("change", function () {
-        const fields = document.getElementById("securityFields");
-        if (this.value === "yes") {
-            fields.classList.remove("d-none");
-        } else {
-            fields.classList.add("d-none");
-        }
-    });
-});
-
 </script>
 @endsection
 
