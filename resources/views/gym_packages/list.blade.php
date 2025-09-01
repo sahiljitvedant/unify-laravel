@@ -21,7 +21,7 @@
                 <h4 class="mb-2 mb-md-0">List Members</h4>
                 <div class="d-flex flex-column align-items-start align-items-md-end gap-2">
                     <a href="{{ route('add_member') }}" class="btn-add">Add Members</a>
-                    <a href="{{ route('list_deleted_membership') }}" class="btn-link">Show Deleted Membership</a>
+                    <a href="{{ route('list_deleted_membership') }}" class="btn-link">Show Deleted Members</a>
                 </div>
             </div>
             <div class="data-wrapper">

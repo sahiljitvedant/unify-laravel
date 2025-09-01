@@ -4,7 +4,84 @@
 
 @section('content')
 <div class="container">
- This is Dashboard Page
+  Welcome Back, Admin
+ <div class="container mt-4">
+  <div class="row g-3">
+    
+    <!-- Card 1 -->
+    <div class="col-md-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body d-flex flex-column">
+            
+            <!-- Title & text (top-left) -->
+            <div>
+                <h5 class="card-title text-start"><i class="bi bi-people me-2"></i>100</h5>
+                <p class="card-text text-start">Members Count</p>
+            </div>
+
+            <!-- Spacer + Button (bottom-right) -->
+            <div class="mt-auto d-flex justify-content-end">
+                <a href="#" class="text-link text-decoration-none">
+                    <i class="bi bi-box-arrow-up-right"></i>
+                </a>
+            </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Card 2 -->
+    <div class="col-md-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body d-flex flex-column">
+            
+            <!-- Title & text (top-left) -->
+            <div>
+                <h5 class="card-title text-start"><i class="bi bi-book me-2"></i>5</h5>
+                <p class="card-text text-start">Membership Count</p>
+            </div>
+
+            <!-- Spacer + Button (bottom-right) -->
+            <div class="mt-auto d-flex justify-content-end">
+                <a href="#" class="text-link text-decoration-none">
+                    <i class="bi bi-box-arrow-up-right"></i>
+                </a>
+            </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="col-md-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body d-flex flex-column">
+            
+            <!-- Title & text (top-left) -->
+            <div>
+                <h5 class="card-title text-start"><i class="bi bi-person-plus me-2"></i>4</h5>
+                <p class="card-text text-start">Members Count</p>
+            </div>
+
+            <!-- Spacer + Button (bottom-right) -->
+            <div class="mt-auto d-flex justify-content-end">
+                <a href="#" class="text-link text-decoration-none">
+                    <i class="bi bi-box-arrow-up-right"></i>
+                </a>
+            </div>
+
+
+            </div>
+        </div>
+    </div>
+
+  </div>
+</div>
+
+ 
 </div>
 @endsection
 

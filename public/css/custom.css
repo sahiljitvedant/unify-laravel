@@ -508,3 +508,12 @@ table td {
 {
     font-size:  12px;
 } 
+
+.text-link
+{
+    color: var(--sidebar_color);
+}
+.card-text
+{
+    font-size:  12px;
+}
