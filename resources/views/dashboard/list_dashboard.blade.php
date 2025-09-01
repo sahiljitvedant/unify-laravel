@@ -10,78 +10,70 @@
     
     <!-- Card 1 -->
     <div class="col-md-4">
-  <div class="card shadow-sm border-0 rounded-3 h-100 card-hover">
-    <div class="card-body d-flex flex-column p-4">
-
-      <!-- Title & Text -->
-      <div>
-        <h5 class="card-title text-start fw-bold mb-2">
-          <i class="bi bi-people text-primary me-2 fs-4"></i>
-          <span class="fs-3">100</span>
-        </h5>
-        <p class="card-text text-muted text-start mb-0">Members Count</p>
-      </div>
-
-      <!-- Bottom Right Link -->
-      <div class="mt-auto d-flex justify-content-end">
-        <a href="{{ route('list_member') }}" 
-           class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm text-primary"
-           style="width: 36px; height: 36px; background-color: #f0f4ff;">
-          <i class="bi bi-box-arrow-up-right fs-5"></i>
-        </a>
-      </div>
-
+    <div class="card shadow-sm border-0 rounded-3 h-100 card-hover">
+        <div class="card-body d-flex flex-column p-4">
+        <div>
+            <h5 class="card-title text-start fw-bold mb-2">
+            <i class="bi bi-people text-icon me-2 fs-4"></i>
+            <span class="fs-3 counter" data-target="100" data-direction="up">0</span>
+            </h5>
+            <p class="card-text text-muted text-start mb-0">Members Count</p>
+        </div>
+        <div class="mt-auto d-flex justify-content-end">
+            <a href="{{ route('list_member') }}" 
+            class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm text-icon"
+            style="width: 36px; height: 36px; background-color: #f0f4ff;">
+            <i class="bi bi-box-arrow-up-right fs-5"></i>
+            </a>
+        </div>
+        </div>
     </div>
-  </div>
-</div>
-
-
+    </div>
 
     <!-- Card 2 -->
     <div class="col-md-4">
-        <div class="card shadow-sm h-100">
-            <div class="card-body d-flex flex-column">
-            
-            <!-- Title & text (top-left) -->
-            <div>
-                <h5 class="card-title text-start"><i class="bi bi-book me-2"></i>5</h5>
-                <p class="card-text text-start">Membership Count</p>
-            </div>
-
-            <!-- Spacer + Button (bottom-right) -->
-            <div class="mt-auto d-flex justify-content-end">
-                <a href="{{ route('list_membership') }}" class="text-link text-decoration-none">
-                    <i class="bi bi-box-arrow-up-right"></i>
-                </a>
-            </div>
-
-
-            </div>
+    <div class="card shadow-sm border-0 rounded-3 h-100 card-hover">
+        <div class="card-body d-flex flex-column p-4">
+        <div>
+            <h5 class="card-title text-start fw-bold mb-2">
+            <i class="bi bi-book text-icon me-2 fs-4"></i>
+            <span class="fs-3 counter" data-target="100" data-direction="down">5</span>
+            </h5>
+            <p class="card-text text-muted text-start mb-0">Books Issued</p>
         </div>
+        <div class="mt-auto d-flex justify-content-end">
+            <a href="{{ route('list_member') }}" 
+            class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm text-icon"
+            style="width: 36px; height: 36px; background-color: #f0f4ff;">
+            <i class="bi bi-box-arrow-up-right fs-5"></i>
+            </a>
+        </div>
+        </div>
+    </div>
     </div>
 
     <!-- Card 3 -->
     <div class="col-md-4">
-        <div class="card shadow-sm h-100">
-            <div class="card-body d-flex flex-column">
-            
-            <!-- Title & text (top-left) -->
-            <div>
-                <h5 class="card-title text-start"><i class="bi bi-person-plus me-2"></i>4</h5>
-                <p class="card-text text-start">Trainers Count</p>
-            </div>
-
-            <!-- Spacer + Button (bottom-right) -->
-            <div class="mt-auto d-flex justify-content-end">
-                <a href="{{ route('list_trainer') }}" class="text-link text-decoration-none">
-                    <i class="bi bi-box-arrow-up-right"></i>
-                </a>
-            </div>
-
-
-            </div>
+    <div class="card shadow-sm border-0 rounded-3 h-100 card-hover">
+        <div class="card-body d-flex flex-column p-4">
+        <div>
+            <h5 class="card-title text-start fw-bold mb-2">
+            <i class="bi bi-person-plus me-2 fs-4"></i>
+            <span class="fs-3 counter" data-target="10" data-direction="up">10</span>
+            </h5>
+            <p class="card-text text-muted text-start mb-0">New Joinees</p>
+        </div>
+        <div class="mt-auto d-flex justify-content-end">
+            <a href="{{ route('list_member') }}" 
+            class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm text-icon"
+            style="width: 36px; height: 36px; background-color: #f0f4ff;">
+            <i class="bi bi-box-arrow-up-right fs-5"></i>
+            </a>
+        </div>
         </div>
     </div>
+    </div>
+
 
   </div>
 </div>
@@ -120,6 +112,7 @@
         text-align: center; /* optional: center headers */
     }
 </style>
+
 @endpush
 
 @push('scripts')
@@ -130,6 +123,40 @@
     <script>
         const fetchMembership = "{{ route('fetch_membership') }}";
         const deleteMembershipUrl = "{{ route('delete_membership', ':id') }}";
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+        const counters = document.querySelectorAll(".counter");
+
+        counters.forEach(counter => 
+        {
+            const target = +counter.getAttribute("data-target");
+            const direction = counter.getAttribute("data-direction") || "up";
+            let count = direction === "down" ? target * 2 : 0; // start higher for down
+            const speed = 30;
+
+            const updateCount = () => {
+            if (direction === "up") {
+                if (count < target) {
+                count += Math.ceil(target / 50);
+                if (count > target) count = target;
+                counter.textContent = count;
+                setTimeout(updateCount, speed);
+                }
+            } else if (direction === "down") {
+                if (count > target) {
+                count -= Math.ceil(target / 50);
+                if (count < target) count = target;
+                counter.textContent = count;
+                setTimeout(updateCount, speed);
+                }
+            }
+            };
+
+            updateCount();
+        });
+        });
+
     </script>
     <script src="{{ asset('assets/js/gym_membership/list_membership.js') }}"></script>
 @endpush
