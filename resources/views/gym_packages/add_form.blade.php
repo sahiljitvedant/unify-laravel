@@ -20,7 +20,7 @@
                 <label class="form-label d-block mb-2">Upload Profile Image</label>
                 <img id="previewImage" class="mt-2 img-thumbnail mb-2" style="max-height: 80px; display:block; margin: 0 auto;" src="{{ asset('assets/img/default.png') }}">
                 <input type="file" class="form-control d-none" id="profileImage"  name="profile_image" accept="image/*">
-                <button type="button" class="btn btn-primary rounded-pill" id="uploadButton">Upload Photo</button>
+                <button type="button" class="profilebtn" id="uploadButton">Upload Photo</button>
             </div>
 
             <div class="col-12 col-md-3 mb-3">
@@ -317,6 +317,12 @@ const stepperSubmitUrl = "{{ route('stepper.submit') }}";
 @endsection
 
 <style>
+    .profilebtn{
+        background: #0b1061;
+        color: #fff;
+        border: 5px solid #0b1061 !important;
+        border-radius: 5px
+    }
 .progressbar {
     display: flex;
     justify-content: center;
@@ -334,7 +340,7 @@ const stepperSubmitUrl = "{{ route('stepper.submit') }}";
     font-weight: bold;
 }
 .circle.active {
-    background: #0d6efd;  /* Bootstrap primary blue */
+    background: #0b1061;  /* Bootstrap primary blue */
     color: #fff;
 }
 .circle.completed {

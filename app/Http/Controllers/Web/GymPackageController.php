@@ -37,8 +37,8 @@ class GymPackageController extends Controller
     {
         // dd($request->all());
         $query = DB::table('tbl_gym_members')
-            ->select('*');
-            // ->where('is_deleted', '!=', 9);
+            ->select('*')
+            ->where('is_deleted', '!=', 9);
 
         // Apply filters
         if ($request->filled('active')) {
