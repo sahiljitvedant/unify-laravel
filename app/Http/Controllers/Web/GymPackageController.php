@@ -17,61 +17,64 @@ class GymPackageController extends Controller
         return view('gym_packages.list');
     }
 
-    // public function fetchMemberList(Request $request)
-    // {
-    //     // ONE variable that fetches everything you need
-    //     $fetch_data = DB::table('tbl_gym_members')
-    //         ->select('*');
 
-    //     // Send to DataTables (server-side)
-    //     return DataTables::of($fetch_data)
-    //         ->addColumn('action', function ($row) {
-    //             return '<a href="/edit_member'.$row->id.'" class="btn btn-sm btn-primary">Edit</a>
-    //                     <a href="/members/delete/'.$row->id.'" class="btn btn-sm btn-danger">Delete</a>';
-    //         })
-    //         ->rawColumns(['action'])
-    //         ->make(true);
-    // }
 
     public function fetchMemberList(Request $request)
     {
         // dd($request->all());
-        $query = DB::table('tbl_gym_members')
-            ->select('*')
-            ->where('is_deleted', '!=', 9);
+        $query = DB::table('tbl_gym_members as gm')
+        ->join('tbl_gym_membership as ms', 'gm.membership_type', '=', 'ms.id')
+        ->select(
+            'gm.*',
+            'ms.membership_name',
+            'ms.duration_in_days',
+            'ms.price',
+            'ms.description'
+        )
+        ->where('gm.is_deleted', '!=', 9);
 
         // Apply filters
         if ($request->filled('first_name')) {
-            $query->where('first_name', 'like', "%{$request->first_name}%");
+            $query->where('gm.first_name', 'like', "%{$request->first_name}%");
         }
         
         if ($request->filled('mobile')) {
-            $query->where('mobile', 'like', "%{$request->mobile}%");
+            $query->where('gm.mobile', 'like', "%{$request->mobile}%");
         }
         
         if ($request->filled('email')) {
-            $query->where('email', 'like', "%{$request->email}%");
+            $query->where('gm.email', 'like', "%{$request->email}%");
         }
         
         // Sorting
         $allowedSorts = [
-            'id',
-            'first_name',
-            'email',
-            'mobile',
-            'membership_type',
+            'gm.id',
+            'gm.first_name',
+            'gm.email',
+            'gm.mobile',
+            'gm.membership_type',
+            'ms.membership_name',
+            'ms.price',
+            'gm.amount_paid'
         ];
 
+       
+        
         $sort = $request->get('sort', 'id');
         $direction = $request->get('order', 'desc');
 
         if (!in_array($sort, $allowedSorts)) {
-            $sort = 'id';
+            $sort = 'gm.id';
         }
         if (!in_array(strtolower($direction), ['asc', 'desc'])) {
             $direction = 'desc';
         }
-
+        if ($sort === 'fees_pending') {
+            $query->orderByRaw('(ms.price - gm.amount_paid) ' . $direction);
+        } else {
+            $query->orderBy($sort, $direction);
+        }
+    
         $query->orderBy($sort, $direction);
 
         // Pagination

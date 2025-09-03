@@ -47,10 +47,11 @@ $(document).ready(function ()
                     <tr>
                         <td>${m.id}</td>
                         <td>${m.first_name} ${m.middle_name ?? ''} ${m.last_name ?? ''}</td>
-                        <td>${m.email}</td>
                         <td>${m.mobile}</td>
                         <td>${m.membership_name}</td>
-                        <td>${m.action}</td>
+                        <td>${m.price}</td>
+                        <td>${m.amount_paid}</td>
+                        <td>${m.price - m.amount_paid}</td>
                     </tr>
                 `;
             });

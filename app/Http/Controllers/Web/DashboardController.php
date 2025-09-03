@@ -19,7 +19,7 @@ class DashboardController extends Controller
         ->where('is_deleted', '!=', 9)
         ->count();
 
-        $memebership = DB::table('tbl_gym_membership')
+        $membership = DB::table('tbl_gym_membership')
         ->select('*')
         ->where('is_deleted', '!=', 9)
         ->count();
@@ -28,8 +28,51 @@ class DashboardController extends Controller
         ->select('*')
         ->where('is_deleted', '!=', 9)
         ->count();
+        // Controller
+        $years = DB::table('tbl_gym_members')
+        ->select(DB::raw("YEAR(joining_date) as year"))
+        ->where('is_deleted', '!=', 9)
+        ->distinct()
+        ->orderBy('year', 'desc')
+        ->pluck('year');
 
-        return view('dashboard.list_dashboard',compact('members','memebership','trainer'));
+        // Selected year (default = current year if not passed)
+        $selectedYear = request()->get('year', now()->year);
+
+        $members_data = DB::table('tbl_gym_members')
+        ->select(
+            DB::raw("DATE_FORMAT(joining_date, '%b') as month"), // only month
+            DB::raw("COUNT(*) as total")
+        )
+        ->where('is_deleted', '!=', 9)
+        ->whereYear('joining_date', $selectedYear)
+        ->groupBy('month')
+        ->orderByRaw("MIN(joining_date)")
+        ->get();
+
+        // Convert to arrays for Chart.js
+        $labels = $members_data->pluck('month'); // ["Jan","Feb","Mar"]
+        $values = $members_data->pluck('total');
+
+        $memebrs_query=DB::table('tbl_gym_members')
+        ->select('*')
+        ->where('is_deleted', '!=', 9)
+        ->get();
+        // Membership type distribution
+        $membership_distribution = DB::table('tbl_gym_members as gm')
+        ->join('tbl_gym_membership as ms', 'gm.membership_type', '=', 'ms.id')
+        ->select('ms.membership_name', DB::raw('COUNT(gm.id) as total'))
+        ->where('gm.is_deleted', '!=', 9)
+        ->groupBy('ms.membership_name')
+        ->get();
+    
+            // dd($membership_distribution);
+        // Labels & values for Chart.js
+        $membershipLabels = $membership_distribution->pluck('membership_name'); 
+        $membershipValues = $membership_distribution->pluck('total');
+
+
+        return view('dashboard.list_dashboard',compact('members','membership_distribution','membershipLabels','membershipValues','memebrs_query','membership','trainer','labels','values','years','selectedYear'));
        
     }
 
