@@ -57,8 +57,6 @@ class GymPackageController extends Controller
             'ms.price',
             'gm.amount_paid'
         ];
-
-       
         
         $sort = $request->get('sort', 'id');
         $direction = $request->get('order', 'desc');

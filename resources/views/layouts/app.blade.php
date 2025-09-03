@@ -68,37 +68,40 @@
         <!-- Sidebar -->
         <div id="sidebar" class="sidebar d-lg-block">
           
-            <a href="{{ route('list_dashboard') }}">
-            
-                <i class="bi bi-speedometer2 me-2"></i>
-                Dashboard
+            <a href="{{ route('list_dashboard') }}" 
+                class="{{ request()->routeIs('list_dashboard') ? 'active' : '' }}">
+                    <i class="bi bi-speedometer2 me-2"></i>
+                    Dashboard
             </a>
-            <a href="{{ route('list_member') }}"><i class="bi bi-people me-2"></i>Members</a>
+            <a href="{{ route('list_member') }}" 
+            class="{{ request()->routeIs('list_member') ? 'active' : '' }}">
+                <i class="bi bi-people me-2"></i>Members
+            </a>
             <a class="d-flex justify-content-start align-items-center" 
             data-bs-toggle="collapse" 
             href="#modulesDropdown" 
             role="button" 
-            aria-expanded="false" 
+            aria-expanded="{{ request()->routeIs('list_membership','list_trainer') ? 'true' : 'false' }}" 
             aria-controls="modulesDropdown">
-            <span><i class="bi bi-briefcase me-2"></i>Modules</span><i class="fas fa-chevron-down small ms-2 mt-0"></i>
+            <span><i class="bi bi-briefcase me-2"></i>Modules</span>
+            <i class="fas fa-chevron-down small ms-2 mt-0"></i>
             </a>
-            <div class="collapse ps-4" id="modulesDropdown">
-                <a href="{{ route('list_membership') }}" class="d-block py-1">
+            <div class="collapse ps-4 {{ request()->routeIs('list_membership','list_trainer') ? 'show' : '' }}" 
+                id="modulesDropdown">
+                <a href="{{ route('list_membership') }}" 
+                class="d-block py-1 {{ request()->routeIs('list_membership') ? 'active' : '' }}">
                     <i class="bi bi-book me-2"></i>Membership
                 </a>
-                <a href="{{ route('list_trainer') }}" class="d-block py-1">
+                <a href="{{ route('list_trainer') }}" 
+                class="d-block py-1 {{ request()->routeIs('list_trainer') ? 'active' : '' }}">
                     <i class="bi bi-person-plus me-2"></i>Trainer
                 </a>
-
-                <!-- <a href="{{ route('list_company') }}" class="d-block py-1">
-                    <i class="bi bi-person-plus me-2"></i>Company
-                </a> -->
             </div>
-
-            <a href="#"><i class="bi bi-gear me-2"></i>Settings</a>
-            <a href="{{ route('logout') }}">
+            <a href="{{ route('logout') }}" 
+            class="{{ request()->routeIs('logout') ? 'active' : '' }}">
                 <i class="bi bi-box-arrow-right me-2"></i>Logout
             </a>
+
         </div>
     @endif
     <!-- Main Content -->

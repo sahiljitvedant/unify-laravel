@@ -8,15 +8,19 @@ use App\Http\Controllers\Web\GymMembershipController;
 use App\Http\Controllers\Web\CompanyController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\TrainerController;
+use App\Http\Controllers\Web\EnquiryController;
 
 Route::get('', function () {
     return view('front.index');
 })->name('home');
-
+Route::get('/about_us', function () {
+    return view('front.about_us');
+})->name('about_us');
 Route::get('/register', [AuthController::class, 'register'])->name('register_get');
 Route::post('/register', [AuthController::class, 'registerPost'])->name('register_post');
 Route::get('/login', [AuthController::class, 'index'])->name('login_get');
 Route::post('/login', [AuthController::class, 'loginPost'])->name('login_post');
+Route::post('/enquiry', [EnquiryController::class, 'storeEnquiry'])->name('enquiry.store');
 
 Route::get('/logout', function ()
 {

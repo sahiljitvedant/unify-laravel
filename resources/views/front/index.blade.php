@@ -23,7 +23,7 @@
         <li><a href="#about">About</a></li>
         <li><a href="#classes">Classes</a></li>
         <li><a href="#contact">Contact</a></li>
-        <li><a href="{{ route('login_get') }}">Login</a></li>
+        <li><a target="_blank" href="{{ route('login_get') }}">Login</a></li>
         </ul>
         <div class="hamburger">&#9776;</div>
     </nav>
@@ -45,7 +45,7 @@
             <div class="slide-content">
                 <h1>Transform Your Body</h1>
                 <p>Join our gym and start your fitness journey today.</p>
-                <a class="btn" href="#contact">Get Started</a>
+                <a class="btn" href="#about">Get Started</a>
             </div>
             </div>
 
@@ -53,7 +53,7 @@
             <div class="slide-content">
                 <h1>Push Your Limits</h1>
                 <p>Cardio, strength, yoga & more — all in one place.</p>
-                <a class="btn" href="#contact">Join Now</a>
+                <a class="btn" href="#classes">Join Now</a>
             </div>
             </div>
 
@@ -78,8 +78,10 @@
     <section id="about" class="about">
         <div class="about-text">
         <h2>About Us</h2>
-        <p>We are more than just a gym – we are a community. Our mission is to help you achieve your fitness goals with state-of-the-art equipment, experienced trainers, and a motivating environment.</p>
-        <a href="#contact" class="btn mt-2">Get Started</a>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vitae orci sed libero consequat tincidunt. Vivamus vel urna eget arcu ultricies sagittis. Integer euismod, sapien nec pretium pharetra, magna justo volutpat magna, et bibendum justo libero eget risus.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vitae orci sed libero consequat tincidunt. Vivamus vel urna eget arcu ultricies sagittis. Integer euismod, sapien nec pretium pharetra, magna justo volutpat magna, et bibendum justo libero eget risus.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vitae orci sed libero consequat tincidunt. Vivamus vel urna eget arcu ultricies sagittis. Integer euismod, sapien nec pretium pharetra, magna justo volutpat magna, et bibendum justo libero eget risus.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vitae orci sed libero consequat tincidunt. Vivamus vel urna eget arcu ultricies sagittis. Integer euismod, sapien nec pretium pharetra, magna justo volutpat magna, et bibendum justo libero eget risus.
+
+        </p>
+        <a href="{{ route('about_us') }}" class="btn mt-2">Get Started</a>
         </div>
         <img src="https://images.unsplash.com/photo-1558611848-73f7eb4001a1?w=600" alt="Gym">
         
@@ -123,20 +125,35 @@
     <section id="contact" class="contact">
         <h2>Contact Us</h2>
         <div class="contact-card">
-            <form>
-            <input type="text" placeholder="Your Name" required>
-            <input type="email" placeholder="Your Email" required>
-            <textarea rows="5" placeholder="Your Message"></textarea>
-            <button type="submit">Send Message</button>
-            </form>
+        <form method="POST" action="{{ route('enquiry.store') }}" id="enquiryForm">
+            @csrf
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="email" name="email" placeholder="Your Email" required>
+            <textarea rows="5" name="message" placeholder="Your Message" required maxlength="15"></textarea>
+
+            <button type="submit" id="submitBtn">Send Message</button>
+        </form>
         </div>
     </section>
 
 
   <!-- FOOTER -->
   <footer class="footer">
-    <p>&copy; 2025 Sachi. All rights reserved.</p>
+    <p>&copy;2025 Sachi. All rights reserved.</p>
   </footer>
+<style>
+    .nav-links a.active 
+    {
+        color: #0B1061; /* green highlight */
+        font-weight: bold;
+        border-bottom: 2px solid #0B1061;
+    }
+.contact-card
+{
+    background: #f2f2f2 !important;
+}
+</style>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     const hamburger = document.querySelector('.hamburger');
     const mobileMenu = document.getElementById('mobileMenu');
@@ -209,6 +226,43 @@
         window.addEventListener('load', () => showSlide(current));
     })();
 </script>
+<script>
+$(document).ready(function () {
+    $("#enquiryForm").on("submit", function () {
+        var btn = $("#submitBtn");
+        btn.prop("disabled", true).text("Please wait...");
+    });
+});
+$(document).ready(function () {
+    $(".nav-links a").on("click", function () {
+        $(".nav-links a").removeClass("active"); // remove from all
+        $(this).addClass("active"); // add to clicked
+    });
+});
+$(document).ready(function () {
+    const sections = $("section"); // all sections
+    const navLinks = $(".nav-links a");
 
+    function setActiveLink() {
+        let scrollPos = $(window).scrollTop();
+
+        sections.each(function () {
+            let top = $(this).offset().top - 100; // offset for navbar height
+            let bottom = top + $(this).outerHeight();
+            let id = $(this).attr("id");
+
+            if (scrollPos >= top && scrollPos < bottom) {
+                navLinks.removeClass("active");
+                $(".nav-links a[href='#" + id + "']").addClass("active");
+            }
+        });
+    }
+
+    // run on page load + scroll
+    setActiveLink();
+    $(window).on("scroll", setActiveLink);
+});
+
+</script>
 </body>
 </html>
