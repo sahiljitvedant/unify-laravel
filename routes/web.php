@@ -16,6 +16,12 @@ Route::get('', function () {
 Route::get('/about_us', function () {
     return view('front.about_us');
 })->name('about_us');
+Route::get('/blogs', function () {
+    return view('front.blogs');
+})->name('blogs');
+Route::get('/blogs_read_more', function () {
+    return view('front.blogs_read_more');
+})->name('blogs_read_more');
 Route::get('/register', [AuthController::class, 'register'])->name('register_get');
 Route::post('/register', [AuthController::class, 'registerPost'])->name('register_post');
 Route::get('/login', [AuthController::class, 'index'])->name('login_get');

@@ -20,7 +20,7 @@
         <ul class="nav-links">
         <li><a href="{{ route('home') }}">Home</a></li>
         <li><a href="#about"  class="active">About</a></li>
-        <li><a href="#classes">Classes</a></li>
+        <li><a href="{{ route('blogs') }}">Blogs</a></li>
         <li><a href="#contact">Contact</a></li>
         <li><a target="_blank" href="{{ route('login_get') }}">Login</a></li>
         </ul>
