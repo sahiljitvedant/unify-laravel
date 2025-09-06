@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Deleted Trainer List')
+@section('title', 'Deleted Membership List')
 
 @section('content')
     <div id="loader">
@@ -11,18 +11,15 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('list_dashboard') }}">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('list_trainer') }}">Trainer</a></li>
-                <li class="breadcrumb-item" aria-current="page">List Deleted Trainer</li>
+                <li class="breadcrumb-item"><a href="{{ route('list_membership') }}">Memberships</a></li>
+                <li class="breadcrumb-item" aria-current="page">List Deleted Membership</li>
             </ol>
         </nav>
         <div class="p-4 bg-light rounded shadow">
             <!-- Heading + Add Button -->
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 gap-2">
-                <h4 class="mb-2 mb-md-0">List Deleted Trainer</h4>
-                <!-- <div class="d-flex flex-column align-items-start align-items-md-end gap-2">
-                    <a href="{{ route('add_trainer') }}" class="btn-add">Add Trainer</a>
-                    <a href="{{ route('list_deleted_trainer') }}" class="btn-link">Show Deleted Trainer</a>
-                </div> -->
+                <h4 class="mb-2 mb-md-0">List Deleted Membership</h4>
+               
             </div>
             <div class="data-wrapper">
                 <!-- Filters -->
@@ -36,14 +33,24 @@
                                 <option value="0">Inactive</option>
                             </select>
                         </div>
+                        <div class="col-md-3">
+                            <select id="filterTrainer" class="form-select">
+                                <option value="">Select Trainer</option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" id="filterMinPrice" class="form-control" placeholder="Min Price">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" id="filterMaxPrice" class="form-control" placeholder="Max Price">
+                        </div>
+                    </div>
 
-                        <div class="col-md-3">
-                            <input type="text" id="trainerName" class="form-control" placeholder="Trainer Name">
-                        </div>
-                        <div class="col-md-3">
-                            <input type="date" id="joiningDate" class="form-control">
-                            <small class="form-text text-muted">Joining Date</small>
-                        </div>
+                    <div class="row g-3 mt-2">
+                        <!-- Row 2 -->
+                    
                         <div class="col-md-2">
                             <button id="submitBtn" class="btn ">
                                 <i class="bi bi-search"></i> 
@@ -53,12 +60,6 @@
                                 <i class="bi bi-x-circle"></i> 
                             </button>
                         </div>
-                    </div>
-
-                    <div class="row g-3 mt-2">
-                        <!-- Row 2 -->
-                    
-                        
                     </div>
                 </div>
                 <!-- Separator -->
@@ -79,8 +80,8 @@
                                     </a>
                                 </th>
                                 <th>
-                                    <a href="#" class="sort-link" data-column="trainer_name">
-                                        Tariner Name
+                                    <a href="#" class="sort-link" data-column="membership_name">
+                                        Name
                                         <span class="sort-icons">
                                             <i class="asc">▲</i>
                                             <i class="desc">▼</i>
@@ -88,8 +89,8 @@
                                     </a>
                                 </th>
                                 <th>
-                                    <a href="#" class="sort-link" data-column="joining_date">
-                                        Joining Date
+                                    <a href="#" class="sort-link" data-column="duration_in_days">
+                                        Duration
                                         <span class="sort-icons">
                                             <i class="asc">▲</i>
                                             <i class="desc">▼</i>
@@ -97,14 +98,15 @@
                                     </a>
                                 </th>
                                 <th>
-                                    <a href="#" class="sort-link" data-column="expiry_date">
-                                        Leaving Date
+                                    <a href="#" class="sort-link" data-column="price">
+                                        Price
                                         <span class="sort-icons">
                                             <i class="asc">▲</i>
                                             <i class="desc">▼</i>
                                         </span>
                                     </a>
                                 </th>
+                                <th>Trainer</th>
                                 <th>Active</th>
                                 <th>Action</th>
                             </tr>
@@ -142,14 +144,11 @@
 
 @push('scripts')
 <script>
-    const fetchDeletedTrainer = "{{ route('fetch_deleted_trainer') }}";
-    const activateTrainerUrl = "{{ route('activate_trainer', ':id') }}";
-
+    const fetchMembership = "{{ route('fetch_deleted_membership') }}";
+    const activateMembershipUrl = "{{ route('activate_membership', ':id') }}";
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="{{ asset('assets/js/trainer/list_deleted_trainer.js') }}"></script>
-
-
+<script src="{{ asset('assets/js/gym_membership/list_deleted_membership.js') }}"></script>
 <script>
 
 </script>

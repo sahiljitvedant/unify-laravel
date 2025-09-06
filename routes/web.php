@@ -10,6 +10,7 @@ use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\TrainerController;
 use App\Http\Controllers\Web\PolicyController;
 use App\Http\Controllers\Web\EnquiryController;
+use App\Http\Controllers\Web\BlogsController;
 
 Route::get('', function () {
     return view('front.index');
@@ -63,12 +64,11 @@ Route::middleware(['auth.custom', 'session.timeout'])->group(function ()
     Route::get('/edit_trainer/{id}', [TrainerController::class, 'edit'])->name('edit_trainer');
     Route::get('/list_deleted_trainer', [TrainerController::class, 'list_deleted_trainer'])->name('list_deleted_trainer');
     
-
-    Route::get('/list_policy', [PolicyController::class, 'list'])->name('list_trainer');
+    // Policy route:-
     Route::get('/add_policy', [PolicyController::class, 'add'])->name('add_policy');
-    Route::get('/edit_policy/{id}', [PolicyController::class, 'edit'])->name('edit_trainer');
-    Route::get('/list_deleted_policy', [PolicyController::class, 'list_deleted_trainer'])->name('list_deleted_trainer');
-    
+
+    // Blogs route:-
+    Route::get('/add_blogs', [BlogsController::class, 'add'])->name('add_policy');
 
     Route::get('/add_company', [CompanyController::class, 'add'])->name('add_company');
     Route::get('/list_company', [CompanyController::class, 'list'])->name('list_company');
