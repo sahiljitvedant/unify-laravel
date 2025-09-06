@@ -8,6 +8,7 @@ use App\Http\Controllers\Web\GymMembershipController;
 use App\Http\Controllers\Web\CompanyController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\TrainerController;
+use App\Http\Controllers\Web\PolicyController;
 use App\Http\Controllers\Web\EnquiryController;
 
 Route::get('', function () {
@@ -63,6 +64,12 @@ Route::middleware(['auth.custom', 'session.timeout'])->group(function ()
     Route::get('/list_deleted_trainer', [TrainerController::class, 'list_deleted_trainer'])->name('list_deleted_trainer');
     
 
+    Route::get('/list_policy', [PolicyController::class, 'list'])->name('list_trainer');
+    Route::get('/add_policy', [PolicyController::class, 'add'])->name('add_policy');
+    Route::get('/edit_policy/{id}', [PolicyController::class, 'edit'])->name('edit_trainer');
+    Route::get('/list_deleted_policy', [PolicyController::class, 'list_deleted_trainer'])->name('list_deleted_trainer');
+    
+
     Route::get('/add_company', [CompanyController::class, 'add'])->name('add_company');
     Route::get('/list_company', [CompanyController::class, 'list'])->name('list_company');
     Route::get('/edit_company/{id}', [CompanyController::class, 'edit'])->name('edit_company');
@@ -96,7 +103,9 @@ Route::middleware(['auth.custom', 'session.timeout'])->group(function ()
         Route::post('/activate_trainer/{id}', [TrainerController::class, 'activate_trainer'])->name('activate_trainer');
         Route::post('/update_trainer/{id}', [TrainerController::class, 'update'])->name('update_trainer');
        
-        
+        Route::post('/add_policy', [PolicyController::class, 'submit'])->name('add_policy');
+
+
         Route::post('/create_company', [CompanyController::class, 'create_company'])->name('create_company');
         Route::get('/fetch_comapny_list', [CompanyController::class, 'fetch_comapny_list'])
         ->name('fetch_comapny_list');

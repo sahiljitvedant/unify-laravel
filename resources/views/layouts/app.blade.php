@@ -129,7 +129,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Sidebar -->
         <div id="sidebar" class="sidebar d-lg-block">
           
@@ -178,7 +177,7 @@
             class="{{ request()->routeIs('list_member') ? '' : '' }}">
                 <i class="bi bi-question-circle me-2"></i>FAQs
             </a>
-            <a href="#" 
+            <a href="{{ route('add_policy') }}" 
             class="{{ request()->routeIs('list_member') ? '' : '' }}">
                 <i class="bi bi-shield-lock me-2"></i>Privacy Policy
             </a>
