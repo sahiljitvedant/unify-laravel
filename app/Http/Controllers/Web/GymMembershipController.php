@@ -416,5 +416,35 @@ class GymMembershipController extends Controller
         ]);
     }
 
-      
+    
+    public function get_membership_name(Request $request)
+    {
+        $query = trim($request->get('q'));
+
+        if (empty($query)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Search cannot be empty.'
+            ], 422);
+        }
+
+        $membership = DB::table('tbl_gym_membership')
+            ->where('membership_name', 'LIKE', "%{$query}%")
+            ->select('id', 'membership_name')
+            ->first();
+
+        if (!$membership) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No Membership found by this Name'
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'id' => Crypt::encryptString($membership->id), // ENCRYPT ID
+            'name' => $membership->membership_name
+        ]);
+    }
+
 }

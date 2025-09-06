@@ -50,20 +50,85 @@
     @if (!in_array(Route::currentRouteName(), $hideSidebarRoutes))
         <!-- Header -->
        
-        <div class="topbar d-flex justify-content-between align-items-center px-3">
-            <!-- Mobile Menu Button -->
-            <button id="menuToggle" class="btn btn-outline-secondary d-lg-none">
-                <i class="fas fa-bars"></i>
-            </button>
+        <!-- Topbar -->
+        <div class="topbar d-flex justify-content-between align-items-center px-3 py-2 shadow-sm flex-wrap">
+            <!-- Left: Mobile Menu & Logo -->
+            <div class="d-flex align-items-center gap-3">
+                <!-- Mobile Menu Button -->
+                <button id="menuToggle" class="btn btn-outline-secondary d-lg-none">
+                    <i class="fas fa-bars"></i>
+                </button>
 
-            <!-- Logo & Brand -->
-           
-            <a href="{{ route('list_dashboard') }}" class="d-flex align-items-center text-decoration-none">
-                <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" 
-                    style="height:60px; width:180px; object-fit:cover; border-radius:10px; border:1px solid var(--sidebar_color)">
-            </a>
+                <!-- Logo -->
+                <a href="{{ route('list_dashboard') }}" class="d-flex align-items-center text-decoration-none">
+                    <img src="{{ asset('assets/img/logo.png') }}" alt="Logo"
+                        style="height:50px; width:150px; object-fit:cover; border-radius:8px; border:1px solid var(--sidebar_color)">
+                </a>
+            </div>
+
+            <!-- Center: Search Bar + Welcome -->
+            <div class="d-flex align-items-center flex-grow-1 justify-content-center mx-3 gap-3">
+                <form id="membershipSearchForm" class="d-none d-md-flex flex-grow-1" style="max-width: 400px;">
+                    <input type="text" id="membershipSearchInput" class="form-control" placeholder="Search Member">
+                    <button type="submit" class="btn btn_bg_color ms-2">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </form>
+                <!-- Welcome Text -->
+                <div class="welcome-text d-none d-md-block">
+                    <span style="font-size:12px; color:#000;">
+                        Welcome back, Admin
+                    </span>
+                </div>
+            </div>
+
+            <!-- Right: Time, Notifications, Profile -->
+            <div class="d-flex align-items-center gap-4">
+                <!-- Static Time & Day -->
+                <div class="text-end d-none d-md-block">
+                    <span id="day" class="d-block fw-semibold"></span>
+                    <span id="time" class="small text-muted"></span>
+                </div>
+
+                <!-- Notifications -->
+                <!-- <a href="#" class="text-dark position-relative">
+                    <i class="bi bi-bell fs-5"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        3
+                    </span>
+                </a> -->
+
+                <!-- Profile Dropdown -->
+                <div class="dropdown">
+                    <a class="dropdown-toggle text-dark text-decoration-none d-flex align-items-center" 
+                    href="#" role="button" id="profileDropdown" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle fs-5 me-2"></i> 
+                        <span class="fw-medium" style="font-size:14px;">Admin</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="profileDropdown">
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <i class="bi bi-person me-2"></i> 
+                                <span style="font-size:14px;">Profile</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <i class="bi bi-gear me-2"></i> 
+                                <span style="font-size:14px;">Settings</span>
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="{{ route('logout') }}">
+                                <i class="bi bi-box-arrow-right me-2"></i> 
+                                <span style="font-size:14px;">Logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-        
 
         <!-- Sidebar -->
         <div id="sidebar" class="sidebar d-lg-block">
@@ -97,6 +162,26 @@
                     <i class="bi bi-person-plus me-2"></i>Trainer
                 </a>
             </div>
+            <a href="#" 
+            class="{{ request()->routeIs('list_member') ? '' : '' }}">
+                <i class="bi bi-journal me-2"></i>Blogs
+            </a>
+            <a href="#" 
+            class="{{ request()->routeIs('list_member') ? '' : '' }}">
+                <i class="bi bi-camera me-2"></i>Gallary
+            </a>
+            <a href="#" 
+            class="{{ request()->routeIs('list_member') ? '' : '' }}">
+                <i class="bi bi-chat-left-text me-2"></i>Enquiry
+            </a>
+            <a href="#" 
+            class="{{ request()->routeIs('list_member') ? '' : '' }}">
+                <i class="bi bi-question-circle me-2"></i>FAQs
+            </a>
+            <a href="#" 
+            class="{{ request()->routeIs('list_member') ? '' : '' }}">
+                <i class="bi bi-shield-lock me-2"></i>Privacy Policy
+            </a>
             <a href="{{ route('logout') }}" 
             class="{{ request()->routeIs('logout') ? 'active' : '' }}">
                 <i class="bi bi-box-arrow-right me-2"></i>Logout
@@ -114,22 +199,80 @@
 
     <!-- Toggle Sidebar -->
     <script>
+        const searchMembershipbyId = "{{ route('get_membership_name') }}";
+        const editMembershipUrl = "{{ url('/edit_membership') }}";
+    </script>
+    <script>
         const menuToggle = document.getElementById('menuToggle');
         const sidebar = document.getElementById('sidebar');
 
         menuToggle.addEventListener('click', () => {
             sidebar.classList.toggle('active');
         });
+  
+        function updateTime() {
+            const now = new Date();
+            const optionsDay = { weekday: 'long' };
+            const optionsTime = { hour: '2-digit', minute: '2-digit' };
+
+            document.getElementById('day').textContent = now.toLocaleDateString('en-US', optionsDay);
+            document.getElementById('time').textContent = now.toLocaleTimeString('en-US', optionsTime);
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('assets/js/gym_membership/app.js') }}"></script>
     @stack('scripts')
 </body>
 </html>
 <style>
-    .no-sidebar {
-    margin-left: 0 !important;
-    padding: 100px 20px 20px 20px !important;
-    max-width: 500px;
-    margin: 100px auto 0 auto !important;
-}
+    .topbar {
+    height: 70px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    }
 
+    .topbar .form-control {
+        max-width: 100%;
+        border-radius: 8px;
+        font-size: 14px;
+        color: var(--theme-color);
+    }
+
+    .topbar form {
+        min-width: 200px; /* prevents shrinking too much */
+    }
+
+    /* Add spacing between logo and search */
+    @media (max-width: 1200px) {
+        .topbar .flex-grow-1 {
+            margin-left: 20px;
+        }
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+        .topbar form {
+            display: none !important; /* hide search bar on small screens */
+        }
+        .welcome-text {
+            display: none !important;
+        }
+        .topbar {
+            flex-wrap: wrap;
+            height: auto;
+            padding: 10px;
+        }
+    }
+    .dropdown-menu 
+    {
+        --bs-dropdown-link-hover-bg: var(--sidebar_color) !important;
+        --bs-dropdown-link-active-bg: var(--sidebar_color) !important;
+        --bs-dropdown-link-hover-color: var(--theme-color) !important;
+        --bs-dropdown-link-active-color: var(--theme-color) !important;
+    }
 </style>

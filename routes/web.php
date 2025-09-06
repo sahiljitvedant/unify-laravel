@@ -67,6 +67,9 @@ Route::middleware(['auth.custom', 'session.timeout'])->group(function ()
     Route::get('/list_company', [CompanyController::class, 'list'])->name('list_company');
     Route::get('/edit_company/{id}', [CompanyController::class, 'edit'])->name('edit_company');
 
+    Route::get('/get_membership_name', [GymMembershipController::class, 'get_membership_name'])
+    ->name('get_membership_name');
+
     Route::middleware(['web'])->group(function () 
     {
         Route::post('/stepper-submit', [GymPackageController::class, 'submit'])->name('stepper.submit');
@@ -100,6 +103,8 @@ Route::middleware(['auth.custom', 'session.timeout'])->group(function ()
         Route::post('/delete_company/{id}', [CompanyController::class, 'delete_comapny'])->name('delete_company');
         Route::post('/update_home_profile/{id}', [CompanyController::class, 'update_home_profile'])->name('update_home_profile');
         Route::post('/update_company_profile/{id}', [CompanyController::class, 'update_company_profile'])->name('update_company_profile');
+    
+   
     });
 });
 

@@ -522,7 +522,7 @@ table td {
 }
 .card 
 {
-   background: #f2f2f2;
+   background:var(--theme-color);
 }
 .card-hover {
     transition: transform 0.25s ease, box-shadow 0.25s ease;
@@ -532,4 +532,21 @@ table td {
     transform: translateY(-6px) scale(1.03);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   }
-  
+
+.btn_bg_color
+{
+    background: var(--sidebar_color);
+    color: var(--theme-color);
+}
+.btn_bg_color:hover
+{
+    background: var(--sidebar_color);
+    color: var(--theme-color);
+}
+.form-control {
+    color: var(--sidebar_color) !important;
+}
+.form-control:focus {
+    border-color: var(--sidebar_color);
+    box-shadow: 0 0 0 0.2rem rgba(11, 16, 97, 0.2); /* adjust as needed */
+}

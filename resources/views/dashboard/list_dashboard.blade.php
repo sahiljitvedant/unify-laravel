@@ -3,9 +3,15 @@
 @section('title', 'Dashboard')
 
 @section('content')
-<div class="container">
-  Welcome Back, Admin
-    <div class="container mt-4">
+<div class="container-custom">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('list_dashboard') }}">Dashboard</a></li>
+              
+                <li class="breadcrumb-item" aria-current="page">List Dashboard</li>
+            </ol>
+        </nav>
+    <div class="p-4 bg-light rounded shadow">
         <div class="row g-3">
             <!-- Card 1 -->
             <div class="col-md-4">
