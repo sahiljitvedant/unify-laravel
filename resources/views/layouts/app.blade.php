@@ -182,6 +182,12 @@
             class="{{ request()->routeIs('list_member') ? '' : '' }}">
                 <i class="bi bi-shield-lock me-2"></i>Privacy Policy
             </a>
+            <a  target="_blank" href="{{ route('home') }}" 
+            class="{{ request()->routeIs('list_member') ? '' : '' }}">
+                <i class="bi bi-globe me-2"></i>Go Live
+            </a>
+           
+           
             <a href="{{ route('logout') }}" 
             class="{{ request()->routeIs('logout') ? 'active' : '' }}">
                 <i class="bi bi-box-arrow-right me-2"></i>Logout

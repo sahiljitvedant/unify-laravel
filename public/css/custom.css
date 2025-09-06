@@ -24,6 +24,7 @@ body {
 
 .sidebar {
     position: fixed;
+    overflow-y: auto; 
     top: 70px;
     left: 0;
     width: 220px;
@@ -34,6 +35,20 @@ body {
     transition: transform 0.3s ease;
     z-index: 999;
     
+}
+/* Webkit browsers (Chrome, Edge, Safari) */
+.sidebar::-webkit-scrollbar {
+    width: 2px;       /* ultra-thin scrollbar */
+}
+
+/* Hide default scrollbar but keep scrollable */
+.sidebar {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE 10+ */
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 0px;  /* Chrome, Edge, Safari */
 }
 
 .sidebar a {
