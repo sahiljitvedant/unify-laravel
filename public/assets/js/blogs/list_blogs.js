@@ -9,14 +9,14 @@ $(document).ready(function ()
         $("#loader").show();
 
         $.ajax({
-            url: fetchMembership,
+            url: fetchBlogs,
             type: "GET",
             data: {
                 page: page,
                 sort: sortColumn,
                 order: sortOrder,
                 active: $("#filterActive").val(),
-                trainer: $("#filterTrainer").val(),
+                blogname: $("#blogName").val(),
                 trainerName: $("#trainerName").val(),
                 joiningDate: $("#joiningDate").val(),
             },
@@ -36,7 +36,7 @@ $(document).ready(function ()
             // Show "No memberships found" message spanning all columns
             rows = `
                 <tr>
-                    <td colspan="7" class="text-center">No memberships found</td>
+                    <td colspan="7" class="text-center">No records found</td>
                 </tr>
             `;
         } else {
@@ -44,11 +44,7 @@ $(document).ready(function ()
                 rows += `
                     <tr>
                         <td>${m.id}</td>
-                        <td>${m.trainer_name}</td>
-                        <td>${m.joining_date}</td>
-                        <td>${m.expiry_date ? m.expiry_date : '-'}</td>
-
-                        
+                        <td>${m.blog_title}</td>
                         <td>${m.is_active ? 'Active' : 'Inactive'}</td>
                         <td>${m.action}</td>
                     </tr>
@@ -134,7 +130,7 @@ $(document).ready(function ()
 $("#btnCancel").on("click", function (e) {
     e.preventDefault();
     $("#filterActive").val('');
-    $("#filterTrainer").val('');
+    $("#blogName").val('');
     $("#trainerName").val('');
     $("#joiningDate").val('');
     fetchData(1); // reload data with no filters
@@ -146,7 +142,7 @@ $("#btnCancel").on("click", function (e) {
 function deleteMembershipById(id)
 {
     $.ajax({
-        url: deleteTrainer.replace(':id', id), 
+        url: deleteBlogs.replace(':id', id), 
         type: "POST",
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

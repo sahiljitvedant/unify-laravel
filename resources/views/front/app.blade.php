@@ -25,6 +25,7 @@
     <li><a href="{{ route('about_us') }}" class="{{ request()->routeIs('about_us') ? 'active' : '' }}">About</a></li>
     <li><a href="{{ route('blogs') }}" class="{{ request()->routeIs('blogs') ? 'active' : '' }}">Blogs</a></li>
     <li><a href="#contact" class="{{ request()->is('#contact') ? 'active' : '' }}">Contact</a></li>
+    <li><a href="{{ route('gallary') }}" class="{{ request()->is('#gallary') ? 'active' : '' }}">Gallary</a></li>
     <li><a target="_blank" href="{{ route('login_get') }}" class="{{ request()->routeIs('login_get') ? 'active' : '' }}">Login</a></li>
 </ul>
 
@@ -97,7 +98,7 @@
         width: 100%;
     
         text-align: center;
-        padding: 10px 0;
+        /* padding: 10px 0; */
         z-index: 1000;
         }
         .nav-links a.active 

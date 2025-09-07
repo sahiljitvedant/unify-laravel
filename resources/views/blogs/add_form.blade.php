@@ -8,12 +8,12 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('list_dashboard') }}">Dashboard</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('list_membership') }}">Blogs</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('list_blogs') }}">Blogs</a></li>
             <li class="breadcrumb-item" aria-current="page">Add Blogs</li>
         </ol>
     </nav>
 
-    <form id="gym_member_add_form" class="p-4 bg-light rounded shadow" >
+    <form id="add_blogs" class="p-4 bg-light rounded shadow" >
         <!-- Form Heading -->
         <h4 class="mb-4">Add Blogs</h4>
         <div class="step" data-step="2">
@@ -68,10 +68,10 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-const stepperSubmitUrl = "{{ route('add_membership') }}";
+const submitblog = "{{ route('add_blogs') }}";
 </script>
 
-<script src="{{ asset('assets/js/gym_membership/add_membership.js') }}"></script>
+<script src="{{ asset('assets/js/blogs/add_blogs.js') }}"></script>
 <style>
     /* Keep label normal even if checkbox is disabled */
     .form-check-input:disabled + .form-check-label 

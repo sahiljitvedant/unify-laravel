@@ -1,7 +1,6 @@
 // Validation Rules
-// Validation Rules
 const validationRules = {
-    blog_title: { 
+    gallery_name: { 
         required: true, 
         minlength: 3, 
         maxlength: 150 
@@ -9,39 +8,39 @@ const validationRules = {
     is_active: { 
         required: true 
     },
-    description: { 
+    main_thumbnail: { 
         required: true, 
-        minlength: 10, 
-        maxlength: 1000 
+        extension: "jpg|jpeg|png" 
     },
-    publish_date: { 
-        required: true, 
-        date: true 
+    "gallery_images[]": { 
+        extension: "jpg|jpeg|png" 
     },
+    "youtube_links[]": { 
+        url: true 
+    }
 };
 
 // Validation Messages
 const validationMessages = {
-    blog_title: { 
-        required: "Blog title is required", 
-        minlength: "Blog title must be at least 3 characters", 
-        maxlength: "Blog title must not exceed 150 characters" 
+    gallery_name: { 
+        required: "Gallery name is required", 
+        minlength: "Gallery name must be at least 3 characters", 
+        maxlength: "Gallery name must not exceed 150 characters" 
     },
     is_active: { 
         required: "Please select the status" 
     },
-    description: { 
-        required: "Blog description is required", 
-        minlength: "Description must be at least 10 characters", 
-        maxlength: "Description must not exceed 1000 characters" 
+    main_thumbnail: { 
+        required: "Main thumbnail is required", 
+        extension: "Only JPG, JPEG, PNG images are allowed" 
     },
-    publish_date: { 
-        required: "Publish date is required", 
-        date: "Please enter a valid date" 
+    "gallery_images[]": { 
+        extension: "Only JPG, JPEG, PNG images are allowed" 
     },
+    "youtube_links[]": { 
+        url: "Please enter a valid YouTube link" 
+    }
 };
-
-
 
 // Validate all form fields
 function validateForm() 
@@ -51,7 +50,7 @@ function validateForm()
     // Clear previous errors
     $('.error-message').text('');
 
-    $('#add_blogs :input').each(function () {
+    $('#add_gallery :input').each(function () {
         const name = $(this).attr('name');
         const value = $(this).val();
         const rules = validationRules[name];
@@ -108,10 +107,10 @@ $('#submitBtn').on('click', function (e) {
    
     if (!validateForm()) return;
 
-    let formData = new FormData($('#add_blogs')[0]);
+    let formData = new FormData($('#add_gallery')[0]);
 
     $.ajax({
-        url: submitblog,
+        url: submitGallary,
         type: "POST",
         data: formData,
         processData: false,
@@ -148,8 +147,10 @@ $('#submitBtn').on('click', function (e) {
             if (xhr.status === 422) {
                 let errors = xhr.responseJSON.errors;
                 for (let key in errors) {
-                    $(`.error-message[data-error-for="${key}"]`).text(errors[key][0]);
+                    let fieldKey = key.replace(/\.\d+$/, '[]'); // convert youtube_links.0 → youtube_links[]
+                    $(`.error-message[data-error-for="${fieldKey}"]`).text(errors[key][0]);
                 }
+                
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -162,7 +163,7 @@ $('#submitBtn').on('click', function (e) {
 });
 
 // Live error removal
-$('#add_blogs :input').on('input change', function () {
+$('#add_gallery :input').on('input change', function () {
     const name = $(this).attr('name');
     const value = $(this).val();
     const rules = validationRules[name];
@@ -185,3 +186,97 @@ $('#add_blogs :input').on('input change', function () {
 
     if (valid) errorDiv.text('');
 });
+
+// Helper function
+function isValidUrl(url) {
+    let pattern = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;
+    return pattern.test(url);
+}
+
+// Add new YouTube link
+$(document).on('click', '#addYoutubeLink', function() 
+{
+    let lastInput = $('#youtubeLinksWrapper .youtube-input').last();
+    let errorDiv = $(`.error-message[data-error-for="youtube_links[]"]`);
+    errorDiv.text('');
+
+    // If there is already an input, check it before adding new one
+    if (lastInput.length) {
+        let val = lastInput.val().trim();
+        if (val === '' || !isValidUrl(val)) {
+            errorDiv.text("Please enter a valid YouTube link before adding another");
+            lastInput.focus();
+            return;
+        }
+    }
+
+    // Append new input
+    $('#youtubeLinksWrapper').append(`
+        <div class="d-flex mb-2 youtube-link-row">
+            <input type="url" class="form-control youtube-input" name="youtube_links[]" placeholder="Enter YouTube link">
+            <button type="button" class="btn btn-danger ms-2 remove-link">-</button>
+        </div>
+    `);
+});
+
+// Remove link
+$(document).on('click', '.remove-link', function() {
+    $(this).closest('.youtube-link-row').remove();
+});
+
+// Validate all YouTube links on form submit
+function validateYouTubeLinks() {
+    let isValid = true;
+    let errorDiv = $(`.error-message[data-error-for="youtube_links[]"]`);
+    errorDiv.text('');
+
+    $('#youtubeLinksWrapper .youtube-input').each(function() {
+        let val = $(this).val().trim();
+        if (val === '' || !isValidUrl(val)) {
+            errorDiv.text("All YouTube links must be valid or removed");
+            isValid = false;
+            return false; // break
+        }
+    });
+
+    return isValid;
+}
+
+// Hook into form validation
+function validateForm() {
+    let isValid = true;
+
+    // existing validations...
+    $('.error-message').text('');
+    $('#add_gallery :input').each(function () {
+        const name = $(this).attr('name');
+        const value = $(this).val();
+        const rules = validationRules[name];
+        const messages = validationMessages[name];
+        const errorDiv = $(`.error-message[data-error-for="${name}"]`);
+
+        if (!rules) return true;
+
+        if (rules.required && (!value || value.trim() === '')) {
+            errorDiv.text(messages.required);
+            isValid = false;
+            return;
+        }
+        if (rules.minlength && value.length < rules.minlength) {
+            errorDiv.text(messages.minlength);
+            isValid = false;
+            return;
+        }
+        if (rules.maxlength && value.length > rules.maxlength) {
+            errorDiv.text(messages.maxlength);
+            isValid = false;
+            return;
+        }
+    });
+
+    // extra check for YouTube
+    if (!validateYouTubeLinks()) isValid = false;
+
+    return isValid;
+}
+

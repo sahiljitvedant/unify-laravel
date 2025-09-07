@@ -12,12 +12,12 @@ use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Crypt; 
 
-class BlogsController extends Controller
+class GallaryController extends Controller
 {
     public function list()
     {
-        return view('blogs.list_blogs');
-       
+        return view('gallary.add_form');
+
     }
 
     public function fetch_blogs(Request $request)
@@ -89,8 +89,7 @@ class BlogsController extends Controller
     }
     public function add()
     { 
-        return view('blogs.add_form');
-       
+        return view('gallary.add_form');
     }
     
 
@@ -98,13 +97,13 @@ class BlogsController extends Controller
     {
         // Validation rules
         $arr_rules = [
-            'blog_title'   => 'required|string|max:150',
-            'description'  => 'required|string|max:1000',
-            'publish_date' => 'required|date',
-            'is_active'    => 'required|boolean',
+            'gallery_name'    => 'required|string|max:150',
+            'is_active'       => 'required|boolean',
+            'main_thumbnail'  => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'gallery_images.*'=> 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'youtube_links.*' => 'nullable|url',
         ];
     
-        // Validate the inputs
         $validator = Validator::make($request->all(), $arr_rules);
     
         if ($validator->fails()) {
@@ -117,16 +116,50 @@ class BlogsController extends Controller
         DB::beginTransaction();
     
         try {
-            $blog_data = $request->only(['blog_title', 'description', 'publish_date', 'is_active']);
+            $gallery_data = [
+                'gallery_name' => $request->gallery_name,
+                'is_active'    => $request->is_active,
+            ];
     
-            $inserted_id = DB::table('tbl_blogs')->insertGetId($blog_data);
+            // Handle main thumbnail upload
+            if ($request->hasFile('main_thumbnail')) {
+                $thumbnail = $request->file('main_thumbnail');
+                $thumbName = time() . '_thumb_' . $thumbnail->getClientOriginalName();
+                $thumbnail->move(public_path('uploads/gallery'), $thumbName);
+                $gallery_data['main_thumbnail'] = 'uploads/gallery/' . $thumbName;
+            }
+    
+            // Handle multiple gallery images
+            $image_paths = [];
+            if ($request->hasFile('gallery_images')) {
+                foreach ($request->file('gallery_images') as $image) {
+                    $imageName = time() . '_' . $image->getClientOriginalName();
+                    $image->move(public_path('uploads/gallery'), $imageName);
+                    $image_paths[] = 'uploads/gallery/' . $imageName;
+                }
+            }
+            $gallery_data['gallery_images'] = !empty($image_paths) ? json_encode($image_paths) : null;
+    
+            // Handle YouTube links
+            $links = [];
+            if ($request->has('youtube_links')) {
+                foreach ($request->youtube_links as $link) {
+                    if (!empty($link)) {
+                        $links[] = $link;
+                    }
+                }
+            }
+            $gallery_data['youtube_links'] = !empty($links) ? json_encode($links) : null;
+    
+            // Insert into DB
+            $inserted_id = DB::table('tbl_gallery')->insertGetId($gallery_data);
     
             DB::commit();
     
             return response()->json([
                 'status' => 'success',
-                'message' => 'Blog added successfully',
-                'blog_id' => $inserted_id
+                'message' => 'Gallery added successfully',
+                'gallery_id' => $inserted_id
             ]);
     
         } catch (\Exception $e) {
@@ -139,8 +172,7 @@ class BlogsController extends Controller
             ], 500);
         }
     }
-    
-    
+
     
     public function edit($id)
     {
@@ -150,13 +182,15 @@ class BlogsController extends Controller
 
         // dd($id);
 
-        $decryptedId = Crypt::decryptString($id);
+        // $decryptedId = Crypt::decryptString($id);
         // dd($decryptedId);
-        $member = DB::table('tbl_trainer')->where('id', $decryptedId)->first();
+        $member = DB::table('tbl_gallery')->where('id', $id)->first();
 
         if (!$member) {
+            dd(1);
             abort(404, 'Member not found');
         }
+        dd(2);
 
         // Pass existing member data into the form
         return view('trainer.edit_trainer', compact('member'));
@@ -315,6 +349,32 @@ class BlogsController extends Controller
             'status' => true,
             'message' => 'Trainer activated successfully'
         ]);
+    }
+
+    public function show_front()
+    {
+        $galleries2025 = DB::table('tbl_gallery')
+        // ->whereYear('created_at', 2025)
+        ->get()
+        ->map(function($item) {
+            // If DB already has "uploads/gallery/filename.png", keep as is
+            $item->main_thumbnail = $item->main_thumbnail ?: null;
+            return $item;
+        });
+
+        return view('front.gallary', compact('galleries2025'));
+    }
+    public function gallary_details($id)
+    {
+        $gallery = DB::table('tbl_gallery')->where('id', $id)->first();
+
+        if (!$gallery) {
+            abort(404, 'Gallery not found');
+        }
+        $gallery->gallery_images = $gallery->gallery_images ? json_decode($gallery->gallery_images, true) : [];
+        $gallery->youtube_links  = $gallery->youtube_links ? json_decode($gallery->youtube_links, true) : [];
+    
+        return view('front.gallary_details', compact('gallery'));
     }
 
 }

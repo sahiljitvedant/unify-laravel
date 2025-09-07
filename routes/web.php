@@ -11,6 +11,7 @@ use App\Http\Controllers\Web\TrainerController;
 use App\Http\Controllers\Web\PolicyController;
 use App\Http\Controllers\Web\EnquiryController;
 use App\Http\Controllers\Web\BlogsController;
+use App\Http\Controllers\Web\GallaryController;
 
 Route::get('', function () {
     return view('front.index');
@@ -21,6 +22,9 @@ Route::get('/about_us', function () {
 Route::get('/blogs', function () {
     return view('front.blogs');
 })->name('blogs');
+
+Route::get('/gallary', [GallaryController::class, 'show_front'])->name('gallary');
+Route::get('/gallary_details/{id}', [GallaryController::class, 'gallary_details'])->name('gallary_details');
 Route::get('/blogs_read_more', function () {
     return view('front.blogs_read_more');
 })->name('blogs_read_more');
@@ -68,8 +72,12 @@ Route::middleware(['auth.custom', 'session.timeout'])->group(function ()
     Route::get('/add_policy', [PolicyController::class, 'add'])->name('add_policy');
 
     // Blogs route:-
-    Route::get('/add_blogs', [BlogsController::class, 'add'])->name('add_policy');
+    Route::get('/list_blogs', [BlogsController::class, 'list'])->name('list_blogs');
+    Route::get('/add_blogs', [BlogsController::class, 'add'])->name('add_blogs');
 
+    // Gallary Route:-
+    Route::get('/add_gallery', [GallaryController::class, 'add'])->name('add_gallery');
+    Route::get('/edit_gallery/{id}', [GallaryController::class, 'edit'])->name('edit_gallery');
     Route::get('/add_company', [CompanyController::class, 'add'])->name('add_company');
     Route::get('/list_company', [CompanyController::class, 'list'])->name('list_company');
     Route::get('/edit_company/{id}', [CompanyController::class, 'edit'])->name('edit_company');
@@ -103,8 +111,16 @@ Route::middleware(['auth.custom', 'session.timeout'])->group(function ()
         Route::post('/activate_trainer/{id}', [TrainerController::class, 'activate_trainer'])->name('activate_trainer');
         Route::post('/update_trainer/{id}', [TrainerController::class, 'update'])->name('update_trainer');
        
+        // Policy
         Route::post('/add_policy', [PolicyController::class, 'submit'])->name('add_policy');
+        // Blogs
+        
+        Route::post('/add_blogs', [BlogsController::class, 'submit'])->name('add_blogs');
+        Route::get('/fetch_blogs', [BlogsController::class, 'fetch_blogs'])
+        ->name('fetch_blogs');
 
+        // Gallary:-
+        Route::post('/add_gallery', [GallaryController::class, 'submit'])->name('add_gallery');
 
         Route::post('/create_company', [CompanyController::class, 'create_company'])->name('create_company');
         Route::get('/fetch_comapny_list', [CompanyController::class, 'fetch_comapny_list'])

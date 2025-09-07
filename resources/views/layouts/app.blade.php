@@ -161,8 +161,8 @@
                     <i class="bi bi-person-plus me-2"></i>Trainer
                 </a>
             </div>
-            <a href="#" 
-            class="{{ request()->routeIs('list_member') ? '' : '' }}">
+            <a href="{{ route('list_blogs') }}" 
+            class="{{ request()->routeIs('list_blogs') ? 'active' : '' }}">
                 <i class="bi bi-journal me-2"></i>Blogs
             </a>
             <a href="#" 
@@ -178,7 +178,7 @@
                 <i class="bi bi-question-circle me-2"></i>FAQs
             </a>
             <a href="{{ route('add_policy') }}" 
-            class="{{ request()->routeIs('list_member') ? '' : '' }}">
+            class="{{ request()->routeIs('add_policy') ? 'active' : '' }}">
                 <i class="bi bi-shield-lock me-2"></i>Privacy Policy
             </a>
             <a  target="_blank" href="{{ route('home') }}" 

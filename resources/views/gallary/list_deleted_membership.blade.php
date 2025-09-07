@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Membership List')
+@section('title', 'Deleted Membership List')
 
 @section('content')
     <div id="loader">
@@ -12,17 +12,14 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('list_dashboard') }}">Dashboard</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('list_membership') }}">Memberships</a></li>
-                <li class="breadcrumb-item" aria-current="page">List Membership</li>
+                <li class="breadcrumb-item" aria-current="page">List Deleted Membership</li>
             </ol>
         </nav>
         <div class="p-4 bg-light rounded shadow">
             <!-- Heading + Add Button -->
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 gap-2">
-                <h4 class="mb-2 mb-md-0">List Membership</h4>
-                <div class="d-flex flex-column align-items-start align-items-md-end gap-2">
-                    <a href="{{ route('add_membership') }}" class="btn-add">Add Membership</a>
-                    <a href="{{ route('list_deleted_membership') }}" class="btn-link">Show Deleted Membership</a>
-                </div>
+                <h4 class="mb-2 mb-md-0">List Deleted Membership</h4>
+               
             </div>
             <div class="data-wrapper">
                 <!-- Filters -->
@@ -147,11 +144,11 @@
 
 @push('scripts')
 <script>
-    const fetchMembership = "{{ route('fetch_membership') }}";
-    const deleteMembershipUrl = "{{ route('delete_membership', ':id') }}";
+    const fetchMembership = "{{ route('fetch_deleted_membership') }}";
+    const activateMembershipUrl = "{{ route('activate_membership', ':id') }}";
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="{{ asset('assets/js/gym_membership/list_membership.js') }}"></script>
+<script src="{{ asset('assets/js/gym_membership/list_deleted_membership.js') }}"></script>
 <script>
 
 </script>

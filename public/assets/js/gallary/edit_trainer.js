@@ -1,46 +1,25 @@
 // Validation Rules
-// Validation Rules
 const validationRules = {
-    blog_title: { 
-        required: true, 
-        minlength: 3, 
-        maxlength: 150 
-    },
-    is_active: { 
-        required: true 
-    },
-    description: { 
-        required: true, 
-        minlength: 10, 
-        maxlength: 1000 
-    },
-    publish_date: { 
-        required: true, 
-        date: true 
-    },
+    trainer_name: { required: true, minlength: 3, maxlength: 5 },
+    joining_date: { required: true, date: true },
+    is_active: { required: true }
 };
 
 // Validation Messages
 const validationMessages = {
-    blog_title: { 
-        required: "Blog title is required", 
-        minlength: "Blog title must be at least 3 characters", 
-        maxlength: "Blog title must not exceed 150 characters" 
+    trainer_name: { 
+        required: "Trainer name is required", 
+        minlength: "Trainer name must be at least 3 characters", 
+        maxlength: "Trainer name must not exceed 5 characters" 
     },
-    is_active: { 
-        required: "Please select the status" 
-    },
-    description: { 
-        required: "Blog description is required", 
-        minlength: "Description must be at least 10 characters", 
-        maxlength: "Description must not exceed 1000 characters" 
-    },
-    publish_date: { 
-        required: "Publish date is required", 
-        date: "Please enter a valid date" 
-    },
-};
 
+    joining_date: { 
+        required: "Joining Date is required", 
+        date: "date must be numeric" 
+    },
+    
+    is_active: { required: "Please select status" }
+};
 
 
 // Validate all form fields
@@ -51,7 +30,7 @@ function validateForm()
     // Clear previous errors
     $('.error-message').text('');
 
-    $('#add_blogs :input').each(function () {
+    $('#gym_trainer_edit_form :input').each(function () {
         const name = $(this).attr('name');
         const value = $(this).val();
         const rules = validationRules[name];
@@ -74,8 +53,8 @@ function validateForm()
             return;
         }
 
-         // Min length check
-         if (rules.minlength && value.length < rules.minlength) {
+        // Min length check
+        if (rules.minlength && value.length < rules.minlength) {
             errorDiv.text(messages.minlength);
             isValid = false;
             return;
@@ -102,16 +81,18 @@ $('#profileImage').on('change', function (e)
 });
 
 // Submit button
-$('#submitBtn').on('click', function (e) {
+$('#submitBtn').on('click', function (e) 
+{
     // alert(1);
     e.preventDefault();
    
     if (!validateForm()) return;
 
-    let formData = new FormData($('#add_blogs')[0]);
+    let formData = new FormData($('#gym_trainer_edit_form')[0]);
 
-    $.ajax({
-        url: submitblog,
+    $.ajax
+    ({
+        url: updateTrainer,
         type: "POST",
         data: formData,
         processData: false,
@@ -135,22 +116,26 @@ $('#submitBtn').on('click', function (e) {
             Swal.fire({
                 icon: 'success',
                 title: 'Form Submitted!',
-                text: 'Your Blog has been created successfully.',
+                text: 'Trainer has been updated Sucessfully.',
                 confirmButtonText: 'OK',
                 allowOutsideClick: false
             }).then(() => {
-                window.location.href = "/list_blogs";
+                // Redirect on OK
+                window.location.href = "/list_trainer";
             });
         },
-        error: function (xhr) {
+        error: function (xhr) 
+        {
             Swal.close(); // close loader
         
-            if (xhr.status === 422) {
+            if (xhr.status === 422) 
+            {
                 let errors = xhr.responseJSON.errors;
                 for (let key in errors) {
                     $(`.error-message[data-error-for="${key}"]`).text(errors[key][0]);
                 }
-            } else {
+            } 
+            else {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
@@ -162,7 +147,7 @@ $('#submitBtn').on('click', function (e) {
 });
 
 // Live error removal
-$('#add_blogs :input').on('input change', function () {
+$('#gym_trainer_edit_form :input').on('input change', function () {
     const name = $(this).attr('name');
     const value = $(this).val();
     const rules = validationRules[name];
@@ -175,13 +160,11 @@ $('#add_blogs :input').on('input change', function () {
 
     if (rules.required && (!value || value.trim() === '')) valid = false;
     if (rules.number && value && isNaN(value)) valid = false;
-
     // Min length
     if (rules.minlength && value && value.length < rules.minlength) valid = false;
 
     // Max length
     if (rules.maxlength && value && value.length > rules.maxlength) valid = false;
-
 
     if (valid) errorDiv.text('');
 });
