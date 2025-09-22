@@ -19,9 +19,9 @@
         <div class="step" data-step="2">
             <div class="row g-3">
                 <div class="col-md-6 col-12">
-                    <label class="form-label required">Trainer Name</label>
+                    <label class="form-label required">Trainer name</label>
                     <input type="text" class="form-control" name="trainer_name" id="trainer_name" 
-                        placeholder="Trainer Name">
+                        placeholder="Trainer name">
                     <div class="text-danger error-message" data-error-for="trainer_name"></div>
                 </div>
                 <div class="col-md-6 col-12">
@@ -38,13 +38,13 @@
 
             <div class="row g-3 mt-2">
                 <div class="col-12 col-md-6 mb-3">
-                    <label class="form-label">Joining Date</label>
+                    <label class="form-label required">Joining date</label>
                     <input type="date" class="form-control" name="joining_date" id="joining_date" placeholder="DD-MM-YYYY">
                     <div class="text-danger error-message" data-error-for="joining_date"></div>
                 </div>
 
                 <div class="col-12 col-md-6 mb-3">
-                    <label class="form-label">Leaving Date</label>
+                    <label class="form-label">Leaving date</label>
                     <input type="date" class="form-control" name="expiry_date" id="expiry_date" placeholder="DD-MM-YYYY">
                     <div class="text-danger error-message" data-error-for="expiry_date"></div>
                 </div>

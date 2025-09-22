@@ -30,7 +30,7 @@
                     <div class="row g-3">
                         <!-- Row 1 -->
                         <div class="col-md-3">
-                            <select id="filterActive" class="form-select">
+                            <select id="filterActive" class="form-control">
                                 <option value="">Select Status</option>
                                 <option value="1">Active</option>
                                 <option value="0">Inactive</option>

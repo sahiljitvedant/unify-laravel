@@ -5,21 +5,19 @@ $(document).ready(function ()
     let sortColumn = 'id';
     let sortOrder = 'asc';
 
-    function fetchData(page = 1) 
-    {
+    function fetchData(page = 1) {
         $("#loader").show();
 
         $.ajax({
-            url: fetchDeletedTrainer,
+            url: fetchMembership,
             type: "GET",
             data: {
                 page: page,
                 sort: sortColumn,
                 order: sortOrder,
                 active: $("#filterActive").val(),
-                trainer: $("#filterTrainer").val(),
-                trainerName: $("#trainerName").val(),
-                joiningDate: $("#joiningDate").val(),
+                question: $("#question_name").val(),
+      
             },
             success: function (res) {
                 $("#loader").hide();
@@ -30,15 +28,14 @@ $(document).ready(function ()
         });
     }
 
-    function renderTable(data) 
-    {
+    function renderTable(data) {
         let rows = '';
     
         if (data.length === 0) {
-            // Show "No trainers found" message spanning all columns
+            // Show "No memberships found" message spanning all columns
             rows = `
                 <tr>
-                    <td colspan="7" class="text-center">No trainers found</td>
+                    <td colspan="7" class="text-center">No FAQ found</td>
                 </tr>
             `;
         } else {
@@ -46,10 +43,8 @@ $(document).ready(function ()
                 rows += `
                     <tr>
                         <td>${m.id}</td>
-                        <td>${m.trainer_name}</td>
-                        <td>${m.joining_date}</td>
-                        <td>${m.expiry_date ? m.expiry_date : '-'}</td>
-                        <td>${m.is_active ? 'Active' : 'Inactive'}</td>
+                        <td>${m.question}</td>
+                        <td>${m.status ? 'Active' : 'Inactive'}</td>
                         <td>${m.action}</td>
                     </tr>
                 `;
@@ -59,7 +54,9 @@ $(document).ready(function ()
         $("#membershipBody").html(rows);
     }
     
-    function renderPagination(currentPage, lastPage)  
+    
+
+    function renderPagination(currentPage, lastPage) 
     {
         let paginationHtml = "";
 
@@ -100,8 +97,7 @@ $(document).ready(function ()
 
     // Sorting
    
-    $(document).on("click", ".sort-link", function (e) 
-    {
+    $(document).on("click", ".sort-link", function (e) {
         e.preventDefault();
         let column = $(this).data("column");
 
@@ -124,36 +120,36 @@ $(document).ready(function ()
 
     // Filters change
    // Search button click
-    $("#submitBtn").on("click", function (e) {
-        e.preventDefault();
-        fetchData(1);
-    });
+   $("#submitBtn").on("click", function (e) {
+    e.preventDefault();
+    fetchData(1);
+});
 
-    // Cancel button click - reset filters
-    $("#btnCancel").on("click", function (e) {
-        e.preventDefault();
-        $("#filterActive").val('');
-        $("#filterTrainer").val('');
-        $("#trainerName").val('');
-        $("#joiningDate").val('');
-        fetchData(1); // reload data with no filters
-    });
+// Cancel button click - reset filters
+$("#btnCancel").on("click", function (e) {
+    e.preventDefault();
+    $("#filterActive").val('');
+  
+    $("#question_name").val('');
+ 
+    fetchData(1); // reload data with no filters
+});
 
     // Initial load
     fetchData();
 });
-function activateTrainerID(id) 
+function deleteMembershipById(id)
 {
     $.ajax({
-        url: activateTrainerUrl.replace(':id', id), 
+        url: deleteMembershipUrl.replace(':id', id), 
         type: "POST",
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         beforeSend: function () {
             Swal.fire({
-                title: 'Activating...',
-                text: 'Please wait while we activate the Trainer',
+                title: 'Deleting...',
+                text: 'Please wait while we delete the FAQ.',
                 allowOutsideClick: false,
                 didOpen: () => {
                     Swal.showLoading();
@@ -163,12 +159,13 @@ function activateTrainerID(id)
         success: function (response) {
             Swal.fire({
                 icon: 'success',
-                title: 'Activated!',
+                title: 'Deleted!',
                 text: response.message,
                 confirmButtonText: 'OK',
                 allowOutsideClick: false
             }).then(() => {
-                window.location.href = "/list_trainer"; // refresh table
+                // alert('hii');
+                location.reload();
             });
         },
         error: function (xhr) {
@@ -182,7 +179,7 @@ function activateTrainerID(id)
                 confirmButtonText: 'OK',
                 allowOutsideClick: false
             }).then(() => {
-                $('#members-table').DataTable().ajax.reload(); // refresh table
+                location.reload();
             });
                
           

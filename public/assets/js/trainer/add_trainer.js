@@ -1,6 +1,6 @@
 // Validation Rules
 const validationRules = {
-    trainer_name: { required: true, minlength: 3, maxlength: 5 },
+    trainer_name: { required: true, minlength: 2, maxlength: 15 },
     joining_date: { required: true, date: true },
     is_active: { required: true }
 };
@@ -9,12 +9,12 @@ const validationRules = {
 const validationMessages = {
     trainer_name: { 
         required: "Trainer name is required", 
-        minlength: "Trainer name must be at least 3 characters", 
-        maxlength: "Trainer name must not exceed 5 characters" 
+        minlength: "Trainer name must be at least 2 characters", 
+        maxlength: "Trainer name must not exceed 15 characters" 
     },
 
     joining_date: { 
-        required: "Joining Date is required", 
+        required: "Joining date is required", 
         date: "date must be numeric" 
     },
     
@@ -114,7 +114,7 @@ $('#submitBtn').on('click', function (e) {
             Swal.fire({
                 icon: 'success',
                 title: 'Form Submitted!',
-                text: 'Your membership has been submitted successfully.',
+                text: 'Trainer has been added Sucessfully',
                 confirmButtonText: 'OK',
                 allowOutsideClick: false
             }).then(() => {

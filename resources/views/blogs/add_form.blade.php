@@ -17,16 +17,30 @@
         <!-- Form Heading -->
         <h4 class="mb-4">Add Blogs</h4>
         <div class="step" data-step="2">
+            <div class="col-12 text-center">
+                <label class="form-label d-block mb-2 required">Upload Blog Image</label>
+
+                <!-- Preview wrapper (hidden by default) -->
+                <div class="blog-image-wrapper d-none" id="blogImageWrapper">
+                    <img id="previewBlogImage" class="blog-preview-image">
+                </div>
+                <div class="text-danger error-message" data-error-for="blog_image"></div>
+                <!-- Upload button -->
+                <button type="button" class="profilebtn mt-2" id="uploadBlogButton" data-type="blog_image">
+                    Upload Blog Image
+                </button>
+            </div>
+
             <div class="row g-3">
                 <div class="col-md-6 col-12">
-                    <label class="form-label required">Blog Title</label>
+                    <label class="form-label required">Blog title</label>
                     <input type="text" class="form-control" name="blog_title" id="blog_title" 
-                        placeholder="blog title">
+                        placeholder="Blog title">
                     <div class="text-danger error-message" data-error-for="blog_title"></div>
                 </div>
                 <div class="col-md-6 col-12">
                     <label class="form-label required">{{ __('membership.active_label') }}</label>
-                    <select class="form-select" name="is_active" id="is_active">
+                    <select class="form-control" name="is_active" id="is_active">
                         <option disabled selected>{{ __('membership.select_status') }}</option>
                         <option value="1">{{ __('membership.active') }}</option>
                         <option value="0">{{ __('membership.inactive') }}</option>
@@ -46,7 +60,7 @@
 
             <div class="row g-3 mt-2">
                 <div class="col-12 col-md-6 mb-3">
-                    <label class="form-label required">Publish Date</label>
+                    <label class="form-label required">Publish date</label>
                     <input type="date" class="form-control" name="publish_date" id="publish_date" placeholder="DD-MM-YYYY">
                     <div class="text-danger error-message" data-error-for="publish_date"></div>
                 </div>
@@ -65,20 +79,103 @@
         </div>
     </form>
 </div>
+<!-- Crop Image Modal -->
+<div class="modal fade" id="cropImageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!-- We'll update this title dynamically via JS -->
+                <h5 class="modal-title" id="cropModalTitle">Upload Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body d-flex flex-column">
+
+                <!-- Image Preview -->
+                <div class="text-center mb-3" id="imagePreviewContainer" style="display:none;">
+                    <img id="imageToCrop" style="max-width: 100%; border-radius:10px;">
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="progress mb-3" id="uploadProgress" style="display:none;">
+                    <div class="progress-bar" role="progressbar" style="width:0%">0%</div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="d-flex justify-content-center gap-2 mt-auto">
+                    <input type="file" id="browseImage" accept="image/*" class="d-none">
+                    <button type="button" id="browseBtn" class="btn btn-secondary">Browse</button>
+                    <button type="button" id="uploadCropped" class="btn btn-primary" disabled>Upload</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
 const submitblog = "{{ route('add_blogs') }}";
+const uploadUrl  = "{{ route('profile.cropUpload') }}";
 </script>
-
+<script src="{{ asset('assets/js/global/image_crop.js') }}"></script>
 <script src="{{ asset('assets/js/blogs/add_blogs.js') }}"></script>
 <style>
-    /* Keep label normal even if checkbox is disabled */
-    .form-check-input:disabled + .form-check-label 
-    {
-        color: inherit !important;
-        opacity: 1 !important;
+    .blog-image-wrapper {
+        width: 100%;
+        height: 300px; /* Adjust height */
+        overflow: hidden;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #f5f5f5;
     }
-   
+
+    .blog-preview-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .profilebtn{
+        background: #0b1061;
+        color: #fff;
+        border: 5px solid #0b1061 !important;
+        border-radius: 5px
+    }
+    .progressbar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #ddd;
+        color: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+    }
+    .circle.active {
+        background: #0b1061;  /* Bootstrap primary blue */
+        color: #fff;
+    }
+    .circle.completed {
+        background: #28a745; /* green */
+        color: #fff;
+    }
+    .line {
+        flex: 1;
+        height: 4px;
+        background: #ddd;
+    }
+    .line.active {
+        background: #28a745; /* green */
+    }
 </style>
 @endsection

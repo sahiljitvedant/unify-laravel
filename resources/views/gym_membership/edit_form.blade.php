@@ -28,7 +28,7 @@
 
                 <div class="col-md-6 col-12">
                     <label class="form-label required">{{ __('membership.active_label') }}</label>
-                    <select class="form-select" name="is_active" id="is_active">
+                    <select class="form-control" name="is_active" id="is_active">
                         <option disabled>{{ __('membership.select_status') }}</option>
                         <option value="1" {{ $member->is_active == 1 ? 'selected' : '' }}>{{ __('membership.active') }}</option>
                         <option value="0" {{ $member->is_active == 0 ? 'selected' : '' }}>{{ __('membership.inactive') }}</option>
@@ -49,9 +49,12 @@
             <div class="row g-3 mt-2">
                 <div class="col-md-6 col-12">
                     <label class="form-label required">{{ __('membership.duration_label') }}</label>
-                    <input type="number" class="form-control" name="duration_in_days" id="duration_in_days"
-                        value="{{ $member->duration_in_days }}"
-                        placeholder="{{ __('membership.duration_placeholder') }}">
+                    <select class="form-control" name="duration_in_days" id="duration_in_days">
+                        <option value="30"  {{ $member->duration_in_days == 30 ? 'selected' : '' }}>1 Month</option>
+                        <option value="90"  {{ $member->duration_in_days == 90 ? 'selected' : '' }}>3 Months</option>
+                        <option value="180" {{ $member->duration_in_days == 180 ? 'selected' : '' }}>6 Months</option>
+                        <option value="365" {{ $member->duration_in_days == 365 ? 'selected' : '' }}>1 Year</option>
+                    </select>
                     <div class="text-danger error-message" data-error-for="duration_in_days"></div>
                 </div>
 
@@ -67,7 +70,7 @@
             <div class="row g-3 mt-2">
                 <div class="col-md-6 col-12">
                     <label class="form-label required">{{ __('membership.trainer_label') }}</label>
-                    <select class="form-select" name="trainer_included" id="trainer_included">
+                    <select class="form-control" name="trainer_included" id="trainer_included">
                         <option disabled>{{ __('membership.select_option') }}</option>
                         <option value="yes" {{ $member->trainer_included == 'yes' ? 'selected' : '' }}>{{ __('membership.yes') }}</option>
                         <option value="no" {{ $member->trainer_included == 'no' ? 'selected' : '' }}>{{ __('membership.no') }}</option>

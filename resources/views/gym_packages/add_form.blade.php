@@ -18,11 +18,14 @@
         <div class="row mb-3">
             <div class="col-12 col-md-3 text-center">
                 <label class="form-label d-block mb-2">Upload Profile Image</label>
-                <img id="previewImage" class="mt-2 img-thumbnail mb-2" style="max-height: 80px; display:block; margin: 0 auto;" src="{{ asset('assets/img/default.png') }}">
-                <input type="file" class="form-control d-none" id="profileImage"  name="profile_image" accept="image/*">
-                <button type="button" class="profilebtn" id="uploadButton">Upload Photo</button>
+                <img id="previewImage" class="mt-2 img-thumbnail mb-2" 
+                    style="max-height: 80px; display:block; margin: 0 auto;" 
+                    src="{{ asset('assets/img/default.png') }}">
+                
+                <button type="button" class="profilebtn" id="uploadButton" data-type="profile_image">
+                    Upload Photo
+                </button>
             </div>
-
             <div class="col-12 col-md-3 mb-3">
                 <label class="form-label">{{ __('global.first_name') }}</label>
                 <input type="text" class="form-control" name="first_name" id="first_name" placeholder="{{ __('global.first_name_placeholder') }}">
@@ -39,9 +42,8 @@
                 <label class="form-label">{{ __('global.last_name') }}</label>
                 <input type="text" class="form-control" name="last_name" id="last_name" placeholder="{{ __('global.last_name_placeholder') }}">
                 <div class="text-danger error-message" data-error-for="last_name"></div>
-            </div>
+            </div>  
         </div>
-
         <div class="row mb-3">
             <div class="col-12 col-md-6 mb-3">
                 <label class="form-label">{{ __('global.dob') }}</label>
@@ -264,19 +266,57 @@
         <button type="button" id="prevBtn" class="btn btn-secondary rounded-pill">Prev</button>
 
         <!-- Next/Submit Button (right) -->
-        <button type="button" id="nextBtn" class="btn btn-secondary rounded-pill">Next</button>
+        <button type="button" id="nextBtn" class="btn  rounded-pill">Next</button>
 
         <button type="submit" id="submitBtn" class="btn btn-success rounded-pill">Submit</button>
     </div>
 </form>
+<!-- Modal -->
+<div class="modal fade" id="cropImageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Upload Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body d-flex flex-column">
 
+                <!-- Image Preview (hidden initially) -->
+                <div class="text-center mb-3" id="imagePreviewContainer" style="display:none;">
+                    <img id="imageToCrop" style="max-width: 100%; border-radius:10px;">
+                </div>
+
+                <!-- Progress Bar (hidden initially) -->
+                <div class="progress mb-3" id="uploadProgress" style="display:none;">
+                    <div class="progress-bar" role="progressbar" style="width:0%">0%</div>
+                </div>
+
+                <!-- Buttons Row -->
+                <div class="d-flex justify-content-center gap-2 mt-auto">
+                    <input type="file" id="browseImage" accept="image/*" class="d-none">
+                    <button type="button" id="browseBtn" class="btn btn-secondary">Browse</button>
+                    <button type="button" id="uploadCropped" class="btn btn-primary" disabled>Upload</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+
+
+</style>
 <!-- Include jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 const stepperSubmitUrl = "{{ route('stepper.submit') }}";
+const uploadUrl  = "{{ route('profile.cropUpload') }}";
 </script>
 
 <script src="{{ asset('assets/js/gym_package/add_package.js') }}"></script>
+<script src="{{ asset('assets/js/global/image_crop.js') }}"></script>
+
 <script>
     function showStep(step) 
     {
@@ -323,36 +363,36 @@ const stepperSubmitUrl = "{{ route('stepper.submit') }}";
         border: 5px solid #0b1061 !important;
         border-radius: 5px
     }
-.progressbar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.circle {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: #ddd;
-    color: #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-}
-.circle.active {
-    background: #0b1061;  /* Bootstrap primary blue */
-    color: #fff;
-}
-.circle.completed {
-    background: #28a745; /* green */
-    color: #fff;
-}
-.line {
-    flex: 1;
-    height: 4px;
-    background: #ddd;
-}
-.line.active {
-    background: #28a745; /* green */
-}
+    .progressbar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #ddd;
+        color: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+    }
+    .circle.active {
+        background: #0b1061;  /* Bootstrap primary blue */
+        color: #fff;
+    }
+    .circle.completed {
+        background: #28a745; /* green */
+        color: #fff;
+    }
+    .line {
+        flex: 1;
+        height: 4px;
+        background: #ddd;
+    }
+    .line.active {
+        background: #28a745; /* green */
+    }
 </style>

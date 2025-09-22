@@ -5,9 +5,9 @@ $(document).ready(function ()
     const defaultImage = 'https://via.placeholder.com/150x150?text=Profile';
 
     // Trigger file input on upload button click
-    $('#uploadButton').on('click', function () {
-        $('#profileImage').click();
-    });
+    // $('#uploadButton').on('click', function () {
+    //     $('#profileImage').click();
+    // });
 
     // Preview selected image
     $('#profileImage').on('change', function (e) 
@@ -318,5 +318,10 @@ $(`.step :input`).on('input change', function () {
         errorDiv.text('');
     }
 });
+
+
+
+
+
 
 

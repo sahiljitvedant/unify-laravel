@@ -7,7 +7,7 @@
     .left-section 
     {
         overflow-y: auto; 
-        background-color: #0B1061;
+        background-color: var(--sidebar_color);;
         color: #fff;  
         overflow: hidden; 
         min-height: 100vh; 
@@ -21,7 +21,7 @@
 
     .login-box {
         background: #fff;
-        border-radius: 12px;
+        border-radius: var(--font_size);
         padding: 40px;
         box-shadow: 6px 0 18px rgba(0, 0, 0, 0.35);
         width: 100%;
@@ -39,17 +39,17 @@
     }
     .register-link a {
         text-decoration: none;
-        color: #0B1061;
+        color: var(--sidebar_color);;
         font-weight: 500;
     }
     .login_btn
     {
-        background-color: #0B1061;
+        background-color: var(--sidebar_color);;
         color: #ffffff;
     }
     .login_btn:hover
     {
-        background-color: #0B1061;
+        background-color: var(--sidebar_color);;
         color: #ffffff;
     }
 
@@ -151,3 +151,41 @@
     .icon-box i {
         margin-bottom: 4px;
     }
+    .form-control {
+        color: var(--sidebar_color) !important;
+    }
+    .form-control:focus {
+        border-color: var(--sidebar_color);
+        box-shadow: 0 0 0 0.2rem rgba(11, 16, 97, 0.2); /* adjust as needed */
+    }
+    .form-label 
+{
+    font-size: 13px;     
+    font-weight: 500;     
+    color: #333;          
+    margin-bottom: 4px;  
+    
+}
+.form-label.required::after {
+    content: "*";
+    color: #d32f2f;  
+    font-size: 0.85em; 
+    font-weight: normal; 
+
+}
+
+.error-message
+{
+    font-size:var(--font_size);;     
+    font-weight: 500; 
+}
+#submitBtn
+{
+    background-color: var(--sidebar_color);;
+    color: #fff;
+    font-size:  var(--font_size);;
+}
+.register-link
+{
+    font-size:  14px;
+}

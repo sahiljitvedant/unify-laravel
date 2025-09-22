@@ -150,7 +150,7 @@ function deleteMembershipById(id)
         beforeSend: function () {
             Swal.fire({
                 title: 'Deleting...',
-                text: 'Please wait while we delete the trainer.',
+                text: 'Please wait while we delete the blog.',
                 allowOutsideClick: false,
                 didOpen: () => {
                     Swal.showLoading();

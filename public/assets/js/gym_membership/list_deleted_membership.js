@@ -17,8 +17,10 @@ $(document).ready(function ()
                 order: sortOrder,
                 active: $("#filterActive").val(),
                 trainer: $("#filterTrainer").val(),
-                min_price: $("#filterMinPrice").val(),
+                durartion: $("#durartion").val(),
+                price: $("#price").val(),
                 max_price: $("#filterMaxPrice").val(),
+                membership_name: $("#membership_name").val(),
             },
             success: function (res) {
                 $("#loader").hide();
@@ -45,7 +47,15 @@ $(document).ready(function ()
                     <tr>
                         <td>${m.id}</td>
                         <td>${m.membership_name}</td>
-                        <td>${m.duration_in_days}</td>
+                        <td>
+                        ${
+                          m.duration_in_days == 30 ? "1 Month" :
+                          m.duration_in_days == 90 ? "3 Months" :
+                          m.duration_in_days == 180 ? "6 Months" :
+                          m.duration_in_days == 365 ? "1 Year" :
+                          m.duration_in_days + " Days"
+                        }
+                      </td>
                         <td>${m.price}</td>
                         <td>${m.trainer_included === 'yes' ? 'Yes' : 'No'}</td>
                         <td>${m.is_active ? 'Active' : 'Inactive'}</td>
@@ -134,7 +144,9 @@ $("#btnCancel").on("click", function (e) {
     e.preventDefault();
     $("#filterActive").val('');
     $("#filterTrainer").val('');
-    $("#filterMinPrice").val('');
+    $("#price").val('');
+    $("#durartion").val('');
+    $("#membership_name").val('');
     $("#filterMaxPrice").val('');
     fetchData(1); // reload data with no filters
 });
@@ -153,7 +165,7 @@ function activateMembershipID(id)
         beforeSend: function () {
             Swal.fire({
                 title: 'Activating...',
-                text: 'Please wait while we activate the Trainer.',
+                text: 'Please wait while we activate the Membership.',
                 allowOutsideClick: false,
                 didOpen: () => {
                     Swal.showLoading();
@@ -168,7 +180,7 @@ function activateMembershipID(id)
                 confirmButtonText: 'OK',
                 allowOutsideClick: false
             }).then(() => {
-                window.location.href = "/list_trainer"; // refresh table
+                window.location.href = "/list_membership"; // refresh table
             });
         },
         error: function (xhr) {

@@ -114,7 +114,7 @@ class GymPackageController extends Controller
         // Validation rules
         $arr_rules = 
         [
-            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'profile_image' => 'nullable',
             'first_name' => 'required|max:100',
             'middle_name' => 'nullable|max:100',
             'last_name' => 'required|max:100',
@@ -171,9 +171,14 @@ class GymPackageController extends Controller
                 $image->move(public_path('uploads/profile_images'), $imageName);
                 $user_details_arr['profile_image'] = 'uploads/profile_images/' . $imageName;
             } 
-            else 
-            {
-                $user_details_arr['profile_image'] = null; // or default path
+            elseif ($request->filled('profile_image')) {
+                // If the input is a full URL, extract only the path
+                $imagePath = $request->input('profile_image');
+                $imagePath = parse_url($imagePath, PHP_URL_PATH); // removes domain
+                $imagePath = ltrim($imagePath, '/'); // remove leading slash if any
+                $user_details_arr['profile_image'] = $imagePath;
+            } else {
+                $user_details_arr['profile_image'] = null;
             }
     
             $inserted_id = DB::table('tbl_gym_members')->insertGetId($user_details_arr);

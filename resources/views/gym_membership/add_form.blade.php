@@ -26,7 +26,7 @@
                 </div>
                 <div class="col-md-6 col-12">
                     <label class="form-label required">{{ __('membership.active_label') }}</label>
-                    <select class="form-select" name="is_active" id="is_active">
+                    <select class="form-control" name="is_active" id="is_active">
                         <option disabled selected>{{ __('membership.select_status') }}</option>
                         <option value="1">{{ __('membership.active') }}</option>
                         <option value="0">{{ __('membership.inactive') }}</option>
@@ -45,12 +45,16 @@
             </div>
 
             <div class="row g-3 mt-2">
-                <div class="col-md-6 col-12">
-                    <label class="form-label required">{{ __('membership.duration_label') }}</label>
-                    <input type="number" class="form-control" name="duration_in_days" id="duration_in_days"
-                        placeholder="{{ __('membership.duration_placeholder') }}">
-                    <div class="text-danger error-message" data-error-for="duration_in_days"></div>
-                </div>
+            <div class="col-md-6 col-12">
+                <label class="form-label required">{{ __('membership.duration_label') }}</label>
+                <select class="form-control" name="duration_in_days" id="duration_in_days">
+                    <option value="30">1 Month</option>
+                    <option value="90">3 Months</option>
+                    <option value="180">6 Months</option>
+                    <option value="365">1 Year</option>
+                </select>
+                <div class="text-danger error-message" data-error-for="duration_in_days"></div>
+            </div>
 
                 <div class="col-md-6 col-12">
                     <label class="form-label required">{{ __('membership.price_label') }}</label>
@@ -63,7 +67,7 @@
             <div class="row g-3 mt-2">
                 <div class="col-md-6 col-12">
                     <label class="form-label required">{{ __('membership.trainer_label') }}</label>
-                    <select class="form-select" name="trainer_included" id="trainer_included">
+                    <select class="form-control" name="trainer_included" id="trainer_included">
                         <option disabled selected>{{ __('membership.select_option') }}</option>
                         <option value="yes">{{ __('membership.yes') }}</option>
                         <option value="no">{{ __('membership.no') }}</option>
@@ -75,7 +79,7 @@
                     <label class="form-label">{{ __('membership.facilities_label') }}</label>
                     @foreach(config('app.facilities') as $id => $label)
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" 
+                            <input class="form-check-input " type="checkbox" 
                                 name="facilities_included[]" 
                                 id="facility_{{ $id }}" 
                                 value="{{ $id }}"

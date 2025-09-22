@@ -20,33 +20,7 @@ class GymMembershipController extends Controller
        
     }
     
-    // public function fetchMembership(Request $request)
-    // {
-    //     // dd(1);
-    //     // ONE variable that fetches everything you need
-    //     $fetch_data = DB::table('tbl_gym_membership')
-    //         ->select('*')
-    //         ->where('is_deleted', '!=', 9) 
-    //         ->orderBy('id', 'desc')
-    //         ->get();
-
-    //     // Send to DataTables (server-side)
-    //     return DataTables::of($fetch_data)
-    //         ->addColumn('action', function ($row) 
-    //         {
-    //             $encryptedId = Crypt::encryptString($row->id);
-    //             return ' 
-    //             <a href="'.route('edit_membership', $encryptedId).'" class="btn btn-sm" data-bs-toggle="tooltip" title="Edit">
-    //                 <i class="bi bi-pencil-square"></i>
-    //             </a>
-    //             <button type="button" class="btn btn-sm" onclick="deleteMembershipById('.$row->id.')">
-    //                 <i class="bi bi-trash"></i>
-    //             </button>';
-    //         })
-    //         ->rawColumns(['action'])
-    //         ->make(true);
-    // }
-
+ 
     public function fetchMembership(Request $request)
     {
         // dd($request->all());
@@ -65,12 +39,14 @@ class GymMembershipController extends Controller
             $query->where('trainer_included', $trainerValue);
         }
 
-        if ($request->filled('min_price')) {
-            $query->where('price', '>=', $request->min_price);
+        if ($request->filled('durartion')) {  
+            $query->where('duration_in_days', $request->durartion);
         }
-
-        if ($request->filled('max_price')) {
-            $query->where('price', '<=', $request->max_price);
+        if ($request->filled('membership_name')) {  
+            $query->where('membership_name', $request->membership_name);
+        }
+        if ($request->filled('price')) {
+            $query->where('price', $request->price);
         }
 
         // Sorting
@@ -157,7 +133,8 @@ class GymMembershipController extends Controller
             ->where('is_deleted', '=', 9) ;
 
         // Apply filters
-        if ($request->filled('active')) {
+         // Apply filters
+         if ($request->filled('active')) {
             $query->where('is_active', $request->active);
         }
 
@@ -167,12 +144,14 @@ class GymMembershipController extends Controller
             $query->where('trainer_included', $trainerValue);
         }
 
-        if ($request->filled('min_price')) {
-            $query->where('price', '>=', $request->min_price);
+        if ($request->filled('durartion')) {  
+            $query->where('duration_in_days', $request->durartion);
         }
-
-        if ($request->filled('max_price')) {
-            $query->where('price', '<=', $request->max_price);
+        if ($request->filled('membership_name')) {  
+            $query->where('membership_name', $request->membership_name);
+        }
+        if ($request->filled('price')) {
+            $query->where('price', $request->price);
         }
 
         // Sorting
@@ -200,6 +179,7 @@ class GymMembershipController extends Controller
 
         // Pagination
         $memberships = $query->paginate(10);
+
 
         // Add action + encrypted_id
         $memberships->getCollection()->transform(function ($row) {
@@ -345,7 +325,7 @@ class GymMembershipController extends Controller
         try 
         {
             $request->validate([
-                'membership_name' => 'required|string|min:3|max:5|unique:tbl_gym_membership,membership_name,' . $id,
+                'membership_name' => 'required|string|min:10|max:15|unique:tbl_gym_membership,membership_name,' . $id,
                 'description'     => 'required|string',
                 'duration_in_days'=> 'required|numeric',
                 'price'           => 'required|numeric',

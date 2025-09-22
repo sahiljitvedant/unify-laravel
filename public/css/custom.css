@@ -208,7 +208,7 @@ table.dataTable tbody tr:hover {
 
 .form-label 
 {
-    font-size: 14px;     
+    font-size: 13px;     
     font-weight: 500;     
     color: #333;          
     margin-bottom: 4px;  
@@ -220,11 +220,7 @@ table.dataTable tbody tr:hover {
     color: #777;     
     opacity: 1;      
 }
-.error-message
-{
-    font-size: 14px;     
-    font-weight: 500; 
-}
+
 .form-label.required::after {
     content: "*";
     color: #d32f2f;  
@@ -248,19 +244,7 @@ table.dataTable tbody tr:hover {
     text-decoration: none;
     font-size: 14px;
 }
-.form-label {
-    font-size: 14px;     
-    font-weight: 500;     
-    color: #333;          
-    margin-bottom: 4px;  
-}
 
-.form-label.required::after {
-    content: " *";
-    color: #d32f2f;    
-    font-size: 0.85em; 
-    font-weight: normal;
-}
 .form-control
 {
     font-size:  var(--font_size);
@@ -518,13 +502,11 @@ table td {
     font-size:  10px;
 }
 
-.form-label
-{
-    font-size:  13px;
-}
+
 .error-message
 {
-    font-size:  12px;
+    font-size:  var(--font_size);;
+    font-weight: 500; 
 } 
 
 .text-icon
@@ -533,7 +515,7 @@ table td {
 }
 .card-text
 {
-    font-size:  12px;
+    font-size: var(--font_size);
 }
 .card 
 {
@@ -564,4 +546,76 @@ table td {
 .form-control:focus {
     border-color: var(--sidebar_color);
     box-shadow: 0 0 0 0.2rem rgba(11, 16, 97, 0.2); /* adjust as needed */
+}
+
+/* Image Upload Model */
+
+    /* Buttons Row */
+    #cropImageModal .d-flex.justify-content-center {
+        margin-top: 15px;
+    }
+
+    /* Browse & Upload Buttons */
+    #browseBtn, #uploadCropped {
+        padding: 8px 20px;
+        font-size: 14px;
+        font-weight: 500;
+        border-radius: 6px;
+        transition: background 0.3s, opacity 0.3s;
+    }
+
+    /* Browse Button */
+    #browseBtn {
+        background-color: #6c757d;
+        color: #fff;
+        border: none;
+    }
+
+    #browseBtn:hover {
+        background-color: #5a6268;
+        cursor: pointer;
+    }
+
+    /* Upload Button */
+    #uploadCropped {
+        background-color:var(--sidebar_color);
+        color: #fff;
+        border: none;
+    }
+
+    /* Disabled Upload Button */
+    #uploadCropped:disabled {
+        background-color: #8d7ac0;
+        cursor: not-allowed;
+    }
+
+    #uploadProgress {
+        height: 12px;             
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    
+    #uploadProgress .progress-bar {
+        background-color: var(--sidebar_color);
+        font-size: 10px;
+        font-weight: 500;
+        text-align: center;
+        line-height: 12px;        
+        transition: width 0.4s ease;
+    }
+
+    /* Image Preview */
+    #imagePreviewContainer img {
+        border-radius: 10px;
+        max-width: 100%;
+        display: block;
+        margin: 0 auto;
+    }
+
+/* Next & PRev button of add memebrs */
+#nextBtn
+{
+    background-color: var(--sidebar_color);
+    color: #fff;
+    font-size: var(--font_size);
 }

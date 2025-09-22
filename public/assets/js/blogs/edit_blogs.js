@@ -1,24 +1,50 @@
 // Validation Rules
 const validationRules = {
-    trainer_name: { required: true, minlength: 3, maxlength: 5 },
-    joining_date: { required: true, date: true },
-    is_active: { required: true }
+    blog_title: { 
+        required: true, 
+        minlength: 3, 
+        maxlength: 150 
+    },
+    is_active: { 
+        required: true 
+    },
+    description: { 
+        required: true, 
+        minlength: 10, 
+        maxlength: 1000 
+    },
+    publish_date: { 
+        required: true, 
+        date: true 
+    },
+    blog_image: {
+        required: true
+    }
+ 
 };
 
 // Validation Messages
 const validationMessages = {
-    trainer_name: { 
-        required: "Trainer name is required", 
-        minlength: "Trainer name must be at least 3 characters", 
-        maxlength: "Trainer name must not exceed 5 characters" 
+    blog_title: { 
+        required: "Blog title is required", 
+        minlength: "Blog title must be at least 3 characters", 
+        maxlength: "Blog title must not exceed 150 characters" 
     },
-
-    joining_date: { 
-        required: "Joining Date is required", 
-        date: "date must be numeric" 
+    is_active: { 
+        required: "Please select the status" 
     },
-    
-    is_active: { required: "Please select status" }
+    description: { 
+        required: "Blog description is required", 
+        minlength: "Description must be at least 10 characters", 
+        maxlength: "Description must not exceed 1000 characters" 
+    },
+    publish_date: { 
+        required: "Publish date is required", 
+        date: "Please enter a valid date" 
+    },
+    blog_image: {
+        required: "Please upload a blog image"
+    }
 };
 
 
@@ -30,7 +56,7 @@ function validateForm()
     // Clear previous errors
     $('.error-message').text('');
 
-    $('#gym_trainer_edit_form :input').each(function () {
+    $('#edit_blogs :input').each(function () {
         const name = $(this).attr('name');
         const value = $(this).val();
         const rules = validationRules[name];
@@ -68,6 +94,11 @@ function validateForm()
         }
     });
 
+    if (!$('#blog_image_path').val()) {
+        $(`.error-message[data-error-for="blog_image"]`).text(validationMessages.blog_image.required);
+        isValid = false;
+    }
+
     return isValid;
 }
 
@@ -88,11 +119,11 @@ $('#submitBtn').on('click', function (e)
    
     if (!validateForm()) return;
 
-    let formData = new FormData($('#gym_trainer_edit_form')[0]);
+    let formData = new FormData($('#edit_blogs')[0]);
 
     $.ajax
     ({
-        url: updateTrainer,
+        url: stepperSubmitUrl,
         type: "POST",
         data: formData,
         processData: false,
@@ -116,12 +147,12 @@ $('#submitBtn').on('click', function (e)
             Swal.fire({
                 icon: 'success',
                 title: 'Form Submitted!',
-                text: 'Trainer has been updated Sucessfully.',
+                text: 'Blog has been updated Sucessfully.',
                 confirmButtonText: 'OK',
                 allowOutsideClick: false
             }).then(() => {
                 // Redirect on OK
-                window.location.href = "/list_trainer";
+                window.location.href = "/list_blogs";
             });
         },
         error: function (xhr) 
@@ -147,7 +178,7 @@ $('#submitBtn').on('click', function (e)
 });
 
 // Live error removal
-$('#gym_trainer_edit_form :input').on('input change', function () {
+$('#edit_blogs :input').on('input change', function () {
     const name = $(this).attr('name');
     const value = $(this).val();
     const rules = validationRules[name];

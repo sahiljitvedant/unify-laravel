@@ -5,16 +5,7 @@
 
     <h2>{{ $gallery->gallery_name }}</h2>
 
-    {{-- Main Thumbnail --}}
-    <div class="mb-4">
-        <img src="{{ asset($gallery->main_thumbnail) }}" 
-             alt="{{ $gallery->gallery_name }}" 
-             style="max-width:400px; border-radius:8px;">
-    </div>
-
-    {{-- Description --}}
-    <p><strong>Description:</strong> {{ $gallery->gallery_description ?? 'No description available.' }}</p>
-
+   
     {{-- Gallery Images --}}
     <h3>Gallery Images</h3>
     @if(!empty($gallery->gallery_images))

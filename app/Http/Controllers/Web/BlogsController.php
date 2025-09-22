@@ -24,8 +24,8 @@ class BlogsController extends Controller
     {
         // dd($request->all());
         $query = DB::table('tbl_blogs')
-            ->select('*');
-            // ->where('is_deleted', '!=', 9);
+            ->select('*')
+            ->where('is_deleted', '!=', 9);
 
         // Apply filters
         if ($request->filled('active')) {
@@ -76,7 +76,7 @@ class BlogsController extends Controller
             $encryptedId = Crypt::encryptString($row->id);
             $row->encrypted_id = $encryptedId;
             $row->action = '
-                <a href="'.route('edit_trainer', $encryptedId).'" class="btn btn-sm" title="Edit">
+                <a href="'.route('edit_blogs', $encryptedId).'" class="btn btn-sm" title="Edit">
                     <i class="bi bi-pencil-square"></i>
                 </a>
                 <button type="button" class="btn btn-sm" onclick="deleteMembershipById('.$row->id.')">
@@ -102,6 +102,7 @@ class BlogsController extends Controller
             'description'  => 'required|string|max:1000',
             'publish_date' => 'required|date',
             'is_active'    => 'required|boolean',
+            'blog_image'   => 'required|string'
         ];
     
         // Validate the inputs
@@ -118,7 +119,7 @@ class BlogsController extends Controller
     
         try {
             $blog_data = $request->only(['blog_title', 'description', 'publish_date', 'is_active']);
-    
+            $blog_data['blog_image'] = $request->input('blog_image');
             $inserted_id = DB::table('tbl_blogs')->insertGetId($blog_data);
     
             DB::commit();
@@ -152,14 +153,15 @@ class BlogsController extends Controller
 
         $decryptedId = Crypt::decryptString($id);
         // dd($decryptedId);
-        $member = DB::table('tbl_trainer')->where('id', $decryptedId)->first();
+        $member = DB::table('tbl_blogs')->where('id', $decryptedId)->first();
 
         if (!$member) {
-            abort(404, 'Member not found');
+            abort(404, 'Blog not found');
         }
 
         // Pass existing member data into the form
-        return view('trainer.edit_trainer', compact('member'));
+        return view('blogs.edit_form', compact('member'));
+       
        
     }
 
@@ -170,20 +172,21 @@ class BlogsController extends Controller
         // dd($request->all());
         try 
         {
-            $request->validate([
-                'trainer_name' => 'required|string|min:3|max:5',
-                'joining_date'     => 'required|date',
-                'is_active'       => 'required',
-            ]);
+            // $request->validate([
+            //     'trainer_name' => 'required|string|min:3|max:5',
+            //     'joining_date'     => 'required|date',
+            //     'is_active'       => 'required',
+            // ]);
 
     
-            DB::table('tbl_trainer')
+            DB::table('tbl_blogs')
                 ->where('id', $id)
                 ->update([
-                    'trainer_name'     => $request->trainer_name,
+                    'blog_title'     => $request->blog_title,
                     'is_active'           => $request->is_active,
-                    'joining_date'         => $request->joining_date,
-                    'expiry_date'    => $request->expiry_date,
+                    'description'         => $request->description,
+                    'publish_date'    => $request->publish_date,
+                    'blog_image'    => $request->blog_image,
                 ]);
     
             return response()->json(['success' => true, 'message' => 'Trainer updated successfully!']);
@@ -203,17 +206,17 @@ class BlogsController extends Controller
 
     }
     
-    public function deleteTrainer($id)
+    public function delete_blogs($id)
     {
         // dd(1);
-        $trainer = DB::table('tbl_trainer')->where('id', $id)->first();
+        $trainer = DB::table('tbl_blogs')->where('id', $id)->first();
         // dd($trainer);
         if (!$trainer) 
         {
             return response()->json(['status' => false, 'message' => 'Trainer not found'], 404);
         }
 
-        DB::table('tbl_trainer')
+        DB::table('tbl_blogs')
         ->where('id', $id)
         ->update([
             'is_deleted' => 9,  
@@ -221,24 +224,25 @@ class BlogsController extends Controller
         return response()->json
         ([
             'status' => true,
-            'message' => 'Trainer deleted successfully'
+            'message' => 'Blog deleted successfully'
         ]);
     }
 
-    public function list_deleted_trainer()
+    public function list_deleted_blogs()
     {
-        return view('trainer.list_deleted_trainer');
+        return view('blogs.list_deleted_blogs');
+       
     }
 
-    public function fetch_deleted_trainer(Request $request)
+    public function fetch_deleted_blogs(Request $request)
     {
         // dd($request->all());
-        $query = DB::table('tbl_trainer')
+        $query = DB::table('tbl_blogs')
             ->select('*')
             ->where('is_deleted', '=', 9);
 
-        // Apply filters
-        if ($request->filled('active')) {
+         // Apply filters
+         if ($request->filled('active')) {
             $query->where('is_active', $request->active);
         }
 
@@ -248,8 +252,8 @@ class BlogsController extends Controller
         //     $query->where('trainer_included', $trainerValue);
         // }
 
-        if ($request->filled('trainerName')) {
-            $query->where('trainer_name', '=', $request->trainerName);
+        if ($request->filled('blogname')) {
+            $query->where('blog_title', '=', $request->blogname);
         }
 
         if ($request->filled('joiningDate')) {
@@ -259,7 +263,7 @@ class BlogsController extends Controller
         // Sorting
         $allowedSorts = [
             'id',
-            'trainer_name',
+            'blog_title',
             'joining_date',
             'expiry_date',
             'is_active',
@@ -295,17 +299,17 @@ class BlogsController extends Controller
         return response()->json($trainer);
     }
 
-    public function activate_trainer($id)
+    public function activate_blogs($id)
     {
         // dd(1);
-        $trainer = DB::table('tbl_trainer')->where('id', $id)->first();
+        $trainer = DB::table('tbl_blogs')->where('id', $id)->first();
         // dd($trainer);
         if (!$trainer) 
         {
-            return response()->json(['status' => false, 'message' => 'Trainer not found'], 404);
+            return response()->json(['status' => false, 'message' => 'Blog not found'], 404);
         }
 
-        DB::table('tbl_trainer')
+        DB::table('tbl_blogs')
         ->where('id', $id)
         ->update([
             'is_deleted' => 1,  
@@ -313,8 +317,67 @@ class BlogsController extends Controller
         return response()->json
         ([
             'status' => true,
-            'message' => 'Trainer activated successfully'
+            'message' => 'Blog activated successfully'
         ]);
     }
+    public function home()
+    {
+        $blogs = DB::table('tbl_blogs')
+        ->where('is_deleted', '!=', 9)
+            ->where('is_active', 1)
+            ->orderBy('publish_date', 'desc')
+            ->get();
+    
+        if ($blogs->isEmpty()) {
+            abort(404, 'Blogs not found');
+        }
+    
+        $latest_blogs = $blogs->take(3);
+    // dd($latest_blogs );
+        // Pass as string keys
+        return view('front.index', [
+            'blogs' => $blogs,
+            'latest_blogs' => $latest_blogs,
+        ]);
+    }
+    
+    public function blogs()
+    {
+        // dd(1);
+        $blogs = DB::table('tbl_blogs')
+        ->where('is_deleted', '!=', 9)
+        ->where('is_active', 1)
+        ->orderBy('publish_date', 'desc')
+        ->get();
+  
+        if (!$blogs ) {
+            abort(404, 'Blogs not found');
+        }
+
+        $recent_blogs = $blogs->take(4); // Latest 4 blogs
+        return view('front.blogs', compact('blogs','recent_blogs'));
+
+    }
+    public function blogs_read_more($id)
+    {
+        try {
+            $decryptedId = decrypt($id);
+        } catch (\Exception $e) {
+            abort(404, 'Invalid blog ID');
+        }
+    
+        // dd($decryptedId);
+        $blog = DB::table('tbl_blogs')
+            ->where('id', $decryptedId)           
+            ->where('is_active', 1)
+            ->first();
+    
+        if (!$blog) {
+            abort(404, 'Blog not found');
+        }
+    
+        return view('front.blogs_read_more', compact('blog'));
+    }
+    
 
 }

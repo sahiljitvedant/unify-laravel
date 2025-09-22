@@ -3,7 +3,7 @@ const validationRules = {
     policy_description: { 
         required: true, 
         minlength: 10, 
-        maxlength: 500 
+        maxlength: 5000 
     },
 };
 
@@ -12,7 +12,7 @@ const validationMessages = {
     policy_description: { 
         required: "Policy description is required", 
         minlength: "Policy description must be at least 10 characters", 
-        maxlength: "Policy description must not exceed 500 characters" 
+        maxlength: "Policy description must not exceed 5000 characters" 
     },
 };
 

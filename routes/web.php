@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Web\GymPackageController;
 use App\Http\Controllers\Web\GymMembershipController;
+use App\Http\Controllers\Web\FAQController;
 use App\Http\Controllers\Web\CompanyController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\TrainerController;
@@ -12,22 +13,29 @@ use App\Http\Controllers\Web\PolicyController;
 use App\Http\Controllers\Web\EnquiryController;
 use App\Http\Controllers\Web\BlogsController;
 use App\Http\Controllers\Web\GallaryController;
-
-Route::get('', function () {
-    return view('front.index');
-})->name('home');
+use App\Http\Controllers\Web\ProfileController;
+// Route::get('', function () {
+//     return view('front.index');
+// })->name('home');
 Route::get('/about_us', function () {
     return view('front.about_us');
 })->name('about_us');
-Route::get('/blogs', function () {
-    return view('front.blogs');
-})->name('blogs');
+// Route::get('/blogs', function () {
+//     return view('front.blogs');
+// })->name('blogs');
+Route::get('', [BlogsController::class, 'home'])->name('home');
+Route::get('/blogs', [BlogsController::class, 'blogs'])->name('blogs');
+Route::get('/blogs_read_more/{id}', [BlogsController::class, 'blogs_read_more'])->name('blogs_read_more');
 
+
+
+Route::get('/privacy_policy', [PolicyController::class, 'privacy_policy'])->name('privacy_policy');
 Route::get('/gallary', [GallaryController::class, 'show_front'])->name('gallary');
 Route::get('/gallary_details/{id}', [GallaryController::class, 'gallary_details'])->name('gallary_details');
-Route::get('/blogs_read_more', function () {
-    return view('front.blogs_read_more');
-})->name('blogs_read_more');
+// Route::get('/blogs_read_more', function () 
+// {
+//     return view('front.blogs_read_more');
+// })->name('blogs_read_more');
 Route::get('/register', [AuthController::class, 'register'])->name('register_get');
 Route::post('/register', [AuthController::class, 'registerPost'])->name('register_post');
 Route::get('/login', [AuthController::class, 'index'])->name('login_get');
@@ -46,11 +54,14 @@ Route::get('/access-denied', function () {
 })->name('access_denied');
 
 
+// web.php
+Route::post('/profile/crop-upload', [ProfileController::class, 'cropUpload'])->name('profile.cropUpload');
 
 Route::middleware(['auth.custom', 'session.timeout'])->group(function () 
 {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'list'])->name('list_dashboard');
+    
     // Members Route:-
     Route::get('/list_member', [GymPackageController::class, 'list'])->name('list_member');
     Route::get('/add_member', [GymPackageController::class, 'add'])->name('add_member');
@@ -68,12 +79,26 @@ Route::middleware(['auth.custom', 'session.timeout'])->group(function ()
     Route::get('/edit_trainer/{id}', [TrainerController::class, 'edit'])->name('edit_trainer');
     Route::get('/list_deleted_trainer', [TrainerController::class, 'list_deleted_trainer'])->name('list_deleted_trainer');
     
+    // FAQ Route:-
+    Route::get('/list_faqs', [FAQController::class, 'list'])->name('list_faqs');
+    Route::get('/add_faq', [FAQController::class, 'add'])->name('add_faq');
+    Route::get('/edit_faq/{id}', [FAQController::class, 'edit'])->name('edit_faq');
+    Route::get('/list_deleted_faqs', [FAQController::class, 'list_deleted_faqs'])->name('list_deleted_faqs');
+        
     // Policy route:-
     Route::get('/add_policy', [PolicyController::class, 'add'])->name('add_policy');
 
     // Blogs route:-
     Route::get('/list_blogs', [BlogsController::class, 'list'])->name('list_blogs');
     Route::get('/add_blogs', [BlogsController::class, 'add'])->name('add_blogs');
+    Route::get('/edit_blogs/{id}', [BlogsController::class, 'edit'])->name('edit_blogs');
+    Route::get('/list_deleted_blogs', [BlogsController::class, 'list_deleted_blogs'])->name('list_deleted_blogs');
+        
+    // Blogs route:-
+    // Route::get('/list_faqs', [FAQController::class, 'list'])->name('list_faqs');
+    // Route::get('/add_faqs', [BlogsController::class, 'add'])->name('add_faqs');
+    // Route::get('/edit_faqs/{id}', [BlogsController::class, 'edit'])->name('edit_faqs');
+    // Route::get('/list_deleted_faqs', [BlogsController::class, 'list_deleted_faqs'])->name('list_deleted_faqs');
 
     // Gallary Route:-
     Route::get('/add_gallery', [GallaryController::class, 'add'])->name('add_gallery');
@@ -118,7 +143,18 @@ Route::middleware(['auth.custom', 'session.timeout'])->group(function ()
         Route::post('/add_blogs', [BlogsController::class, 'submit'])->name('add_blogs');
         Route::get('/fetch_blogs', [BlogsController::class, 'fetch_blogs'])
         ->name('fetch_blogs');
-
+        Route::post('/update_blogs/{id}', [BlogsController::class, 'update'])->name('update_blogs');
+        Route::post('/delete_blogs/{id}', [BlogsController::class, 'delete_blogs'])->name('delete_blogs');
+        Route::get('/fetch_deleted_blogs', [BlogsController::class, 'fetch_deleted_blogs'])
+        ->name('fetch_deleted_blogs');
+        Route::post('/activate_blogs/{id}', [BlogsController::class, 'activate_blogs'])->name('activate_blogs');
+        // FAQ
+        Route::get('/fetch_faqs', [FAQController::class, 'fetch_faqs'])->name('fetch_faqs');
+        Route::post('/add_faq', [FAQController::class, 'submit'])->name('add_faq');
+        Route::post('/delete_faqs/{id}', [FAQController::class, 'delete_faqs'])->name('delete_faqs');
+        Route::post('/update_faqs/{id}', [FAQController::class, 'update_faqs'])->name('update_faqs');
+        Route::get('/fetch_deleted_faqs', [FAQController::class, 'fetch_deleted_faqs'])->name('fetch_deleted_faqs');
+        Route::post('/activate_faqs/{id}', [FAQController::class, 'activate_faqs'])->name('activate_faqs');
         // Gallary:-
         Route::post('/add_gallery', [GallaryController::class, 'submit'])->name('add_gallery');
 

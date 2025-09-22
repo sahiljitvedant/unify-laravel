@@ -27,30 +27,41 @@
                     <div class="row g-3">
                         <!-- Row 1 -->
                         <div class="col-md-3">
-                            <select id="filterActive" class="form-select">
+                            <select id="filterActive" class="form-control">
                                 <option value="">Select Status</option>
                                 <option value="1">Active</option>
                                 <option value="0">Inactive</option>
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <select id="filterTrainer" class="form-select">
+                            <select id="filterTrainer" class="form-control">
                                 <option value="">Select Trainer</option>
                                 <option value="1">Yes</option>
                                 <option value="0">No</option>
                             </select>
                         </div>
+                        <!-- <div class="col-md-3">
+                            <input type="number" id="durartion" class="form-control" placeholder="Durartion">
+                        </div> -->
                         <div class="col-md-3">
-                            <input type="number" id="filterMinPrice" class="form-control" placeholder="Min Price">
+                            <select id="durartion" class="form-control">
+                                <option value="">Select Duration</option>
+                                <option value="30">1 Month</option>
+                                <option value="90">3 Months</option>
+                                <option value="180">6 Months</option>
+                                <option value="365">1 Year</option>
+                            </select>
                         </div>
                         <div class="col-md-3">
-                            <input type="number" id="filterMaxPrice" class="form-control" placeholder="Max Price">
+                            <input type="number" id="price" class="form-control" placeholder="Price">
                         </div>
                     </div>
 
                     <div class="row g-3 mt-2">
                         <!-- Row 2 -->
-                    
+                        <div class="col-md-3">
+                            <input type="text" id="membership_name" class="form-control" placeholder="Membership name">
+                        </div>
                         <div class="col-md-2">
                             <button id="submitBtn" class="btn ">
                                 <i class="bi bi-search"></i> 

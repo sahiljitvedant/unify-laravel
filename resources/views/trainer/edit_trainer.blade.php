@@ -19,10 +19,10 @@
         <div class="step" data-step="2">
             <div class="row g-3">
                 <div class="col-md-6 col-12">
-                    <label class="form-label required">Trainer Name</label>
+                    <label class="form-label required">Trainer name</label>
                     <input type="text" class="form-control" name="trainer_name" id="trainer_name" 
                         value="{{ $member->trainer_name }}" 
-                        placeholder="Trainer Name">
+                        placeholder="Trainer name">
                     <div class="text-danger error-message" data-error-for="trainer_name"></div>
                 </div>
 
@@ -38,7 +38,7 @@
             </div>
             <div class="row g-3 mt-2">
                 <div class="col-md-6 col-12">
-                    <label class="form-label required">Joining Date</label>
+                    <label class="form-label required">Joining date</label>
                     <input type="date" class="form-control" name="joining_date" id="joining_date"
                         value="{{ $member->joining_date }}"
                         placeholder="Joining Date">
@@ -46,7 +46,7 @@
                 </div>
 
                 <div class="col-md-6 col-12">
-                    <label class="form-label required">Leaving Date</label>
+                    <label class="form-label ">Leaving date</label>
                     <input type="date" class="form-control" name="expiry_date" id="expiry_date"
                         value="{{ $member->expiry_date }}"
                         placeholder="Leaving Date">

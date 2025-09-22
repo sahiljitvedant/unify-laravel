@@ -1,121 +1,178 @@
 @extends('front.app')
 
 @section('content')
-<section id="about-contact" class="about-contact">
-<h2 class="section-title">Blogs</h2>
-    <div class="about-container">
-        <div class="blogs-grid mt-1">
-            <div class="class-item">
-                <img src="https://images.unsplash.com/photo-1605296867424-35fc25c9212a?w=600" alt="Yoga">
-                <h3>Yoga</h3>
-                <p>Improve flexibility, balance, and mental focus with our yoga sessions.</p>
-                <a href="{{ route('blogs_read_more') }}" class="btn-read">Read More
-                <i class="bi bi-arrow-right fs-5 ms-1 align-middle"></i>
-                </a>
+<section id="blogs-section" class="blogs-section py-5">
+    <div class="container">
+        <div class="row">
+            <!-- Main Blog Cards -->
+            <div class="col-lg-8">
+                <div class="blogs-grid">
+                    @foreach($blogs as $blog)
+                        <div class="blog-card">
+                            <img src="{{ $blog->blog_image ?? 'https://images.unsplash.com/photo-1605296867424-35fc25c9212a?w=600' }}" alt="{{ $blog->blog_title }}">
+                            <div class="blog-content">
+                                <span class="blog-date">{{ \Carbon\Carbon::parse($blog->publish_date)->format('d M') }}</span>
+                                <h3 class="blog-title">{{ \Illuminate\Support\Str::words($blog->blog_title, 10, '...') }}</h3>
+                                <p>{{ \Illuminate\Support\Str::words($blog->description, 20, '...') }}</p>
+                                <div class="text-end">
+                                <a href="{{ route('blogs_read_more', ['id' => encrypt($blog->id)]) }}" class="btn-read">
+                                    Read More
+                                </a>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
             </div>
-            <div class="class-item">
-                <img src="https://images.unsplash.com/photo-1605296867424-35fc25c9212a?w=600" alt="Cardio">
-                <h3>Cardio</h3>
-                <p>Boost your heart health and stamina with our intensive cardio workouts.</p>
-                <a href="{{ route('blogs_read_more') }}" class="btn-read">Read More
-                <i class="bi bi-arrow-right fs-5 ms-1 align-middle"></i>
-                </a>
+
+
+            <!-- Sidebar Recent Posts -->
+            <div class="col-lg-4">
+                <div class="recent-posts-card p-3" style="background-color: #f2f2f2; border-radius: 10px;">
+                    <h4 class="sidebar-title">Recent Posts</h4>
+                    <div class="recent-posts-card p-3" style="background-color: #f2f2f2; border-radius: 10px;">
+
+                        <div class="recent-posts">
+                            @foreach($recent_blogs as $recent)
+                            <div class="recent-post">
+                                <img src="{{ $recent->blog_image ?? 'https://images.unsplash.com/photo-1605296867424-35fc25c9212a?w=100' }}" 
+                                    alt="{{ $recent->blog_title }}">
+                                <div>
+                                    <h5><a href="{{ route('blogs_read_more', ['id' => encrypt($recent->id)]) }}">
+                                        {{ \Illuminate\Support\Str::words($recent->blog_title, 10, '...') }}
+                                    </a></h5>
+                                    <p class="recent-desc">
+                                    {{ \Illuminate\Support\Str::limit($recent->description, 30, '...') }}
+                                    </p>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                </div>
             </div>
-            <div class="class-item">
-                <img src="https://images.unsplash.com/photo-1605296867424-35fc25c9212a?w=600" alt="Crossfit">
-                <h3>CrossFit</h3>
-                <p>Challenge yourself with high-intensity CrossFit exercises for full-body strength.</p>
-                <a href="{{ route('blogs_read_more') }}" class="btn-read">Read More
-                <i class="bi bi-arrow-right fs-5 ms-1 align-middle"></i>
-                </a>
-            </div>
-            <!-- Add more cards here -->
-        </div>
-        <div class="blogs-grid mt-1">
-            <div class="class-item">
-                <img src="https://images.unsplash.com/photo-1605296867424-35fc25c9212a?w=600" alt="Yoga">
-                <h3>Yoga</h3>
-                <p>Improve flexibility, balance, and mental focus with our yoga sessions.</p>
-                <a href="{{ route('blogs_read_more') }}" class="btn-read">Read More
-                <i class="bi bi-arrow-right fs-5 ms-1 align-middle"></i>
-                </a>
-            </div>
-            <div class="class-item">
-                <img src="https://images.unsplash.com/photo-1605296867424-35fc25c9212a?w=600" alt="Cardio">
-                <h3>Cardio</h3>
-                <p>Boost your heart health and stamina with our intensive cardio workouts.</p>
-                <a href="{{ route('blogs_read_more') }}" class="btn-read">Read More
-                <i class="bi bi-arrow-right fs-5 ms-1 align-middle"></i>
-                </a>
-            </div>
-            <div class="class-item">
-                <img src="https://images.unsplash.com/photo-1605296867424-35fc25c9212a?w=600" alt="Crossfit">
-                <h3>CrossFit</h3>
-                <p>Challenge yourself with high-intensity CrossFit exercises for full-body strength.</p>
-                <a href="{{ route('blogs_read_more') }}" class="btn-read">Read More
-                <i class="bi bi-arrow-right fs-5 ms-1 align-middle"></i>
-                </a>
-            </div>
-            <!-- Add more cards here -->
         </div>
     </div>
 </section>
 @endsection
+
 <style>
+.blogs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+   
+}
+
+.blog-card {
+    background: #f2f2f2;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.blog-card:hover {
+    transform: translateY(-5px);
+}
+
+.blog-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.blog-content {
+    padding: 15px 20px;
+}
+
+.blog-date {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+.blog-title {
+    font-size: 1.25rem;
+    margin: 5px 0 10px 0;
+    color: #0B1061;
+}
+
+.blog-content p {
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.btn-read {
+    display: inline-block;
+    margin-top: 10px;
+    color: #0B1061;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.btn-read:hover {
+    text-decoration: underline;
+}
+
+/* Sidebar */
+.sidebar-title {
+    font-size: 1.25rem;
+    margin-bottom: 15px;
+    color: #0B1061;
+}
+
+.recent-posts {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.recent-post {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.recent-post img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.recent-post h5 {
+    font-size: 1rem;
+    margin: 0;
+}
+
+.recent-post h5 a {
+    text-decoration: none;
+    color: #0B1061;
+}
+
+.recent-post h5 a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
     .blogs-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr); /* 3 cards per row */
-        gap: 20px; /* space between cards */
+        grid-template-columns: 1fr;
     }
+}
 
-    .class-item {
-        background: #fff;
-        border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        text-align: center;
-        transition: transform 0.3s ease;
+@media (max-width: 576px) {
+    .recent-posts {
+        flex-direction: column;
     }
+}
 
-    .class-item:hover {
-        transform: translateY(-5px);
+/* Hide Recent Posts on screens smaller than 1024px */
+@media (max-width: 768px) {
+    .recent-posts-card {
+        display: none;
     }
+}
 
-    .class-item img {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-        border-radius: 10px;
-        margin-bottom: 15px;
-    }
-
-    /* Responsive (mobile: 1 per row, tablet: 2 per row) */
-    @media (max-width: 992px) {
-        .blogs-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-    @media (max-width: 576px) {
-        .blogs-grid {
-            grid-template-columns: 1fr;
-        }
-    }
-    #about-contact {
-        padding: 60px 20px;  
-        min-height: auto;     
-        display: block;      
-    }
-
-    #about-contact {
-        padding: 60px 20px;  
-        min-height: auto;   
-        display: block;     
-    }
-    .section-title {
-        text-align: center;   /* centers title horizontally */
-        font-size: 2.5rem;
-        font-weight: 700;
-        margin-bottom: 30px;
-        color: #0B1061;
-    }
 </style>

@@ -36,7 +36,7 @@ $(document).ready(function ()
             // Show "No memberships found" message spanning all columns
             rows = `
                 <tr>
-                    <td colspan="7" class="text-center">No memberships found</td>
+                    <td colspan="7" class="text-center">No Trainer found</td>
                 </tr>
             `;
         } else {

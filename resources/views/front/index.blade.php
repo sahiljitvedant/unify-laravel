@@ -4,38 +4,51 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gym Website</title>
+  <link rel="icon" type="image/png" href="{{ asset('assets/img/logo.png') }}">
   <link rel="stylesheet" href="style.css">
+ 
   <link rel="stylesheet" href="{{ asset('css/style.css') }}">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <style>
+    :root 
+    {
+        --theme-color: {{ config('app.theme_color') }};
+        --sidebar_color: {{ config('app.sidebar_color') }};
+        --other_color_fff: {{ config('app.other_color_fff') }};
+        --front_font_size: {{ config('app.front_font_size') }};
+    }
+  </style>
 </head>
 <body>
     <!-- HEADER -->
     <header class="header">
-    <nav class="navbar">
-        <div class="logo">
-            <a href="{{ route('home') }}" class="d-flex align-items-center text-decoration-none">
-                <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" 
-                    style="height:60px; width:180px; object-fit:cover; border-radius:10px; border:1px solid #0B1061">
-            </a>
-        </div>
-        <ul class="nav-links">
-        <li><a href="#hero">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#classes">Blogs</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a target="_blank" href="{{ route('login_get') }}">Login</a></li>
-        </ul>
-        <div class="hamburger">&#9776;</div>
-    </nav>
+        <nav class="navbar">
+            <div class="container">
+            <div class="logo">
+                <a href="{{ route('home') }}" class="d-flex align-items-center text-decoration-none">
+                    <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" 
+                        style="height:50px; width:160px; object-fit:cover; border-radius:10px; border:1px solid #0B1061">
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#classes">Blogs</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a target="_blank" href="{{ route('login_get') }}">Login</a></li>
+            </ul>
+            </div>
+            <div class="hamburger">&#9776;</div>
+        </nav>
     </header>
     <!-- MOBILE MENU -->
     <div class="mobile-menu" id="mobileMenu">
-    <a href="#hero">Home</a>
-    <a href="#about">About</a>
-    <a href="#classes">Classes</a>
-    <a href="#contact">Contact</a>
-    <li><a href="{{ route('login_get') }}">Login</a></li>
+        <a href="#hero">Home</a>
+        <a href="#about">About</a>
+        <a href="#classes">Classes</a>
+        <a href="#contact">Contact</a>
+        <li><a href="{{ route('login_get') }}">Login</a></li>
     </div>
     <!-- HERO -->
     <section id="hero" class="hero-slider" aria-label="Hero slider">
@@ -73,73 +86,172 @@
         </div>
     </section>
     <!-- ABOUT -->
-    <section id="about" class="about">
+    <!-- <section id="about" class="about">
+        
         <div class="about-text">
         <h2>About Us</h2>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vitae orci sed libero consequat tincidunt. Vivamus vel urna eget arcu ultricies sagittis. Integer euismod, sapien nec pretium pharetra, magna justo volutpat magna, et bibendum justo libero eget risus.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vitae orci sed libero consequat tincidunt. Vivamus vel urna eget arcu ultricies sagittis. Integer euismod, sapien nec pretium pharetra, magna justo volutpat magna, et bibendum justo libero eget risus.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vitae orci sed libero consequat tincidunt. Vivamus vel urna eget arcu ultricies sagittis. Integer euismod, sapien nec pretium pharetra, magna justo volutpat magna, et bibendum justo libero eget risus.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vitae orci sed libero consequat tincidunt. Vivamus vel urna eget arcu ultricies sagittis. Integer euismod, sapien nec pretium pharetra, magna justo volutpat magna, et bibendum justo libero eget risus.
-
         </p>
         <a href="{{ route('about_us') }}" class="btn-see-more mt-2 btn-read">Get Started</a>
         </div>
         <img src="https://images.unsplash.com/photo-1558611848-73f7eb4001a1?w=600" alt="Gym">
         
+    </section> -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="row align-items-stretch"> <!-- key: stretch columns to same height -->
+
+            <!-- Left Column: Text (fills height, pushes button to bottom) -->
+            <div class="col-md-6 d-flex">
+                <div class="about-text w-100 d-flex flex-column">
+                <div class="about-text-inner">  <!-- this inner element will stretch -->
+                    <h2>About Us</h2>
+                    <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vitae orci sed libero consequat tincidunt.
+                    Vivamus vel urna eget arcu ultricies sagittis. Integer euismod, sapien nec pretium pharetra, magna justo 
+                    volutpat magna, et bibendum justo libero eget risus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                    Nullam vitae orci sed libero consequat tincidunt. Vivamus vel urna eget arcu ultricies sagittis.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vitae orci sed libero consequat tincidunt.
+                    Vivamus vel urna eget arcu ultricies sagittis. Integer euismod, sapien nec pretium pharetra, magna justo 
+                    volutpat magna, et bibendum justo libero eget risus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                    Nullam vitae orci sed libero consequat tincidunt. Vivamus vel urna eget arcu ultricies sagittis.
+                    
+                    </p>
+
+                    <div class="about-cta"> <!-- keeps CTA at bottom -->
+                    <a href="{{ route('about_us') }}" class="btn-see-more mt-2 btn-read">Get Started</a>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Image (will match the height of the left column) -->
+            <div class="col-md-6 d-flex">
+                <div class="contact-image w-100">
+                <img src="https://images.unsplash.com/photo-1558611848-73f7eb4001a1?w=1200" alt="Gym">
+                </div>
+            </div>
+
+            </div>
+        </div>
     </section>
+
+
     <!-- CLASSES -->
     <section id="classes" class="classes">
-    <h2>Blogs</h2>
-    <div class="class-grid">
-        
-        <div class="class-item">
-            <img src="https://images.unsplash.com/photo-1605296867424-35fc25c9212a?w=600" alt="Crossfit">
-            <h3>Yoga</h3>
-            <p>Improve flexibility, balance, and mental focus with our yoga sessions.</p>
-            <a href="{{ route('blogs_read_more') }}" class="btn-read">
-            Read More <i class="bi bi-arrow-right fs-5 ms-1 align-middle"></i>
-        </a>
+        <div class="container">
+        <h2>Blogs</h2>
+        <div class="class-grid">
+            @foreach($latest_blogs as $blog)
+            <div class="blog-card">
+                <img src="{{ $blog->blog_image ?? 'https://images.unsplash.com/photo-1605296867424-35fc25c9212a?w=600' }}" alt="{{ $blog->blog_title }}">
+                <div class="blog-content">
+                    <span class="blog-date">{{ \Carbon\Carbon::parse($blog->publish_date)->format('d M') }}</span>
+                    <h3 class="blog-title">{{ \Illuminate\Support\Str::limit($blog->blog_title, 50, '...') }}</h3>
+                    <p>{{ \Illuminate\Support\Str::limit($blog->description, 120, '...') }}</p>
+                    <div class="text-end mt-auto">
+                        <a href="{{ route('blogs_read_more', ['id' => encrypt($blog->id)]) }}" class="btn-read">
+                            Read More
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @endforeach
         </div>
 
-        <div class="class-item">
-        <img src="https://images.unsplash.com/photo-1605296867424-35fc25c9212a?w=600" alt="Crossfit">
-        <h3>Cardio</h3>
-        <p>Burn calories and boost your endurance with high-energy cardio workouts.</p>
-        <a href="{{ route('blogs_read_more') }}" class="btn-read">
-            Read More <i class="bi bi-arrow-right fs-5 ms-1 align-middle"></i>
-        </a>
-        </div>
-
-        <div class="class-item">
-        <img src="https://images.unsplash.com/photo-1605296867424-35fc25c9212a?w=600" alt="Crossfit">
-        <h3>Crossfit</h3>
-        <p>Challenge your strength and stamina with functional training.</p>
-        <a href="{{ route('blogs_read_more') }}" class="btn-read">
-            Read More <i class="bi bi-arrow-right fs-5 ms-1 align-middle"></i>
-        </a>
-        </div>
-
-    </div>
-    <!-- See More button -->
-    <div class="see-more-container">
-        <a href="{{ route('blogs') }}" class="btn-see-more btn-read">See More</a>
-    </div>
+        <div class="see-more-container">
+            <a href="{{ route('blogs') }}" class="btn-see-more btn-read">See More</a>
+        </div></div>
     </section>
     <!-- CONTACT -->
+  
     <section id="contact" class="contact">
-        <h2>Contact Us</h2>
-        <div class="contact-card">
-        <form method="POST" action="{{ route('enquiry.store') }}" id="enquiryForm">
-            @csrf
-            <input type="text" name="name" placeholder="Your Name" required>
-            <input type="email" name="email" placeholder="Your Email" required>
-            <textarea rows="5" name="message" placeholder="Your Message" required maxlength="15"></textarea>
+        <div class="container">
+            <div class="row align-items-center">
+            
+                <!-- Left Column: Cartoon Image -->
+                <div class="col-md-6 contact-image">
+                    <img src="https://images.unsplash.com/photo-1605296867424-35fc25c9212a?w=600" 
+                        alt="Contact Us Illustration" class="img-fluid">
+                        <!-- <img src="{{ asset('assets/img/gym_04.jpg') }}" 
+                        alt="Contact Us Illustration" class="img-fluid"> -->
+                </div>
+                
 
-            <button type="submit" id="submitBtn" class="btn-see-more btn-read">Send Message</button>
-        </form>
+                <!-- Right Column: Contact Form -->
+                <div class="col-md-6">
+                    <div class="contact-card">
+                    <h2>Contact Us</h2>
+                    <form method="POST" action="{{ route('enquiry.store') }}" id="enquiryForm">
+                        @csrf
+                        <input type="text" class="form-control" name="name" placeholder="Your Name" required>
+                        <input type="email" class="form-control" name="email" placeholder="Your Email" required>
+                        <textarea rows="5" class="form-control" name="message" placeholder="Your Message" required maxlength="150"></textarea>
+                        <button type="submit" id="submitBtn" class="btn-see-more btn-read">Send Message</button>
+                    </form>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </section>
+
     <!-- FOOTER -->
     <footer class="footer">
-        <p>&copy;2025 Sachi. All rights reserved.</p>
+        <div class="container">
+            <div class="footer-grid">
+            
+            <!-- Column 1 -->
+            <div class="footer-col">
+                <h3>We at Sachiii</h3>
+                <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vitae orci sed libero consequat tincidunt. Vivamus vel urna eget arcu ultricies sagittis. Integer euismod, sapien nec pretium pharetra, magna justo volutpat magna, et bibendum justo libero eget risus.Lorem ipsum dolor sit ame
+                </p>
+                <div class="social-links">
+                    <a href="#" class="btn-read"><i class="bi bi-facebook"></i></a>
+                    <a href="#"  class="btn-read"><i class="bi bi-instagram"></i></a>
+                    <a href="#"  class="btn-read"><i class="bi bi-linkedin"></i></a>
+                    <a href="#"  class="btn-read"><i class="bi bi-youtube"></i></a>
+                </div>
+            </div>
+
+            <!-- Column 2 -->
+            <div class="footer-col">
+                <h3>Navigation</h3>
+                <ul class="footer-links">
+                    <li><a href="/about_us">About Us</a></li>
+                    <li><a href="#">Gallary</a></li>
+                    <li><a href="blogs">Blogs</a></li>
+                    <li><a href="/privacy_policy">Privacy Policy</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                    <li><a href="#">FAQ's</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 3 -->
+            <div class="footer-col">
+                <h3>Contact</h3>
+                <p> Fitness Club, FC Road, Pune, Maharashtra, India</p>
+                <p>support@fitnessclub.com</p>
+                <p>+91 98765 43210</p>
+
+                <form class="newsletter">
+                <input type="email" class="form-control" placeholder="Subscribe email" required>
+                <button type="submit" class="btn-read">Subscribe</button>
+                </form>
+            </div>
+            </div>
+
+            <div class="footer-bottom">
+            <p>
+                &copy; <script>document.write(new Date().getFullYear())</script> Sachi|2025 All Rights Reserved.
+                <a href="/privacy_policy">Privacy Policy</a> |
+                <a href="#">Terms & Conditions</a>
+            </p>
+            </div>
+        </div>
     </footer>
+
     <style>
         .nav-links a,
         .mobile-menu a {
@@ -185,61 +297,64 @@
         });
     </script>
     <script>
-        (function () 
-        {
-            const slides = document.querySelectorAll(".hero-slider .slide");
-            const dots   = document.querySelectorAll(".hero-slider .dot");
-            let current = 0;
+        document.addEventListener('DOMContentLoaded', function () {
+        const slider = document.querySelector('.hero-slider');
+        if (!slider) return;
 
-            if (!slides.length || !dots.length) return;
+        const slides = slider.querySelectorAll('.slide');
+        const dots   = slider.querySelectorAll('.dot');
 
-            function showSlide(index) {
-            index = (index + slides.length) % slides.length;
+        if (!slides.length || !dots.length) return;
+
+        let current = 0;
+        const autoplayInterval = 130000; // 3s (change to 5000 if you want 5s)
+        let autoplayTimer = null;
+
+        function showSlide(index) {
+            index = (index + slides.length) % slides.length; // always wrap around
             slides.forEach((s, i) => {
-                s.classList.toggle("active", i === index);
-                s.setAttribute('aria-hidden', i === index ? 'false' : 'true');
+            s.classList.toggle('active', i === index);
+            s.setAttribute('aria-hidden', i === index ? 'false' : 'true');
             });
             dots.forEach((d, i) => d.classList.toggle('active', i === index));
             current = index;
-            }
+        }
 
-            // wire dots
-            dots.forEach(dot => {
-            dot.addEventListener('click', function () {
-                const idx = parseInt(this.dataset.index, 10);
-                showSlide(idx);
+        function startAutoplay() {
+            stopAutoplay();
+            autoplayTimer = setInterval(() => showSlide(current + 1), autoplayInterval);
+        }
+        function stopAutoplay() {
+            if (autoplayTimer) clearInterval(autoplayTimer);
+            autoplayTimer = null;
+        }
+
+        // dot controls
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => {
+            showSlide(parseInt(dot.dataset.index, 10));
+            startAutoplay(); // 🔥 restart autoplay after clicking
             });
-            // keyboard support
-            dot.addEventListener('keydown', function (e) {
-                if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                showSlide(parseInt(this.dataset.index, 10));
-                }
-            });
-            });
+        });
 
-            // optional: keyboard left/right
-            document.addEventListener('keydown', function (e) {
-            if (e.key === 'ArrowLeft') showSlide(current - 1);
-            if (e.key === 'ArrowRight') showSlide(current + 1);
-            });
+        // keyboard arrows
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') { showSlide(current - 1); startAutoplay(); }
+            if (e.key === 'ArrowRight') { showSlide(current + 1); startAutoplay(); }
+        });
 
-            // ensure initial state
-            showSlide(0);
+        // pause on hover/touch
+        slider.addEventListener('mouseenter', stopAutoplay);
+        slider.addEventListener('mouseleave', startAutoplay);
+        slider.addEventListener('touchstart', stopAutoplay);
+        slider.addEventListener('touchend', startAutoplay);
 
-            // optional autoplay (comment out if you don't want auto-advance)
-            let autoplayInterval = 5000; // ms
-            let autoplay = setInterval(() => showSlide(current + 1), autoplayInterval);
-
-            // pause autoplay while user interacts (hover / touch)
-            const sliderEl = document.querySelector('.hero-slider');
-            sliderEl.addEventListener('mouseenter', () => clearInterval(autoplay));
-            sliderEl.addEventListener('touchstart', () => clearInterval(autoplay));
-
-            // small safety: re-show current after images load (keeps layout stable)
-            window.addEventListener('load', () => showSlide(current));
-        })();
+        // init
+        showSlide(0);
+        startAutoplay();
+        });
     </script>
+
     <script>
         $(document).ready(function () {
             $("#enquiryForm").on("submit", function () {
@@ -247,12 +362,12 @@
                 btn.prop("disabled", true).text("Please wait...");
             });
         });
-        $(document).ready(function () {
-            $(".nav-links a").on("click", function () {
-                $(".nav-links a").removeClass("active"); // remove from all
-                $(this).addClass("active"); // add to clicked
-            });
-        });
+        // $(document).ready(function () {
+        //     $(".nav-links a").on("click", function () {
+        //         $(".nav-links a").removeClass("active"); // remove from all
+        //         $(this).addClass("active"); // add to clicked
+        //     });
+        // });
         $(document).ready(function () {
             const sections = $("section"); // all sections
             const navLinks = $(".nav-links a");
@@ -278,5 +393,8 @@
         });
 
     </script>
+
 </body>
+
+
 </html>

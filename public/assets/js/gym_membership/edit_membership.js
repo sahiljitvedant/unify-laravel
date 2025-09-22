@@ -1,9 +1,9 @@
 // Validation Rules
 const validationRules = {
-    membership_name: { required: true, minlength: 3, maxlength: 5 },
+    membership_name: { required: true, minlength: 2, maxlength: 15 },
     description: { required: true },
     duration_in_days: { required: true, number: true },
-    price: { required: true, number: true },
+    price: { required: true, number: true ,min: 0},
     trainer_included: { required: true },
     facilities_included: { required: true },
     is_active: { required: true }
@@ -13,8 +13,8 @@ const validationRules = {
 const validationMessages = {
     membership_name: { 
         required: "Membership name is required", 
-        minlength: "Membership name must be at least 3 characters", 
-        maxlength: "Membership name must not exceed 5 characters" 
+        minlength: "Membership name must be at least 2 characters", 
+        maxlength: "Membership name must not exceed 15 characters" 
     },
     description: { required: "Description is required" },
     duration_in_days: { 
@@ -23,7 +23,8 @@ const validationMessages = {
     },
     price: { 
         required: "Price is required", 
-        number: "Price must be numeric" 
+        number: "Price must be numeric" ,
+        min: "Price cannot be negative"
     },
     trainer_included: { required: "Please select if trainer included" },
     facilities_included: { required: "Facilities are required" },
@@ -72,6 +73,13 @@ function validateForm()
         // Max length check
         if (rules.maxlength && value.length > rules.maxlength) {
             errorDiv.text(messages.maxlength);
+            isValid = false;
+            return;
+        }
+
+        // Min value check (catch negatives)
+        if (rules.min !== undefined && value && parseFloat(value) < rules.min) {
+            errorDiv.text(messages.min);
             isValid = false;
             return;
         }

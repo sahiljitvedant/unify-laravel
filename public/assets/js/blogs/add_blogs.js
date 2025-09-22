@@ -1,4 +1,4 @@
-// Validation Rules
+
 // Validation Rules
 const validationRules = {
     blog_title: { 
@@ -17,7 +17,11 @@ const validationRules = {
     publish_date: { 
         required: true, 
         date: true 
-    },
+    },  
+    blog_image: {
+        required: true
+    }
+
 };
 
 // Validation Messages
@@ -39,6 +43,9 @@ const validationMessages = {
         required: "Publish date is required", 
         date: "Please enter a valid date" 
     },
+    blog_image: {
+        required: "Please upload a blog image"
+    }
 };
 
 
@@ -88,7 +95,11 @@ function validateForm()
             return;
         }
     });
-
+    // Special check for blog image
+    if (!$('#blog_image_path').val()) {
+            $(`.error-message[data-error-for="blog_image"]`).text(validationMessages.blog_image.required);
+            isValid = false;
+    }
     return isValid;
 }
 

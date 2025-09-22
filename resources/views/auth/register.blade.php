@@ -13,27 +13,27 @@
             <h5 class="text-center mb-4">Register</h5>
             <form id="registration_add">
                 <div class="mb-3">
-                    <label for="name" class="form-label">Name</label>
+                    <label for="name" class="form-label required">Name</label>
                     <input type="text" class="form-control" id="name" name="name">
-                    <span class="text-danger error-name small"></span>
+                    <span class="text-danger error-name error-message"></span>
                 </div>
                 <div class="mb-3">
-                    <label for="email" class="form-label">Email address</label>
+                    <label for="email" class="form-label required">Email address</label>
                     <input type="email" class="form-control" id="email" name="email">
-                    <span class="text-danger error-email small"></span>
+                    <span class="text-danger error-email error-message"></span>
                 </div>
                 <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
+                    <label for="password" class="form-label required">Password</label>
                     <div class="input-group">
                         <input type="password" class="form-control" id="password" name="password">
                         <button type="button" class="btn btn-outline-secondary" id="togglePassword">
                             <i class="bi bi-eye"></i>
                         </button>
                     </div>
-                    <span class="text-danger error-password small"></span>
+                    <span class="text-danger error-password error-message"></span>
                 </div>
             
-                <button type="submit" class="btn login_btn w-100">Submit</button>
+                <button type="submit"  id="submitBtn" class="btn login_btn w-100">Submit</button>
                 <div class="register-link">
                     <p>Already a User? <a href="{{ url('/login') }}">Login here</a></p>
                 </div>
