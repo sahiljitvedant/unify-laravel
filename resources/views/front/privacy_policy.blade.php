@@ -1,6 +1,6 @@
 
 @extends('front.app')
-
+@section('title', 'Privacy Policy')
 @section('content')
     <!-- Privacy Policy Section -->
     <section id="privacy-policy" class="py-5" style="background:#f9f9f9;">

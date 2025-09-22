@@ -224,7 +224,7 @@
                     <li><a href="blogs">Blogs</a></li>
                     <li><a href="/privacy_policy">Privacy Policy</a></li>
                     <li><a href="#">Terms & Conditions</a></li>
-                    <li><a href="#">FAQ's</a></li>
+                    <li><a href="/faqs">FAQ's</a></li>
                 </ul>
             </div>
 

@@ -1,5 +1,5 @@
 @extends('front.app')
-
+@section('title', 'Blogs')
 @section('content')
 <section id="blogs-section" class="blogs-section py-5">
     <div class="container">

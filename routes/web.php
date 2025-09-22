@@ -27,7 +27,7 @@ Route::get('', [BlogsController::class, 'home'])->name('home');
 Route::get('/blogs', [BlogsController::class, 'blogs'])->name('blogs');
 Route::get('/blogs_read_more/{id}', [BlogsController::class, 'blogs_read_more'])->name('blogs_read_more');
 
-
+Route::get('/faqs', [FAQController::class, 'faq'])->name('faqs');
 
 Route::get('/privacy_policy', [PolicyController::class, 'privacy_policy'])->name('privacy_policy');
 Route::get('/gallary', [GallaryController::class, 'show_front'])->name('gallary');
@@ -80,6 +80,7 @@ Route::middleware(['auth.custom', 'session.timeout'])->group(function ()
     Route::get('/list_deleted_trainer', [TrainerController::class, 'list_deleted_trainer'])->name('list_deleted_trainer');
     
     // FAQ Route:-
+
     Route::get('/list_faqs', [FAQController::class, 'list'])->name('list_faqs');
     Route::get('/add_faq', [FAQController::class, 'add'])->name('add_faq');
     Route::get('/edit_faq/{id}', [FAQController::class, 'edit'])->name('edit_faq');

@@ -308,4 +308,21 @@ class FAQController extends Controller
         ]);
     }
 
+    public function faq()
+    {
+        // dd(1);
+        $faqs  = DB::table('tbl_faqs')
+        ->where('is_deleted', '!=', 9)
+        ->where('status', 1)
+       
+        ->get();
+  
+        if (!$faqs  ) {
+            abort(404, 'FAQS not found');
+        }
+
+        return view('front.faq', compact('faqs'));
+
+    }
+
 }

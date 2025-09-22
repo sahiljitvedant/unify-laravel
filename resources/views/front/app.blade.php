@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gym Website</title>
+  <title>@yield('title', 'Sachii-Front')</title>
   <link rel="icon" type="image/png" href="{{ asset('assets/img/logo.png') }}">
   <link rel="stylesheet" href="style.css">
  
@@ -83,7 +83,7 @@
                     <li><a href="/blogs">Blogs</a></li>
                     <li><a href="/privacy_policy">Privacy Policy</a></li>
                     <li><a href="#">Terms & Conditions</a></li>
-                    <li><a href="#">FAQ's</a></li>
+                    <li><a href="/faqs">FAQ's</a></li>
                 </ul>
             </div>
 
