@@ -59,66 +59,74 @@
             'maxlength': 'Password cannot exceed 10 characters'
         }
     };
-
     $(document).ready(function () {
-        $('#login_post').validate({
-            rules: addValidationRules,
-            messages: addValidationMessages,
-            errorPlacement: function (error, element) {
-                $(".error-" + element.attr("name")).html(error);
-            },
-            submitHandler: function (form) {
-                let formData = new FormData(form);
+    $('#login_post').validate({
+        rules: addValidationRules,
+        messages: addValidationMessages,
+        errorPlacement: function (error, element) {
+            $(".error-" + element.attr("name")).html(error);
+        },
+        submitHandler: function (form) {
+            let formData = new FormData(form);
 
-                // Disable the submit button to prevent multiple clicks
-                let $submitBtn = $(form).find('button[type="submit"]');
-                $submitBtn.prop('disabled', true);
+            // Append CSRF token to form data
+            formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
 
-                if (previousRequest) return false;
+            // Disable the submit button to prevent multiple clicks
+            let $submitBtn = $(form).find('button[type="submit"]');
+            $submitBtn.prop('disabled', true);
 
-                previousRequest = $.ajax({
-                    url: '{{ url("/login") }}',
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-                    
-                    beforeSend: function () {
+            if (previousRequest) return false;
+
+            previousRequest = $.ajax({
+                url: '{{ url("/login") }}',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                
+                beforeSend: function () {
+                    Swal.fire({
+                        title: 'Please wait...',
+                        allowOutsideClick: false,
+                        didOpen: () => Swal.showLoading()
+                    });
+                },
+
+                success: function (response) {
+                    Swal.close();
+
+                    if (response.status === 'success' && response.redirect) {
+                        window.location.href = response.redirect; // conditional redirect
+                    } else {
                         Swal.fire({
-                            title: 'Please wait...',
-                            allowOutsideClick: false,
-                            didOpen: () => {
-                                Swal.showLoading();
-                            }
+                            icon: 'error',
+                            title: 'Login Failed',
+                            text: response.message || 'Unexpected error occurred.',
                         });
-                    },
-
-                    success: function (response) {
-                        // No need to re-enable button because page will redirect
-                        Swal.close();
-                        window.location.href = '{{ route("list_dashboard") }}';
-                    },
-                    error: function (xhr) {
-                        Swal.close();
-
-                        // Re-enable the button on error
                         $submitBtn.prop('disabled', false);
-
-                        if (xhr.status === 422) {
-                            let response = xhr.responseJSON;
-                            $(".error-email").text(response.message);
-                        } else {
-                            console.log('Error occurred');
-                        }
-                    },
-                    complete: function () {
-                        previousRequest = null;
                     }
-                });
-            }
-        });
+                },
+
+                error: function (xhr) {
+                    Swal.close();
+                    $submitBtn.prop('disabled', false);
+
+                    if (xhr.status === 422) {
+                        let response = xhr.responseJSON;
+                        $(".error-email").text(response.message);
+                    } else {
+                        console.log('Error occurred');
+                    }
+                },
+
+                complete: function () {
+                    previousRequest = null;
+                }
+            });
+        }
     });
+});
 
 
     $(document).ready(function() 

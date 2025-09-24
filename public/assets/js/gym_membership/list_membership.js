@@ -67,8 +67,6 @@ $(document).ready(function ()
     
         $("#membershipBody").html(rows);
     }
-    
-    
 
     function renderPagination(currentPage, lastPage) 
     {
@@ -110,7 +108,6 @@ $(document).ready(function ()
     });
 
     // Sorting
-   
     $(document).on("click", ".sort-link", function (e) {
         e.preventDefault();
         let column = $(this).data("column");

@@ -333,7 +333,7 @@ class BlogsController extends Controller
         }
     
         $latest_blogs = $blogs->take(3);
-    // dd($latest_blogs );
+     // dd($latest_blogs );
         // Pass as string keys
         return view('front.index', [
             'blogs' => $blogs,
@@ -378,6 +378,5 @@ class BlogsController extends Controller
     
         return view('front.blogs_read_more', compact('blog'));
     }
-    
 
 }

@@ -17,8 +17,6 @@ class AuthenticateCustom
         {
             return redirect()->route('access_denied')->withErrors(['error' => 'Unauthorized access. Please login first.']);
         }
-
-
         return $next($request);
     }
 }

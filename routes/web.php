@@ -14,6 +14,7 @@ use App\Http\Controllers\Web\EnquiryController;
 use App\Http\Controllers\Web\BlogsController;
 use App\Http\Controllers\Web\GallaryController;
 use App\Http\Controllers\Web\ProfileController;
+use App\Http\Controllers\Web\LoginController;
 // Route::get('', function () {
 //     return view('front.index');
 // })->name('home');
@@ -57,7 +58,7 @@ Route::get('/access-denied', function () {
 // web.php
 Route::post('/profile/crop-upload', [ProfileController::class, 'cropUpload'])->name('profile.cropUpload');
 
-Route::middleware(['auth.custom', 'session.timeout'])->group(function () 
+Route::middleware(['auth.custom', 'session.timeout','auth.admin'])->group(function () 
 {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'list'])->name('list_dashboard');
@@ -168,6 +169,28 @@ Route::middleware(['auth.custom', 'session.timeout'])->group(function ()
     
    
     });
+});
+
+Route::middleware(['auth.custom', 'session.timeout','auth.member'])->group(function () 
+{
+    // Dashboard
+    Route::get('/member_dashboard', [DashboardController::class, 'list_member'])->name('member_dashboard');
+    //Member Login functionality:-   
+    Route::get('/member_login', [LoginController::class, 'list'])->name('member_login');
+    Route::get('/member_team', [LoginController::class, 'member_team'])->name('member_team');
+
+
+
+
+
+
+
+
+    // API Routes:-
+    Route::get('/fetch_member_login', [LoginController::class, 'fetchLogin'])->name('fetch_member_login');
+
+    Route::post('/member_login_action', [LoginController::class, 'loginLogoutAction'])->name('member_login_action');
+
 });
 
 Route::get('/debug-log', function () {

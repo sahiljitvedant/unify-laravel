@@ -63,28 +63,41 @@ class AuthController extends Controller
         }
     }
 
+
     public function loginPost(Request $request)
     {
-        // dd($request);
         // Validate the input fields
         $request->validate([
             'email' => 'required|email',
             'password' => 'required|min:6',
         ]);
-   
+
         // Attempt to authenticate the user
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            return response()->json([
-                'status' => 'success',
-                'redirect' => route('add_member'),
-            ]);
+            $user = Auth::user(); // get logged-in user
+
+            if ($user->is_admin == 1) {
+                // dd(1);
+                return response()->json([
+                    'status' => 'success',
+                    'redirect' => route('list_dashboard'), 
+                ]);
+            } else {
+                // dd(2);
+                // redirect normal user
+                return response()->json([
+                    'status' => 'success',
+                    'redirect' => route('member_dashboard'), 
+                ]);
+            }
         }
-   
+
         // Return JSON error response instead of redirecting
         return response()->json([
             'status' => 'error',
             'message' => 'Invalid credentials. Please try again.',
         ], 422);
     }
+
    
 }
