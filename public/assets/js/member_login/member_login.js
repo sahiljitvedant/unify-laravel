@@ -140,6 +140,180 @@ $(document).ready(function ()
     }
 
 
+    function renderPagination(currentPage, lastPage) 
+    {
+        let paginationHtml = "";
+
+        // Prev Button
+        paginationHtml += `
+            <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                <a href="#" class="page-link" data-page="${currentPage - 1}">Prev</a>
+            </li>
+        `;
+
+        // Current Page (only one active page shown)
+        paginationHtml += `
+            <li class="page-item active">
+                <a href="#" class="page-link" data-page="${currentPage}">
+                    ${currentPage}
+                </a>
+            </li>
+        `;
+
+        // Next Button
+        paginationHtml += `
+            <li class="page-item ${currentPage === lastPage ? 'disabled' : ''}">
+                <a href="#" class="page-link" data-page="${currentPage + 1}">Next</a>
+            </li>
+        `;
+
+        $("#pagination").html(paginationHtml);
+    }
+
+    // Pagination click
+    $(document).on("click", "#pagination .page-link", function (e) {
+        e.preventDefault();
+        let page = $(this).data("page");
+        if (page && page > 0) {
+            fetchData(page);
+        }
+    });
+
+    // Sorting
+    $(document).on("click", ".sort-link", function (e) {
+        e.preventDefault();
+        let column = $(this).data("column");
+
+        // Toggle order
+        sortOrder = (sortColumn === column && sortOrder === 'asc') ? 'desc' : 'asc';
+        sortColumn = column;
+
+        // Reset all icons
+        $(".sort-icons i").removeClass("active");
+
+        // Highlight correct icon
+        if (sortOrder === "asc") {
+            $(this).find(".asc").addClass("active");
+        } else {
+            $(this).find(".desc").addClass("active");
+        }
+
+        fetchData(1);
+    });
+
+    // Initial fetch
+    fetchData();
+});
+$(document).ready(function () 
+{
+
+    function fetchData(page = 1) {
+        $("#loader").show();
+
+        $.ajax({
+            url: fetchLogin2, 
+            type: "GET",
+            data: {
+                page: page,
+                sort: sortColumn,
+                order: sortOrder,
+            },
+            success: function (res) {
+                $("#loader").hide();
+                renderTable(res.data);
+                renderPagination(res.current_page, res.last_page);
+                currentPage = res.current_page;
+            }
+        });
+    }
+
+    function renderTable(data) {
+        let rows = '';
+    
+        if (!data || data.length === 0) {
+            rows = `<tr><td colspan="3" class="text-center">No records found</td></tr>`;
+        } else {
+            data.forEach(m => {
+                let dbDate = m.date ? new Date(m.date) : null;
+    
+                let day = m.day ?? '-';
+                let date = dbDate ? dbDate.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' }) : '-';
+    
+                rows += `
+                    <tr>
+                        <td>${day}</td>
+                        <td>${date}</td>
+                        <td>${m.cumulative_time ? m.cumulative_time + ' min' : '-'}</td>
+                       
+                    </tr>
+                `;
+            });
+        }
+    
+        $("#loginBodyDeatil").html(rows);
+    }
+    
+
+    function renderPagination(currentPage, lastPage) 
+    {
+        let paginationHtml = "";
+
+        // Prev Button
+        paginationHtml += `
+            <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                <a href="#" class="page-link" data-page="${currentPage - 1}">Prev</a>
+            </li>
+        `;
+
+        // Current Page (only one active page shown)
+        paginationHtml += `
+            <li class="page-item active">
+                <a href="#" class="page-link" data-page="${currentPage}">
+                    ${currentPage}
+                </a>
+            </li>
+        `;
+
+        // Next Button
+        paginationHtml += `
+            <li class="page-item ${currentPage === lastPage ? 'disabled' : ''}">
+                <a href="#" class="page-link" data-page="${currentPage + 1}">Next</a>
+            </li>
+        `;
+
+        $("#pagination").html(paginationHtml);
+    }
+
+    // Pagination click
+    $(document).on("click", "#pagination .page-link", function (e) {
+        e.preventDefault();
+        let page = $(this).data("page");
+        if (page && page > 0) {
+            fetchData(page);
+        }
+    });
+
+    // Sorting
+    $(document).on("click", ".sort-link", function (e) {
+        e.preventDefault();
+        let column = $(this).data("column");
+
+        // Toggle order
+        sortOrder = (sortColumn === column && sortOrder === 'asc') ? 'desc' : 'asc';
+        sortColumn = column;
+
+        // Reset all icons
+        $(".sort-icons i").removeClass("active");
+
+        // Highlight correct icon
+        if (sortOrder === "asc") {
+            $(this).find(".asc").addClass("active");
+        } else {
+            $(this).find(".desc").addClass("active");
+        }
+
+        fetchData(1);
+    });
 
     // Initial fetch
     fetchData();

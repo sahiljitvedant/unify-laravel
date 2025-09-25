@@ -30,53 +30,7 @@ class LoginController extends Controller
     
         return view('members.Login.list', compact('loginRecord','loginDisabled', 'logoutDisabled'));
     }
-    // public function loginLogoutAction(Request $request)
-    // {
-    //     $userId = $request->user_id; 
-    //     $action = $request->action; 
-    //     $currentTime = Carbon::now();
-    
-    //     if ($action === 'login') 
-    //     {
-    //         // Create a new login record
-    //         $loginRecord = UserLogin::create
-    //         ([
-    //             'user_id' => $userId,
-    //             'date' => $currentTime->toDateString(),
-    //             'log_in_time' => $currentTime,
-    //             'status' => 1,
-    //             'created_at_by' => $userId,
-    //             'updated_at_by' => $userId,
-    //         ]);
-    
-    //         return response()->json(['status' => 'success', 'message' => 'Login recorded']);
-    //     } 
-    //     else 
-    //     {
-    //     //   dd(1);
-    //         $loginRecord = UserLogin::where('user_id', $userId)
-    //                         ->whereDate('date', $currentTime->toDateString())
-    //                         ->whereNotNull('log_in_time')
-    //                         ->whereNull('log_out_time')
-    //                         ->latest()
-    //                         ->first();
-    //         // dd($loginRecord);
-    //         if ($loginRecord)  
-    //         {
-    //             $loginRecord->update
-    //             ([
-    //                 'log_out_time' => $currentTime,
-    //                 'total_time' => Carbon::parse($loginRecord->log_in_time)->diffInMinutes($currentTime),
-    //                 'status' => 0, 
-    //                 'updated_at_by' => $userId,
-    //             ]);
-    //             // dd($loginRecord);
-    //             return response()->json(['status' => 'success', 'message' => 'Logout recorded']);
-    //         }
-    
-    //         return response()->json(['status' => 'error', 'message' => 'No active login found']);
-    //     }
-    // }
+ 
     public function loginLogoutAction(Request $request)
     {
         $userId = $request->user_id; 
@@ -172,73 +126,113 @@ class LoginController extends Controller
             ]);
         }
     }
-    
-    // public function fetchLogin (Request $request)
-    // {
-    //     $query = DB::table('tbl_user_login')
-    //         ->select('*')
-    //         ->orderBy('id', 'desc');
-    
-    //     // Filter by status if provided
-    //     if ($request->filled('status')) {
-    //         $query->where('status', $request->status);
-    //     }
-    
-    //     // Sorting
-    //     $allowedSorts = ['id', 'log_in_time', 'log_out_time', 'user_id'];
-    //     $sort = $request->get('sort', 'id');
-    //     $direction = $request->get('order', 'asc');
-    
-    //     if (!in_array($sort, $allowedSorts)) $sort = 'id';
-    //     if (!in_array(strtolower($direction), ['asc', 'desc'])) $direction = 'asc';
-    
-    //     $query->orderBy($sort, $direction);
-    
-    //     // Pagination
-    //     $records = $query->paginate(6);
-    
-    //     // Transform for any additional data if needed
-    //     $records->getCollection()->transform(function ($row) {
-    //         $row->log_in_time = $row->log_in_time ? \Carbon\Carbon::parse($row->log_in_time)->format('h:i A') : '-';
-    //         $row->log_out_time = $row->log_out_time ? \Carbon\Carbon::parse($row->log_out_time)->format('h:i A') : '-';
-    //         return $row;
-    //     });
-    
-    //     return response()->json($records);
-    // }
-
 
     public function fetchLogin(Request $request)
-{
-    $user = Auth::user();
+    {
+        $user = Auth::user();
 
-    $query = DB::table('tbl_user_login')
-        ->where('user_id', $user->id)  // only current user
-        ->orderBy('id', 'desc');
+        $query = DB::table('tbl_user_login')
+            ->where('user_id', $user->id)  // only current user
+            ->orderBy('id', 'desc');
 
-    // Sorting
-    $allowedSorts = ['id', 'log_in_time', 'log_out_time'];
-    $sort = $request->get('sort', 'id');
-    $direction = $request->get('order', 'asc');
+        // Sorting
+        $allowedSorts = ['id', 'log_in_time', 'log_out_time'];
+        $sort = $request->get('sort', 'id');
+        $direction = $request->get('order', 'asc');
 
-    if (!in_array($sort, $allowedSorts)) $sort = 'id';
-    if (!in_array(strtolower($direction), ['asc', 'desc'])) $direction = 'asc';
+        if (!in_array($sort, $allowedSorts)) $sort = 'id';
+        if (!in_array(strtolower($direction), ['asc', 'desc'])) $direction = 'asc';
 
-    $query->orderBy($sort, $direction);
+        $query->orderBy($sort, $direction);
 
-    // Pagination
-    $records = $query->paginate(6);
+        // Pagination
+        $records = $query->paginate(6);
 
-    // Format times
-    $records->getCollection()->transform(function ($row) {
-        $row->log_in_time = $row->log_in_time ? \Carbon\Carbon::parse($row->log_in_time)->format('h:i A') : '-';
-        $row->log_out_time = $row->log_out_time ? \Carbon\Carbon::parse($row->log_out_time)->format('h:i A') : '-';
-        $row->total_time = $row->total_time ?? null;
-        return $row;
-    });
+        // Format times
+        $records->getCollection()->transform(function ($row) {
+            $row->log_in_time = $row->log_in_time ? \Carbon\Carbon::parse($row->log_in_time)->format('h:i A') : '-';
+            $row->log_out_time = $row->log_out_time ? \Carbon\Carbon::parse($row->log_out_time)->format('h:i A') : '-';
+            $row->total_time = $row->total_time ?? null;
+            return $row;
+        });
 
-    return response()->json($records);
-}
+        return response()->json($records);
+    }
+
+    public function fetch_member_login_detail(Request $request)
+    {
+        $user = Auth::user();
+
+        // Last 7 days (descending: latest date first)
+        $days = 7;
+        $dates = collect(range(0, $days - 1))
+            ->map(fn($i) => \Carbon\Carbon::today()->subDays($i)->toDateString())
+            ->values(); // today first, yesterday next, etc.
+
+        // Subquery: get latest entry id for each date
+        $latestEntries = DB::table('tbl_user_login')
+            ->select(DB::raw('MAX(id) as id'))
+            ->where('user_id', $user->id)
+            ->whereIn('date', $dates)
+            ->groupBy('date');
+
+        // Fetch those rows
+        $records = DB::table('tbl_user_login')
+            ->whereIn('id', $latestEntries)
+            ->get()
+            ->keyBy('date');
+
+        // Build final result
+        $result = $dates->map(function ($d) use ($records) {
+            $entry = $records->get($d);
+
+            return [
+                'date' => $d,
+                'day'  => \Carbon\Carbon::parse($d)->format('l'),
+                'cumulative_time' => $entry->cumulative_time ?? null,
+            ];
+        });
+
+        return response()->json([
+            'data' => $result
+        ]);
+    }
+
+    public function user_login_histroy(Request $request)
+    {
+        $user = Auth::user();
+
+        // Get all saved entries for this user, latest date first
+        // For each date, only take the latest entry
+        $records = DB::table('tbl_user_login')
+            ->where('user_id', $user->id)
+            ->orderBy('date', 'desc')   // latest date first
+            ->orderBy('id', 'desc')     // latest entry for that date on top
+            ->get()
+            ->groupBy('date')           // group by date
+            ->map(function ($entries) {
+                // Take only the first (latest) entry for that date
+                return $entries->first();
+            });
+
+        // Build final result
+        $result = $records->map(function ($row) {
+            return [
+                'id' => $row->id,
+                'date' => $row->date,
+                'day' => \Carbon\Carbon::parse($row->date)->format('l'),
+                'cumulative_time' => $row->cumulative_time ?? null,
+            ];
+        })->values(); // reset keys
+
+        return response()->json([
+            'data' => $result,
+            'current_page' => 1,
+            'last_page' => 1
+        ]);
+    }
+
+    
 
     public function member_team (Request $request)
     {

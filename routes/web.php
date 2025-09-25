@@ -180,14 +180,10 @@ Route::middleware(['auth.custom', 'session.timeout','auth.member'])->group(funct
     Route::get('/member_team', [LoginController::class, 'member_team'])->name('member_team');
 
 
-
-
-
-
-
-
     // API Routes:-
     Route::get('/fetch_member_login', [LoginController::class, 'fetchLogin'])->name('fetch_member_login');
+    Route::get('/fetch_member_login_detail', [LoginController::class, 'fetch_member_login_detail'])->name('fetch_member_login_detail');
+    Route::get('/user_login_histroy', [LoginController::class, 'user_login_histroy'])->name('user_login_histroy');
 
     Route::post('/member_login_action', [LoginController::class, 'loginLogoutAction'])->name('member_login_action');
 

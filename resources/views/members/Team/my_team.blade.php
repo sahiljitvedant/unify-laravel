@@ -1,141 +1,133 @@
 @extends('members.layouts.app')
 
-@section('title', 'Member Login')
+@section('title', 'Blogs List')
 
 @section('content')
-<div class="container-custom d-flex flex-wrap justify-content-center align-items-start py-4 gap-3">
-
-    <!-- Left Panel -->
-    <div class="left-panel p-4 d-flex flex-column align-items-center">
-      
-
-        <!-- Fingerprint -->
-        <div class="fingerprint-container mb-4 text-center">
-            <img src="{{ asset('assets/img/fingurtip.png') }}" alt="Fingerprint" class="fingerprint-img">
-            <div class="mt-2 fw-bold">Active</div>
-        </div>
-
-        <!-- Buttons -->
-        <div class="d-flex gap-2 w-100">
-            <button class="btn btn-success flex-fill" {{ $loginDisabled ? 'disabled' : '' }}>Login</button>
-            <button class="btn btn-danger flex-fill" {{ $logoutDisabled ? 'disabled' : '' }}>Logout</button>
-        </div>
+    <div id="loader">
+        <img src="{{ asset('assets/img/logo.png') }}" alt="Loading..." class="loader-img">
     </div>
+    <div class="container-custom py-4">
+    <div class="container">
+   
+          <div class="p-4 bg-light rounded shadow">
+            <!-- Heading + Add Button -->
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 gap-2">
+                <h4 class="mb-2 mb-md-0">Working Histroy</h4>
+                <!-- <div class="d-flex flex-column align-items-start align-items-md-end gap-2">
+                    <a href="{{ route('add_blogs') }}" class="btn-add">Add Blogs</a>
+                    <a href="{{ route('list_deleted_blogs') }}" class="btn-link">Show Deleted Blogs</a>
+                </div> -->
+            </div>
+            <div class="data-wrapper">
+                <!-- Filters -->
+                <!-- <div class="filters p-3">
+                    <div class="row g-3">
+                        
+                        <div class="col-md-3">
+                            <input type="text" id="blogName" class="form-control" placeholder="Blog Name">
+                        </div>
+                        <div class="col-md-3">
+                            <select id="filterActive" class="form-control">
+                                <option value="">Select Status</option>
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button id="submitBtn" class="btn ">
+                                <i class="bi bi-search"></i> 
+                            </button>
+                    
+                            <button id="btnCancel" class="btn btn-secondary me-1 cncl_btn">
+                                <i class="bi bi-x-circle"></i> 
+                            </button>
+                        </div>
+                    </div>
 
+                    <div class="row g-3 mt-2">
+                    
+                    
+                        
+                    </div>
+                </div> -->
+                <!-- Separator -->
+                <!-- <div class="separator"></div> -->
 
-    <div class="right-panel p-4 flex-fill">
-    <div class="date-header mb-3 text-center fw-bold">22 Sept 2025</div>
+                <!-- Table -->
+                <div class="table-responsive p-3">
+                    <table class="table table-hover align-middle custom-table" id="members-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <a href="#" class="sort-link" data-column="id">
+                                        Day 
+                                        <span class="sort-icons">
+                                            <i class="asc">▲</i>
+                                            <i class="desc">▼</i>
+                                        </span>
+                                    </a>
+                                </th>
+                                <th>
+                                    <a href="#" class="sort-link" data-column="membership_name">
+                                        Date
+                                        <span class="sort-icons">
+                                            <i class="asc">▲</i>
+                                            <i class="desc">▼</i>
+                                        </span>
+                                    </a>
+                                </th>
+                                <th>
+                                    <a href="#" class="sort-link" data-column="duration_in_days">
+                                        Total Time
+                                        <span class="sort-icons">
+                                            <i class="asc">▲</i>
+                                            <i class="desc">▼</i>
+                                        </span>
+                                    </a>
+                                </th>
+                              
+                              
+                            </tr>
+                        </thead>
 
-    <!-- Table -->
-    <div class="table-responsive p-3">
-        <table class="table table-hover align-middle custom-table" id="members-table">
-            <thead>
-                <tr>
-                    <th><a href="#" class="sort-link" data-column="id">ID <span class="sort-icons"><i class="asc">▲</i><i class="desc">▼</i></span></a></th>
-                    <th><a href="#" class="sort-link" data-column="log_in_time">Login Time <span class="sort-icons"><i class="asc">▲</i><i class="desc">▼</i></span></a></th>
-                    <th><a href="#" class="sort-link" data-column="log_out_time">Logout Time <span class="sort-icons"><i class="asc">▲</i><i class="desc">▼</i></span></a></th>
-                </tr>
-            </thead>
-            <tbody id="loginBody"></tbody>
-        </table>
-    </div>
+                        <tbody id="membershipBody"></tbody>
+                    </table>
+                </div>
 
-    <!-- Pagination -->
-    <ul id="pagination" class="pagination justify-content-center mt-3"></ul>
-</div>
-
-
-</div>
+                <!-- Pagination -->
+                <nav class="pb-3">
+                    <ul class="pagination justify-content-center" id="pagination"></ul>
+                </nav>
+            </div>
+        </div>
+        </div></div>
 @endsection
 
-@push('styles')
 
 <style>
-    .container-custom {
-        min-height: 90vh;
-        background-color: #f4f6f9;
-        padding: 20px;
-        gap: 20px;
-    }
-
-    .left-panel, .right-panel {
-        background-color: #fff;
-        border-radius: 10px;
-        box-shadow: 0 0 15px rgba(0,0,0,0.1);
-    }
-
-    .left-panel {
-        max-width: 350px;
-        width: 100%;
-    }
-
-    .right-panel {
-        flex: 1;
-        min-width: 350px;
-    }
-
-    .fingerprint-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .fingerprint-img {
-        width: 120px;
-        height: 120px;
-        object-fit: contain;
-    }
-
-    .date-header {
-        font-size: 20px;
-    }
-
-    #members-table {
-        font-size: 13px;
-    }
-
-    #members-table th, #members-table td {
-        text-align: center;
-        vertical-align: middle;
-    }
-
-    .btn {
+    .btn-add {
+        background-color: #0B1061;
+        color: #fff;
         border-radius: 8px;
-        font-weight: 500;
-        padding: 10px 0;
+        padding: 6px 16px;
+        border: none;
+        text-decoration: none;
+        font-size: 14px;
     }
+    .btn-add:hover { background-color: #090d4a; }
+    th a { color: inherit; text-decoration: none; }
 
-    @media (max-width: 768px) {
-        .container-custom {
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .left-panel, .right-panel {
-            width: 100%;
-        }
-
-        .fingerprint-img {
-            width: 100px;
-            height: 100px;
-        }
-
-        .btn {
-            padding: 8px 0;
-        }
-    }
 </style>
-@endpush
+
 
 @push('scripts')
 <script>
-    const LogIN  = "{{ route('member_login_action') }}";
-    const fetchLogin  = "{{ route('fetch_member_login') }}";
-    const USER_ID = {{ auth()->user()->id }};
+    const userLoginHistory = "{{ route('user_login_histroy') }}";
+   
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="{{ asset('assets/js/member_login/member_login.js') }}"></script>
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="{{ asset('assets/js/my_team/my_team.js') }}"></script>
+<script>
+
+</script>
 @endpush

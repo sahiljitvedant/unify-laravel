@@ -3,88 +3,134 @@
 @section('title', 'Member Login')
 
 @section('content')
-<div class="container-custom d-flex flex-wrap justify-content-center align-items-start py-4 gap-3">
+<div class="container-custom py-4">
+    <div class="container">
+        <div class="row g-3">
+            <!-- Left Panel as Card -->
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body d-flex flex-column align-items-center">
+                        <!-- Fingerprint -->
+                        <div class="fingerprint-container mb-4 text-center">
+                            <img src="{{ asset('assets/img/fingurtip.png') }}" alt="Fingerprint" class="fingerprint-img">
+                            <div class="mt-2 fw-bold">     
+                                @if($loginRecord)
+                                    {{ $loginRecord->status == 1 ? 'User is Logged In' : 'User is Logged Out' }}
+                                @else
+                                    No login record found for today
+                                @endif
+                            </div>
+                        </div>
 
-    <!-- Left Panel -->
-    <div class="left-panel p-4 d-flex flex-column align-items-center">
-        <!-- Fingerprint -->
-        <div class="fingerprint-container mb-4 text-center">
-            <img src="{{ asset('assets/img/fingurtip.png') }}" alt="Fingerprint" class="fingerprint-img">
-            <div class="mt-2 fw-bold">     
-                @if($loginRecord)
-                    {{ $loginRecord->status == 1 ? 'User is Logged In' : 'User is Logged Out' }}
-                @else
-                    No login record found for today
-                @endif
+                        <!-- Buttons -->
+                        <div class="d-flex gap-2 w-100 mt-auto">
+                            <button id="nextBtn" class="btn btn-success flex-fill" {{ $loginDisabled ? 'disabled' : '' }}>Login</button> 
+                            <button id="nextBtn" class="btn btn-danger flex-fill" {{ $logoutDisabled ? 'disabled' : '' }}>Logout</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel as Card -->
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body">
+                        <div class="date-header mb-3 text-center fw-bold">
+                            {{ \Carbon\Carbon::now()->format('d M Y') }}
+                        </div>
+
+                        <!-- Table -->
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle custom-table" id="members-table">
+                                <thead>
+                                    <tr>
+                                        <th>Login Time</th>
+                                        <th>Logout Time</th>
+                                        <th>Total Time</th>
+                                        <th>Total Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="loginBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Buttons -->
-        <div class="d-flex gap-2 w-100">
-            <button id="nextBtn" class="btn btn-success flex-fill" {{ $loginDisabled ? 'disabled' : '' }}>Login</button>
-            <button id="nextBtn" class="btn btn-danger flex-fill" {{ $logoutDisabled ? 'disabled' : '' }}>Logout</button>
+        <!-- Full-width Summary Section -->
+        <!-- <div class="row mt-4">
+            <div class="col-12">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body text-center">
+                        <h5 class="card-title fw-bold">Summary Section</h5>
+                        <p class="card-text text-muted">
+                            This is a static card (col-12 size). You can use it for 
+                            showing total login hours, extra information, or any 
+                            other details you want to display.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold text-center mb-3">Summary Section</h5>
+
+                        <!-- Static Table -->
+                        <div class="table-responsive">
+                           
+                            <table class="table table-hover align-middle custom-table" id="members-table-2">
+                                <thead>
+                                    <tr>
+                                        <th>Day</th>
+                                        <th>Date</th>
+                                        <th>Total Time</th>
+                                    
+                                    </tr>
+                                </thead>
+                                <tbody id="loginBodyDeatil"></tbody>
+                            </table>
+                           
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
-
-    <!-- Right Panel -->
-  
-    <div class="right-panel p-4 flex-fill">
-    <div class="date-header mb-3 text-center fw-bold">  {{ \Carbon\Carbon::now()->format('d M Y') }}</div>
-
-    <!-- Table -->
-    <div class="table-responsive p-3">
-        <table class="table table-hover align-middle custom-table" id="members-table">
-            <thead>
-                <tr>
-                    
-                    <th>Login Time</th>
-                    <th>Logout Time</th>
-                    <th>Total Time</th>
-                    <th>Total Time</th>
-                </tr>
-            </thead>
-            <tbody id="loginBody"></tbody>
-        </table>
-    </div>
-
-    <!-- Pagination -->
-    <ul id="pagination" class="pagination justify-content-center mt-3"></ul>
-</div>
-
-
 </div>
 @endsection
 
-@push('styles')
+
 
 <style>
     #members-table thead {
         background-color: #0B1061 !important;
         color: #fff !important;
+       
     }
     .container-custom {
         min-height: 90vh;
-        background-color: #f4f6f9;
-        padding: 20px;
+        background-color: #eee3fb;
+        padding: 10px;
         gap: 20px;
+        border-radius: 10px;
     }
-
+    .card
+    {
+        background-color: #f2f2f2 !important;
+    }
     .left-panel, .right-panel {
 
         border-radius: 10px;
-        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        box-shadow:0 4px 12px rgba(0,0,0,0.1);
     }
 
-    .left-panel {
-        max-width: 350px;
-        width: 100%;
-    }
-
-    .right-panel {
-        flex: 1;
-        min-width: 350px;
-    }
-
+  
     .fingerprint-container {
         display: flex;
         flex-direction: column;
@@ -136,19 +182,18 @@
         }
     }
 </style>
-@endpush
+
 
 @push('scripts')
 <script>
     const LogIN  = "{{ route('member_login_action') }}";
     const fetchLogin  = "{{ route('fetch_member_login') }}";
+    const fetchLogin2  = "{{ route('fetch_member_login_detail') }}";
+
     const USER_ID = {{ auth()->user()->id }};
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{{ asset('assets/js/member_login/member_login.js') }}"></script>
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
 
 
