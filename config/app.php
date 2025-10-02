@@ -208,6 +208,8 @@ return [
     'other_color_fff'=>'#fff' ,
     // Font size variable:-
     'font_size'=>'12px',
+    'font_size_10px'=>'10px',
+    'black_color'=>'#000',
     'front_font_size'=>'14px',
 
     

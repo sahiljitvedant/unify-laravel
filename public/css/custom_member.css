@@ -65,11 +65,14 @@ body {
     padding: 10px 0;
     transition: background 0.3s;
 }
-
-.sidebar ul li a:hover {
+.sidebar ul li a.active {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: var(--other_color_fff);
+}
+/* .sidebar ul li a:hover {
     background-color: var(--sidebar-hover);
     border-radius: 4px;
-}
+} */
 
 .sidebar ul li a i {
     font-size:18px;
@@ -83,7 +86,7 @@ body {
 }
 
 /* Responsive */
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
     .sidebar {
         top: auto;
         bottom: 0;

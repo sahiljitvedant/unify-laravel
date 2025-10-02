@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Auth;
 use App\Models\UserLogin;
 use Carbon\Carbon;
+use Razorpay\Api\Api;
+use App\Models\Payment; 
+use App\Models\GymMember; 
+
 class LoginController extends Controller
 {
     public function list()
@@ -52,12 +56,10 @@ class LoginController extends Controller
                 ]);
             }
     
-            // Fetch last cumulative time for this user
-            $lastRecord = UserLogin::where('user_id', $userId)
-                            ->latest()
-                            ->first();
-    
-            $previousCumulative = $lastRecord ? $lastRecord->cumulative_time : 0;
+            // Get today's cumulative time (not all-time)
+            $todayCumulative = UserLogin::where('user_id', $userId)
+                ->whereDate('date', $currentTime->toDateString())
+                ->max('cumulative_time') ?? 0;
     
             // Create a new login record
             $loginRecord = UserLogin::create([
@@ -69,7 +71,7 @@ class LoginController extends Controller
                 'location' => 'Pune',
                 'login_count' => $loginCountToday + 1,
                 'total_time' => 0,
-                'cumulative_time' => $previousCumulative, 
+                'cumulative_time' => $todayCumulative, // start from today's cumulative only
                 'created_at_by' => $userId,
                 'updated_at_by' => $userId,
             ]);
@@ -84,11 +86,11 @@ class LoginController extends Controller
         {
             // Fetch the last active login for today
             $loginRecord = UserLogin::where('user_id', $userId)
-                            ->whereDate('date', $currentTime->toDateString())
-                            ->whereNotNull('log_in_time')
-                            ->whereNull('log_out_time')
-                            ->latest()
-                            ->first();
+                ->whereDate('date', $currentTime->toDateString())
+                ->whereNotNull('log_in_time')
+                ->whereNull('log_out_time')
+                ->latest()
+                ->first();
     
             if ($loginRecord)  
             {
@@ -96,11 +98,16 @@ class LoginController extends Controller
                 $sessionMinutes = Carbon::parse($loginRecord->log_in_time)
                                     ->diffInMinutes($currentTime);
     
-                // Update total_time and cumulative_time
+                // Calculate today's cumulative before update
+                $todayCumulative = UserLogin::where('user_id', $userId)
+                    ->whereDate('date', $currentTime->toDateString())
+                    ->max('cumulative_time') ?? 0;
+    
+                // Update total_time and today's cumulative_time
                 $loginRecord->update([
                     'log_out_time' => $currentTime,
                     'total_time' => $sessionMinutes,
-                    'cumulative_time' => $loginRecord->cumulative_time + $sessionMinutes,
+                    'cumulative_time' => $todayCumulative + $sessionMinutes, // today's only
                     'status' => 0, 
                     'updated_at_by' => $userId,
                 ]);
@@ -109,7 +116,7 @@ class LoginController extends Controller
                     'status' => 'success', 
                     'message' => 'Logout recorded',
                     'total_time' => $sessionMinutes,
-                    'cumulative_time' => $loginRecord->cumulative_time
+                    'cumulative_time' => $todayCumulative + $sessionMinutes
                 ]);
             }
     
@@ -126,13 +133,16 @@ class LoginController extends Controller
             ]);
         }
     }
+    
 
     public function fetchLogin(Request $request)
     {
         $user = Auth::user();
+        $today = \Carbon\Carbon::today()->toDateString();
 
         $query = DB::table('tbl_user_login')
-            ->where('user_id', $user->id)  // only current user
+            ->where('user_id', $user->id)
+            ->whereDate('date', $today) // only today's entries
             ->orderBy('id', 'desc');
 
         // Sorting
@@ -197,7 +207,8 @@ class LoginController extends Controller
             'data' => $result
         ]);
     }
-
+    
+    
     public function user_login_histroy(Request $request)
     {
         $user = Auth::user();
@@ -248,4 +259,149 @@ class LoginController extends Controller
         return view('members.Team.my_team', compact('loginDisabled', 'logoutDisabled'));
 
     }
+
+
+    public function member_subscription()
+    {
+        $memberships = DB::table('tbl_gym_membership')
+        ->where('is_active', 1)
+        ->where('is_deleted', 1)
+        ->orderBy('price', 'asc')
+        ->get();
+
+        // dd($memberships);
+
+        $currentSubscription = DB::table('payments')
+        ->where('user_id', Auth::id())
+        ->where('status', 'success')
+        ->orderBy('amount', 'desc')
+        ->first();
+        // dd( $currentSubscription);
+
+        // Map facility IDs to names
+        $facilityNames = [
+            1 => 'Cardio',
+            2 => 'Yoga',
+            3 => 'Zumba',
+            4 => 'Steam Bath',
+            5 => 'Swimming Pool',
+            6 => 'Sauna',
+            // add more as needed
+        ];
+
+        return view('members.Subscriptions.member_subscription', compact('memberships','currentSubscription','facilityNames'));
+ 
+    }
+
+
+    public function createOrder(Request $request)
+    {
+        $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+    
+        $order = $api->order->create([
+            'receipt'         => 'rcptid_' . time(),
+            'amount'          => $request->amount * 100, // amount in paise
+            'currency'        => 'INR',
+            'payment_capture' => 1
+        ]);
+    
+        return response()->json([
+            'order_id' => $order['id'],
+            'amount'   => $request->amount,
+            'currency' => $order['currency'],
+            'razorpay_key' => env('RAZORPAY_KEY'),
+            'plan_name' => $request->plan_name
+        ]);
+    }
+    
+    public function verifyPayment(Request $request)
+    {
+        $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+    
+        $attributes = [
+            'razorpay_order_id'   => $request->order_id,
+            'razorpay_payment_id' => $request->payment_id,
+            'razorpay_signature'  => $request->signature
+        ];
+    
+        $api->utility->verifyPaymentSignature($attributes);
+    
+        // Fetch payment details from Razorpay
+        $razorpayPayment = $api->payment->fetch($request->payment_id);
+        $gatewayMethod   = $razorpayPayment->method ?? 'unknown';
+    
+        // Generate invoice number
+        $invoiceNumber = 'MEM' . auth()->id() . '-' . rand(100, 999) . '-' . now()->format('dMMy');
+    
+        // Membership dates
+        $membershipStart = now();
+        $membershipEnd   = now()->addDays(30);
+    
+        // Save payment
+        $payment = Payment::create([
+            'user_id'               => auth()->id(),
+            'plan_id'               => $request->plan_id,
+            'gateway'               => $gatewayMethod,
+            'amount'                => $request->amount,
+            'payment_id'            => $request->payment_id,
+            'order_id'              => $request->order_id,
+            'signature'             => $request->signature,
+            'invoice_number'        => $invoiceNumber,
+            'membership_start_date' => $membershipStart,
+            'membership_end_date'   => $membershipEnd,
+            'status'                => 'success'
+        ]);
+    
+        return response()->json([
+            'status'  => 'success',
+            'payment' => $payment
+        ]);
+    }
+    
+    public function member_my_team (Request $request)
+    {
+        $user = Auth::user(); 
+        // dd($user);
+        $loginRecord = UserLogin::where('user_id', $user->id)
+        ->whereDate('date', Carbon::now()->toDateString())
+        ->latest()
+        ->first();
+        $loginDisabled = $loginRecord && $loginRecord->status == 1; 
+        $logoutDisabled = !$loginDisabled; 
+
+        $members = GymMember::where('is_deleted', '!=', 9)->get();
+        // dd($members);
+    
+        return view('members.Team.member_my_team', compact('loginDisabled', 'logoutDisabled','members'));
+
+    }
+
+    public function fetch_member_my_team(Request $request)
+    {
+        $query = GymMember::query()->where('is_deleted', '!=', 9);
+
+        // Search filter
+        if($request->filled('search')){
+            $search = $request->search;
+            $query->where(function($q) use ($search){
+                $q->where('first_name', 'like', "%$search%")
+                ->orWhere('last_name', 'like', "%$search%");
+            });
+        }
+
+        $perPage = $request->get('per_page', 10);
+        $page = $request->get('page', 1);
+
+        $members = $query->skip(($page-1)*$perPage)
+                        ->take($perPage)
+                        ->get();
+
+        return response()->json([
+            'data' => $members
+        ]);
+    }
+
+
+
+
 }

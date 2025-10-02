@@ -7,25 +7,20 @@
     <title>@yield('title', 'Admin Panel')</title>
     <link rel="icon" type="image/png" href="{{ asset('assets/img/logo.png') }}">
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <link  href="{{ asset('css/bootstrap.min.css') }}"   rel="stylesheet">
     <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-
-    <!-- DataTables Bootstrap 5 -->
-    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/searchpanes/2.2.0/css/searchPanes.bootstrap5.min.css" rel="stylesheet" />
+    <link  href="{{ asset('css/all.min.css') }}"   rel="stylesheet">
     <!-- Google Fonts: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="{{ asset('css/bootstrap-icons.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/css2.css') }}" rel="stylesheet">
     <!-- Swal Js -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('css/sweetalert2@11.js') }}"></script>
+ 
     <!-- Custom Admin CSS -->
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
-
+    <link  href="{{ asset('css/cropper.min.css') }}"   rel="stylesheet">
+    <script src="{{ asset('css/cropper.min.js') }}"></script>
       
     <style>
         :root {
@@ -33,6 +28,8 @@
             --sidebar_color: {{ config('app.sidebar_color') }};
             --other_color_fff: {{ config('app.other_color_fff') }};
             --font_size: {{ config('app.font_size') }};
+            --font_size_10px: {{ config('app.font_size_10px') }};
+            --black_color:{{config('app.black_color')}};
         }
         .no-sidebar {
             margin-left: 0 !important;
@@ -78,9 +75,10 @@
                 </form>
                 <!-- Welcome Text -->
                 <div class="welcome-text d-none d-md-block">
-                    <span style="font-size:12px; color:#000;">
-                        Welcome back, Admin
+                    <span class="admin_text">
+                        Welcome back, {{ Auth::user()->name ?? 'Admin' }}
                     </span>
+                   
                 </div>
             </div>
 
@@ -88,8 +86,8 @@
             <div class="d-flex align-items-center gap-4">
                 <!-- Static Time & Day -->
                 <div class="text-end d-none d-md-block">
-                    <span id="day" class="d-block fw-semibold"></span>
-                    <span id="time" class="small text-muted"></span>
+                    <span id="day" class="day_time"></span>
+                    <span id="time" class="day_time"></span>
                 </div>
 
                 <!-- Notifications -->
@@ -111,20 +109,20 @@
                         <li>
                             <a class="dropdown-item d-flex align-items-center" href="#">
                                 <i class="bi bi-person me-2"></i> 
-                                <span style="font-size:14px;">Profile</span>
+                                <span class="dropdown-text">Profile</span>
                             </a>
                         </li>
                         <li>
                             <a class="dropdown-item d-flex align-items-center" href="#">
                                 <i class="bi bi-gear me-2"></i> 
-                                <span style="font-size:14px;">Settings</span>
+                                <span class="dropdown-text">Settings</span>
                             </a>
                         </li>
                         <li><hr class="dropdown-divider"></li>
                         <li>
                             <a class="dropdown-item d-flex align-items-center" href="{{ route('logout') }}">
                                 <i class="bi bi-box-arrow-right me-2"></i> 
-                                <span style="font-size:14px;">Logout</span>
+                                <span class="dropdown-text">Logout</span>
                             </a>
                         </li>
                     </ul>
@@ -187,8 +185,6 @@
             class="{{ request()->routeIs('list_member') ? '' : '' }}">
                 <i class="bi bi-globe me-2"></i>Go Live
             </a>
-           
-           
             <a href="{{ route('logout') }}" 
             class="{{ request()->routeIs('logout') ? 'active' : '' }}">
                 <i class="bi bi-box-arrow-right me-2"></i>Logout
@@ -229,7 +225,7 @@
         updateTime();
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{{ asset('assets/js/gym_membership/app.js') }}"></script>
+  
     @stack('scripts')
 </body>
 </html>

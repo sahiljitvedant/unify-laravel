@@ -540,6 +540,19 @@ table td {
     background: var(--sidebar_color);
     color: var(--theme-color);
 }
+#membershipSearchInput::placeholder {
+    font-size: var(--font_size);
+    color: var(--black_color) !important;
+   
+}
+.admin_text,
+.day_time {
+    color: var(--black_color);
+    font-size: var(--font_size);
+}
+.dropdown-text {
+    font-size: var(--font_size);
+}
 .form-control {
     color: var(--sidebar_color) !important;
 }

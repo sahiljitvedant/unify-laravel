@@ -135,22 +135,28 @@
         <div class="sidebar">
             <ul>
                 <li>
-                    <a href="#" title="Dashboard">
+                   <a href="{{ route('member_working_history') }}" 
+                       class="{{ request()->routeIs('member_working_history') ? 'active' : '' }}">
+                       <i class="bi bi-clock-history"></i>
+                   </a>
+               </li>
+                
+                
+                <li>
+                    <a href="{{ route('member_subscription') }}" 
+                        class="{{ request()->routeIs('member_subscription') ? 'active' : '' }}">
+                        <i class="bi bi-card-checklist"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('member_login') }}" 
+                        class="{{ request()->routeIs('member_login') ? 'active' : '' }}">
                         <i class="bi bi-speedometer2"></i>
                     </a>
                 </li>
+               
                 <li>
-                    <a href="#" title="Login">
-                        <i class="bi bi-people"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" title="Working History">
-                        <i class="bi bi-question-circle"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" title="Privacy Policy">
+                    <a href="{{ route('member_my_team') }}" title="My Team">
                         <i class="bi bi-shield-lock"></i>
                     </a>
                 </li>

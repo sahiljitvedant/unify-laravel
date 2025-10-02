@@ -43,8 +43,9 @@ class GymMembershipController extends Controller
             $query->where('duration_in_days', $request->durartion);
         }
         if ($request->filled('membership_name')) {  
-            $query->where('membership_name', $request->membership_name);
+            $query->where('membership_name', 'LIKE', $request->membership_name . '%');
         }
+        
         if ($request->filled('price')) {
             $query->where('price', $request->price);
         }
@@ -99,31 +100,6 @@ class GymMembershipController extends Controller
 
     }
 
-    // public function fetch_deleted_membership(Request $request)
-    // {
-    //     // dd(1);
-    //     // ONE variable that fetches everything you need
-    //     $fetch_data = DB::table('tbl_gym_membership')
-    //         ->select('*')
-    //         ->where('is_deleted', '=', 9) 
-    //         ->orderBy('id', 'desc')
-    //         ->get();
-
-    //     // Send to DataTables (server-side)
-    //     return DataTables::of($fetch_data)
-    //         ->addColumn('action', function ($row) 
-    //         {
-    //             $encryptedId = Crypt::encryptString($row->id);
-    //             return ' 
-                
-    //             <button type="button" class="btn btn-sm" onclick="activateMembershipID('.$row->id.')">
-    //             <i class="bi bi-check-circle"></i>
-
-    //             </button>';
-    //         })
-    //         ->rawColumns(['action'])
-    //         ->make(true);
-    // }
 
     public function fetch_deleted_membership(Request $request)
     {
@@ -148,7 +124,7 @@ class GymMembershipController extends Controller
             $query->where('duration_in_days', $request->durartion);
         }
         if ($request->filled('membership_name')) {  
-            $query->where('membership_name', $request->membership_name);
+            $query->where('membership_name', 'LIKE', $request->membership_name . '%');
         }
         if ($request->filled('price')) {
             $query->where('price', $request->price);
@@ -325,7 +301,7 @@ class GymMembershipController extends Controller
         try 
         {
             $request->validate([
-                'membership_name' => 'required|string|min:10|max:15|unique:tbl_gym_membership,membership_name,' . $id,
+                'membership_name' => 'required|string|unique:tbl_gym_membership,membership_name,' . $id,
                 'description'     => 'required|string',
                 'duration_in_days'=> 'required|numeric',
                 'price'           => 'required|numeric',

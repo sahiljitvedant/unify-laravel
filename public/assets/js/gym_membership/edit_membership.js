@@ -1,7 +1,11 @@
 // Validation Rules
 const validationRules = {
     membership_name: { required: true, minlength: 2, maxlength: 15 },
-    description: { required: true },
+    description: { 
+        required: true,
+        minlength: 50,
+        maxlength: 500, 
+    },
     duration_in_days: { required: true, number: true },
     price: { required: true, number: true ,min: 0},
     trainer_included: { required: true },
@@ -16,7 +20,12 @@ const validationMessages = {
         minlength: "Membership name must be at least 2 characters", 
         maxlength: "Membership name must not exceed 15 characters" 
     },
-    description: { required: "Description is required" },
+    description: 
+    { 
+        required: "Description is required",
+        minlength: "Description atleast exceed 50 characters",
+        maxlength: "Description cannot exceed 500 characters" 
+    },
     duration_in_days: { 
         required: "Duration is required", 
         number: "Duration must be numeric" 

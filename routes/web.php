@@ -177,10 +177,16 @@ Route::middleware(['auth.custom', 'session.timeout','auth.member'])->group(funct
     Route::get('/member_dashboard', [DashboardController::class, 'list_member'])->name('member_dashboard');
     //Member Login functionality:-   
     Route::get('/member_login', [LoginController::class, 'list'])->name('member_login');
-    Route::get('/member_team', [LoginController::class, 'member_team'])->name('member_team');
-
-
+    Route::get('/member_working_history', [LoginController::class, 'member_team'])->name('member_working_history');
+    Route::get('/member_subscription', [LoginController::class, 'member_subscription'])->name('member_subscription');
+    Route::post('/create-order', [LoginController::class, 'createOrder'])->name('razorpay.create.order');
+    Route::post('/payment/order', [LoginController::class, 'createOrder'])->name('payment.create');
+    Route::post('/payment/verify', [LoginController::class, 'verifyPayment'])->name('payment.verify');
+    Route::get('/member_my_team', [LoginController::class, 'member_my_team'])->name('member_my_team');
+    
+   
     // API Routes:-
+    Route::get('/fetch_member_my_team', [LoginController::class, 'fetch_member_my_team'])->name('fetch_member_my_team');
     Route::get('/fetch_member_login', [LoginController::class, 'fetchLogin'])->name('fetch_member_login');
     Route::get('/fetch_member_login_detail', [LoginController::class, 'fetch_member_login_detail'])->name('fetch_member_login_detail');
     Route::get('/user_login_histroy', [LoginController::class, 'user_login_histroy'])->name('user_login_histroy');

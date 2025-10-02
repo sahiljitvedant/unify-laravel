@@ -1,6 +1,6 @@
 @extends('members.layouts.app')
 
-@section('title', 'Blogs List')
+@section('title', 'Working History')
 
 @section('content')
     <div id="loader">
@@ -8,7 +8,7 @@
     </div>
     <div class="container-custom py-4">
     <div class="container">
-   
+        <div class="row g-3">
           <div class="p-4 bg-light rounded shadow">
             <!-- Heading + Add Button -->
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 gap-2">
@@ -118,7 +118,81 @@
     th a { color: inherit; text-decoration: none; }
 
 </style>
+<style>
+    #members-table thead {
+        background-color: #0B1061 !important;
+        color: #fff !important;
+       
+    }
+    .container-custom {
+        min-height: 90vh;
+        background-color: #eee3fb;
+        padding: 10px;
+        gap: 20px;
+        border-radius: 10px;
+    }
+    .card
+    {
+        background-color: #f2f2f2 !important;
+    }
+    .left-panel, .right-panel {
 
+        border-radius: 10px;
+        box-shadow:0 4px 12px rgba(0,0,0,0.1);
+    }
+
+  
+    .fingerprint-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .fingerprint-img {
+        width: 120px;
+        height: 120px;
+        object-fit: contain;
+    }
+
+    .date-header {
+        font-size: 20px;
+    }
+
+    #members-table {
+        font-size: 13px;
+    }
+
+    #members-table th, #members-table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .btn {
+        border-radius: 8px;
+        font-weight: 500;
+        padding: 10px 0;
+    }
+
+    @media (max-width: 768px) {
+        .container-custom {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .left-panel, .right-panel {
+            width: 100%;
+        }
+
+        .fingerprint-img {
+            width: 100px;
+            height: 100px;
+        }
+
+        .btn {
+            padding: 8px 0;
+        }
+    }
+</style>
 
 @push('scripts')
 <script>
