@@ -1,153 +1,202 @@
-<div class="step" data-step="1">
-    <div class="row mb-3">
-        <div class="col-12 col-md-3 text-center">
-            <label class="form-label d-block mb-2">Upload Profile Image</label>
-            <img id="previewImage" 
-     class="mt-2 img-thumbnail mb-2" 
-     style="max-height: 80px; display:block; margin: 0 auto;" 
-     src="{{ $member->profile_image ? asset($member->profile_image) : asset('assets/img/default.png') }}">
+<form id="multiStepForm" class="">
+    <div class="step" data-step="1">
+        <div class="row mb-3">
+            <div class="col-12 col-md-3 text-center">
+                <label class="form-label d-block mb-2">Upload Profile Image</label>
 
-            <input type="file" class="form-control d-none" id="profileImage" name="profile_image" accept="image/*">
-            <button type="button" class="btn btn-primary rounded-pill" id="uploadButton">Upload Photo</button>
+                <img id="previewImage"
+                    class="mt-2 img-thumbnail mb-2"
+                    style="max-height: 80px; display:block; margin: 0 auto; border-radius:10px;"
+                    src="{{ $member->profile_image ? asset($member->profile_image) : asset('assets/img/default.png') }}">
+
+                <button type="button" 
+                        class="profilebtn" 
+                        id="uploadButton" 
+                        data-type="profile_image">
+                    Upload Photo
+                </button>
+            </div>
+            <div class="col-12 col-md-3 mb-3">
+                <label class="form-label required">{{ __('global.first_name') }}</label>
+                <input type="text" class="form-control" 
+                    name="first_name" id="first_name" 
+                    placeholder="{{ __('global.first_name_placeholder') }}"
+                    value="{{ old('first_name', $member->first_name) }}">
+                <div class="text-danger error-message" data-error-for="first_name"></div>
+            </div>
+
+            <div class="col-12 col-md-3 mb-3">
+                <label class="form-label required">{{ __('global.middle_name') }}</label>
+                <input type="text" class="form-control" 
+                    name="middle_name" id="middle_name" 
+                    placeholder="{{ __('global.middle_name_placeholder') }}"
+                    value="{{ old('middle_name', $member->middle_name) }}">
+                <div class="text-danger error-message" data-error-for="middle_name"></div>
+            </div>
+
+            <div class="col-12 col-md-3 mb-3">
+                <label class="form-label required">{{ __('global.last_name') }}</label>
+                <input type="text" class="form-control" 
+                    name="last_name" id="last_name" 
+                    placeholder="{{ __('global.last_name_placeholder') }}"
+                    value="{{ old('last_name', $member->last_name) }}">
+                <div class="text-danger error-message" data-error-for="last_name"></div>
+            </div>
         </div>
 
-        <div class="col-12 col-md-3 mb-3">
-            <label class="form-label">{{ __('global.first_name') }}</label>
-            <input type="text" class="form-control" 
-                   name="first_name" id="first_name" 
-                   placeholder="{{ __('global.first_name_placeholder') }}"
-                   value="{{ old('first_name', $member->first_name) }}">
-            <div class="text-danger error-message" data-error-for="first_name"></div>
+        <div class="row mb-3">
+            <div class="col-12 col-md-6 mb-3">
+                <label class="form-label required">{{ __('global.dob') }}</label>
+                <input type="date" class="form-control" 
+                    name="dob" id="dob" 
+                    value="{{ old('dob', $member->dob) }}">
+                <div class="text-danger error-message" data-error-for="dob"></div>
+            </div>
+
+            <div class="col-12 col-md-6 mb-3">
+                <label class="form-label required">{{ __('global.gender_label') }}</label>
+                <select class="form-control" name="gender" id="gender">
+                    <option value="" disabled>{{ __('global.gender_placeholder') }}</option>
+                    @foreach (config('app.gender_options') as $id => $gender)
+                        <option value="{{ $id }}" 
+                            {{ (isset($user) && $user->gender == $id) ? 'selected' : '' }}>
+                            {{ __('global.' . $gender) }}
+                        </option>
+                    @endforeach
+                </select>
+                <div class="text-danger error-message" data-error-for="gender"></div>
+            </div>
+
         </div>
 
-        <div class="col-12 col-md-3 mb-3">
-            <label class="form-label">{{ __('global.middle_name') }}</label>
-            <input type="text" class="form-control" 
-                   name="middle_name" id="middle_name" 
-                   placeholder="{{ __('global.middle_name_placeholder') }}"
-                   value="{{ old('middle_name', $member->middle_name) }}">
-            <div class="text-danger error-message" data-error-for="middle_name"></div>
+        <div class="row mb-3">
+            <div class="col-12 col-md-6 mb-3">
+                <label class="form-label required">{{ __('global.email_label') }}</label>
+                <input type="email" class="form-control" 
+                    name="email" id="email" 
+                    placeholder="{{ __('global.email_placeholder') }}"
+                    value="{{ old('email', $member->email) }}">
+                <div class="text-danger error-message" data-error-for="email"></div>
+            </div>
+
+            <div class="col-12 col-md-6 mb-3">
+                <label class="form-label required">{{ __('global.mobile_label') }}</label>
+                <input type="text" class="form-control" 
+                    name="mobile" id="mobile" 
+                    placeholder="{{ __('global.mobile_placeholder') }}"
+                    value="{{ old('mobile', $member->mobile) }}">
+                <div class="text-danger error-message" data-error-for="mobile"></div>
+            </div>
         </div>
 
-        <div class="col-12 col-md-3 mb-3">
-            <label class="form-label">{{ __('global.last_name') }}</label>
-            <input type="text" class="form-control" 
-                   name="last_name" id="last_name" 
-                   placeholder="{{ __('global.last_name_placeholder') }}"
-                   value="{{ old('last_name', $member->last_name) }}">
-            <div class="text-danger error-message" data-error-for="last_name"></div>
+        <div class="row mb-3">
+            <div class="col-12 col-md-4 mb-3">
+                <label class="form-label required">{{ __('global.residence_address_label') }}</label>
+                <input type="text" class="form-control" 
+                    name="residence_address" id="residence_address" 
+                    placeholder="{{ __('global.residence_address_placeholder') }}"
+                    value="{{ old('residence_address', $member->residence_address) }}">
+                <div class="text-danger error-message" data-error-for="residence_address"></div>
+            </div>
+
+            <div class="col-12 col-md-4 mb-3">
+                <label class="form-label required">{{ __('global.residence_area_label') }}</label>
+                <input type="text" class="form-control" 
+                    name="residence_area" id="residence_area" 
+                    placeholder="{{ __('global.residence_area_placeholder') }}"
+                    value="{{ old('residence_area', $member->residence_area) }}">
+                <div class="text-danger error-message" data-error-for="residence_area"></div>
+            </div>
+
+            <div class="col-12 col-md-4 mb-3">
+                <label class="form-label required">{{ __('global.zipcode_label') }}</label>
+                <input type="text" class="form-control" 
+                    name="zipcode" id="zipcode" 
+                    placeholder="{{ __('global.zipcode_placeholder') }}"
+                    value="{{ old('zipcode', $member->zipcode) }}">
+                <div class="text-danger error-message" data-error-for="zipcode"></div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-12 col-md-4 mb-3">
+                <label class="form-label required">{{ __('global.city_label') }}</label>
+                <select class="form-control" name="city" id="city">
+                    <option disabled>{{ __('global.select_option') }}</option>
+                    <option value="city1" {{ old('city', $member->city) == 'city1' ? 'selected' : '' }}>City 1</option>
+                    <option value="city2" {{ old('city', $member->city) == 'city2' ? 'selected' : '' }}>City 2</option>
+                    <option value="city3" {{ old('city', $member->city) == 'city3' ? 'selected' : '' }}>City 3</option>
+                </select>
+                <div class="text-danger error-message" data-error-for="city"></div>
+            </div>
+
+            <div class="col-12 col-md-4 mb-3">
+                <label class="form-label required">{{ __('global.state_label') }}</label>
+                <select class="form-control" name="state" id="state">
+                    <option disabled>{{ __('global.select_option') }}</option>
+                    <option value="state1" {{ old('state', $member->state) == 'state1' ? 'selected' : '' }}>State 1</option>
+                    <option value="state2" {{ old('state', $member->state) == 'state2' ? 'selected' : '' }}>State 2</option>
+                    <option value="state3" {{ old('state', $member->state) == 'state3' ? 'selected' : '' }}>State 3</option>
+                </select>
+                <div class="text-danger error-message" data-error-for="state"></div>
+            </div>
+
+            <div class="col-12 col-md-4 mb-3">
+                <label class="form-label required">{{ __('global.country_label') }}</label>
+                <select class="form-control" name="country" id="country">
+                    <option disabled>{{ __('global.select_option') }}</option>
+                    <option value="country1" {{ old('country', $member->country) == 'country1' ? 'selected' : '' }}>Country 1</option>
+                    <option value="country2" {{ old('country', $member->country) == 'country2' ? 'selected' : '' }}>Country 2</option>
+                    <option value="country3" {{ old('country', $member->country) == 'country3' ? 'selected' : '' }}>Country 3</option>
+                </select>
+                <div class="text-danger error-message" data-error-for="country"></div>
+            </div>
         </div>
     </div>
-
-    <div class="row mb-3">
-        <div class="col-12 col-md-6 mb-3">
-            <label class="form-label">{{ __('global.dob') }}</label>
-            <input type="date" class="form-control" 
-                   name="dob" id="dob" 
-                   value="{{ old('dob', $member->dob) }}">
-            <div class="text-danger error-message" data-error-for="dob"></div>
-        </div>
-
-        <div class="col-12 col-md-6 mb-3">
-            <label class="form-label">{{ __('global.gender_label') }}</label>
-            <select class="form-select" name="gender" id="gender">
-                <option value="" disabled>{{ __('global.gender_placeholder') }}</option>
-                <option value="male"   {{ old('gender', $member->gender) == 'male' ? 'selected' : '' }}>{{ __('global.male') }}</option>
-                <option value="female" {{ old('gender', $member->gender) == 'female' ? 'selected' : '' }}>{{ __('global.female') }}</option>
-                <option value="other"  {{ old('gender', $member->gender) == 'other' ? 'selected' : '' }}>{{ __('global.other') }}</option>
-            </select>
-            <div class="text-danger error-message" data-error-for="gender"></div>
-        </div>
+    <div class="text-end mt-4">
+        <button type="submit" class="btn btn-primary" id="submitBtn">Submit</button>
     </div>
+</form>
+<div class="modal fade" id="cropImageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Upload Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body d-flex flex-column">
 
-    <div class="row mb-3">
-        <div class="col-12 col-md-6 mb-3">
-            <label class="form-label">{{ __('global.email_label') }}</label>
-            <input type="email" class="form-control" 
-                   name="email" id="email" 
-                   placeholder="{{ __('global.email_placeholder') }}"
-                   value="{{ old('email', $member->email) }}">
-            <div class="text-danger error-message" data-error-for="email"></div>
-        </div>
+                <!-- Image Preview -->
+                <div class="text-center mb-3" id="imagePreviewContainer" style="display:none;">
+                    <img id="imageToCrop" style="max-width: 100%; border-radius:10px;">
+                </div>
 
-        <div class="col-12 col-md-6 mb-3">
-            <label class="form-label">{{ __('global.mobile_label') }}</label>
-            <input type="text" class="form-control" 
-                   name="mobile" id="mobile" 
-                   placeholder="{{ __('global.mobile_placeholder') }}"
-                   value="{{ old('mobile', $member->mobile) }}">
-            <div class="text-danger error-message" data-error-for="mobile"></div>
-        </div>
-    </div>
+                <!-- Progress Bar -->
+                <div class="progress mb-3" id="uploadProgress" style="display:none;">
+                    <div class="progress-bar" role="progressbar" style="width:0%">0%</div>
+                </div>
 
-    <div class="row mb-3">
-        <div class="col-12 col-md-4 mb-3">
-            <label class="form-label">{{ __('global.residence_address_label') }}</label>
-            <input type="text" class="form-control" 
-                   name="residence_address" id="residence_address" 
-                   placeholder="{{ __('global.residence_address_placeholder') }}"
-                   value="{{ old('residence_address', $member->residence_address) }}">
-            <div class="text-danger error-message" data-error-for="residence_address"></div>
-        </div>
-
-        <div class="col-12 col-md-4 mb-3">
-            <label class="form-label">{{ __('global.residence_area_label') }}</label>
-            <input type="text" class="form-control" 
-                   name="residence_area" id="residence_area" 
-                   placeholder="{{ __('global.residence_area_placeholder') }}"
-                   value="{{ old('residence_area', $member->residence_area) }}">
-            <div class="text-danger error-message" data-error-for="residence_area"></div>
-        </div>
-
-        <div class="col-12 col-md-4 mb-3">
-            <label class="form-label">{{ __('global.zipcode_label') }}</label>
-            <input type="text" class="form-control" 
-                   name="zipcode" id="zipcode" 
-                   placeholder="{{ __('global.zipcode_placeholder') }}"
-                   value="{{ old('zipcode', $member->zipcode) }}">
-            <div class="text-danger error-message" data-error-for="zipcode"></div>
-        </div>
-    </div>
-
-    <div class="row mb-3">
-        <div class="col-12 col-md-4 mb-3">
-            <label class="form-label">{{ __('global.city_label') }}</label>
-            <select class="form-select" name="city" id="city">
-                <option disabled>{{ __('global.select_option') }}</option>
-                <option value="city1" {{ old('city', $member->city) == 'city1' ? 'selected' : '' }}>City 1</option>
-                <option value="city2" {{ old('city', $member->city) == 'city2' ? 'selected' : '' }}>City 2</option>
-                <option value="city3" {{ old('city', $member->city) == 'city3' ? 'selected' : '' }}>City 3</option>
-            </select>
-            <div class="text-danger error-message" data-error-for="city"></div>
-        </div>
-
-        <div class="col-12 col-md-4 mb-3">
-            <label class="form-label">{{ __('global.state_label') }}</label>
-            <select class="form-select" name="state" id="state">
-                <option disabled>{{ __('global.select_option') }}</option>
-                <option value="state1" {{ old('state', $member->state) == 'state1' ? 'selected' : '' }}>State 1</option>
-                <option value="state2" {{ old('state', $member->state) == 'state2' ? 'selected' : '' }}>State 2</option>
-                <option value="state3" {{ old('state', $member->state) == 'state3' ? 'selected' : '' }}>State 3</option>
-            </select>
-            <div class="text-danger error-message" data-error-for="state"></div>
-        </div>
-
-        <div class="col-12 col-md-4 mb-3">
-            <label class="form-label">{{ __('global.country_label') }}</label>
-            <select class="form-select" name="country" id="country">
-                <option disabled>{{ __('global.select_option') }}</option>
-                <option value="country1" {{ old('country', $member->country) == 'country1' ? 'selected' : '' }}>Country 1</option>
-                <option value="country2" {{ old('country', $member->country) == 'country2' ? 'selected' : '' }}>Country 2</option>
-                <option value="country3" {{ old('country', $member->country) == 'country3' ? 'selected' : '' }}>Country 3</option>
-            </select>
-            <div class="text-danger error-message" data-error-for="country"></div>
+                <!-- Controls -->
+                <div class="d-flex justify-content-center gap-2 mt-auto">
+                    <input type="file" id="browseImage" accept="image/*" class="d-none">
+                    <button type="button" id="browseBtn" class="btn btn-secondary">Browse</button>
+                    <button type="button" id="uploadCropped" class="btn btn-primary" disabled>Upload</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-   
-    // Profile Image Preview JS:-
+const stepperEditUrl = "{{ route('stepper.update_profile', ['id' => $member->id]) }}";
+const uploadUrl = "{{ route('profile.cropUpload') }}";
+</script>
+
+<script src="{{ asset('assets/js/gym_package/edit_package.js') }}"></script>
+
+<script src="{{ asset('assets/js/global/image_crop.js') }}"></script>
+<script>
+// Profile Image Preview JS:-
 $(document).ready(function () 
 {
     // alert('hi');
@@ -180,3 +229,52 @@ $(document).ready(function ()
     });
 });
 </script>
+<style>
+    #submitBtn
+    {
+        background: #0b1061;
+        color: #fff;
+        border: 5px solid #0b1061 !important;
+        border-radius: 30px;
+        font-size: 12px;
+        padding: 5px;
+    }
+    .profilebtn{
+        background: #0b1061;
+        color: #fff;
+        border: 5px solid #0b1061 !important;
+        border-radius: 30px
+    }
+    .progressbar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #ddd;
+        color: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+    }
+    .circle.active {
+        background: #0b1061;  /* Bootstrap primary blue */
+        color: #fff;
+    }
+    .circle.completed {
+        background: #28a745; /* green */
+        color: #fff;
+    }
+    .line {
+        flex: 1;
+        height: 4px;
+        background: #ddd;
+    }
+    .line.active {
+        background: #28a745; /* green */
+    }
+</style>

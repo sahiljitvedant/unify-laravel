@@ -66,7 +66,7 @@ Route::middleware(['auth.custom', 'session.timeout','auth.admin'])->group(functi
     // Members Route:-
     Route::get('/list_member', [GymPackageController::class, 'list'])->name('list_member');
     Route::get('/add_member', [GymPackageController::class, 'add'])->name('add_member');
-    Route::get('/edit_member/{id}', [GymPackageController::class, 'edit'])->name('edit_package');
+  
 
     // Membersip Route:-
     Route::get('/list_membership', [GymMembershipController::class, 'list'])->name('list_membership');
@@ -115,7 +115,7 @@ Route::middleware(['auth.custom', 'session.timeout','auth.admin'])->group(functi
     Route::middleware(['web'])->group(function () 
     {
         Route::post('/stepper-submit', [GymPackageController::class, 'submit'])->name('stepper.submit');
-        Route::post('/stepper-update/{id}', [GymPackageController::class, 'update'])->name('stepper.update');
+   
         Route::get('/members/fetch', [GymPackageController::class, 'fetchMemberList'])
         ->name('fetch_member_list');
         Route::post('/delete_members/{id}', [GymPackageController::class, 'delete_members'])->name('delete_members');
@@ -173,6 +173,8 @@ Route::middleware(['auth.custom', 'session.timeout','auth.admin'])->group(functi
 
 Route::middleware(['auth.custom', 'session.timeout','auth.member'])->group(function () 
 {
+
+    Route::get('/edit_member/{id}', [GymPackageController::class, 'edit'])->name('edit_member');
     // Dashboard
     Route::get('/member_dashboard', [DashboardController::class, 'list_member'])->name('member_dashboard');
     //Member Login functionality:-   
@@ -193,6 +195,10 @@ Route::middleware(['auth.custom', 'session.timeout','auth.member'])->group(funct
 
     Route::post('/member_login_action', [LoginController::class, 'loginLogoutAction'])->name('member_login_action');
 
+
+    Route::post('/stepper-update/{id}', [GymPackageController::class, 'update'])->name('stepper.update');
+    Route::post('/stepper_update_profile/{id}', [GymPackageController::class, 'update_profile'])->name('stepper.update_profile');
+    Route::post('/stepper_update_setings/{id}', [GymPackageController::class, 'update_setings'])->name('stepper.update_setings');
 });
 
 Route::get('/debug-log', function () {
@@ -205,4 +211,11 @@ Route::get('/db-test', function () {
     } catch (\Exception $e) {
         return 'DB connection failed: ' . $e->getMessage();
     }
+});
+
+use Illuminate\Support\Facades\Log;
+
+Route::get('/test-log', function () {
+    Log::info('Daily log test working!');
+    return 'Log written';
 });

@@ -14,8 +14,14 @@
             <h4 class="mb-2 mb-md-0">My Team</h4>
             <div class="d-flex gap-2">
                 <input type="text" id="searchName" class="form-control" placeholder="Search Name">
-                <button id="btnSearch" class="btn btn-primary">Search</button>
-                <button id="btnCancel" class="btn btn-secondary">Cancel</button>
+      
+                <button id="btnSearch" class="btn ">
+                    <i class="bi bi-search"></i> 
+                </button>
+        
+                <button id="btnCancel" class="btn btn-secondary me-1 cncl_btn">
+                    <i class="bi bi-x-circle"></i> 
+                </button>
             </div>
         </div>
 
@@ -29,7 +35,7 @@
 @endsection
 <style>
     .container-custom {
-    min-height: 90vh;
+    min-height: 80vh;
     background-color: #f5f6fa;
     padding: 20px;
     border-radius: 12px;
@@ -46,7 +52,7 @@
     display: flex;
     flex-direction: column;
     align-items: center; /* centers the image & name */
-    background-color: #fff;
+    background-color: #f2f2f2;
     border-radius: 15px;
     box-shadow: 0 6px 15px rgba(0,0,0,0.1);
     padding: 20px 10px;
@@ -55,25 +61,20 @@
 
 #membersContainer .card img {
     border-radius: 50%;
-    border: 3px solid #0B1061;
+    border: 1px solid #0B1061;
 }
 
 
 #membersContainer .card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-}
-
-
-#membersContainer .card img:hover {
-    border-color: #6c5ce7; /* Slight hover effect */
+    /* box-shadow: 0 10px 25px rgba(0,0,0,0.15); */
 }
 
 #membersContainer .card h6 {
     margin-top: 10px;
-    font-weight: 600;
-    color: #0B1061;
-    font-size: 14px;
+    font-weight: 400;
+    color: #000;
+    font-size: 12px;
 }
 
 .btn-primary {

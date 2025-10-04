@@ -1,22 +1,22 @@
 <?php
 
 return [
-    'first_name' => 'First Name',
+    'first_name' => 'First name',
     'first_name_placeholder' => 'Enter your first name',
 
-    'middle_name' => 'Middle Name',
+    'middle_name' => 'Middle name',
     'middle_name_placeholder' => 'Enter your middle name',
 
-    'last_name' => 'Last Name',
+    'last_name' => 'Last name',
     'last_name_placeholder' => 'Enter your last name',
 
-    'email' => 'Email Address',
+    'email' => 'Email address',
     'email_placeholder' => 'Enter your email address',
 
     'password' => 'Password',
     'password_placeholder' => 'Enter your password',
 
-    'profile_image' => 'Upload Profile Image',
+    'profile_image' => 'Upload profile image',
     'profile_image_placeholder' => 'Select a profile image',
 
     'gender_label' => 'Gender',
@@ -25,18 +25,18 @@ return [
     'female' => 'Female',
     'other' => 'Other',
 
-    'dob' => 'Date of Birth',
+    'dob' => 'Date of birth',
     'dob_placeholder' => 'Select your date of birth',
 
-    'email_label' => 'Email Address',
+    'email_label' => 'Email address',
     'email_placeholder' => 'Enter your email',
-    'mobile_label' => 'Mobile Number',
+    'mobile_label' => 'Mobile number',
     'mobile_placeholder' => 'Enter your mobile number',
 
-    'residence_address_label' => 'Residence Address',
+    'residence_address_label' => 'Residence address',
     'residence_address_placeholder' => 'Enter your residence address',
 
-    'residence_area_label' => 'Residence Area',
+    'residence_area_label' => 'Residence area',
     'residence_area_placeholder' => 'Enter your residence area',
 
     'zipcode_label' => 'Zipcode',

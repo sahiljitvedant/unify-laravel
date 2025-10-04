@@ -32,24 +32,29 @@ function fetchMembers(page = 1) {
             }
 
             let html = '';
-            members.forEach(member => {
-                let profileImage = member.profile_image 
-                ? window.assetBase + member.profile_image
-                : window.assetBase + 'assets/img/default.png';
-               
-            
 
+            members.forEach(member => {
+                let profileImage = member.profile_image
+                    ? window.assetBase + member.profile_image
+                    : window.assetBase + 'assets/img/default.png';
+            
+                let fullName = `${member.first_name} ${member.last_name}`;
+                let displayName = fullName.length > 15 ? fullName.substring(0, 15) + '...' : fullName;
+            
                 html += `
                 <div class="col-6 col-sm-4 col-md-3 col-lg-2">
                     <div class="card text-center p-3 shadow-sm">
-                        <img src="${profileImage}" 
-                             class="rounded-circle mb-2" 
-                             alt="${member.first_name}" 
+                        <img src="${profileImage}"
+                             onerror="this.onerror=null; this.src='${window.assetBase}assets/img/carousel-3.jpg'"
+                   
+                             class="rounded-circle mb-2"
+                             alt="${member.first_name}"
                              style="width:80px; height:80px; object-fit:cover;">
-                        <h6 class="mb-0">${member.first_name} ${member.last_name}</h6>
+                        <h6 class="mb-0">${displayName}</h6>
                     </div>
                 </div>`;
             });
+            
 
             if(page === 1) $("#membersContainer").html(html);
             else $("#membersContainer").append(html);

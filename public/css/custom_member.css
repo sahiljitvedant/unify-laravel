@@ -257,7 +257,7 @@ table.dataTable tbody tr:hover {
 
 .form-label 
 {
-    font-size: 13px;     
+    font-size: 1px;     
     font-weight: 500;     
     color: #333;          
     margin-bottom: 4px;  
@@ -277,7 +277,7 @@ table.dataTable tbody tr:hover {
     font-weight: normal; 
 
 }
-#submitBtn
+#btnSearch
 {
     background-color: var(--sidebar_color);
     color: var(--other_color_fff);

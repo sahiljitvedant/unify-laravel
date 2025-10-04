@@ -79,7 +79,7 @@
                 <!-- Welcome Text -->
                 <div class="welcome-text d-none d-md-block">
                     <span style="font-size:12px; color:#000;">
-                        Welcome back, User
+                    Welcome back, {{ Auth::user()->name ?? 'User' }}
                     </span>
                 </div>
             </div>
@@ -102,32 +102,52 @@
 
                 <!-- Profile Dropdown -->
                 <div class="dropdown">
-                    <a class="dropdown-toggle text-dark text-decoration-none d-flex align-items-center" 
-                    href="#" role="button" id="profileDropdown" data-bs-toggle="dropdown">
-                        <i class="bi bi-person-circle fs-5 me-2"></i> 
-                        <span class="fw-medium" style="font-size:14px;">User</span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="profileDropdown">
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                <i class="bi bi-person me-2"></i> 
-                                <span style="font-size:14px;">Profile</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                <i class="bi bi-gear me-2"></i> 
-                                <span style="font-size:14px;">Settings</span>
-                            </a>
-                        </li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="{{ route('logout') }}">
-                                <i class="bi bi-box-arrow-right me-2"></i> 
-                                <span style="font-size:14px;">Logout</span>
-                            </a>
-                        </li>
-                    </ul>
+                  
+                    @php
+                        $member = DB::table('tbl_gym_members')->where('id', Auth::id())->first();
+                        $profileImage = $member && $member->profile_image ? asset($member->profile_image) : null;
+                    @endphp
+
+                    <div class="dropdown">
+                        <a class="dropdown-toggle text-dark text-decoration-none d-flex align-items-center" 
+                        href="#" role="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+
+                            @if($profileImage)
+                                <img src="{{ $profileImage }}" 
+                                    alt="Profile"
+                                    class="rounded-circle me-2"
+                                    style="width:40px; height:40px; object-fit:cover; border:1px solid #ccc;">
+                            @else
+                                <i class="bi bi-person-circle fs-3 me-2"></i>
+                            @endif
+
+                            <span>{{ Auth::user()->name }}</span>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="profileDropdown">
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" 
+                                href="{{ route('edit_member', auth()->user()->id) }}">
+                                    <i class="bi bi-person me-2"></i>
+                                    <span style="font-size:14px;">Profile</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <i class="bi bi-gear me-2"></i>
+                                    <span style="font-size:14px;">Settings</span>
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="{{ route('logout') }}">
+                                    <i class="bi bi-box-arrow-right me-2"></i>
+                                    <span style="font-size:14px;">Logout</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -155,9 +175,11 @@
                     </a>
                 </li>
                
+               
                 <li>
-                    <a href="{{ route('member_my_team') }}" title="My Team">
-                        <i class="bi bi-shield-lock"></i>
+                    <a href="{{ route('member_my_team') }}" 
+                        class="{{ request()->routeIs('member_my_team') ? 'active' : '' }}">
+                        <i class="bi bi-people"></i>
                     </a>
                 </li>
                 <li>

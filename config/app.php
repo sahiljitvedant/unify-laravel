@@ -198,6 +198,37 @@ return [
         3 => 'Yoga',
         4 => 'Steam Bath',
     ],
+      // Fitness Goals
+      'fitness_goals' => [
+        1 => 'muscle_gain',
+        2 => 'weight_loss',
+        3 => 'flexibility',
+        4 => 'general_fitness',
+    ],
+
+    // Preferred Workout Time
+    'preferred_workout_time' => [
+        1 => 'morning',
+        2 => 'afternoon',
+        3 => 'evening',
+        4=>'night'
+    ],
+
+    // Heights in feet
+    'height_ft' => [
+        3 => 3,
+        4 => 4,
+        5 => 5,
+        6 => 6,
+        7 => 7,
+    ],
+
+    // Heights in inches
+    'height_in' => [
+        0 => 0, 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 
+        6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10, 11 => 11
+    ],
+
 
     // Body color
     'theme_color' => '#e3e3e3',

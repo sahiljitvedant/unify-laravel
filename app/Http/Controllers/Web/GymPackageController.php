@@ -216,14 +216,22 @@ class GymPackageController extends Controller
         try 
         {
             $member = DB::table('tbl_gym_members')->where('id', $id)->first();
-    
+            // dd($member);
+            $memberships = DB::table('tbl_gym_membership')
+            ->where('is_active', 1)       // same as add()
+            ->pluck('membership_name', 'id'); // id => name array
+
+            $trainer = DB::table('tbl_trainer')
+            ->where('is_active', 1)
+            ->pluck('trainer_name', 'id');
+            // dd($memberships);
             if (!$member) 
             {
-                dd("Page not found");
+                // dd("Page not found");
                 return redirect()->back()->with('error', 'Member not found!');
             }
     
-            return view('tabs.index', compact('member'));
+            return view('tabs.index', compact('member','memberships','trainer'));
         } 
         catch (\Exception $e)
         {
@@ -235,7 +243,7 @@ class GymPackageController extends Controller
 
     public function update(Request $request,$id)
     {
-        // dd(1);
+        // dd(12);
         // dd($request->all());
         // Validation rules
         $arr_rules = 
@@ -307,6 +315,136 @@ class GymPackageController extends Controller
             ], 500);
         }
     }
+
+    public function update_profile(Request $request, $id)
+    {
+        // dd(1);
+        $arr_rules = [
+            'first_name'        => 'required|string',
+            'middle_name'       => 'nullable|string',
+            'last_name'         => 'required|string',
+            'dob'               => 'required|date',
+            'gender'            => 'required|string',
+            'email'             => 'required|email',
+            'mobile'            => 'required|string',
+            'residence_address' => 'required|string',
+            'residence_area'    => 'required|string',
+            'zipcode'           => 'required|string',
+            'city'              => 'required|string',
+            'state'             => 'required|string',
+            'country'           => 'required|string',
+        ];
+
+        $validator = Validator::make($request->all(), $arr_rules);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => $validator->messages()
+            ], 400);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $user_details_arr = $request->except(['_token']); // exclude token
+
+            $existing = DB::table('tbl_gym_members')->where('id', $id)->first();
+
+            // ✅ CASE 1: File directly uploaded
+            if ($request->hasFile('profile_image')) {
+                $image = $request->file('profile_image');
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('assets/img/profile_image'), $imageName);
+                $user_details_arr['profile_image'] = 'assets/img/profile_image/' . $imageName;
+            } 
+            // ✅ CASE 2: Cropped image path is sent in payload (already stored on server)
+            elseif ($request->filled('profile_image')) {
+                $user_details_arr['profile_image'] = $request->input('profile_image');
+            } 
+            // ✅ CASE 3: Keep existing image if no change
+            else {
+                $user_details_arr['profile_image'] = $existing->profile_image ?? null;
+            }
+
+            // Update record
+            $updated = DB::table('tbl_gym_members')
+                ->where('id', $id)
+                ->update($user_details_arr);
+
+            DB::commit();
+
+            return response()->json([
+                'status'  => 'success',
+                'message' => $updated ? 'Member updated successfully' : 'No changes made',
+                'id'      => $id
+            ], 200);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Update failed: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function update_setings(Request $request, $id)
+    {
+        // Validation rules (only the fields that are required)
+        $arr_rules = [
+            'fitness_goals'          => 'required|string',
+            'preferred_workout_time' => 'required|string',
+            'current_weight'         => 'nullable|numeric',
+            'additional_notes'       => 'nullable|string',
+        ];
+    
+        // Validate the inputs
+        $validator = Validator::make($request->all(), $arr_rules);
+    
+        if ($validator->fails()) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => $validator->messages()
+            ], 400);
+        }
+    
+        DB::beginTransaction();
+    
+        try {
+            // Prepare only the fields we want to update
+            $member_data = $request->only([
+                'fitness_goals', 
+                'preferred_workout_time', 
+                'current_weight', 
+                'additional_notes'
+            ]);
+    
+            // Update the existing member record by ID
+            $updated = DB::table('tbl_gym_members')
+                ->where('id', $id)
+                ->update($member_data);
+    
+            DB::commit();
+    
+            return response()->json([
+                'status'  => 'success',
+                'message' => $updated ? 'Member updated successfully' : 'No record updated',
+                'id'      => $id
+            ], 200);
+    
+        } catch (\Exception $e) {
+            DB::rollBack();
+    
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Update failed: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+    
+
+
     public function store(Request $request)
     {
         $validated = $request->validate([
