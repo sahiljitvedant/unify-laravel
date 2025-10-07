@@ -17,6 +17,10 @@ use Carbon\Carbon;
 use Razorpay\Api\Api;
 use App\Models\Payment; 
 use App\Models\GymMember; 
+use App\Models\UserPreference;
+use App\Models\Preference;
+use App\Models\Blog;
+use App\Models\Gallery;
 
 class LoginController extends Controller
 {
@@ -271,7 +275,7 @@ class LoginController extends Controller
 
         // dd($memberships);
 
-        $currentSubscription = DB::table('payments')
+        $currentSubscription = DB::table('tbl_payments')
         ->where('user_id', Auth::id())
         ->where('status', 'success')
         ->orderBy('amount', 'desc')
@@ -292,8 +296,6 @@ class LoginController extends Controller
         return view('members.Subscriptions.member_subscription', compact('memberships','currentSubscription','facilityNames'));
  
     }
-
-
     public function createOrder(Request $request)
     {
         $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
@@ -304,6 +306,29 @@ class LoginController extends Controller
             'currency'        => 'INR',
             'payment_capture' => 1
         ]);
+
+        // Generate invoice number
+        $invoiceNumber = 'MEM' . auth()->id() . '-' . rand(100, 999) . '-' . now()->format('dMMy');
+    
+        // Membership dates
+        $membershipStart = now();
+        $membershipEnd   = now()->addDays(30);
+    
+        
+        $payment = Payment::create([
+            'user_id'               => auth()->id(),
+            'plan_id'               => $request->plan_id,
+            'plan_name'             => $request->plan_name,
+            'amount'                => $request->amount,
+            'currency'              => 'INR',
+            'order_id'              => $order['id'],
+            'payment_status'        => 1,           // 1 = Pending
+            'status'                => 'pending',   // enum tracking
+            'membership_start_date' => $membershipStart,
+            'membership_end_date'   => $membershipEnd,
+            'invoice_number'        => $invoiceNumber,
+        ]);
+    
     
         return response()->json([
             'order_id' => $order['id'],
@@ -313,51 +338,53 @@ class LoginController extends Controller
             'plan_name' => $request->plan_name
         ]);
     }
-    
     public function verifyPayment(Request $request)
     {
         $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
-    
-        $attributes = [
-            'razorpay_order_id'   => $request->order_id,
-            'razorpay_payment_id' => $request->payment_id,
-            'razorpay_signature'  => $request->signature
-        ];
-    
-        $api->utility->verifyPaymentSignature($attributes);
-    
-        // Fetch payment details from Razorpay
-        $razorpayPayment = $api->payment->fetch($request->payment_id);
-        $gatewayMethod   = $razorpayPayment->method ?? 'unknown';
-    
-        // Generate invoice number
-        $invoiceNumber = 'MEM' . auth()->id() . '-' . rand(100, 999) . '-' . now()->format('dMMy');
-    
-        // Membership dates
-        $membershipStart = now();
-        $membershipEnd   = now()->addDays(30);
-    
-        // Save payment
-        $payment = Payment::create([
-            'user_id'               => auth()->id(),
-            'plan_id'               => $request->plan_id,
-            'gateway'               => $gatewayMethod,
-            'amount'                => $request->amount,
-            'payment_id'            => $request->payment_id,
-            'order_id'              => $request->order_id,
-            'signature'             => $request->signature,
-            'invoice_number'        => $invoiceNumber,
-            'membership_start_date' => $membershipStart,
-            'membership_end_date'   => $membershipEnd,
-            'status'                => 'success'
-        ]);
-    
-        return response()->json([
-            'status'  => 'success',
-            'payment' => $payment
-        ]);
+
+        try {
+            // 1️⃣ Verify Razorpay signature
+            $attributes = [
+                'razorpay_order_id'   => $request->order_id,
+                'razorpay_payment_id' => $request->payment_id,
+                'razorpay_signature'  => $request->signature
+            ];
+
+            $api->utility->verifyPaymentSignature($attributes);
+
+            // 2️⃣ Fetch payment details from Razorpay
+            $razorpayPayment = $api->payment->fetch($request->payment_id);
+            $gatewayMethod   = $razorpayPayment->method ?? 'unknown';
+
+            // 3️⃣ Update existing payment record
+            $payment = Payment::where('order_id', $request->order_id)->first();
+
+            if (!$payment) {
+                return response()->json([
+                    'status'  => 'error',
+                    'message' => 'Payment record not found'
+                ]);
+            }
+
+            $payment->update([
+                'payment_id'     => $request->payment_id,
+                'signature'      => $request->signature,
+                'gateway'        => $gatewayMethod,
+                'payment_status' => 2,           // 2 = Completed
+                'status'         => 'success',   // enum tracking
+            ]);
+
+            return response()->json([
+                'status'  => 'success',
+                'payment' => $payment
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
-    
     public function member_my_team (Request $request)
     {
         $user = Auth::user(); 
@@ -375,33 +402,200 @@ class LoginController extends Controller
         return view('members.Team.member_my_team', compact('loginDisabled', 'logoutDisabled','members'));
 
     }
-
-    public function fetch_member_my_team(Request $request)
+    public function my_profile (Request $request, $id)
     {
-        $query = GymMember::query()->where('is_deleted', '!=', 9);
+        // dd(1);
+        // dd($id); 
+        // dd($request->all());
+        $member = GymMember::where('id', $id)->first();
 
-        // Search filter
-        if($request->filled('search')){
-            $search = $request->search;
-            $query->where(function($q) use ($search){
-                $q->where('first_name', 'like', "%$search%")
-                ->orWhere('last_name', 'like', "%$search%");
-            });
+        // Check if member exists
+        if (!$member) {
+            abort(404, "Member not found");
         }
+        // dd($member);
+    
+        return view('members.Team.my_profile', compact('member'));
 
-        $perPage = $request->get('per_page', 10);
-        $page = $request->get('page', 1);
+    }
+    // public function fetch_member_my_team(Request $request)
+    // {
+    //     $query = GymMember::query()->where('is_deleted', '!=', 9);
 
-        $members = $query->skip(($page-1)*$perPage)
-                        ->take($perPage)
-                        ->get();
+    //     // Search filter
+    //     if($request->filled('search')){
+    //         $search = $request->search;
+    //         $query->where(function($q) use ($search){
+    //             $q->where('first_name', 'like', "%$search%")
+    //             ->orWhere('last_name', 'like', "%$search%");
+    //         });
+    //     }
 
-        return response()->json([
-            'data' => $members
-        ]);
+    //     $perPage = $request->get('per_page', 10);
+    //     $page = $request->get('page', 1);
+
+    //     $members = $query->skip(($page-1)*$perPage)
+    //                     ->take($perPage)
+    //                     ->get();
+
+    //     return response()->json([
+    //         'data' => $members
+    //     ]);
+    // }
+    public function fetch_member_my_team(Request $request)
+{
+    $query = GymMember::query()->where('is_deleted', '!=', 9);
+
+    // Search filter
+    if ($request->filled('search')) {
+        $search = $request->search;
+        $query->where(function($q) use ($search){
+            $q->where('first_name', 'like', "%$search%")
+              ->orWhere('last_name', 'like', "%$search%");
+        });
     }
 
+    $perPage = $request->get('per_page', 12);
 
+    $members = $query->orderBy('id', 'desc')->paginate($perPage);
 
+    return response()->json($members); // now contains all pagination info
+}
 
+    public function saveUserPreference(Request $request)
+    {
+        // dd(2);
+        $user = Auth::user();
+        $preference = Preference::where('name', $request->preference_name)->first();
+
+        if (!$preference) {
+            return response()->json(['message' => 'Preference not found'], 404);
+        }
+
+        // Save or update the user preference
+        UserPreference::updateOrCreate(
+            [
+                'user_id' => $user->id,
+                'preference_id' => $preference->id
+            ],
+            [
+                'is_active' => $request->is_active,
+                'status' => 1
+            ]
+        );
+
+        return response()->json(['message' => 'Preference saved successfully']);
+    }
+
+    public function member_payments()
+    {
+        $memberships = DB::table('tbl_gym_membership')->pluck('membership_name', 'id');
+        return view('members.Payments.payment_list', compact('memberships'));
+        
+
+    }
+
+    public function fetch_member_payments(Request $request)
+    {
+        $user = Auth::user();
+        $query = DB::table('tbl_payments')
+        ->leftJoin('tbl_gym_membership', 'tbl_payments.plan_id', '=', 'tbl_gym_membership.id')
+        ->select(
+            'tbl_payments.*',
+            'tbl_gym_membership.membership_name as plan_name'
+        )
+        ->where('tbl_payments.user_id', $user->id)
+        ->orderBy('tbl_payments.created_at', 'desc');
+
+        // Filters
+        if ($request->plan_name) {
+            $query->where('tbl_gym_membership.membership_name', 'like', '%' . $request->plan_name . '%');
+        }
+    
+        if ($request->invoice_number) {
+            $query->where('tbl_payments.invoice_number', 'like', '%' . $request->invoice_number . '%');
+        }
+    
+        if ($request->amount) {
+            $query->where('tbl_payments.amount', 'like', '%' . $request->amount . '%');
+        }
+        
+    
+        if($request->status){
+            $query->where('status', $request->status);
+        }
+    
+        if($request->payment_status){
+            $query->where('payment_status', $request->payment_status);
+        }
+    
+        $payments = $query->paginate(10); // pagination
+    
+        return response()->json($payments);
+    }
+
+    public function view_invoice(Request $request,$id)
+    {
+          // Fetch payment entry by ID
+        $payment = DB::table('tbl_payments')
+        ->leftJoin('tbl_gym_membership', 'tbl_payments.plan_id', '=', 'tbl_gym_membership.id')
+        ->select(
+            'tbl_payments.*',
+            'tbl_gym_membership.membership_name as plan_name'
+        )
+        ->where('tbl_payments.id', $id)
+        ->first(); 
+
+        // dd($payment);
+        if (!$payment) 
+        {
+            abort(404, 'Payment not found');
+        }
+
+        // Optionally, if you need all memberships
+        $memberships = DB::table('tbl_gym_membership')->pluck('membership_name', 'id');
+
+        return view('members.Payments.view_invoice', compact('payment', 'memberships'));
+      
+    }
+
+    public function member_blogs()
+    {
+        $blogs = Blog::where('is_active', '1')
+                     ->orderBy('publish_date', 'desc')
+                     ->get();
+        // dd($blogs);
+        return view('members.blogs.blogs', compact('blogs'));
+    }
+    public function fetch_member_blogs(Request $request)
+    {
+        $blogs = Blog::where('is_active', 1)
+            // ->where('is_deleted', 0)
+            ->orderBy('publish_date', 'desc')
+            ->paginate(6); // 6 blogs per page
+    
+        return response()->json($blogs);
+    }
+    
+
+    public function member_gallary()
+    {
+        $galleries = Gallery::where('is_active', 1)
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+        // dd($galleries);
+
+        return view('members.gallary.gallary', compact('galleries'));
+
+    }
+
+    public function fetch_member_gallary(Request $request)
+    {
+        $galleries = Gallery::where('is_active', 1)         
+        ->orderBy('created_at', 'desc')
+        ->paginate(6);
+    
+        return response()->json($galleries);
+    }
+    
 }

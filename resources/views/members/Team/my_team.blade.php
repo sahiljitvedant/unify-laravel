@@ -13,10 +13,7 @@
             <!-- Heading + Add Button -->
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 gap-2">
                 <h4 class="mb-2 mb-md-0">Working Histroy</h4>
-                <!-- <div class="d-flex flex-column align-items-start align-items-md-end gap-2">
-                    <a href="{{ route('add_blogs') }}" class="btn-add">Add Blogs</a>
-                    <a href="{{ route('list_deleted_blogs') }}" class="btn-link">Show Deleted Blogs</a>
-                </div> -->
+               
             </div>
             <div class="data-wrapper">
                 <!-- Filters -->
@@ -100,7 +97,8 @@
                 </nav>
             </div>
         </div>
-        </div></div>
+        </div>
+    </div>
 @endsection
 
 
@@ -117,12 +115,9 @@
     .btn-add:hover { background-color: #090d4a; }
     th a { color: inherit; text-decoration: none; }
 
-</style>
-<style>
     #members-table thead {
         background-color: #0B1061 !important;
         color: #fff !important;
-       
     }
     .container-custom {
         min-height: 90vh;
@@ -136,11 +131,9 @@
         background-color: #f2f2f2 !important;
     }
     .left-panel, .right-panel {
-
         border-radius: 10px;
         box-shadow:0 4px 12px rgba(0,0,0,0.1);
     }
-
   
     .fingerprint-container {
         display: flex;
@@ -197,11 +190,7 @@
 @push('scripts')
 <script>
     const userLoginHistory = "{{ route('user_login_histroy') }}";
-   
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{{ asset('assets/js/my_team/my_team.js') }}"></script>
-<script>
-
-</script>
 @endpush

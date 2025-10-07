@@ -6,9 +6,10 @@
 
 <div class="tab-wrapper">
   <div class="tabs">
-    <button class="tab active" data-tab="home">Home</button>
-    <button class="tab" data-tab="profile">Profile</button>
-    <button class="tab" data-tab="settings">Settings</button>
+    <button class="tab active" data-tab="home">Profile</button>
+    <button class="tab" data-tab="profile">Membership</button>
+    <button class="tab" data-tab="settings">Fitness Goals</button>
+    <button class="tab" data-tab="preferance">Preferance</button>
   </div>
 
     <div class="tab-content" id="home">
@@ -19,6 +20,9 @@
     </div>
     <div class="tab-content" id="settings" style="display: none;">
         @include('tabs.settings')
+    </div>
+    <div class="tab-content" id="preferance" style="display: none;">
+        @include('tabs.preferance')
     </div>
 
 </div>

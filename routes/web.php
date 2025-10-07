@@ -15,16 +15,16 @@ use App\Http\Controllers\Web\BlogsController;
 use App\Http\Controllers\Web\GallaryController;
 use App\Http\Controllers\Web\ProfileController;
 use App\Http\Controllers\Web\LoginController;
-// Route::get('', function () {
-//     return view('front.index');
-// })->name('home');
+Route::get('', function () {
+    return view('front.index');
+})->name('home');
 Route::get('/about_us', function () {
     return view('front.about_us');
 })->name('about_us');
 // Route::get('/blogs', function () {
 //     return view('front.blogs');
 // })->name('blogs');
-Route::get('', [BlogsController::class, 'home'])->name('home');
+Route::get('/', [BlogsController::class, 'home'])->name('home');
 Route::get('/blogs', [BlogsController::class, 'blogs'])->name('blogs');
 Route::get('/blogs_read_more/{id}', [BlogsController::class, 'blogs_read_more'])->name('blogs_read_more');
 
@@ -185,8 +185,11 @@ Route::middleware(['auth.custom', 'session.timeout','auth.member'])->group(funct
     Route::post('/payment/order', [LoginController::class, 'createOrder'])->name('payment.create');
     Route::post('/payment/verify', [LoginController::class, 'verifyPayment'])->name('payment.verify');
     Route::get('/member_my_team', [LoginController::class, 'member_my_team'])->name('member_my_team');
-    
-   
+    Route::get('/my_team/{id}', [LoginController::class, 'my_profile'])->name('my_profile');
+    Route::get('/member_payments', [LoginController::class, 'member_payments'])->name('member_payments');
+    Route::get('/view_invoice/{id}', [LoginController::class, 'view_invoice'])->name('view_invoice');
+    Route::get('/member_blogs', [LoginController::class, 'member_blogs'])->name('member_blogs');
+    Route::get('/member_gallary', [LoginController::class, 'member_gallary'])->name('member_gallary');
     // API Routes:-
     Route::get('/fetch_member_my_team', [LoginController::class, 'fetch_member_my_team'])->name('fetch_member_my_team');
     Route::get('/fetch_member_login', [LoginController::class, 'fetchLogin'])->name('fetch_member_login');
@@ -194,11 +197,15 @@ Route::middleware(['auth.custom', 'session.timeout','auth.member'])->group(funct
     Route::get('/user_login_histroy', [LoginController::class, 'user_login_histroy'])->name('user_login_histroy');
 
     Route::post('/member_login_action', [LoginController::class, 'loginLogoutAction'])->name('member_login_action');
+    Route::get('/fetch_member_payments', [LoginController::class, 'fetch_member_payments'])->name('fetch_member_payments');
 
 
     Route::post('/stepper-update/{id}', [GymPackageController::class, 'update'])->name('stepper.update');
     Route::post('/stepper_update_profile/{id}', [GymPackageController::class, 'update_profile'])->name('stepper.update_profile');
     Route::post('/stepper_update_setings/{id}', [GymPackageController::class, 'update_setings'])->name('stepper.update_setings');
+    Route::post('/save-user-preference', [LoginController::class, 'saveUserPreference'])->name('save_user_preference');
+    Route::get('/fetch_member_blogs', [LoginController::class, 'fetch_member_blogs'])->name('fetch_member_blogs');
+    Route::get('/fetch_member_gallary', [LoginController::class, 'fetch_member_gallary'])->name('fetch_member_gallary');
 });
 
 Route::get('/debug-log', function () {

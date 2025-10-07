@@ -219,19 +219,3 @@ $(document).on('click', '.subscribe-btn', function() {
     }
 
 </style>
-
-
-@push('scripts')
-<script>
-    const LogIN  = "{{ route('member_login_action') }}";
-    const fetchLogin  = "{{ route('fetch_member_login') }}";
-    const fetchLogin2  = "{{ route('fetch_member_login_detail') }}";
-
-    const USER_ID = {{ auth()->user()->id }};
-</script>
-
-<script src="{{ asset('assets/js/member_login/member_login.js') }}"></script>
-
-
-
-@endpush

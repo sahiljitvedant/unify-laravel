@@ -1,109 +1,104 @@
-let currentPage = 1;
-let perPage = 10;
-let loading = false;
-let noMoreData = false;
-let searchName = '';
-let canFetchNext = true; // Flag to prevent multiple triggers
+$(document).ready(function () {
+    let currentPage = 1;
 
-function fetchMembers(page = 1) {
-    if (loading || noMoreData) return;
-    loading = true;
+    function fetchMembers(page = 1) {
+        $("#loader").show();
 
-    if(page > 1) $("#loader").show(); // Loader only for next pages
-
-    $.ajax({
-        url: userMyTeamRoute,
-        type: "GET",
-        data: {
-            page: page,
-            per_page: perPage,
-            search: searchName
-        },
-        success: function(res) {
-            loading = false;
-            $("#loader").hide();
-
-            let members = res.data || [];
-
-            if (members.length === 0) {
-                noMoreData = true;
-                if(page === 1) $("#membersContainer").html('<p class="text-center">No members found</p>');
-                return;
+        $.ajax({
+            url: userMyTeamRoute,
+            type: "GET",
+            data: { 
+                page: page,
+                per_page: 12,
+                search: $("#searchName").val()
+            },
+            success: function(res) {
+                $("#loader").hide();
+                renderMembers(res.data);
+                renderPagination(res);
+            },
+            error: function () {
+                $("#loader").hide();
+                $("#membersContainer").html('<p class="text-center text-danger">Failed to load members.</p>');
             }
+        });
+    }
 
-            let html = '';
-
+    function renderMembers(members) {
+        let html = '';
+        if (members.length === 0) {
+            html = '<p class="text-center text-muted">No team members found.</p>';
+        } else {
             members.forEach(member => {
-                let profileImage = member.profile_image
-                    ? window.assetBase + member.profile_image
-                    : window.assetBase + 'assets/img/default.png';
-            
+                let profileImage = member.profile_image 
+                    ? assetBase + member.profile_image 
+                    : assetBase + 'assets/img/download.png';
+
                 let fullName = `${member.first_name} ${member.last_name}`;
                 let displayName = fullName.length > 15 ? fullName.substring(0, 15) + '...' : fullName;
-            
+
                 html += `
                 <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-                    <div class="card text-center p-3 shadow-sm">
-                        <img src="${profileImage}"
-                             onerror="this.onerror=null; this.src='${window.assetBase}assets/img/carousel-3.jpg'"
-                   
-                             class="rounded-circle mb-2"
-                             alt="${member.first_name}"
-                             style="width:80px; height:80px; object-fit:cover;">
-                        <h6 class="mb-0">${displayName}</h6>
-                    </div>
+                    <a class="my_team_card" href="/my_team/${member.id}">
+                        <div class="card text-center p-3 shadow-sm">
+                            <img src="${profileImage}" 
+                                onerror="this.onerror=null; this.src='${assetBase}assets/img/carousel-3.jpg'"
+                                class="rounded-circle mb-2"
+                                alt="${member.first_name}"
+                                style="width:80px; height:80px; object-fit:cover;">
+                            <h6 class="mb-0">${displayName}</h6>
+                        </div>
+                    </a>
                 </div>`;
             });
-            
-
-            if(page === 1) $("#membersContainer").html(html);
-            else $("#membersContainer").append(html);
-        },
-        error: function() {
-            loading = false;
-            $("#loader").hide();
         }
+        $("#membersContainer").html(html);
+    }
+
+    function renderPagination(data) {
+        let paginationHTML = '';
+
+        if (data.last_page > 1) {
+            // Previous button
+            paginationHTML += `<li class="page-item ${!data.prev_page_url ? 'disabled' : ''}">
+                <a href="#" class="page-link" data-page="${data.current_page - 1}"><i class="bi bi-chevron-left"></i></a>
+            </li>`;
+
+            // Page numbers
+            for (let i = 1; i <= data.last_page; i++) {
+                paginationHTML += `<li class="page-item ${i === data.current_page ? 'active' : ''}">
+                    <a href="#" class="page-link" data-page="${i}">${i}</a>
+                </li>`;
+            }
+
+            // Next button
+            paginationHTML += `<li class="page-item ${!data.next_page_url ? 'disabled' : ''}">
+                <a href="#" class="page-link" data-page="${data.current_page + 1}"><i class="bi bi-chevron-right"></i></a>
+            </li>`;
+        }
+
+        $("#paginationLinks").html(paginationHTML);
+    }
+
+    // Pagination click
+    $(document).on("click", ".page-link", function(e) {
+        e.preventDefault();
+        const page = $(this).data("page");
+        if (!page) return;
+        fetchMembers(page);
     });
-}
 
-// Search
-$(document).on("click", "#btnSearch", function(){
-    searchName = $("#searchName").val();
-    currentPage = 1;
-    noMoreData = false;
-    fetchMembers(currentPage);
-});
+    // Search
+    $(document).on("click", "#btnSearch", function() {
+        fetchMembers(1);
+    });
 
-// Cancel
-$(document).on("click", "#btnCancel", function(){
-    $("#searchName").val('');
-    searchName = '';
-    currentPage = 1;
-    noMoreData = false;
-    fetchMembers(currentPage);
-});
+    // Cancel
+    $(document).on("click", "#btnCancel", function() {
+        $("#searchName").val('');
+        fetchMembers(1);
+    });
 
-// // Infinite scroll: only trigger when user reaches bottom
-// $(window).on("scroll", function() {
-//     if (!canFetchNext) return; // Prevent rapid triggers
-
-//     let scrollTop = $(window).scrollTop();
-//     let windowHeight = $(window).height();
-//     let docHeight = $(document).height();
-
-//     if(scrollTop + windowHeight >= docHeight - 5) {
-//         if(!loading && !noMoreData){
-//             canFetchNext = false;  // Lock
-//             currentPage++;
-//             fetchMembers(currentPage);
-
-//             // Unlock after 500ms to allow next scroll fetch
-//             setTimeout(() => { canFetchNext = true; }, 500);
-//         }
-//     }
-// });
-
-// Initial load
-$(document).ready(function(){
+    // Initial load
     fetchMembers();
 });

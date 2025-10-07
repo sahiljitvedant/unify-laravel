@@ -5,6 +5,27 @@ body {
     font-family: 'Inter', sans-serif;
     background-color: var(--theme-color);
 }
+/* Webkit scrollbar styling for all scrollable elements */
+::-webkit-scrollbar {
+    width: 6px; /* thin scrollbar */
+    height: 6px; /* for horizontal scrollbar */
+}
+
+::-webkit-scrollbar-track {
+    background: #f5f6fa; /* your theme background for track */
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #0B1061; /* your theme color */
+    border-radius: 10px;
+    border: 1px solid #f5f6fa; /* optional: adds spacing */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #090d4a; /* darker shade on hover */
+}
+
 .topbar {
     position: fixed;
     top: 0;
@@ -21,7 +42,34 @@ body {
     box-shadow: 6px 0 18px rgba(0, 0, 0, 0.35);
 
 }
+.oval-link {
+    display: inline-flex;
+    align-items: center;
 
+    border-radius: 50px; /* makes it oval */
+    padding: 6px 16px;
+    color: #f2f2f2;
+    background:var(--sidebar_color);
+    font-weight: 400;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    font-size: 14px;
+}
+
+.oval-link:hover {
+  cursor: pointer;
+    transform: translateY(-1px);
+}
+
+.oval-link i {
+    font-size: 16px;
+}
+.ntf_count
+{
+    background:var(--sidebar_color);
+    cursor: pointer;
+    transform: translateY(-1px);
+}
 :root {
     --sidebar-bg: #0B1061;       /* system sidebar bg */
     --sidebar-color: #fff;        /* font color */
@@ -262,6 +310,10 @@ table.dataTable tbody tr:hover {
     color: #333;          
     margin-bottom: 4px;  
     
+}
+.form-label 
+{
+    font-size: 12px !important;   
 }
 .form-control::placeholder 
 {

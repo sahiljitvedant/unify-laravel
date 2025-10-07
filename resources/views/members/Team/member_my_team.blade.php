@@ -3,7 +3,7 @@
 @section('title', 'My Team')
 
 @section('content')
-<div id="loader">
+<div id="loader" style="display:none;">
     <img src="{{ asset('assets/img/logo.png') }}" alt="Loading..." class="loader-img">
 </div>
 
@@ -11,47 +11,45 @@
     <div class="container">
         <!-- Heading + Search Filter -->
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 gap-2">
-            <h4 class="mb-2 mb-md-0">My Team</h4>
+            <h4 class="mb-2 mb-md-0 text-theme fw-bold">My Team</h4>
             <div class="d-flex gap-2">
                 <input type="text" id="searchName" class="form-control" placeholder="Search Name">
-      
-                <button id="btnSearch" class="btn ">
-                    <i class="bi bi-search"></i> 
+                <button id="btnSearch" class="btn text-white" style="background-color:#0B1061;">
+                    <i class="bi bi-search"></i>
                 </button>
-        
                 <button id="btnCancel" class="btn btn-secondary me-1 cncl_btn">
-                    <i class="bi bi-x-circle"></i> 
+                    <i class="bi bi-x-circle"></i>
                 </button>
             </div>
         </div>
 
-        
-            <div class="row g-3" id="membersContainer">
-                {{-- Cards will load here via JS --}}
-            </div>
-        
+        <!-- Cards -->
+        <div class="row g-3" id="membersContainer"></div>
+
+        <!-- Pagination -->
+        <nav>
+            <ul class="pagination justify-content-center mt-4" id="paginationLinks"></ul>
+        </nav>
     </div>
 </div>
 @endsection
+
 <style>
-    .container-custom {
+.container-custom {
     min-height: 80vh;
     background-color: #f5f6fa;
     padding: 20px;
     border-radius: 12px;
 }
 
-.search-input {
-    min-width: 200px;
-    border-radius: 50px;
-    padding: 8px 16px;
-    border: 1px solid #ccc;
+.text-theme {
+    color: #0B1061 !important;
 }
 
 #membersContainer .card {
     display: flex;
     flex-direction: column;
-    align-items: center; /* centers the image & name */
+    align-items: center;
     background-color: #f2f2f2;
     border-radius: 15px;
     box-shadow: 0 6px 15px rgba(0,0,0,0.1);
@@ -61,13 +59,11 @@
 
 #membersContainer .card img {
     border-radius: 50%;
-    border: 1px solid #0B1061;
 }
 
-
 #membersContainer .card:hover {
-    transform: translateY(-5px);
-    /* box-shadow: 0 10px 25px rgba(0,0,0,0.15); */
+    transform: translateY(-2px);
+    cursor: pointer;
 }
 
 #membersContainer .card h6 {
@@ -77,32 +73,53 @@
     font-size: 12px;
 }
 
-.btn-primary {
+.my_team_card {
+    text-decoration: none;
+}
+
+/* Pagination theme */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+.pagination .page-item .page-link {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0B1061;
+    border: 1px solid #0B1061;
+    background-color: #fff;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+.pagination .page-item .page-link:hover {
     background-color: #0B1061;
-    border-radius: 50px;
-    padding: 6px 18px;
-    border: none;
+    color: #fff;
 }
-
-.btn-primary:hover {
-    background-color: #090d4a;
+.pagination .page-item.active .page-link {
+    background-color: #0B1061;
+    color: #fff;
+    border-color: #0B1061;
 }
-
-.btn-secondary {
-    border-radius: 50px;
-    padding: 6px 18px;
+.pagination .page-item.disabled .page-link {
+    opacity: 0.5;
+    pointer-events: none;
 }
-
+.pagination .page-link:focus {
+    box-shadow: none;
+}
 </style>
+
 @push('scripts')
 <script>
-    const userMyTeamRoute = "{{ route('fetch_member_my_team') }}";
-    window.assetBase = "{{ asset('') }}";
-   
+const userMyTeamRoute = "{{ route('fetch_member_my_team') }}";
+window.assetBase = "{{ asset('') }}";
 </script>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{{ asset('assets/js/my_team/my_team.js') }}"></script>
-<script>
-
-</script>
 @endpush

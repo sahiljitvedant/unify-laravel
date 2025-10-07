@@ -12,15 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('gym_packages', function (Blueprint $table) {
-            $table->id();
+            // $table->id();
             
-            // Basic Details
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->enum('type', ['Monthly', 'Quarterly', 'Yearly', 'Session'])->default('Monthly');
+            // // Basic Details
+            // $table->string('name');
+            // $table->text('description')->nullable();
+            // $table->enum('type', ['Monthly', 'Quarterly', 'Yearly', 'Session'])->default('Monthly');
 
-            // Pricing Details
-            $table->decimal('price', 10, 2);
+            // // Pricing Details
+            // $table->decimal('price', 10, 2);
 
             // $table->timestamps();
         });
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('gym_packages');
+        // Schema::dropIfExists('gym_packages');
     }
 };

@@ -67,38 +67,37 @@
                         style="height:50px; width:150px; object-fit:cover; border-radius:8px; border:1px solid var(--sidebar_color)">
                 </a>
             </div>
-
+          
             <!-- Center: Search Bar + Welcome -->
-            <div class="d-flex align-items-center flex-grow-1 justify-content-center mx-3 gap-3">
+            <!-- <div class="d-flex align-items-center flex-grow-1 justify-content-center mx-3 gap-3">
                 <form id="membershipSearchForm" class="d-none d-md-flex flex-grow-1" style="max-width: 400px;">
                     <input type="text" id="membershipSearchInput" class="form-control" placeholder="Search Member">
                     <button type="submit" class="btn btn_bg_color ms-2">
                         <i class="bi bi-search"></i>
                     </button>
                 </form>
-                <!-- Welcome Text -->
+              
                 <div class="welcome-text d-none d-md-block">
                     <span style="font-size:12px; color:#000;">
                     Welcome back, {{ Auth::user()->name ?? 'User' }}
                     </span>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Right: Time, Notifications, Profile -->
             <div class="d-flex align-items-center gap-4">
                 <!-- Static Time & Day -->
-                <div class="text-end d-none d-md-block">
-                    <span id="day" class="d-block fw-semibold"></span>
-                    <span id="time" class="small text-muted"></span>
-                </div>
-
+               
+                <a href="{{ route('home') }}" class="oval-link">
+                    <i class="bi bi-globe2 me-2"></i> Sachii
+                </a>
                 <!-- Notifications -->
-                <!-- <a href="#" class="text-dark position-relative">
+                <a href="#" class="text-dark position-relative">
                     <i class="bi bi-bell fs-5"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill ntf_count">
                         3
                     </span>
-                </a> -->
+                </a>
 
                 <!-- Profile Dropdown -->
                 <div class="dropdown">
@@ -155,9 +154,9 @@
         <div class="sidebar">
             <ul>
                 <li>
-                   <a href="{{ route('member_working_history') }}" 
-                       class="{{ request()->routeIs('member_working_history') ? 'active' : '' }}">
-                       <i class="bi bi-clock-history"></i>
+                   <a href="{{ route('member_dashboard') }}" 
+                       class="{{ request()->routeIs('member_dashboard') ? 'active' : '' }}">
+                       <i class="bi bi-grid"></i>
                    </a>
                </li>
                 
@@ -169,29 +168,33 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('member_login') }}" 
-                        class="{{ request()->routeIs('member_login') ? 'active' : '' }}">
-                        <i class="bi bi-speedometer2"></i>
+                    <a href="{{ route('member_blogs') }}" 
+                        class="{{ request()->routeIs('member_blogs') ? 'active' : '' }}">
+                        <i class="bi bi-journal-text"></i>
                     </a>
                 </li>
                
                
                 <li>
                     <a href="{{ route('member_my_team') }}" 
-                        class="{{ request()->routeIs('member_my_team') ? 'active' : '' }}">
+                         class="nav-link {{ request()->routeIs('member_my_team', 'my_profile') ? 'active' : '' }}">
                         <i class="bi bi-people"></i>
                     </a>
+
                 </li>
                 <li>
-                    <a href="#" title="Go Live">
-                        <i class="bi bi-globe"></i>
+                    <a href="{{ route('member_gallary') }}" 
+                        class="{{ request()->routeIs('member_gallary') ? 'active' : '' }}">
+                        <i class="bi bi-images"></i>
                     </a>
                 </li>
                 <li>
-                    <a href="#" title="Logout">
-                        <i class="bi bi-box-arrow-right"></i>
+                    <a href="{{ route('member_payments') }}" 
+                        class="{{ request()->routeIs('member_payments','view_invoice') ? 'active' : '' }}">
+                        <i class="bi bi-credit-card"></i>
                     </a>
                 </li>
+                
             </ul>
         </div>
     @endif

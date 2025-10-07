@@ -3,348 +3,317 @@
 @section('title', 'Member Dashboard')
 
 @section('content')
-<div class="container-custom">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('list_dashboard') }}">Dashboard</a></li>
-              
-                <li class="breadcrumb-item" aria-current="page">List Dashboard</li>
-            </ol>
-        </nav>
-    <div class="p-4 bg-light rounded shadow">
-        <div class="row g-3">
-            <!-- Card 1 -->
-            <div class="col-md-4">
-                <div class="card shadow-sm border-0 rounded-3 h-100 card-hover">
-                    <div class="card-body d-flex flex-column p-4">
-                    <div>
-                        <h5 class="card-title text-start fw-bold mb-2">
-                        <i class="bi bi-people text-icon me-2 fs-4"></i>
-            
-                        <span class="fs-3 counter" data-target="{{ $members }}">0</span>
-                        </h5>
-                        <p class="card-text text-muted text-start mb-0">Current Members</p>
-                    </div>
-                    <div class="mt-auto d-flex justify-content-end">
-                        <a href="{{ route('list_member') }}" 
-                        class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm text-icon"
-                        style="width: 36px; height: 36px; background-color: #f0f4ff;">
-                        <i class="bi bi-box-arrow-up-right fs-5"></i>
-                        </a>
-                    </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Card 2 -->
-            <div class="col-md-4">
-                <div class="card shadow-sm border-0 rounded-3 h-100 card-hover">
-                    <div class="card-body d-flex flex-column p-4">
-                    <div>
-                        <h5 class="card-title text-start fw-bold mb-2">
-                        <i class="bi bi-book text-icon me-2 fs-4"></i>
-                        <span class="fs-3 counter" data-target="{{ $membership }}">0</span>
-                        </h5>
-                        <p class="card-text text-muted text-start mb-0">Membership Count</p>
-                    </div>
-                    <div class="mt-auto d-flex justify-content-end">
-                        <a href="{{ route('list_membership') }}" 
-                        class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm text-icon"
-                        style="width: 36px; height: 36px; background-color: #f0f4ff;">
-                        <i class="bi bi-box-arrow-up-right fs-5"></i>
-                        </a>
-                    </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="col-md-4">
-                <div class="card shadow-sm border-0 rounded-3 h-100 card-hover">
-                    <div class="card-body d-flex flex-column p-4">
-                    <div>
-                        <h5 class="card-title text-start fw-bold mb-2">
-                        <i class="bi bi-person-plus me-2 fs-4"></i>
-                        <span class="fs-3 counter" data-target="{{ $trainer }}">0</span>
-                        </h5>
-                        <p class="card-text text-muted text-start mb-0">Active Trainers</p>
-                    </div>
-                    <div class="mt-auto d-flex justify-content-end">
-                        <a href="{{ route('list_trainer') }}" 
-                        class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm text-icon"
-                        style="width: 36px; height: 36px; background-color: #f0f4ff;">
-                        <i class="bi bi-box-arrow-up-right fs-5"></i>
-                        </a>
-                    </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row mt-4 align-items-stretch">
-            <!-- Bar Chart -->
-            <div class="col-md-6 d-flex  py-2">
-                <div class="card shadow-sm border-0 rounded-3 w-100">
-                    <div class="card-body d-flex flex-column">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h5 class="card-title mb-0">Members Joined Per Month</h5>
-
-                            <!-- Year Dropdown -->
-                            <form method="GET" action="{{ route('list_dashboard') }}">
-                                <select name="year" class="form-select" onchange="this.form.submit()">
-                                    @foreach($years as $year)
-                                        <option value="{{ $year }}" {{ $year == $selectedYear ? 'selected' : '' }}>
-                                            {{ $year }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </form>
-                        </div>
-                        <!-- Chart wrapper grows full height -->
-                        <div class="flex-grow-1 d-flex align-items-end">
-                            <canvas id="membersChart" class="w-100 h-100"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Pie Chart -->
-            <div class="col-md-6 d-flex  py-2">
-                <div class="card shadow-sm border-0 rounded-3 w-100">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title mb-3">Membership Type Distribution</h5>
-                        <div class="flex-grow-1 d-flex align-items-center">
-                            <canvas id="membershipPieChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card shadow-sm rounded-3">
-            <div class="card-body">
-                <h5 class="card-title mb-3">List of Members(Pending Payment)</h5>
-                <div class="data-wrapper">
-                    <!-- Table -->
-                    <div class="table-responsive p-3">
-                        <table class="table table-hover align-middle custom-table" id="members-table">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <a href="#" class="sort-link" data-column="id">
-                                            ID 
-                                            <span class="sort-icons">
-                                                <i class="asc">▲</i>
-                                                <i class="desc">▼</i>
-                                            </span>
-                                        </a>
-                                    </th>
-                                    <th>
-                                        <a href="#" class="sort-link" data-column="membership_name">
-                                            Members Name
-                                            <span class="sort-icons">
-                                                <i class="asc">▲</i>
-                                                <i class="desc">▼</i>
-                                            </span>
-                                        </a>
-                                    </th>
-                                    <!-- <th>
-                                        <a href="#" class="sort-link" data-column="duration_in_days">
-                                            Email
-                                            <span class="sort-icons">
-                                                <i class="asc">▲</i>
-                                                <i class="desc">▼</i>
-                                            </span>
-                                        </a>
-                                    </th> -->
-                                    <th>
-                                        <a href="#" class="sort-link" data-column="price">
-                                            Mobile
-                                            <span class="sort-icons">
-                                                <i class="asc">▲</i>
-                                                <i class="desc">▼</i>
-                                            </span>
-                                        </a>
-                                    </th>
-                                    <th>Membership Type</th>
-                                    <th>
-                                        <a href="#" class="sort-link" data-column="ms.price">
-                                            Total Fees
-                                            <span class="sort-icons">
-                                                <i class="asc">▲</i>
-                                                <i class="desc">▼</i>
-                                            </span>
-                                        </a>
-                                    </th>
-                                    <th>
-                                        <a href="#" class="sort-link" data-column="gm.amount_paid">
-                                            Fees Paid
-                                            <span class="sort-icons">
-                                                <i class="asc">▲</i>
-                                                <i class="desc">▼</i>
-                                            </span>
-                                        </a>
-                                    </th>
-                                    <th>
-                                        <a href="#" class="sort-link" data-column="fees_pending">
-                                            Fees Pending
-                                            <span class="sort-icons">
-                                                <i class="asc">▲</i>
-                                                <i class="desc">▼</i>
-                                            </span>
-                                        </a>
-                                    </th>
-                                </tr>
-                            </thead>
-
-                            <tbody id="membershipBody"></tbody>
-                        </table>
-                    </div>
-                    <!-- Pagination -->
-                    <nav class="pb-3">
-                        <ul class="pagination justify-content-center" id="pagination"></ul>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </div>
+<div id="loader" style="display:none;">
+    <img src="{{ asset('assets/img/logo.png') }}" alt="Loading..." class="loader-img">
 </div>
 
+<div class="container-custom py-4">
+    <div class="container">
+        <h4 class="mb-4 text-theme fw-bold">Dashboard</h4>
+        {{-- =======================
+            1️⃣ Row: Profile & Current Plan
+        ======================== --}}
+        <div class="row mb-4">
+            <!-- Profile Completion -->
+            <div class="col-md-6 mb-3">
+                <a href="{{ $authUserId ? route('edit_member', ['id' => $authUserId]) : '#' }}" class="text-decoration-none">
+                    <div class="card shadow-sm p-3 h-100 d-flex flex-row align-items-center justify-content-between cursor-pointer hover-translate" style="min-height: 100px;">
+                        <!-- Left: Circle + Text -->
+                        <div class="d-flex align-items-center">
+                            <div class="icon-wrapper me-3">
+                                <div class="progress-circle-sm">
+                                    <div class="circle" style="width: 50px; height: 50px;">
+                                        <div class="inside-circle" style="width: 40px; height: 40px; font-size: 0.9rem;">80%</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-start">
+                                <h6 class="text-theme mb-1" style="font-weight: 600;">Profile Completed</h6>
+                                <small class="text-muted">Keep updating to reach 100%</small>
+                            </div>
+                        </div>
+
+                        <!-- Right: Arrow -->
+                        <i class="bi bi-arrow-up-right fs-5 text-theme"></i>
+                    </div>
+                </a>
+            </div>
+            <!-- Active Plan -->
+            <div class="col-md-6 mb-3">
+                <a href="{{ route('member_subscription') }}" class="text-decoration-none">
+                    <div class="card shadow-sm p-3 h-100 d-flex flex-row align-items-center justify-content-between cursor-pointer hover-translate" style="min-height: 100px;">
+                        <!-- Info on the left -->
+                        <div class="text-start">
+                            <h6 class="text-theme mb-1" style="font-weight: 600;">Premium Membership</h6>
+                            <small class="text-muted">Renews on: 15 Oct 2025</small>
+                        </div>
+
+                        <!-- Arrow on the right -->
+                        <i class="bi bi-arrow-up-right fs-5 text-theme"></i>
+                    </div>
+                </a>
+            </div>
+
+
+        </div>
+        {{-- =======================
+            5️⃣ Row: Upcoming Sessions / Trainers
+        ======================== --}}
+        <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
+            <h5 class="fw-bold text-theme mb-0">Flashbacks of Sachii</h5>
+            <a href="{{ route('member_gallary') }}" class="text-decoration-none text-theme fw-semibold small">See all</a>
+        </div>
+        <div class="row g-3">
+            <div class="swiper mySwiper">
+            <div class="swiper-wrapper">
+    @foreach($galleries as $gallery)
+        <div class="swiper-slide">
+            <div class="card">
+                <img src="{{ asset($gallery->main_thumbnail) }}" 
+                     class="card-img-top" 
+                     alt="{{ $gallery->gallery_name }}">
+                <div class="card-body text-center">
+                    <h6 class="card-title">{{ $gallery->gallery_name }}</h6>
+                    <p class="card-text small text-muted">{{ $gallery->description }}</p>
+                </div>
+            </div>
+        </div>
+    @endforeach
+</div>
+
+
+                <!-- Navigation buttons -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </div>
+       
+        {{-- =======================
+            2️⃣ Row: Recent Blogs
+        ======================== --}}
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold text-theme mb-0">Recent Blogs</h5>
+            <a href="{{ route('member_blogs') }}" class="text-decoration-none text-theme fw-semibold small">See all</a>
+        </div>
+
+        <div class="row g-3 mb-5">
+            @forelse($blogs as $blog)
+                <div class="col-md-3 col-sm-6">
+                    <div class="blog-card h-100">
+                        <img src="{{ $blog->blog_image ? asset($blog->blog_image) : asset('assets/img/default_blog.jpg') }}" 
+                            class="blog-img" 
+                            alt="{{ $blog->title }}">
+                        <div class="blog-body">
+                            <h6 class="fw-semibold text-dark mb-1">{{ $blog->blog_title }}</h6>
+                            <small class="text-muted">{{ \Carbon\Carbon::parse($blog->publish_date)->format('d M Y') }}</small>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <p class="text-muted">No recent blogs available.</p>
+            @endforelse
+        </div>
+
+        {{-- =======================
+            3️⃣ Row: Meet New Members
+        ======================== --}}
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold text-theme mb-0">Meet New Members</h5>
+            <a href="{{ route('member_my_team') }}" class="text-decoration-none text-theme fw-semibold small">See all</a>
+        </div>
+
+        <div class="row g-3">
+            @foreach($latestMembers as $member)
+                <div class="col-lg-2 col-md-4 col-sm-6 text-center">
+                    <a href="{{ route('my_profile', ['id' => $member->id]) }}" class="text-decoration-none ">
+                        <div class="card h-100 py-3 shadow-sm cursor-pointer hover-translate">
+                            <img 
+                                src="{{ $member->profile_image ? asset($member->profile_image) : asset('assets/img/download.png') }}" 
+                                class="rounded-circle mx-auto mb-2" 
+                                width="70" height="70" 
+                                alt="{{ $member->first_name }}">
+                            <h6 class="fw-semibold text-dark mb-0">{{ $member->first_name }} {{ $member->last_name }}</h6>
+                            <small class="text-muted">Joined {{ \Carbon\Carbon::parse($member->joining_date)->format('M Y') }}</small>
+                        </div>
+                    </a>
+                </div>
+            @endforeach
+        </div>
+
+        {{-- =======================
+            4️⃣ Row: Workout Progress
+        ======================== --}}
+        <!-- <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
+            <h5 class="fw-bold text-theme mb-0">Workout Progress</h5>
+            <a href="#" class="text-decoration-none text-theme fw-semibold small">View details</a>
+        </div>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="card shadow-sm p-4 h-100">
+                    <h6 class="fw-bold text-dark mb-3">Monthly Attendance</h6>
+                    <div class="progress mb-2" style="height: 10px;">
+                        <div class="progress-bar bg-theme" style="width: 75%;"></div>
+                    </div>
+                    <small class="text-muted">You attended <span class="text-theme fw-semibold">15</span> out of 20 sessions this month</small>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card shadow-sm p-4 h-100 text-center">
+                    <h6 class="fw-bold text-dark mb-3">Calories Burned</h6>
+                    <h3 class="fw-bold text-theme mb-1">12,540 kcal</h3>
+                    <small class="text-muted">This month’s total activity</small>
+                </div>
+            </div>
+        </div> -->
+
+        
+    </div>
+</div>
 @endsection
-
-@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
 <style>
-    .btn-add {
-        background-color: #0B1061;
-        color: #ffffff;
-        border-radius: 8px;
-        padding: 6px 16px;
+    .hover-translate {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .hover-translate:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+    .container-custom {
+        min-height: 80vh;
+        background-color: #f5f6fa;
+        padding: 20px;
+        border-radius: 12px;
+    }
+    .text-theme { color: #0B1061 !important; }
+    .card {
         border: none;
-        text-decoration: none;
-        font-size: 14px;
+        border-radius: 12px;
+    }
+    .blog-card {
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        overflow: hidden;
+        transition: transform 0.2s ease;
+    }
+    .blog-card:hover { transform: translateY(-5px); }
+    .blog-img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+    }
+    .blog-body { padding: 12px; }
+
+        /* Profile Completion Circle */
+        .progress-circle {
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+    /* Profile Completion Circle */
+    .progress-circle-sm {
+        position: relative;
+        width: 60px;      /* smaller outer circle */
+        height: 60px;
     }
 
-    .btn-add:hover {
-        background-color: #090d4a;
-    }
-    .table-responsive {
-    overflow-x: auto;
-    }
-
-    #members-table {
-        width: 100% !important;
-        table-layout: auto; /* allows columns to shrink */
-        font-size: 14px; /* optional: smaller text for better fit */
+    .circle {
+        position: relative;
+        width: 60px;      /* match smaller size */
+        height: 60px;
+        background: conic-gradient(#0B1061 0deg 288deg, #e9ecef 288deg 360deg);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    #members-table thead th {
-        font-size: 13px; /* smaller header text */
-        text-align: center; /* optional: center headers */
+    .inside-circle {
+        position: absolute;
+        background: #fff;
+        width: 46px;      /* smaller inner circle */
+        height: 46px;
+        border-radius: 50%;
+        font-weight: bold;
+        font-size: 0.8rem;  /* smaller font to fit */
+        color: #0B1061;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
+    .swiper {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 0;
+    padding: 0;
+    }
+
+    .swiper-wrapper {
+    align-items: center;
+    height:300px;
+    width: auto;
+    }
+
+    .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    }
+
+    .swiper-slide .card {
+        height:100px;
+    width: 450px;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    }
+
+    .swiper-slide .card:hover {
+    transform: translateY(-5px);
+    }
+
+    .swiper-button-next,
+    .swiper-button-prev {
+    color: #0B1061;
+    top: 50% !important;
+    transform: translateY(-50%);
+    }
+
+    .swiper-pagination {
+    margin-top: 5px !important;
+    position: relative !important;
+    }
+
+
 </style>
 
-@endpush
-
 @push('scripts')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-    <script>
-        const fetchMembership = "{{ route('fetch_member_list') }}";
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-        const counters = document.querySelectorAll(".counter");
-        counters.forEach(counter => 
-        {
-            const target = +counter.getAttribute("data-target");
-            const direction = counter.getAttribute("data-direction") || "up";
-            let count = direction === "down" ? target * 2 : 0; // start higher for down
-            const speed = 30;
-
-            const updateCount = () => {
-            if (direction === "up") {
-                if (count < target) {
-                count += Math.ceil(target / 50);
-                if (count > target) count = target;
-                counter.textContent = count;
-                setTimeout(updateCount, speed);
-                }
-            } else if (direction === "down") {
-                if (count > target) {
-                count -= Math.ceil(target / 50);
-                if (count < target) count = target;
-                counter.textContent = count;
-                setTimeout(updateCount, speed);
-                }
-            }
-            };
-
-            updateCount();
-        });
-        });
-    </script>
-   
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function()
-        {
-            // ---- Bar Chart ----
-            const ctx = document.getElementById('membersChart').getContext('2d');
-            new Chart(ctx, 
-            {
-                type: 'bar',
-                data: {
-                    labels: {!! json_encode($labels) !!},
-                    datasets: [{
-                        label: 'Members Joined',
-                        data: {!! json_encode($values) !!},
-                        backgroundColor: '#0b1061',
-                        borderRadius: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false, // ✅ allows canvas to fill parent height
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: { enabled: false }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: { stepSize: 1 }
-                        },
-                        x: {
-                            grid: { drawTicks: false }
-                        }
-                    }
-                }
-            });
-
-
-            // ---- Pie Chart ----
-            const ctxPie = document.getElementById('membershipPieChart').getContext('2d');
-            new Chart(ctxPie, 
-            {
-                type: 'pie',
-                data: {
-                    labels: {!! json_encode($membershipLabels) !!}, 
-                    datasets: [{
-                        data: {!! json_encode($membershipValues) !!}, 
-                        backgroundColor: ['#4e73df', '#1cc88a', '#5f64b1', '#af6878', '#36b9cc'],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: { position: 'bottom' },
-                        tooltip: { enabled: true }
-                    }
-                }
-            });
-        });
-    </script>
-    <script src="{{ asset('assets/js/dashboard/list_dashboard.js') }}"></script>
- 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+<script>
+    const swiper = new Swiper(".mySwiper", 
+    {
+        slidesPerView: 3,
+        spaceBetween: 30,
+        loop: true,
+        pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+        },
+        navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+        },
+        breakpoints: {
+        0: { slidesPerView: 1 },
+        576: { slidesPerView: 2 },
+        992: { slidesPerView: 3 }
+        }
+    });
+</script>
 @endpush
