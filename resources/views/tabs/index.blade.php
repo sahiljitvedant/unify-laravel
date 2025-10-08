@@ -3,29 +3,34 @@
 @section('title', 'Edit Member')
 
 @section('content')
+<div class="container-custom py-4">
+    <div class="container">
+        <h4 class="mb-4 text-theme fw-bold">Edit Profile</h4>
+        <div class="tab-wrapper">
+        <div class="tabs">
+            <button class="tab active" data-tab="home">Profile</button>
+            <button class="tab" data-tab="profile">Membership</button>
+            <button class="tab" data-tab="settings">Fitness Goals</button>
+            <button class="tab" data-tab="preferance">Preferance</button>
+        </div>
 
-<div class="tab-wrapper">
-  <div class="tabs">
-    <button class="tab active" data-tab="home">Profile</button>
-    <button class="tab" data-tab="profile">Membership</button>
-    <button class="tab" data-tab="settings">Fitness Goals</button>
-    <button class="tab" data-tab="preferance">Preferance</button>
-  </div>
+            <div class="tab-content" id="home">
+                @include('tabs.home')
+            </div>
+            <div class="tab-content" id="profile" style="display: none;">
+                @include('tabs.profile')
+            </div>
+            <div class="tab-content" id="settings" style="display: none;">
+                @include('tabs.settings')
+            </div>
+            <div class="tab-content" id="preferance" style="display: none;">
+                @include('tabs.preferance')
+            </div>
 
-    <div class="tab-content" id="home">
-        @include('tabs.home')
-    </div>
-    <div class="tab-content" id="profile" style="display: none;">
-        @include('tabs.profile')
-    </div>
-    <div class="tab-content" id="settings" style="display: none;">
-        @include('tabs.settings')
-    </div>
-    <div class="tab-content" id="preferance" style="display: none;">
-        @include('tabs.preferance')
-    </div>
+        </div>
+        </div>
+        </div>
 
-</div>
 <script>
     const tabs = document.querySelectorAll(".tab");
     const contents = document.querySelectorAll(".tab-content");
@@ -46,23 +51,28 @@
 
 @endsection
 <style>
+     .container-custom {
+        min-height: 80vh;
+        background-color: #f5f6fa;
+        padding: 20px;
+        border-radius: 12px;
+    }
     body {
         display: block !important;   /* stop flex centering */
         padding: 0;                  /* let your layout handle spacing */
         color: #212529;
     }
-
+    .text-theme { color: #0B1061 !important; }
     .tab-wrapper {
-    max-width: 100%;
-    width: 95%; /* take almost full width like multi-step form */
-       padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
-    margin: 0 auto;
-    background: #f5f6fa;  /* same as .bg-light */
-    padding: 1.5rem;      /* same as p-4 */
-    border-radius: 0.375rem; /* same as .rounded */
-    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15); /* same as .shadow */
+        max-width: 100%;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+        margin: 0 auto;
+        background: #e3e3e3; 
+        padding: 1.5rem;    
+        border-radius: 0.375rem; 
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
     }
 
     /* Tabs container */
@@ -76,7 +86,7 @@
     .tab {
         flex: 1;
         padding: 5px;
-        background: #dee2e6;
+        background: #f2f2f2;
         color: #000;
         border: none;
         border-radius: 6px;
@@ -87,7 +97,7 @@
     }
 
     .tab:hover {
-        background: #dee2e6;
+        background: #f2f2f2;
     }
 
     .tab.active {

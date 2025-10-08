@@ -26,7 +26,7 @@
             <div class="recent-blogs-sidebar position-sticky" style="top: 20px;">
                 @foreach($blogs->take(3) as $blog)
                 <div class="blog-card shadow-hover mb-4">
-                    <img src="{{ asset($blog->image_path ?? 'assets/img/default_blog.png') }}" class="blog-img" alt="{{ $blog->title }}">
+                    <img src="{{ asset($blog->image_path ?? 'assets/img/download.png') }}" class="blog-img" alt="{{ $blog->title }}">
                     <div class="blog-body">
                         <h6 class="fw-bold text-theme">{{ ucfirst($blog->title) }}</h6>
                         <p class="text-muted small mb-0">{{ Str::limit($blog->description, 60) }}</p>

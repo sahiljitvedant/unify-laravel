@@ -54,109 +54,78 @@
        
         <!-- Topbar -->
         <div class="topbar d-flex justify-content-between align-items-center px-3 py-2 shadow-sm flex-wrap">
-            <!-- Left: Mobile Menu & Logo -->
+            <!-- Left: Logo -->
             <div class="d-flex align-items-center gap-3">
-                <!-- Mobile Menu Button -->
-                <!-- <button id="menuToggle" class="btn btn-outline-secondary d-lg-none">
-                    <i class="fas fa-bars"></i>
-                </button> -->
-
-                <!-- Logo -->
-                <a href="{{ route('list_dashboard') }}" class="d-flex align-items-center text-decoration-none">
+                <a href="{{ route('member_dashboard') }}" class="d-flex align-items-center text-decoration-none">
                     <img src="{{ asset('assets/img/logo.png') }}" alt="Logo"
-                        style="height:50px; width:150px; object-fit:cover; border-radius:8px; border:1px solid var(--sidebar_color)">
+                        class="topbar-logo">
                 </a>
             </div>
-          
-            <!-- Center: Search Bar + Welcome -->
-            <!-- <div class="d-flex align-items-center flex-grow-1 justify-content-center mx-3 gap-3">
-                <form id="membershipSearchForm" class="d-none d-md-flex flex-grow-1" style="max-width: 400px;">
-                    <input type="text" id="membershipSearchInput" class="form-control" placeholder="Search Member">
-                    <button type="submit" class="btn btn_bg_color ms-2">
-                        <i class="bi bi-search"></i>
-                    </button>
-                </form>
-              
-                <div class="welcome-text d-none d-md-block">
-                    <span style="font-size:12px; color:#000;">
-                    Welcome back, {{ Auth::user()->name ?? 'User' }}
-                    </span>
-                </div>
-            </div> -->
 
             <!-- Right: Time, Notifications, Profile -->
-            <div class="d-flex align-items-center gap-4">
-                <!-- Static Time & Day -->
-               
-                <a href="{{ route('home') }}" class="oval-link">
-                    <i class="bi bi-globe2 me-2"></i> Sachii
+            <div class="d-flex align-items-center gap-3 topbar-right">
+                <!-- Home link -->
+                <a href="{{ route('home') }}" class="oval-link d-flex align-items-center">
+                    <i class="bi bi-globe2 me-2"></i>
+                    <span class="d-none d-sm-inline">Sachii</span>
                 </a>
+
                 <!-- Notifications -->
                 <a href="#" class="text-dark position-relative">
                     <i class="bi bi-bell fs-5"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill ntf_count">
-                        3
-                    </span>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill ntf_count">3</span>
                 </a>
 
                 <!-- Profile Dropdown -->
+                @php
+                    $member = DB::table('tbl_gym_members')->where('id', Auth::id())->first();
+                    $profileImage = $member && $member->profile_image ? asset($member->profile_image) : null;
+                @endphp
+
                 <div class="dropdown">
-                  
-                    @php
-                        $member = DB::table('tbl_gym_members')->where('id', Auth::id())->first();
-                        $profileImage = $member && $member->profile_image ? asset($member->profile_image) : null;
-                    @endphp
+                    <a class="dropdown-toggle text-dark text-decoration-none d-flex align-items-center" 
+                        href="#" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
 
-                    <div class="dropdown">
-                        <a class="dropdown-toggle text-dark text-decoration-none d-flex align-items-center" 
-                        href="#" role="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        @if($profileImage)
+                            <img src="{{ $profileImage }}" alt="Profile"
+                                class="rounded-circle me-2 profile-img">
+                        @else
+                            <i class="bi bi-person-circle fs-3 me-2"></i>
+                        @endif
 
-                            @if($profileImage)
-                                <img src="{{ $profileImage }}" 
-                                    alt="Profile"
-                                    class="rounded-circle me-2"
-                                    style="width:40px; height:40px; object-fit:cover; border:1px solid #ccc;">
-                            @else
-                                <i class="bi bi-person-circle fs-3 me-2"></i>
-                            @endif
+                        <span class="username d-none d-md-inline">{{ Auth::user()->name }}</span>
+                    </a>
 
-                            <span>{{ Auth::user()->name }}</span>
-                        </a>
-
-                        <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="profileDropdown">
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center" 
-                                href="{{ route('edit_member', auth()->user()->id) }}">
-                                    <i class="bi bi-person me-2"></i>
-                                    <span style="font-size:14px;">Profile</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <i class="bi bi-gear me-2"></i>
-                                    <span style="font-size:14px;">Settings</span>
-                                </a>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center" href="{{ route('logout') }}">
-                                    <i class="bi bi-box-arrow-right me-2"></i>
-                                    <span style="font-size:14px;">Logout</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-
+                    <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="profileDropdown">
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" 
+                            href="{{ route('edit_member', auth()->user()->id) }}">
+                                <i class="bi bi-person me-2"></i> Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <i class="bi bi-gear me-2"></i> Settings
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="{{ route('logout') }}">
+                                <i class="bi bi-box-arrow-right me-2"></i> Logout
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
+
         <!-- Sidebar -->
         <div class="sidebar">
             <ul>
                 <li>
                    <a href="{{ route('member_dashboard') }}" 
                        class="{{ request()->routeIs('member_dashboard') ? 'active' : '' }}">
-                       <i class="bi bi-grid"></i>
+                       <i class="bi bi-grid"></i><span>Dashboard</span>
                    </a>
                </li>
                 
@@ -164,13 +133,13 @@
                 <li>
                     <a href="{{ route('member_subscription') }}" 
                         class="{{ request()->routeIs('member_subscription') ? 'active' : '' }}">
-                        <i class="bi bi-card-checklist"></i>
+                        <i class="bi bi-card-checklist"></i><span>Subsription</span>
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('member_blogs') }}" 
                         class="{{ request()->routeIs('member_blogs') ? 'active' : '' }}">
-                        <i class="bi bi-journal-text"></i>
+                        <i class="bi bi-journal-text"></i><span>Blogs</span>
                     </a>
                 </li>
                
@@ -178,20 +147,20 @@
                 <li>
                     <a href="{{ route('member_my_team') }}" 
                          class="nav-link {{ request()->routeIs('member_my_team', 'my_profile') ? 'active' : '' }}">
-                        <i class="bi bi-people"></i>
+                        <i class="bi bi-people"></i><span>My Team</span>
                     </a>
 
                 </li>
                 <li>
                     <a href="{{ route('member_gallary') }}" 
                         class="{{ request()->routeIs('member_gallary') ? 'active' : '' }}">
-                        <i class="bi bi-images"></i>
+                        <i class="bi bi-images"></i><span>Gallary</span>
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('member_payments') }}" 
                         class="{{ request()->routeIs('member_payments','view_invoice') ? 'active' : '' }}">
-                        <i class="bi bi-credit-card"></i>
+                        <i class="bi bi-credit-card"></i><span>My Payments</span>
                     </a>
                 </li>
                 

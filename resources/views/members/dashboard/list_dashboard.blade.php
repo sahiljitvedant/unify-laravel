@@ -60,29 +60,27 @@
         {{-- =======================
             5️⃣ Row: Upcoming Sessions / Trainers
         ======================== --}}
-        <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
             <h5 class="fw-bold text-theme mb-0">Flashbacks of Sachii</h5>
             <a href="{{ route('member_gallary') }}" class="text-decoration-none text-theme fw-semibold small">See all</a>
         </div>
-        <div class="row g-3">
+        <div class="row g-3 mb-5">
             <div class="swiper mySwiper">
-            <div class="swiper-wrapper">
-    @foreach($galleries as $gallery)
-        <div class="swiper-slide">
-            <div class="card">
-                <img src="{{ asset($gallery->main_thumbnail) }}" 
-                     class="card-img-top" 
-                     alt="{{ $gallery->gallery_name }}">
-                <div class="card-body text-center">
-                    <h6 class="card-title">{{ $gallery->gallery_name }}</h6>
-                    <p class="card-text small text-muted">{{ $gallery->description }}</p>
+                <div class="swiper-wrapper">
+                    @foreach($galleries as $gallery)
+                        <div class="swiper-slide">
+                            <div class="card">
+                                <img src="{{ asset($gallery->main_thumbnail) }}" 
+                                    class="card-img-top" 
+                                    alt="{{ $gallery->gallery_name }}">
+                                <div class="card-body text-center">
+                                    <h6 class="card-title">{{ $gallery->gallery_name }}</h6>
+                                    <p class="card-text small text-muted">{{ $gallery->description }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
-            </div>
-        </div>
-    @endforeach
-</div>
-
-
                 <!-- Navigation buttons -->
                 <div class="swiper-button-next"></div>
                 <div class="swiper-button-prev"></div>
@@ -172,7 +170,7 @@
 </div>
 @endsection
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
 <style>
     .hover-translate {
         transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -246,50 +244,89 @@
         justify-content: center;
     }
     .swiper {
-    width: 100%;
-    margin-top: 10px;
-    margin-bottom: 0;
-    padding: 0;
+        width: 100%;
+        margin-bottom: 0;
     }
 
     .swiper-wrapper {
-    align-items: center;
-    height:300px;
-    width: auto;
+        align-items: center;
+        height: auto;
+        width: auto;
     }
 
     .swiper-slide {
-    display: flex;
-    justify-content: center;
-    align-items: stretch;
+        display: flex;
+        justify-content: center;
+        align-items: stretch;
     }
 
     .swiper-slide .card {
-        height:100px;
-    width: 450px;
-    border: none;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
+        height: 200px; /* increased for better visibility */
+        width: 350px;  /* adjust width if needed */
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        position: relative;
+        transition: transform 0.3s ease;
+    }
+
+    .swiper-slide .card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: opacity 0.3s ease;
+    }
+
+    .swiper-slide .card .card-body {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 10px;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.5); /* semi-transparent background for text */
+        color: #fff;
+        opacity: 0; /* hidden by default */
+        transition: opacity 0.3s ease;
     }
 
     .swiper-slide .card:hover {
-    transform: translateY(-5px);
+        transform: translateY(-5px);
+    }
+
+    .swiper-slide .card:hover img {
+        opacity: 0.6; /* reduce image opacity on hover */
+    }
+
+    .swiper-slide .card:hover .card-body {
+        opacity: 1; /* show text on hover */
     }
 
     .swiper-button-next,
     .swiper-button-prev {
-    color: #0B1061;
-    top: 50% !important;
-    transform: translateY(-50%);
+        color: #0B1061;
+        top: 65% !important;
+        transform: translateY(-50%);
+        width: 35px;
+        height: 35px;
+        background: rgba(255,255,255,0.8);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .swiper-button-next::after,
+    .swiper-button-prev::after {
+        font-size: 20px;
+        font-weight: bold;
     }
 
     .swiper-pagination {
-    margin-top: 5px !important;
-    position: relative !important;
+        margin-top: 5px !important;
+        position: relative !important;
     }
-
-
 </style>
 
 @push('scripts')

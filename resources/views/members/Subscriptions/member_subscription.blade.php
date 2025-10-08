@@ -1,12 +1,16 @@
 @extends('members.layouts.app')
 
-@section('title', 'Member Login')
+@section('title', 'Member Dashboard')
 
 @section('content')
+
+<div id="loader" style="display:none;">
+    <img src="{{ asset('assets/img/logo.png') }}" alt="Loading..." class="loader-img">
+</div>
 <div class="container-custom py-4">
     <div class="container">
         <div class="row g-4">
-          
+        <h4 class="mb-4 text-theme fw-bold">My Subscription</h4>
         <div class="row">
             @foreach($memberships as $membership)
                 @php
@@ -49,26 +53,34 @@
                         
                         {{-- Current Plan Badge --}}
                         @if($isCurrentPlan)
-                            <span class="badge bg-success position-absolute">Current Plan</span>
+                            <span class="badge_icon  position-absolute"> Current Plan</span>
                         @endif
 
-                        <h5 class="card-title mb-3" style="{{ $isCurrentPlan ? 'font-weight:normal;font-size:16px;' : '' }}">
+                        <h5 class="card-title mb-3" style="{{ $isCurrentPlan ? '' : '' }}">
                             {{ $membership->membership_name }}
                         </h5>
-                        
-                        {{-- Facilities List --}}
-                        <div class="card-text text-start flex-grow-1 scroll-desc" style="{{ $isCurrentPlan ? 'font-size:14px;' : '' }}">
-                            @foreach($allFacilities as $id => $name)
+                        <div class="fw-bold fs-5 mb-2">₹{{ number_format($membership->price, 0) }}</div>
+
+
+                        <hr class="my-2"> 
+
+                        <div class="card-text text-start flex-grow-1 scroll-desc" style="{{ $isCurrentPlan ? '' : '' }}">
+                            <!-- @foreach($allFacilities as $id => $name)
                                 @if(in_array($id, $included))
                                     <p class="feature text-success">✓ {{ $name }}</p>
                                 @else
                                     <p class="feature text-danger">✗ {{ $name }}</p>
                                 @endif
-                            @endforeach
+                            @endforeach -->
+                            <p> ✔ Cardio – Great for building stamina and overall fitness.</p>            
+                            <p> ✔ Yoga – Excellent for flexibility, balance, and stress</p>                  
+                            <p>✔ Zumba – Fun way to burn calories with dance workouts.</p>
+                            <p> ✖ Steam Bath – Not included, so users needing relaxation won’t have it.</p>
+                            <p> ✖ Swimming Pool / ✖ Sauna – Missing amenities for aquatic and heat-based</p> 
                         </div>
 
                         <div class="mt-3">
-                            <div class="fw-bold fs-5 mb-2">₹{{ $membership->price }} / month</div>
+                           
                             
                             @if($showButton)
                                 <button class="btn btn-primary w-100 subscribe-btn" 
@@ -88,7 +100,89 @@
     </div>
 </div>
 @endsection
+<style>
+    .badge_icon
+    {
+        top:10px;
+        right:10px;
+        font-size:12px;
+        padding:  5px 10px 5px 20px;
+        border-radius: 12px;
 
+        background: #DFFFE4;
+        border: solid 1px #9AECA7;
+        font-size: 10px;
+        font-weight: 500;
+        font-family: "Montserrat", sans-serif;
+       
+
+        position: absolute;
+        border-radius: 28px;
+        color: #10AB29;
+        
+    }
+    .container-custom {
+        min-height: 80vh;
+        background-color: #f5f6fa;
+        padding: 20px;
+        border-radius: 12px;
+    }
+    .text-theme { color: #0B1061 !important; }
+    .card {
+        background-color: #f2f2f2 !important;
+        border-radius: 25px !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+       
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        height: 420px;
+    }
+
+    .card:hover {
+    /* transform: translateY(-5px); */
+    }
+
+    .card-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #0B1061;
+    }
+
+    .card-text {
+        font-size: 14px;
+        flex-grow: 1;
+        overflow-y: auto; /* scroll if content too long */
+        padding-right: 5px;
+        margin-bottom: 10px;
+    }
+
+    .scroll-desc::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .scroll-desc::-webkit-scrollbar-thumb {
+        background-color: rgba(0,0,0,0.2);
+        border-radius: 5px;
+    }
+
+    .feature {
+    margin-bottom: 10px;
+    }
+
+    .btn-primary {
+    background-color: #0B1061 !important;
+    border: none !important;
+    padding: 10px 0;
+    border-radius: 12px;
+    }
+
+    /* pin price & button at bottom */
+    .card > div.mt-3 {
+    margin-top: auto;
+    }
+
+</style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
@@ -153,69 +247,3 @@ $(document).on('click', '.subscribe-btn', function() {
     });
 });
 </script>
-
-
-
-<style>
-    .badge
-    {
-        top:10px; 
-        right:10px; 
-        font-size:12px !important;
-        font-weight:400 !important;
-    }
-    .card {
-    background-color: #f2f2f2 !important;
-    border-radius: 25px !important;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    transition: transform 0.2s ease-in-out;
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    height: 420px; /* fixed card height */
-    }
-
-    .card:hover {
-    transform: translateY(-5px);
-    }
-
-    .card-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: #0B1061;
-    }
-
-    .card-text {
-    font-size: 14px;
-    flex-grow: 1;
-    overflow-y: auto; /* scroll if content too long */
-    padding-right: 5px;
-    margin-bottom: 10px;
-    }
-
-    .scroll-desc::-webkit-scrollbar {
-        width: 5px;
-    }
-
-    .scroll-desc::-webkit-scrollbar-thumb {
-        background-color: rgba(0,0,0,0.2);
-        border-radius: 5px;
-    }
-
-    .feature {
-    margin-bottom: 10px;
-    }
-
-    .btn-primary {
-    background-color: #0B1061 !important;
-    border: none !important;
-    padding: 10px 0;
-    border-radius: 12px;
-    }
-
-    /* pin price & button at bottom */
-    .card > div.mt-3 {
-    margin-top: auto;
-    }
-
-</style>
