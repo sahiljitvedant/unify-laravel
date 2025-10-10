@@ -29,31 +29,44 @@ function fetchPayments(page = 1) {
         }
     });
 }
-
 function renderTable(data) {
-    let rows = '';
+    let html = '';
+
     if (data.length === 0) {
-        rows = `<tr><td colspan="7" class="text-center">No payments found</td></tr>`;
+        html = `<div class="text-center w-100">No payments found</div>`;
     } else {
+        html += `<div class="row g-3">`; // start row
+
         data.forEach(p => {
             let viewUrl = `/view_invoice/${p.id}`;
-            rows += `<tr>
-                <td>${p.id}</td>
-                <td>${p.invoice_number}</td>
-                <td>${p.plan_name}</td>
-                <td>₹${parseFloat(p.amount).toFixed(2)}</td>
-                <td>${p.status}</td>
-            
-                <td class="text-center">
-                    <a href="${viewUrl}" class="text-primary">
-                        <i class="bi bi-eye" style="cursor:pointer;"></i>
-                    </a>
-                </td>
-            </tr>`;
+            html += `
+            <div class="col-12 col-md-4">
+                <div class="card mb-3 shadow-sm">
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <div>
+                            <h6 class="card-title mb-1">Invoice: ${p.invoice_number}</h6>
+                            <p class="mb-1"><strong>Plan:</strong> ${p.plan_name}</p>
+                            <p class="mb-1"><strong>Amount:</strong> ₹${parseFloat(p.amount).toFixed(2)}</p>
+                            <p class="mb-0"><strong>Status:</strong> ${p.status}</p>
+                            <a href="${viewUrl}" class="view-btn d-inline-flex align-items-center justify-content-center mt-3">
+                                View
+                            </a>
+                            <a href="${viewUrl}" class="download-btn d-inline-flex align-items-center justify-content-center mt-3">
+                                Download
+                            </a>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>`;
         });
+
+        html += `</div>`; // end row
     }
-    $("#paymentsBody").html(rows);
+
+    $("#paymentsCards").html(html);
 }
+
 
 function renderPagination(current, last) {
     let html = '';

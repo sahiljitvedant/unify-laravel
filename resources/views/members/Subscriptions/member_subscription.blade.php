@@ -10,7 +10,8 @@
 <div class="container-custom py-4">
     <div class="container">
         <div class="row g-4">
-        <h4 class="mb-4 text-theme fw-bold">My Subscription</h4>
+            <h4 class="mb-3 text-theme fw-bold">My Subscription</h4>
+        </div>
         <div class="row">
             @foreach($memberships as $membership)
                 @php
@@ -96,7 +97,7 @@
             @endforeach
         </div>
 
-        </div>
+       
     </div>
 </div>
 @endsection
@@ -108,14 +109,11 @@
         font-size:12px;
         padding:  5px 10px 5px 20px;
         border-radius: 12px;
-
         background: #DFFFE4;
         border: solid 1px #9AECA7;
         font-size: 10px;
         font-weight: 500;
         font-family: "Montserrat", sans-serif;
-       
-
         position: absolute;
         border-radius: 28px;
         color: #10AB29;
@@ -132,7 +130,6 @@
         background-color: #f2f2f2 !important;
         border-radius: 25px !important;
         box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-       
         display: flex;
         flex-direction: column;
         padding: 20px;
@@ -140,7 +137,7 @@
     }
 
     .card:hover {
-    /* transform: translateY(-5px); */
+        /* transform: translateY(-5px); */
     }
 
     .card-title {
@@ -152,7 +149,7 @@
     .card-text {
         font-size: 14px;
         flex-grow: 1;
-        overflow-y: auto; /* scroll if content too long */
+        overflow-y: auto; 
         padding-right: 5px;
         margin-bottom: 10px;
     }
@@ -167,7 +164,7 @@
     }
 
     .feature {
-    margin-bottom: 10px;
+     margin-bottom: 10px;
     }
 
     .btn-primary {
@@ -177,12 +174,46 @@
     border-radius: 12px;
     }
 
-    /* pin price & button at bottom */
     .card > div.mt-3 {
     margin-top: auto;
     }
+   
+    @media (max-width: 768px) 
+    {
+        /* Title fully left aligned */
+        h4.text-theme {
+            text-align: left !important;
+            margin-left: 0 !important;
+            padding-left: 5px !important;
+        }
+
+        /* Center cards perfectly */
+        .row > .col-md-4 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .card {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Smaller badge */
+        .badge_icon {
+            top: 8px;
+            right: 8px;
+            font-size: 9px;
+            padding: 3px 8px 3px 12px;
+            border-radius: 20px;
+        }
+    }
+
+
 
 </style>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
@@ -190,7 +221,6 @@ $(document).on('click', '.subscribe-btn', function() {
     let planId   = $(this).data('id');  // plan_id from button
     let planName = $(this).data('name'); // optional display
     let amount   = $(this).data('amount');    // amount from plan
-    // alert(planId,planName);
     $.ajax({
         url: "{{ route('payment.create') }}",
         type: "POST",

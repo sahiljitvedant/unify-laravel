@@ -1,6 +1,6 @@
 <form id="multiStepForm" class="">
     <div class="step" data-step="1">
-        <div class="row mb-3">
+        <div class="row mb-1">
             <div class="col-12 col-md-3 text-center">
                 <label class="form-label d-block mb-2">Upload Profile Image</label>
 
@@ -44,7 +44,7 @@
             </div>
         </div>
 
-        <div class="row mb-3">
+        <div class="row mb-1">
             <div class="col-12 col-md-6 mb-3">
                 <label class="form-label required">{{ __('global.dob') }}</label>
                 <input type="date" class="form-control" 
@@ -69,7 +69,7 @@
 
         </div>
 
-        <div class="row mb-3">
+        <div class="row mb-1">
             <div class="col-12 col-md-6 mb-3">
                 <label class="form-label required">{{ __('global.email_label') }}</label>
                 <input type="email" class="form-control" 
@@ -89,8 +89,8 @@
             </div>
         </div>
 
-        <div class="row mb-3">
-            <div class="col-12 col-md-4 mb-3">
+        <div class="row mb-1">
+            <div class="col-12 col-md-6 mb-3">
                 <label class="form-label required">{{ __('global.residence_address_label') }}</label>
                 <input type="text" class="form-control" 
                     name="residence_address" id="residence_address" 
@@ -99,7 +99,7 @@
                 <div class="text-danger error-message" data-error-for="residence_address"></div>
             </div>
 
-            <div class="col-12 col-md-4 mb-3">
+            <div class="col-12 col-md-6 mb-3">
                 <label class="form-label required">{{ __('global.residence_area_label') }}</label>
                 <input type="text" class="form-control" 
                     name="residence_area" id="residence_area" 
@@ -108,7 +108,7 @@
                 <div class="text-danger error-message" data-error-for="residence_area"></div>
             </div>
 
-            <div class="col-12 col-md-4 mb-3">
+            <div class="col-12 col-md-6 mb-3">
                 <label class="form-label required">{{ __('global.zipcode_label') }}</label>
                 <input type="text" class="form-control" 
                     name="zipcode" id="zipcode" 
@@ -118,8 +118,8 @@
             </div>
         </div>
 
-        <div class="row mb-3">
-            <div class="col-12 col-md-4 mb-3">
+        <div class="row mb-1">
+            <div class="col-12 col-md-6 mb-3">
                 <label class="form-label required">{{ __('global.city_label') }}</label>
                 <select class="form-control" name="city" id="city">
                     <option disabled>{{ __('global.select_option') }}</option>
@@ -130,7 +130,7 @@
                 <div class="text-danger error-message" data-error-for="city"></div>
             </div>
 
-            <div class="col-12 col-md-4 mb-3">
+            <div class="col-12 col-md-6 mb-3">
                 <label class="form-label required">{{ __('global.state_label') }}</label>
                 <select class="form-control" name="state" id="state">
                     <option disabled>{{ __('global.select_option') }}</option>
@@ -141,7 +141,7 @@
                 <div class="text-danger error-message" data-error-for="state"></div>
             </div>
 
-            <div class="col-12 col-md-4 mb-3">
+            <div class="col-12 col-md-6 mb-3">
                 <label class="form-label required">{{ __('global.country_label') }}</label>
                 <select class="form-control" name="country" id="country">
                     <option disabled>{{ __('global.select_option') }}</option>
@@ -240,6 +240,7 @@ $(document).ready(function ()
         padding: 5px;
     }
     .profilebtn{
+        font-size: 12px !important;
         background: #0b1061;
         color: #fff;
         border: 5px solid #0b1061 !important;
@@ -277,4 +278,71 @@ $(document).ready(function ()
     .line.active {
         background: #28a745; /* green */
     }
+
+    /* MOBILE FIXS */
+    @media (max-width: 1023px) 
+    {
+        /* 1. Force labels to left */
+        .form-label {
+            text-align: left !important;
+            display: block; /* make sure block */
+        }
+
+        /* 2. Reduce vertical spacing between rows */
+        .row.mb-3 {
+            margin-bottom: 0.5rem !important;
+        }
+
+        /* Reduce spacing inside columns */
+        .col-12.mb-3,
+        .col-12.col-md-3.mb-3,
+        .col-12.col-md-4.mb-3,
+        .col-12.col-md-6.mb-3 {
+            margin-bottom: 0.5rem !important;
+        }
+
+        /* 3. Profile image column alignment */
+        .col-12.col-md-3.text-center {
+            text-align: left !important; /* left align for image & upload */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        #previewImage {
+            margin: 0 0 5px 0 !important;
+            max-height: 60px;
+        }
+
+        .profilebtn {
+            margin-top: 5px !important;
+            align-self: flex-start; /* keep button left */
+        }
+
+        /* 4. Optional: smaller input padding */
+        .form-control {
+            padding: 0.35rem 0.5rem;
+            font-size: 10px;
+        }
+        .form-label
+        {
+            font-size: 11px!important;
+        }
+        .error-message{
+            font-size: 10px!important;
+            text-align: left !important;
+            display: block; /* make sure block */
+        }
+        .profilebtn {
+            font-size: 12px !important;
+            padding: 3px 10px !important;
+            border-radius: 15px !important;
+            border: 2px solid #0b1061 !important;
+            margin-top: 5px !important;
+            align-self: flex-start;
+        }
+    
+    }
+
+
 </style>

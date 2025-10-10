@@ -159,19 +159,16 @@ body {
         width: 80px;             
         z-index: 1000;
     }
-
     .sidebar ul 
     {
         list-style: none;
         margin: 0;
         padding: 0;
     }
-
     .sidebar ul li 
     {
         width: 100%;
     }
-
     .sidebar ul li a 
     {
         display: flex;
@@ -187,14 +184,12 @@ body {
         background-color: rgba(255, 255, 255, 0.15);
         color: var(--other_color_fff);
     }
-
     .sidebar ul li a i 
     {
         font-size:18px;
         font-weight: normal;  
         color: #f2f2f2;      
     }
-
     #mainContent 
     {
         margin-left: 100px;
@@ -233,6 +228,10 @@ body {
     /* Responsive */
     @media (max-width: 1023px) 
     {
+        .container-custom
+        {
+            padding: 5px;
+        }
         .sidebar {
             top: auto;
             bottom: 0;
@@ -240,17 +239,21 @@ body {
             width: 100%;
             height: 60px;
             display: flex;
-            align-items: center;          /* centers vertically */
-            justify-content: center;      /* centers horizontally */
+            align-items: center;
+            justify-content: center;
             padding: 0;
             background-color: var(--sidebar_color);
             border-top: 1px solid #ddd;
+            border-radius: 0;
+            border-top-left-radius: 20px;    /* 👈 curved top left */
+            border-top-right-radius: 20px;   /* 👈 curved top right */
+            display: none !important;
         }
 
         .sidebar ul {
             display: flex;
             justify-content: space-around;
-            align-items: center;          /* keep icons centered vertically */
+            align-items: center;
             width: 100%;
             height: 100%;
             margin: 0;
@@ -259,37 +262,89 @@ body {
         }
 
         .sidebar ul li {
-            margin: 0;
             flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            text-align: center;
+            font-weight: normal; 
+            font-size: 10px; 
         }
 
         .sidebar ul li a {
-            font-size: 20px;
-            padding: 0;
-            color: #f2f2f2;
-            font-weight: normal;          /* remove boldness */
-            display: flex;
+            flex-direction: column;       
             justify-content: center;
-            align-items: center;
-            height: 100%;
+            align-items: center;          
+            color: #f2f2f2;
             text-decoration: none;
+            height: 100%;
+            padding: 5px 0;
+      
         }
 
         .sidebar ul li a i {
-            font-size: 20px;
+            font-size: 14px;
             font-weight: normal;
             color: #f2f2f2;
+            margin-bottom: 2px;          
+        }
+
+    
+        .sidebar ul li a span {
+            display: block;
+            position: static;
+            background: none;
+            color: #f2f2f2;
+            font-size: 8px;
+            font-weight: normal;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+            line-height: 1.1;
+        }
+
+        .sidebar ul li a span::after {
+            display: none;
+        }
+
+        
+        .sidebar ul li a.active i,
+        .sidebar ul li a.active span {
+            color: var(--theme_color);
         }
 
         #mainContent {
             margin-left: 0;
-            padding: 100px 20px 80px 20px; /* bottom padding for nav bar */
+            padding: 80px 10px 20px 5px;
             text-align: center;
         }
     }
+
+    @media (max-width: 1023px) 
+    {
+        .mobile-toggle-btn {
+            position: fixed;
+            right: 20px;
+            bottom: 60px; 
+            width: 50px;
+            height: 50px;
+            background-color: var(--sidebar_color);
+            color: #f2f2f2;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            font-weight: normal;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+            z-index: 1200;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .mobile-toggle-btn {
+            display: none;
+        }
+    }
+
 
 /* Sidebar wwith Responsive Query End */
 
@@ -418,7 +473,7 @@ table.dataTable tbody tr:hover {
 }
 .form-control::placeholder 
 {
-    font-size:  var(--font_size); 
+    font-size:  10px; 
     color: #777;     
     opacity: 1;      
 }
@@ -449,7 +504,7 @@ table.dataTable tbody tr:hover {
 
 .form-control
 {
-    font-size:  var(--font_size);
+    font-size:  11px;
 }
 .form-select {
     font-size:  var(--font_size);         

@@ -189,7 +189,9 @@ Route::middleware(['auth.custom', 'session.timeout','auth.member'])->group(funct
     Route::get('/member_payments', [LoginController::class, 'member_payments'])->name('member_payments');
     Route::get('/view_invoice/{id}', [LoginController::class, 'view_invoice'])->name('view_invoice');
     Route::get('/member_blogs', [LoginController::class, 'member_blogs'])->name('member_blogs');
+    Route::get('/member_blogs_details/{id]', [LoginController::class, 'member_blogs_details'])->name('member_blogs_details');
     Route::get('/member_gallary', [LoginController::class, 'member_gallary'])->name('member_gallary');
+    Route::get('/member_gallary/{id}', [LoginController::class, 'member_gallary_namewise'])->name('member_gallary_namewise');
     // API Routes:-
     Route::get('/fetch_member_my_team', [LoginController::class, 'fetch_member_my_team'])->name('fetch_member_my_team');
     Route::get('/fetch_member_login', [LoginController::class, 'fetchLogin'])->name('fetch_member_login');

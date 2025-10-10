@@ -41,12 +41,12 @@
                 <div class="row g-3 mt-2">
                     <div class="col-md-2">
                     <button type="button" id="btnSearch" class="btn">
-    <i class="bi bi-search"></i> 
-</button>
+                        <i class="bi bi-search"></i> 
+                    </button>
 
-<button type="button" id="btnCancel" class="btn btn-secondary me-1 cncl_btn">
-    <i class="bi bi-x-circle"></i> 
-</button>
+                    <button type="button" id="btnCancel" class="btn btn-secondary me-1 cncl_btn">
+                        <i class="bi bi-x-circle"></i> 
+                    </button>
 
                     </div>
                 </div>
@@ -55,120 +55,156 @@
             <!-- Separator -->
             <div class="separator"></div>
 
-            <!-- Table -->
-            <div class="table-responsive p-3">
-                <table class="table table-hover align-middle custom-table" id="payments-table">
-                    <thead>
-                        <tr>
-                            <th><a href="#" class="sort-link" data-column="id">ID <span class="sort-icons"><i class="asc">▲</i><i class="desc">▼</i></span></a></th>
-                            <th><a href="#" class="sort-link" data-column="invoice_number">Invoice <span class="sort-icons"><i class="asc">▲</i><i class="desc">▼</i></span></a></th>
-                            <th><a href="#" class="sort-link" data-column="plan_name">Plan Name <span class="sort-icons"><i class="asc">▲</i><i class="desc">▼</i></span></a></th>
-                            <th><a href="#" class="sort-link" data-column="amount">Amount <span class="sort-icons"><i class="asc">▲</i><i class="desc">▼</i></span></a></th>
-                            <th><a href="#" class="sort-link" data-column="status">Status <span class="sort-icons"><i class="asc">▲</i><i class="desc">▼</i></span></a></th>
-                            <!-- <th><a href="#" class="sort-link" data-column="payment_status">Payment Status <span class="sort-icons"><i class="asc">▲</i><i class="desc">▼</i></span></a></th>
-                            <th><a href="#" class="sort-link" data-column="created_at">Date <span class="sort-icons"><i class="asc">▲</i><i class="desc">▼</i></span></a></th> -->
-                            <th>View</th> 
-                        </tr>
-                    </thead>
-                    <tbody id="paymentsBody"></tbody>
-                </table>
+            <div class="payments-cards-wrapper p-3" id="paymentsCards">
+            <!-- Cards will be injected here -->
             </div>
 
             <!-- Pagination -->
             <nav class="pb-3">
                 <ul class="pagination justify-content-center" id="pagination"></ul>
             </nav>
+
         </div>
     </div>
 </div>
 
 @endsection
 <style>
+    .card-body {
+        font-size: 12px; 
+    }
+    .card:hover {
+        transform: translateY(-5px); 
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+    }
+
+    .view-btn i {
+        font-size: 0.9rem; 
+    }
     .text-theme {
     color: #0B1061 !important;
-}
-    .container-custom {
-    min-height: 80vh;
-    background-color: #f5f6fa;
-    padding: 20px;
-    border-radius: 12px;
-}
+    }
+        .container-custom {
+        min-height: 80vh;
+        background-color: #f5f6fa;
+        padding: 20px;
+        border-radius: 12px;
+    }
 
-.search-input {
-    min-width: 200px;
-    border-radius: 50px;
-    padding: 8px 16px;
-    border: 1px solid #ccc;
-}
+    .search-input {
+        min-width: 200px;
+        border-radius: 50px;
+        padding: 8px 16px;
+        border: 1px solid #ccc;
+    }
 
-#membersContainer .card {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* centers the image & name */
-    background-color: #f2f2f2;
-    border-radius: 15px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-    padding: 20px 10px;
-    transition: transform 0.2s, box-shadow 0.2s;
-}
+    #membersContainer .card {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* centers the image & name */
+        background-color: #f2f2f2;
+        border-radius: 15px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        padding: 20px 10px;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
 
-#membersContainer .card img {
-    border-radius: 50%;
-    /* border: 1px solid #0B1061; */
-}
+    #membersContainer .card img {
+        border-radius: 50%;
+        /* border: 1px solid #0B1061; */
+    }
 
 
-#membersContainer .card:hover {
-    transform: translateY(-2px);
-    cursor: pointer;
-}
+    #membersContainer .card:hover {
+        transform: translateY(-2px);
+        cursor: pointer;
+    }
 
-#membersContainer .card h6 {
-    margin-top: 10px;
-    font-weight: 400;
-    color: #000;
-    font-size: 12px;
-}
+    #membersContainer .card h6 {
+        margin-top: 10px;
+        font-weight: 400;
+        color: #000;
+        font-size: 12px;
+    }
 
-.btn-primary {
-    background-color: #0B1061;
-    border-radius: 50px;
-    padding: 6px 18px;
-    border: none;
-}
+    .btn-primary {
+        background-color: #0B1061;
+        border-radius: 50px;
+        padding: 6px 18px;
+        border: none;
+    }
 
-.btn-primary:hover {
-    background-color: #090d4a;
-}
+    .btn-primary:hover {
+        background-color: #090d4a;
+    }
 
-.btn-secondary {
-    border-radius: 50px;
-    padding: 6px 18px;
-}
-.my_team_card
-{
-    text-decoration: none;
-}
-#payments-table thead th {
-    font-size: 12px;
-    font-weight: 600;
-    color: #0B1061; /* your theme color */
-    vertical-align: middle;
-}
+    .btn-secondary {
+        border-radius: 50px;
+        padding: 6px 18px;
+    }
+    .my_team_card
+    {
+        text-decoration: none;
+    }
+    #payments-table thead th {
+        font-size: 12px;
+        font-weight: 600;
+        color: #0B1061; /* your theme color */
+        vertical-align: middle;
+    }
 
-/* Table body styling */
-#paymentsBody td {
-    font-size: 12px;
-    color: #333;
-    vertical-align: middle;
-}
-body .text-primary {
-    color: #0B1061 !important;
-}
-.text-primary, .text-primary * {
-    color: #0B1061 !important;
-}
+    /* Table body styling */
+    #paymentsBody td {
+        font-size: 12px;
+        color: #333;
+        vertical-align: middle;
+    }
+    body .text-primary {
+        color: #0B1061 !important;
+    }
+    .text-primary, .text-primary * {
+        color: #0B1061 !important;
+    }
+    .view-btn {
+        display: inline-flex;         
+        align-items: center;
+        justify-content: center;
+        width: 60px;                
+        height: 28px;                 
+        border-radius: 50px;           
+        background-color: #0B1061;      /* theme color */
+        color: #fff;
+        font-size: 11px;              
+        font-weight: normal;
+        text-decoration: none;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .download-btn {
+        display: inline-flex;         
+        align-items: center;
+        justify-content: center;
+        width: 80px;                
+        height: 28px;                 
+        border-radius: 50px;           
+        background-color: #0B1061;      /* theme color */
+        color: #fff;
+        font-size: 11px;              
+        font-weight: normal;
+        text-decoration: none;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
 
+    .view-btn:hover {
+        /* transform: scale(1.0); */
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        color: #fff;
+    }
+    .download-btn:hover {
+        /* transform: scale(1.1); */
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        color: #fff;
+    }
 
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

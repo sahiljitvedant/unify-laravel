@@ -28,8 +28,8 @@
             </div>
 
         </div>
-        </div>
-        </div>
+    </div>
+</div>
 
 <script>
     const tabs = document.querySelectorAll(".tab");
@@ -112,6 +112,33 @@
         border-radius: 6px;
         border: 1px solid #dee2e6;
         box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+    }
+    @media (max-width: 1023px) {
+        .tabs {
+            flex-direction: column; /* vertical tabs */
+            gap: 10px;              /* vertical spacing */
+        }
+
+        .tab {
+            width: 100%;            /* full width */
+            text-align: left;
+        }
+    }
+    @media (max-width: 767px) {
+        .container-custom {
+            background: none !important;
+            padding: 0 !important;
+            border-radius: 0 !important;
+        }
+
+        .container-custom > .container {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        .tab-wrapper
+        {
+            padding: 10px !important;
+        }
     }
 </style>
 

@@ -3,34 +3,37 @@
 @section('title', 'Member Profile')
 
 @section('content')
-<div class="container-custom py-3 px-5">
+<div class="container-custom py-3 px-4">
 
     <!-- Back Button -->
     <div class="mb-3">
-    <a href="{{ route('member_my_team') }}" class="btn-back">
-        <i class="bi bi-arrow-left"></i>
-        <span class="btn-text">Back</span>
-    </a>
-</div>
+        <a href="{{ route('member_my_team') }}" class="btn-back">
+            <i class="bi bi-arrow-left"></i>
+            <span class="btn-text">Back</span>
+        </a>
+    </div>
 
     <!-- Member Profile Section -->
     <div class="row g-3">
-        <!-- Profile Card -->
         <div class="col-12">
-            <div class="card profile-card shadow-sm d-flex align-items-center flex-row p-3">
+            <div class="card profile-card shadow-sm d-flex flex-row p-3 align-items-start">
                 <img src="{{ $member->profile_image ? asset($member->profile_image) : asset('assets/img/download.png') }}"
-                     class="rounded-circle me-3"
-                     alt="{{ $member->first_name }}"
-                     style="width:80px; height:80px; object-fit:cover;">
-                <div>
-                    <h5 class="mb-1 fw-bold">
-                        {{ $member->first_name ?? 'Not Available' }} {{ $member->last_name ?? '' }}
-                        <span class="verified-badge ms-1">
+                    class="rounded-circle me-3"
+                    alt="{{ $member->first_name }}"
+                    style="width:80px; height:80px; object-fit:cover;">
+                <div class="profile-info">
+                    <div class="name-row d-flex align-items-center mb-1">
+                        <h5 class="fw-bold mb-0 name">
+                            {{ $member->first_name ?? 'Not Available' }} {{ $member->last_name ?? '' }}
+                        </h5>
+                        <span class="verified-badge ms-2">
                             <i class="bi bi-patch-check-fill"></i>
                         </span>
-                    </h5>
-                    <div class="text-muted small">
-                        <i class="bi bi-envelope me-1"></i>{{ $member->email ?? 'Not Available' }} <br>
+                    </div>
+                    <div class="email mb-1">
+                        <i class="bi bi-envelope me-1"></i>{{ $member->email ?? 'Not Available' }}
+                    </div>
+                    <div class="mobile">
                         <i class="bi bi-telephone me-1"></i>{{ $member->mobile ?? 'Not Available' }}
                     </div>
                 </div>
@@ -92,88 +95,160 @@
 
 <style>
     .btn-back {
-    display: inline-flex;
-    align-items: center; /* vertically centers icon & text */
-    gap: 6px; /* small spacing between icon and text */
-    text-decoration: none;
-    color: #0B1061; /* theme color */
-    font-weight: 500;
-}
+        display: inline-flex;
+        align-items: center; 
+        gap: 6px; 
+        text-decoration: none;
+        color: #0B1061;
+        font-weight: 500;
+    }
 
-.btn-back:hover {
-    color: #05093a;
-}
+    .btn-back:hover {
+        color: #05093a;
+    }
 
-.btn-back i {
-    font-size: 18px;
-    line-height: 1;
-}
+    .btn-back i {
+        font-size: 18px;
+        line-height: 1;
+    }
 
-.btn-text {
-    font-size: 14px;
-    line-height: 1;
-}
+    .btn-text {
+        font-size: 14px;
+        line-height: 1;
+    }
 
-/* Container */
-.container-custom {
-    min-height: 85vh;
-    background-color: #f5f6fa;
-    border-radius: 12px;
-}
+    .container-custom {
+        min-height: 85vh;
+        background-color: #f5f6fa;
+        border-radius: 12px;
+    }
 
-/* Back Button */
-.btn-back {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: #0B1061;
-    font-size: 22px;
-    text-decoration: none;
-    border: none;
-    background: none;
-    padding: 0;
-    transition: transform 0.15s ease-in-out;
-}
-.btn-back:hover {
-    transform: translateX(-3px);
-}
+    .btn-back {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #0B1061;
+        font-size: 22px;
+        text-decoration: none;
+        border: none;
+        background: none;
+        padding: 0;
+        transition: transform 0.15s ease-in-out;
+    }
+    .btn-back:hover {
+        transform: translateX(-3px);
+    }
 
-/* Profile Card */
-.profile-card {
-    border-radius: 12px;
-    background-color: #fff;
-    transition: transform 0.15s ease-in-out;
-}
-.profile-card:hover {
-    transform: translateY(-1px);
-}
-.verified-badge {
-    color: #0B1061;
-    font-size: 18px;
-}
+    .profile-card {
+        border-radius: 12px;
+        background-color: #fff;
+        transition: transform 0.15s ease-in-out;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
 
-/* Info Cards */
-.info-card {
-    border-radius: 12px;
-    background-color: #fff;
-    transition: transform 0.15s ease-in-out;
-}
-.info-card:hover {
-    transform: translateY(-2px);
-}
-.info-card .card-header {
-    background-color: #0B1061;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-    font-size: 14px;
-    padding: 8px 14px;
-}
-.info-card .card-body p {
-    margin-bottom: 6px;
-    font-size: 13px;
-    color: #444;
-}
-.text-muted {
-    color: #555 !important;
-}
+    .profile-card:hover {
+        transform: translateY(-1px);
+    }
+    .verified-badge {
+        color: #0B1061;
+        font-size: 18px;
+    }
+
+    /* Info Cards */
+    .info-card {
+        border-radius: 12px;
+        background-color: #fff;
+        transition: transform 0.15s ease-in-out;
+    }
+    .info-card:hover {
+        transform: translateY(-2px);
+    }
+    .info-card .card-header {
+        background-color: #0B1061;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+        font-size: 14px;
+        padding: 8px 14px;
+    }
+    .info-card .card-body p {
+        margin-bottom: 6px;
+        font-size: 13px;
+        color: #444;
+    }
+    .text-muted {
+        color: #555 !important;
+    }
+    .name
+    {
+        font-size: 16px;
+    }
+    .email, .mobile 
+    {
+        font-size: 14px;
+    }
+
+    /* Mobile view adjustments */
+
+    @media (max-width: 768px) 
+    {
+       .btn-text {
+            text-align: left !important;
+            margin-left: 0 !important;
+            padding-left: 5px !important;
+        }
+        .mb-3 {
+        text-align: left !important;
+        }
+
+        .profile-card {
+            flex-direction: row !important;
+            align-items: flex-start;
+            text-align: left;
+            padding: 10px !important;
+            flex-wrap: wrap;
+        }
+
+        .profile-card img {
+            margin-bottom: 0 !important;
+            width: 80px !important;
+            height: 80px !important;
+            flex-shrink: 0; 
+        }
+
+        .profile-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .name-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap; 
+        }
+
+        .verified-badge {
+            color: #0B1061;
+            font-size: 18px;
+        }
+
+        .email, .mobile {
+            font-size: 11px;
+            margin-top: 4px;
+        }
+        .name
+        {
+            font-size: 12px;
+        }
+        .email i, .mobile i {
+            margin-right: 5px;
+        }
+        .card-header.text-white.fw-semibold
+        {
+            font-size: 12px;
+        }
+    }
+
 </style>

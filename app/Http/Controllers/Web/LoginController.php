@@ -576,7 +576,21 @@ class LoginController extends Controller
     
         return response()->json($blogs);
     }
-    
+    public function member_blogs_details($id)
+    {
+        $blogs = Blog::where('is_active', 1)
+        ->where('id', $id)
+        ->first(); // use first() since it's a single record
+
+        // Optionally check if gallery exists
+        if (!$blogs) {
+        return redirect()->back()->with('error', 'Blog not found.');
+        }
+
+        // Pass gallery data to view
+        return view('members.blogs.blogs_details', compact('gallery'));
+
+    }
 
     public function member_gallary()
     {
@@ -596,6 +610,22 @@ class LoginController extends Controller
         ->paginate(6);
     
         return response()->json($galleries);
+    }
+
+    public function member_gallary_namewise($id)
+    {
+        $gallery = Gallery::where('is_active', 1)
+        ->where('id', $id)
+        ->first(); // use first() since it's a single record
+
+        // Optionally check if gallery exists
+        if (!$gallery) {
+        return redirect()->back()->with('error', 'Gallery not found.');
+        }
+
+        // Pass gallery data to view
+        return view('members.gallary.gallary_detail', compact('gallery'));
+
     }
     
 }

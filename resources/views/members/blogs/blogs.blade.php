@@ -8,35 +8,41 @@
 </div>
 
 <div class="container-custom py-4">
-    <div class="row">
-        <!-- LEFT: All Blogs -->
-        <div class="col-lg-8">
-            <h4 class="mb-3 text-theme fw-bold">All Blogs</h4>
-            <div class="row g-4" id="blogsContainer"></div>
-
-            <!-- Pagination -->
-            <nav>
-                <ul class="pagination justify-content-center mt-4" id="paginationLinks"></ul>
-            </nav>
-        </div>
-
-        <!-- RIGHT: Recent Blogs Sidebar -->
-        <div class="col-lg-4">
-            <h4 class="mb-3 text-theme fw-bold">Member Choice</h4>
-            <div class="recent-blogs-sidebar position-sticky" style="top: 20px;">
-                @foreach($blogs->take(3) as $blog)
-                <div class="blog-card shadow-hover mb-4">
-                    <img src="{{ asset($blog->image_path ?? 'assets/img/download.png') }}" class="blog-img" alt="{{ $blog->title }}">
-                    <div class="blog-body">
-                        <h6 class="fw-bold text-theme">{{ ucfirst($blog->title) }}</h6>
-                        <p class="text-muted small mb-0">{{ Str::limit($blog->description, 60) }}</p>
-                        <small class="text-theme fw-semibold">{{ \Carbon\Carbon::parse($blog->publish_date)->format('d M, Y') }}</small>
-                    </div>
+    <div class="container">
+        <div class="row">
+            <!-- LEFT: All Blogs -->
+            <div class="col-lg-8">
+                <div class="row g-4">
+                <h4 class="mb-3 text-theme fw-bold">All Blogs</h4>
                 </div>
-                @endforeach
+            
+                <div class="row g-4" id="blogsContainer"></div>
+
+                <!-- Pagination -->
+                <nav>
+                    <ul class="pagination justify-content-center mt-4" id="paginationLinks"></ul>
+                </nav>
             </div>
-        </div>
-    </div>
+
+            <!-- RIGHT: Recent Blogs Sidebar -->
+            <div class="col-lg-4">
+                <div class="row g-4">
+                <h4 class="mb-3 text-theme fw-bold">Member Choice</h4>
+                </div>
+                <div class="recent-blogs-sidebar position-sticky" style="top: 20px;">
+                    @foreach($blogs->take(3) as $blog)
+                    <div class="blog-card shadow-hover mb-4">
+                        <img src="{{ asset($blog->image_path ?? 'assets/img/download.png') }}" class="blog-img" alt="{{ $blog->title }}">
+                        <div class="blog-body">
+                            <h6 class="fw-bold text-theme">{{ ucfirst($blog->title) }}</h6>
+                            <p class="text-muted small mb-0">{{ Str::limit($blog->description, 60) }}</p>
+                            <small class="text-theme fw-semibold">{{ \Carbon\Carbon::parse($blog->publish_date)->format('d M, Y') }}</small>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+        </div></div>
 </div>
 @endsection
 
@@ -64,7 +70,7 @@
     }
     .blog-img {
         width: 100%;
-        height: 150px; /* slightly smaller for sidebar */
+        height: 150px;
         object-fit: cover;
         border-bottom: 1px solid #eee;
     }
@@ -119,6 +125,44 @@
         box-shadow: none;
     }
 
+  
+    @media (max-width: 768px) 
+    {
+        /* Title fully left aligned */
+        h4.text-theme {
+            text-align: left !important;
+            margin-left: 0 !important;
+            padding-left: 5px !important;
+        }
+        .row > .col-md-4 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .card {
+            width: 100%;
+            margin: 0 auto;
+        }
+    }
+    @media (max-width: 991px) {
+        .row {
+            display: flex;
+            flex-direction: column-reverse; /* swaps order */
+        }
+
+        /* Optional: center headings on mobile */
+        .row h4 {
+            text-align: center;
+        }
+
+        /* Ensure proper spacing between sections */
+        .col-lg-8,
+        .col-lg-4 {
+            margin-bottom: 20px;
+        }
+    }
 
 </style>
 

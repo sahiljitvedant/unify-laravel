@@ -120,7 +120,7 @@
         </div>
 
         <!-- Sidebar -->
-        <div class="sidebar">
+        <div class="sidebar" id="member_sidebar">
             <ul>
                 <li>
                    <a href="{{ route('member_dashboard') }}" 
@@ -153,7 +153,7 @@
                 </li>
                 <li>
                     <a href="{{ route('member_gallary') }}" 
-                        class="{{ request()->routeIs('member_gallary') ? 'active' : '' }}">
+                        class="{{ request()->routeIs('member_gallary','member_gallary_namewise') ? 'active' : '' }}">
                         <i class="bi bi-images"></i><span>Gallary</span>
                     </a>
                 </li>
@@ -166,6 +166,9 @@
                 
             </ul>
         </div>
+        <div class="mobile-toggle-btn">
+            <i class="bi bi-list"></i>
+        </div>
     @endif
     <!-- Main Content -->
     <div id="mainContent"  class="{{ in_array(Route::currentRouteName(), $hideSidebarRoutes) ? 'no-sidebar' : '' }}">
@@ -174,6 +177,8 @@
 
     <!-- Bootstrap Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+<!-- jQuery CDN -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
     <!-- Toggle Sidebar -->
     <script>
@@ -184,21 +189,37 @@
         const menuToggle = document.getElementById('menuToggle');
         const sidebar = document.getElementById('sidebar');
 
-        menuToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('active');
-        });
-  
-        function updateTime() {
-            const now = new Date();
-            const optionsDay = { weekday: 'long' };
-            const optionsTime = { hour: '2-digit', minute: '2-digit' };
+        let toggleState = 0; 
+        $(document).ready(function() 
+        {
+            $('.mobile-toggle-btn').click(function() 
+            {
+                const icon  = $(this).find('i');
 
-            document.getElementById('day').textContent = now.toLocaleDateString('en-US', optionsDay);
-            document.getElementById('time').textContent = now.toLocaleTimeString('en-US', optionsTime);
-        }
-        setInterval(updateTime, 1000);
-        updateTime();
+                if(toggleState === 0)
+                {
+                    // alert(1);
+                    icon.removeClass().addClass('bi bi-x-circle'); 
+                    $('#member_sidebar').attr('style', 'display: block !important;');
+                    $('#mainContent').css('padding', '70px 10px 80px 10px'); 
+                    // Yes icon
+                    toggleState = 1;
+                } else if(toggleState === 1){
+                    icon.removeClass().addClass('bi bi-list'); // No icon
+                    $('#member_sidebar').attr('style', 'display: none !important;');
+                    $('#mainContent').css('padding', '70px 10px 20px 10px'); 
+                    toggleState = 0;
+                 
+                }
+            });
+        });
+
     </script>
+
+
+<script>
+    
+</script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('assets/js/gym_membership/app.js') }}"></script>
     @stack('scripts')

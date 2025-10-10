@@ -9,7 +9,9 @@
 
 <div class="container-custom py-4">
     <div class="container">
-        <h4 class="mb-3 text-theme fw-bold">Snapshots</h4>
+        <div class="row g-4">
+            <h4 class="mb-3 text-theme fw-bold">Snapshots</h4>
+        </div>
         <div class="row" id="blogsContainer"></div>
 
         <!-- Pagination -->
@@ -35,27 +37,27 @@
     }
 
     .gallery-overlay {
-        background: rgba(0, 0, 0, 0.4); /* dark overlay */
+        background: rgba(0, 0, 0, 0.4);
         opacity: 0;
         transition: opacity 0.3s ease;
     }
 
     .gallery-card:hover .gallery-img {
-        opacity: 0.5; /* dim image on hover */
+        opacity: 0.5;
     }
 
     .gallery-card:hover .gallery-overlay {
-        opacity: 1; /* show overlay on hover */
+        opacity: 1; 
     }
 
 
     .gallery-name {
         font-size: 16px;
         text-align: center;
-        opacity: 1; /* always visible */
+        opacity: 1; 
         transition: opacity 0.3s ease;
-        color: #0B1061 !important; /* your theme color */
-        text-transform: capitalize; /* first letter capitalized */
+        color: #0B1061 !important; 
+        text-transform: capitalize; 
     }
 
     .gallery-card:hover .gallery-name {
@@ -89,8 +91,7 @@
     .text-theme {
         color: #0B1061 !important;
     }
-    </style>
-    <style>
+
     .pagination {
         display: flex;
         justify-content: center;
@@ -129,6 +130,26 @@
 
     .pagination .page-link:focus {
         box-shadow: none;
+    }
+    @media (max-width: 768px) 
+    {
+        /* Title fully left aligned */
+        h4.text-theme {
+            text-align: left !important;
+            margin-left: 0 !important;
+            padding-left: 5px !important;
+        }
+        .row > .col-md-4 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .card {
+            width: 100%;
+            margin: 0 auto;
+        }
     }
 </style>
 

@@ -242,7 +242,4 @@ return [
     'font_size_10px'=>'10px',
     'black_color'=>'#000',
     'front_font_size'=>'14px',
-
-    
-
 ];
