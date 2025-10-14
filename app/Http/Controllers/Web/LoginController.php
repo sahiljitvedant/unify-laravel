@@ -21,6 +21,9 @@ use App\Models\UserPreference;
 use App\Models\Preference;
 use App\Models\Blog;
 use App\Models\Gallery;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
+
 
 class LoginController extends Controller
 {
@@ -175,6 +178,7 @@ class LoginController extends Controller
 
     public function fetch_member_login_detail(Request $request)
     {
+        // dd(1);
         $user = Auth::user();
 
         // Last 7 days (descending: latest date first)
@@ -338,6 +342,7 @@ class LoginController extends Controller
             'plan_name' => $request->plan_name
         ]);
     }
+ 
     public function verifyPayment(Request $request)
     {
         $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
@@ -373,11 +378,26 @@ class LoginController extends Controller
                 'payment_status' => 2,           // 2 = Completed
                 'status'         => 'success',   // enum tracking
             ]);
+        
+            // 4️⃣ Generate PDF invoice
+            $pdf = Pdf::loadView('members.Payments.invoice_pdf', [
+                'payment' => $payment
+            ]);
+
+            // 5️⃣ Save to storage/app/public/invoices/
+            $fileName = 'invoice_' . $payment->invoice_number . '.pdf';
+            $path = 'public/invoices/' . $fileName;
+            Storage::put($path, $pdf->output());
+
+            // Optional: store invoice path in DB
+            $payment->update(['invoice_path' => 'storage/invoices/' . $fileName]);
 
             return response()->json([
                 'status'  => 'success',
-                'payment' => $payment
+                'payment' => $payment,
+                'pdf_url' => asset('storage/invoices/' . $fileName)
             ]);
+
         } catch (\Exception $e) {
             return response()->json([
                 'status'  => 'error',
@@ -418,49 +438,26 @@ class LoginController extends Controller
         return view('members.Team.my_profile', compact('member'));
 
     }
-    // public function fetch_member_my_team(Request $request)
-    // {
-    //     $query = GymMember::query()->where('is_deleted', '!=', 9);
-
-    //     // Search filter
-    //     if($request->filled('search')){
-    //         $search = $request->search;
-    //         $query->where(function($q) use ($search){
-    //             $q->where('first_name', 'like', "%$search%")
-    //             ->orWhere('last_name', 'like', "%$search%");
-    //         });
-    //     }
-
-    //     $perPage = $request->get('per_page', 10);
-    //     $page = $request->get('page', 1);
-
-    //     $members = $query->skip(($page-1)*$perPage)
-    //                     ->take($perPage)
-    //                     ->get();
-
-    //     return response()->json([
-    //         'data' => $members
-    //     ]);
-    // }
+ 
     public function fetch_member_my_team(Request $request)
-{
-    $query = GymMember::query()->where('is_deleted', '!=', 9);
+    {
+        $query = GymMember::query()->where('is_deleted', '!=', 9);
 
-    // Search filter
-    if ($request->filled('search')) {
-        $search = $request->search;
-        $query->where(function($q) use ($search){
-            $q->where('first_name', 'like', "%$search%")
-              ->orWhere('last_name', 'like', "%$search%");
-        });
+        // Search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search){
+                $q->where('first_name', 'like', "%$search%")
+                ->orWhere('last_name', 'like', "%$search%");
+            });
+        }
+
+        $perPage = $request->get('per_page', 12);
+
+        $members = $query->orderBy('id', 'desc')->paginate($perPage);
+
+        return response()->json($members); // now contains all pagination info
     }
-
-    $perPage = $request->get('per_page', 12);
-
-    $members = $query->orderBy('id', 'desc')->paginate($perPage);
-
-    return response()->json($members); // now contains all pagination info
-}
 
     public function saveUserPreference(Request $request)
     {
@@ -565,7 +562,10 @@ class LoginController extends Controller
                      ->orderBy('publish_date', 'desc')
                      ->get();
         // dd($blogs);
-        return view('members.blogs.blogs', compact('blogs'));
+        $latestBlogs = $blogs->take(3);
+
+        return view('members.blogs.blogs', compact('blogs', 'latestBlogs'));
+       
     }
     public function fetch_member_blogs(Request $request)
     {
@@ -578,17 +578,18 @@ class LoginController extends Controller
     }
     public function member_blogs_details($id)
     {
+        // dd($id);
         $blogs = Blog::where('is_active', 1)
         ->where('id', $id)
         ->first(); // use first() since it's a single record
 
         // Optionally check if gallery exists
         if (!$blogs) {
-        return redirect()->back()->with('error', 'Blog not found.');
+         return redirect()->back()->with('error', 'Blog not found.');
         }
 
         // Pass gallery data to view
-        return view('members.blogs.blogs_details', compact('gallery'));
+        return view('members.blogs.blogs_details', compact('blogs'));
 
     }
 

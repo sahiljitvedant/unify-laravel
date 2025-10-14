@@ -138,43 +138,46 @@
                     Dashboard
             </a>
             <a href="{{ route('list_member') }}" 
-            class="{{ request()->routeIs('list_member') ? 'active' : '' }}">
+            class="{{ request()->routeIs('list_member','add_member') ? 'active' : '' }}">
                 <i class="bi bi-people me-2"></i>Members
             </a>
-            <a class="d-flex justify-content-start align-items-center" 
-            data-bs-toggle="collapse" 
-            href="#modulesDropdown" 
-            role="button" 
-            aria-expanded="{{ request()->routeIs('list_membership','list_trainer') ? 'true' : 'false' }}" 
-            aria-controls="modulesDropdown">
-            <span><i class="bi bi-briefcase me-2"></i>Modules</span>
-            <i class="fas fa-chevron-down small ms-2 mt-0"></i>
-            </a>
-            <div class="collapse ps-4 {{ request()->routeIs('list_membership','list_trainer') ? 'show' : '' }}" 
-                id="modulesDropdown">
-                <a href="{{ route('list_membership') }}" 
-                class="d-block py-1 {{ request()->routeIs('list_membership') ? 'active' : '' }}">
-                    <i class="bi bi-book me-2"></i>Membership
-                </a>
-                <a href="{{ route('list_trainer') }}" 
-                class="d-block py-1 {{ request()->routeIs('list_trainer') ? 'active' : '' }}">
-                    <i class="bi bi-person-plus me-2"></i>Trainer
-                </a>
-            </div>
-            <a href="{{ route('list_blogs') }}" 
-            class="{{ request()->routeIs('list_blogs') ? 'active' : '' }}">
-                <i class="bi bi-journal me-2"></i>Blogs
-            </a>
-            <a href="#" 
-            class="{{ request()->routeIs('list_member') ? '' : '' }}">
+
+          
+            <a href="{{ route('list_gallery') }}" 
+            class="{{ request()->routeIs('list_gallery','add_gallery') ? 'active' : '' }}">
                 <i class="bi bi-camera me-2"></i>Gallary
             </a>
             <a href="#" 
             class="{{ request()->routeIs('list_member') ? '' : '' }}">
                 <i class="bi bi-chat-left-text me-2"></i>Enquiry
             </a>
+
+            <a class="d-flex justify-content-start align-items-center" 
+                data-bs-toggle="collapse" 
+                href="#modulesDropdown" 
+                role="button" 
+                aria-expanded="{{ request()->routeIs('list_membership','list_trainer') ? 'true' : 'false' }}" 
+                aria-controls="modulesDropdown">
+            <span><i class="bi bi-briefcase me-2"></i>Modules</span>
+            <i class="fas fa-chevron-down small ms-2 mt-0"></i>
+            </a>
+            <div class="collapse ps-4 {{ request()->routeIs('list_membership','add_membership','edit_membership','list_deleted_membership','list_trainer','add_trainer','edit_trainer','list_deleted_trainer') ? 'show' : '' }}" 
+                id="modulesDropdown">
+                <a href="{{ route('list_membership') }}" 
+                class="d-block py-1 {{ request()->routeIs('list_membership','add_membership','edit_membership','list_deleted_membership') ? 'active' : '' }}">
+                    <i class="bi bi-book me-2"></i>Membership
+                </a>
+                <a href="{{ route('list_trainer') }}" 
+                class="d-block py-1 {{ request()->routeIs('list_trainer','add_trainer','edit_trainer','list_deleted_trainer') ? 'active' : '' }}">
+                    <i class="bi bi-person-plus me-2"></i>Trainer
+                </a>
+            </div>
+            <a href="{{ route('list_blogs') }}" 
+            class="{{ request()->routeIs('list_blogs','add_blogs','edit_blogs','list_deleted_blogs') ? 'active' : '' }}">
+                <i class="bi bi-journal me-2"></i>Blogs
+            </a>
             <a href="{{ route('list_faqs') }}" 
-            class="{{ request()->routeIs('list_faqs') ? 'active' : '' }}">
+            class="{{ request()->routeIs('list_faqs','add_faq','edit_faq','list_deleted_faqs') ? 'active' : '' }}">
                 <i class="bi bi-question-circle me-2"></i>FAQs
             </a>
             <a href="{{ route('add_policy') }}" 

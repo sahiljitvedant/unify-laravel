@@ -180,33 +180,54 @@
    
     @media (max-width: 768px) 
     {
+        .container
+        {
+            padding: 1px !important;
+        }
         /* Title fully left aligned */
         h4.text-theme {
-            text-align: left !important;
-            margin-left: 0 !important;
-            padding-left: 5px !important;
-        }
-
-        /* Center cards perfectly */
-        .row > .col-md-4 {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
+            text-align: center !important;
+        
+            
         }
 
         .card {
-            width: 100%;
-            margin: 0 auto;
+            text-align: left !important;
+            padding: 12px !important;
         }
 
-        /* Smaller badge */
+        .card-title {
+            font-size: 14px !important;
+            margin-bottom: 6px !important;
+            line-height: 1.3;
+        }
+
+        .card-text p {
+            font-size: 12px !important;
+            margin-bottom: 4px !important;
+            line-height: 1.4;
+        }
+
+        .subscribe-btn {
+            font-size: 12px !important;
+            padding: 6px 10px !important;
+            margin-top: 6px !important;
+        }
+
+        .fw-bold.fs-5 {
+            font-size: 13px !important;
+            margin-bottom: 6px !important;
+        }
+
         .badge_icon {
+            font-size: 11px !important;
             top: 8px;
             right: 8px;
-            font-size: 9px;
-            padding: 3px 8px 3px 12px;
-            border-radius: 20px;
+            padding: 3px 6px !important;
+        }
+
+        hr.my-2 {
+            margin: 6px 0 !important;
         }
     }
 

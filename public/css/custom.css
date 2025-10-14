@@ -5,6 +5,25 @@ body {
     font-family: 'Inter', sans-serif;
     background-color: var(--theme-color);
 }
+::-webkit-scrollbar {
+    width: 6px; 
+    height: 6px; 
+}
+::-webkit-scrollbar-track {
+    background: #f5f6fa; 
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #0B1061; 
+    border-radius: 10px;
+    border: 1px solid #f5f6fa; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #090d4a; 
+}
+
 .topbar {
     position: fixed;
     top: 0;
@@ -13,7 +32,7 @@ body {
     width: 100%;
     background-color:  var(--theme-color);
     border-bottom: 1px solid #e3dfe7;
-    z-index: 1000;
+    z-index: 1050 !important;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -631,4 +650,39 @@ table td {
     background-color: var(--sidebar_color);
     color: #fff;
     font-size: var(--font_size);
+}
+
+/* Editor CSS */
+/* CKEditor editable area styling */
+.ck-editor__editable {
+    font-size: 12px;               /* Font size for content */
+    min-height: 150px;             /* Optional: minimum height */
+    line-height: 1.5;              /* Optional: better readability */
+    border: 1px solid #ccc;        /* Default border */
+    border-radius: 4px;            /* Rounded corners */
+    padding: 8px;                  /* Padding inside editor */
+    transition: border-color 0.3s; /* Smooth focus transition */
+}
+
+/* Placeholder styling */
+.ck-editor__editable::before {
+    font-size: 12px;               /* Font size of placeholder */
+    color: #999;                   /* Placeholder color */
+    content: attr(data-placeholder);
+}
+
+/* Focus state styling */
+.ck-editor__editable:focus {
+    border-color: #007bff;         /* Replace with your theme color */
+    outline: none;                 /* Remove default outline */
+}
+
+.ck-editor__top, 
+.ck-toolbar__items
+.ck-editor__editable_inline, 
+.ck-editor__editable {
+    z-index: 1 !important; /* lower than navbar */
+}
+.ck-toolbar {
+    z-index: 1 !important;
 }

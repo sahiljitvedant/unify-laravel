@@ -12,17 +12,17 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('list_dashboard') }}">Dashboard</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('list_blogs') }}">Blogs</a></li>
-                <li class="breadcrumb-item" aria-current="page">List Blogs</li>
+                <li class="breadcrumb-item" aria-current="page">List Deleted Blogs</li>
             </ol>
         </nav>
         <div class="p-4 bg-light rounded shadow">
             <!-- Heading + Add Button -->
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 gap-2">
-                <h4 class="mb-2 mb-md-0">List Blogs</h4>
-                <div class="d-flex flex-column align-items-start align-items-md-end gap-2">
+                <h4 class="mb-2 mb-md-0">List Deleted Blogs</h4>
+                <!-- <div class="d-flex flex-column align-items-start align-items-md-end gap-2">
                     <a href="{{ route('add_blogs') }}" class="btn-add">Add Blogs</a>
                     <a href="{{ route('list_deleted_blogs') }}" class="btn-link">Show Deleted Blogs</a>
-                </div>
+                </div> -->
             </div>
             <div class="data-wrapper">
                 <!-- Filters -->

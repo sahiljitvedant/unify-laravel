@@ -103,6 +103,7 @@ Route::middleware(['auth.custom', 'session.timeout','auth.admin'])->group(functi
     // Route::get('/list_deleted_faqs', [BlogsController::class, 'list_deleted_faqs'])->name('list_deleted_faqs');
 
     // Gallary Route:-
+    Route::get('/list_gallery', [GallaryController::class, 'list'])->name('list_gallery');
     Route::get('/add_gallery', [GallaryController::class, 'add'])->name('add_gallery');
     Route::get('/edit_gallery/{id}', [GallaryController::class, 'edit'])->name('edit_gallery');
     Route::get('/add_company', [CompanyController::class, 'add'])->name('add_company');
@@ -158,6 +159,7 @@ Route::middleware(['auth.custom', 'session.timeout','auth.admin'])->group(functi
         Route::get('/fetch_deleted_faqs', [FAQController::class, 'fetch_deleted_faqs'])->name('fetch_deleted_faqs');
         Route::post('/activate_faqs/{id}', [FAQController::class, 'activate_faqs'])->name('activate_faqs');
         // Gallary:-
+        Route::get('/fetch_gallery', [GallaryController::class, 'fetch_gallery'])->name('fetch_gallery');
         Route::post('/add_gallery', [GallaryController::class, 'submit'])->name('add_gallery');
 
         Route::post('/create_company', [CompanyController::class, 'create_company'])->name('create_company');
@@ -189,7 +191,7 @@ Route::middleware(['auth.custom', 'session.timeout','auth.member'])->group(funct
     Route::get('/member_payments', [LoginController::class, 'member_payments'])->name('member_payments');
     Route::get('/view_invoice/{id}', [LoginController::class, 'view_invoice'])->name('view_invoice');
     Route::get('/member_blogs', [LoginController::class, 'member_blogs'])->name('member_blogs');
-    Route::get('/member_blogs_details/{id]', [LoginController::class, 'member_blogs_details'])->name('member_blogs_details');
+    Route::get('/member_blogs_details/{id}', [LoginController::class, 'member_blogs_details'])->name('member_blogs_details');
     Route::get('/member_gallary', [LoginController::class, 'member_gallary'])->name('member_gallary');
     Route::get('/member_gallary/{id}', [LoginController::class, 'member_gallary_namewise'])->name('member_gallary_namewise');
     // API Routes:-

@@ -3,89 +3,89 @@
 @section('title', 'Member Profile')
 
 @section('content')
-<div class="container-custom py-3 px-4">
+<div class="container-custom py-4">
+    <div class="container">
+        <!-- Back Button -->
+        <div class="mb-3">
+            <a href="{{ url()->previous() }}" class="btn-back">
+                <i class="bi bi-arrow-left"></i>
+                <span class="btn-text">Back</span>
+            </a>
+        </div>
 
-    <!-- Back Button -->
-    <div class="mb-3">
-        <a href="{{ route('member_my_team') }}" class="btn-back">
-            <i class="bi bi-arrow-left"></i>
-            <span class="btn-text">Back</span>
-        </a>
-    </div>
-
-    <!-- Member Profile Section -->
-    <div class="row g-3">
-        <div class="col-12">
-            <div class="card profile-card shadow-sm d-flex flex-row p-3 align-items-start">
-                <img src="{{ $member->profile_image ? asset($member->profile_image) : asset('assets/img/download.png') }}"
-                    class="rounded-circle me-3"
-                    alt="{{ $member->first_name }}"
-                    style="width:80px; height:80px; object-fit:cover;">
-                <div class="profile-info">
-                    <div class="name-row d-flex align-items-center mb-1">
-                        <h5 class="fw-bold mb-0 name">
-                            {{ $member->first_name ?? 'Not Available' }} {{ $member->last_name ?? '' }}
-                        </h5>
-                        <span class="verified-badge ms-2">
-                            <i class="bi bi-patch-check-fill"></i>
-                        </span>
-                    </div>
-                    <div class="email mb-1">
-                        <i class="bi bi-envelope me-1"></i>{{ $member->email ?? 'Not Available' }}
-                    </div>
-                    <div class="mobile">
-                        <i class="bi bi-telephone me-1"></i>{{ $member->mobile ?? 'Not Available' }}
+        <!-- Member Profile Section -->
+        <div class="row g-3">
+            <div class="col-12">
+                <div class="card profile-card shadow-sm d-flex flex-row p-3 align-items-start">
+                    <img src="{{ $member->profile_image ? asset($member->profile_image) : asset('assets/img/download.png') }}"
+                        class="rounded-circle me-3"
+                        alt="{{ $member->first_name }}"
+                        style="width:80px; height:80px; object-fit:cover;">
+                    <div class="profile-info">
+                        <div class="name-row d-flex align-items-center mb-1">
+                            <h5 class="fw-bold mb-0 name">
+                                {{ $member->first_name ?? 'Not Available' }} {{ $member->last_name ?? '' }}
+                            </h5>
+                            <span class="verified-badge ms-2">
+                                <i class="bi bi-patch-check-fill"></i>
+                            </span>
+                        </div>
+                        <div class="email mb-1">
+                            <i class="bi bi-envelope me-1"></i>{{ $member->email ?? 'Not Available' }}
+                        </div>
+                        <div class="mobile">
+                            <i class="bi bi-telephone me-1"></i>{{ $member->mobile ?? 'Not Available' }}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- Membership Info -->
-        <div class="col-md-6">
-        <div class="card info-card shadow-sm">
-            <div class="card-header text-white fw-semibold">Membership Details</div>
-                <div class="card-body small text-muted">
-                    <p><strong>Type:</strong> {{ $member->membership_type ?? 'Not Available' }}</p>
-                    <p><strong>Joining Date:</strong> {{ $member->joining_date ? date('d-m-Y', strtotime($member->joining_date)) : 'Not Available' }}</p>
-                    <p><strong>Expiry Date:</strong> {{ $member->expiry_date ? date('d-m-Y', strtotime($member->expiry_date)) : 'Not Available' }}</p>
-
-                    <p><strong>Payment Method:</strong> {{ $member->payment_method ?? 'Not Available' }}</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Fitness Info -->
-        <div class="col-md-6">
+            <!-- Membership Info -->
+            <div class="col-md-6">
             <div class="card info-card shadow-sm">
-                <div class="card-header text-white fw-semibold">Fitness Information</div>
-                <div class="card-body small text-muted">
-                    <p><strong>Goal:</strong> {{ $member->fitness_goals ?? 'Not Available' }}</p>
-                    <p><strong>Preferred Time:</strong> {{ $member->preferred_workout_time ?? 'Not Available' }}</p>
-                    <p><strong>Current Weight:</strong> {{ $member->current_weight ?? 'Not Available' }}</p>
-                    <p><strong>Notes:</strong> {{ $member->additional_notes ?? 'Not Available' }}</p>
+                <div class="card-header text-white fw-semibold">Membership Details</div>
+                    <div class="card-body small text-muted">
+                        <p class="font_size"><strong>Type:</strong> {{ $member->membership_type ?? 'Not Available' }}</p>
+                        <p class="font_size"><strong>Joining Date:</strong> {{ $member->joining_date ? date('d-m-Y', strtotime($member->joining_date)) : 'Not Available' }}</p>
+                        <p class="font_size"><strong>Expiry Date:</strong> {{ $member->expiry_date ? date('d-m-Y', strtotime($member->expiry_date)) : 'Not Available' }}</p>
+                        <p class="font_size"><strong>Payment Method:</strong> {{ $member->payment_method ?? 'Not Available' }}</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <!-- Personal Info -->
-        <div class="col-12">
-            <div class="card info-card shadow-sm">
-                <div class="card-header text-white fw-semibold">Personal Information</div>
-                <div class="card-body small text-muted">
-                    <p><strong>Date of Birth:</strong> 
-                        {{ $member->dob ? \Carbon\Carbon::parse($member->dob)->format('d-m-Y') : 'Not Available' }}
-                    </p>
 
-                    <p><strong>Gender:</strong> 
-                        @php
-                            $genderMap = [
-                                1 => 'Male',
-                                2 => 'Female',
-                                3 => 'Other'
-                            ];
-                        @endphp
-                        {{ isset($genderMap[$member->gender]) ? $genderMap[$member->gender] : 'Not Available' }}
-                    </p>
+            <!-- Fitness Info -->
+            <div class="col-md-6">
+                <div class="card info-card shadow-sm">
+                    <div class="card-header text-white fw-semibold">Fitness Information</div>
+                    <div class="card-body small text-muted">
+                        <p class="font_size"><strong>Goal:</strong> {{ $member->fitness_goals ?? 'Not Available' }}</p>
+                        <p class="font_size"><strong>Preferred Time:</strong> {{ $member->preferred_workout_time ?? 'Not Available' }}</p>
+                        <p class="font_size"><strong>Current Weight:</strong> {{ $member->current_weight ?? 'Not Available' }}</p>
+                        <p class="font_size"><strong>Notes:</strong> {{ $member->additional_notes ?? 'Not Available' }}</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Personal Info -->
+            <div class="col-12">
+                <div class="card info-card shadow-sm">
+                    <div class="card-header text-white fw-semibold">Personal Information</div>
+                    <div class="card-body small text-muted">
+                        <p class="font_size"><strong>Date of Birth:</strong> 
+                            {{ $member->dob ? \Carbon\Carbon::parse($member->dob)->format('d-m-Y') : 'Not Available' }}
+                        </p>
 
-                    <p><strong>Address:</strong> {{ $member->residence_address ?? 'Not Available' }}</p>
+                        <p class="font_size"><strong>Gender:</strong> 
+                            @php
+                                $genderMap = [
+                                    1 => 'Male',
+                                    2 => 'Female',
+                                    3 => 'Other'
+                                ];
+                            @endphp
+                            {{ isset($genderMap[$member->gender]) ? $genderMap[$member->gender] : 'Not Available' }}
+                        </p>
+
+                        <p class="font_size"><strong>Address:</strong> {{ $member->residence_address ?? 'Not Available' }}</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -94,6 +94,7 @@
 @endsection
 
 <style>
+   
     .btn-back {
         display: inline-flex;
         align-items: center; 
@@ -193,6 +194,25 @@
 
     @media (max-width: 768px) 
     {
+        .info-card,
+        .profile-card {
+            text-align: left !important;
+        }
+        
+        /* If some inner elements have flex or justify-content styles that center things, override them */
+        .info-card .card-body,
+        .info-card .card-header,
+        .profile-card .profile-info,
+        .profile-card .name-row {
+            text-align: left !important;
+            justify-content: flex-start !important;
+            align-items: flex-start !important;
+        }
+        .container
+        {
+            padding: 1px !important;
+        }
+
        .btn-text {
             text-align: left !important;
             margin-left: 0 !important;
@@ -248,6 +268,11 @@
         .card-header.text-white.fw-semibold
         {
             font-size: 12px;
+        }
+        .info-card .card-body p {
+            margin-bottom: 6px;
+            font-size: 11px;
+            color: #444;
         }
     }
 

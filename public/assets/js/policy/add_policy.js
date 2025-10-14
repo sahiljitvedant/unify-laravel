@@ -1,3 +1,34 @@
+let ckEditorInstance;
+
+ClassicEditor
+    .create(document.querySelector('#policy_description'), {
+        toolbar: [
+            'heading', '|',
+            'bold', 'italic', 'underline', 'strikethrough', 'link',
+            'bulletedList', 'numberedList', 'blockQuote',
+            'undo', 'redo',
+            'fontSize' // <-- add font size control
+        ],
+        fontSize: {
+            options: [
+                10, 12, 14, 'default', 18, 20, 24, 28
+            ]
+        },
+        removePlugins: [
+            'EasyImage',
+            'Image',
+            'ImageUpload',
+            'CKFinder',
+            'CKFinderUploadAdapter',
+            'MediaEmbed'
+        ]
+    })
+    .then(editor => {
+        ckEditorInstance = editor;
+        console.log('CKEditor initialized without image upload, with font size');
+    })
+    .catch(error => console.error('CKEditor init error:', error));
+
 // Validation Rules
 const validationRules = {
     policy_description: { 
@@ -24,6 +55,11 @@ function validateForm()
 
     // Clear previous errors
     $('.error-message').text('');
+    let descriptionData = '';
+    if (ckEditorInstance) {
+        descriptionData = ckEditorInstance.getData().trim();
+        $('#policy_description').val(descriptionData); // keep the textarea in sync
+    }
 
     $('#add_policy_form :input').each(function () {
         const name = $(this).attr('name');
@@ -79,7 +115,9 @@ $('#profileImage').on('change', function (e)
 $('#submitBtn').on('click', function (e) {
     // alert(1);
     e.preventDefault();
-   
+    if (ckEditorInstance) {
+        $('#policy_description').val(ckEditorInstance.getData().trim());
+    }
     if (!validateForm()) return;
 
     let formData = new FormData($('#add_policy_form')[0]);

@@ -78,8 +78,6 @@
     .my_team_card {
         text-decoration: none;
     }
-
-    /* Pagination theme */
     .pagination {
         display: flex;
         justify-content: center;
@@ -116,7 +114,7 @@
     }
     .card
     {
-        height: 150px !important; /* fixed height — adjust as needed */
+        height: 150px !important; 
         padding: 15px;
         border-radius: 12px;
         background: #f9f9f9;
@@ -126,11 +124,14 @@
 
     @media (max-width: 768px) 
     {
-        /* Title fully left aligned */
+        .container {
+            padding:1px !important;
+        }
+      
         h4.text-theme {
-            text-align: left !important;
+            text-align: center !important;
             margin-left: 0 !important;
-            padding-left: 5px !important;
+            /* padding-left: 5px !important; */
         }
         .row > .col-md-4 {
             display: flex;
@@ -138,7 +139,6 @@
             align-items: center;
             width: 100%;
         }
-
         .card {
             width: 100%;
             margin: 0 auto;

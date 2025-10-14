@@ -71,10 +71,10 @@
                 </a>
 
                 <!-- Notifications -->
-                <a href="#" class="text-dark position-relative">
+                <!-- <a href="#" class="text-dark position-relative">
                     <i class="bi bi-bell fs-5"></i>
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill ntf_count">3</span>
-                </a>
+                </a> -->
 
                 <!-- Profile Dropdown -->
                 @php
@@ -138,7 +138,7 @@
                 </li>
                 <li>
                     <a href="{{ route('member_blogs') }}" 
-                        class="{{ request()->routeIs('member_blogs') ? 'active' : '' }}">
+                        class="{{ request()->routeIs('member_blogs','member_blogs_details') ? 'active' : '' }}">
                         <i class="bi bi-journal-text"></i><span>Blogs</span>
                     </a>
                 </li>
@@ -201,13 +201,23 @@
                     // alert(1);
                     icon.removeClass().addClass('bi bi-x-circle'); 
                     $('#member_sidebar').attr('style', 'display: block !important;');
-                    $('#mainContent').css('padding', '70px 10px 80px 10px'); 
+                    $('#mainContent').css('padding', '60px 5px 80px 5px'); 
+                    $('.mobile-toggle-btn').css
+                    ({
+                        'bottom': '60px',
+                        'right': '20px'
+                    });   
                     // Yes icon
                     toggleState = 1;
                 } else if(toggleState === 1){
                     icon.removeClass().addClass('bi bi-list'); // No icon
                     $('#member_sidebar').attr('style', 'display: none !important;');
-                    $('#mainContent').css('padding', '70px 10px 20px 10px'); 
+                    $('#mainContent').css('padding', '60px 5px 20px 5px'); 
+                    $('.mobile-toggle-btn').css
+                    ({
+                        'bottom': '10px',
+                        'right': '10px'
+                    });    
                     toggleState = 0;
                  
                 }
@@ -227,12 +237,12 @@
 </html>
 <style>
     .topbar {
-    height: 70px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
+        height: 70px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
     }
 
     .topbar .form-control {
@@ -274,4 +284,85 @@
         --bs-dropdown-link-hover-color: var(--theme-color) !important;
         --bs-dropdown-link-active-color: var(--theme-color) !important;
     }
+    /* Profile Dropdown Container */
+    .dropdown .profile-img {
+        width: 32px;
+        height: 32px;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    /* Username Text */
+    .dropdown .username {
+        font-size: 14px;
+        font-weight: 500;
+        max-width: 100px; /* prevent overflowing */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    /* Dropdown Toggle */
+    .dropdown-toggle {
+        padding: 4px 8px;
+        font-size: 14px;
+    }
+
+    /* Dropdown Menu */
+    .dropdown-menu {
+        min-width: 180px;
+        font-size: 13px;
+        padding: 0.25rem 0;
+        border-radius: 8px;
+        background: #f2f2f2;
+    }
+
+    /* Dropdown Items */
+    .dropdown-menu .dropdown-item {
+        padding: 6px 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+    }
+
+    /* Dropdown Icons */
+    .dropdown-menu .dropdown-item i {
+        font-size: 16px;
+    }
+
+    /* Divider */
+    .dropdown-menu .dropdown-divider {
+        margin: 0.25rem 0;
+    }
+
+    /* Hover effect */
+    .dropdown-menu .dropdown-item:hover {
+        background-color: var(--sidebar_color) !important;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .dropdown .username {
+            display: none; /* hide username on small screens */
+        }
+
+        .dropdown-menu {
+            min-width: 140px;
+            font-size: 12px;
+        }
+
+        .dropdown-menu .dropdown-item i {
+            font-size: 14px;
+        }
+
+        .dropdown-menu .dropdown-item {
+            padding: 5px 10px;
+        }
+
+        .dropdown-toggle {
+            padding: 3px 6px;
+        }
+    }
+
 </style>

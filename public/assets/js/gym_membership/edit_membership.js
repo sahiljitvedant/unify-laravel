@@ -1,52 +1,72 @@
-// Validation Rules
+let ckEditorInstance;
+
+ClassicEditor
+    .create(document.querySelector('#description'), {
+        toolbar: [
+            'heading', '|',
+            'bold', 'italic', 'underline', 'strikethrough', 'link',
+            'bulletedList', 'numberedList', 'blockQuote',
+            'undo', 'redo'
+        ],
+        removePlugins: [
+            'EasyImage',            // cloud image plugin
+            'Image',                // disables image button
+            'ImageUpload',          // disables drag/drop upload
+            'CKFinder',             // CKFinder integration
+            'CKFinderUploadAdapter',// backend upload adapter
+            'MediaEmbed'            // optional, disables media embed
+        ]
+    })
+    .then(editor => {
+        ckEditorInstance = editor;
+        console.log('CKEditor initialized without image upload');
+    })
+    .catch(error => console.error('CKEditor init error:', error));
+
+// Validation rules
 const validationRules = {
     membership_name: { required: true, minlength: 2, maxlength: 15 },
-    description: { 
-        required: true,
-        minlength: 50,
-        maxlength: 500, 
-    },
+    description: { required: true, minlength: 50, maxlength: 500 },
     duration_in_days: { required: true, number: true },
-    price: { required: true, number: true ,min: 0},
+    price: { required: true, number: true, min: 0 },
     trainer_included: { required: true },
     facilities_included: { required: true },
     is_active: { required: true }
 };
 
-// Validation Messages
 const validationMessages = {
-    membership_name: { 
-        required: "Membership name is required", 
-        minlength: "Membership name must be at least 2 characters", 
-        maxlength: "Membership name must not exceed 15 characters" 
+    membership_name: {
+        required: "Membership name is required",
+        minlength: "Membership name must be at least 2 characters",
+        maxlength: "Membership name must not exceed 15 characters"
     },
-    description: 
-    { 
+    description: {
         required: "Description is required",
-        minlength: "Description atleast exceed 50 characters",
-        maxlength: "Description cannot exceed 500 characters" 
+        minlength: "Description must exceed 50 characters",
+        maxlength: "Description cannot exceed 500 characters"
     },
-    duration_in_days: { 
-        required: "Duration is required", 
-        number: "Duration must be numeric" 
+    duration_in_days: {
+        required: "Duration is required",
+        number: "Duration must be numeric"
     },
-    price: { 
-        required: "Price is required", 
-        number: "Price must be numeric" ,
+    price: {
+        required: "Price is required",
+        number: "Price must be numeric",
         min: "Price cannot be negative"
     },
-    trainer_included: { required: "Please select if trainer included" },
+    trainer_included: { required: "Please select if trainer is included" },
     facilities_included: { required: "Facilities are required" },
     is_active: { required: "Please select status" }
 };
 
-
-// Validate all form fields
-function validateForm() 
-{
+// Validation function
+function validateForm() {
     let isValid = true;
 
-    // Clear previous errors
+    if (ckEditorInstance) {
+        $('#description').val(ckEditorInstance.getData().trim());
+    }
+
     $('.error-message').text('');
 
     $('#gym_member_edit_form :input').each(function () {
@@ -56,38 +76,33 @@ function validateForm()
         const messages = validationMessages[name];
         const errorDiv = $(`.error-message[data-error-for="${name}"]`);
 
-        if (!rules) return true; // skip if no rules
+        if (!rules) return true;
 
-        // Required check
         if (rules.required && (!value || value.trim() === '')) {
             errorDiv.text(messages.required);
             isValid = false;
             return;
         }
 
-        // Number check
         if (rules.number && value && isNaN(value)) {
             errorDiv.text(messages.number);
             isValid = false;
             return;
         }
 
-        // Min length check
         if (rules.minlength && value.length < rules.minlength) {
             errorDiv.text(messages.minlength);
             isValid = false;
             return;
         }
 
-        // Max length check
         if (rules.maxlength && value.length > rules.maxlength) {
             errorDiv.text(messages.maxlength);
             isValid = false;
             return;
         }
 
-        // Min value check (catch negatives)
-        if (rules.min !== undefined && value && parseFloat(value) < rules.min) {
+        if (rules.min !== undefined && parseFloat(value) < rules.min) {
             errorDiv.text(messages.min);
             isValid = false;
             return;
@@ -97,100 +112,60 @@ function validateForm()
     return isValid;
 }
 
-// Image preview
-$('#profileImage').on('change', function (e) 
-{
-    const file = e.target.files[0];
-    if (file) {
-        $('#previewImage').attr('src', URL.createObjectURL(file));
-    }
-});
-
-// Submit button
-$('#submitBtn').on('click', function (e) 
-{
-    // alert(1);
+// Submit form via AJAX
+$('#submitBtn').on('click', function (e) {
     e.preventDefault();
-   
+
     if (!validateForm()) return;
 
     let formData = new FormData($('#gym_member_edit_form')[0]);
 
-    $.ajax
-    ({
+    $.ajax({
         url: stepperSubmitUrl,
         type: "POST",
         data: formData,
         processData: false,
         contentType: false,
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
         beforeSend: function () {
-            // Show loader before sending request
             Swal.fire({
-                title: 'Submitting...',
-                text: 'Please wait while we process your form.',
+                title: 'Updating...',
+                text: 'Please wait while we update your membership.',
                 allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
+                didOpen: () => Swal.showLoading()
             });
         },
-        success: function (response) {
-            // Close loader & show success popup
+        success: function () {
             Swal.fire({
                 icon: 'success',
-                title: 'Form Submitted!',
-                text: 'Your membership has been submitted successfully.',
-                confirmButtonText: 'OK',
-                allowOutsideClick: false
+                title: 'Membership Updated!',
+                text: 'Changes saved successfully.',
+                confirmButtonText: 'OK'
             }).then(() => {
-                // Redirect on OK
                 window.location.href = "/list_membership";
             });
         },
-        error: function (xhr) 
-        {
-            Swal.close(); // close loader
-        
-            if (xhr.status === 422) 
-            {
+        error: function (xhr) {
+            Swal.close();
+            if (xhr.status === 422) {
                 let errors = xhr.responseJSON.errors;
                 for (let key in errors) {
                     $(`.error-message[data-error-for="${key}"]`).text(errors[key][0]);
                 }
-            } 
-            else {
+            } else {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Oops...',
-                    text: 'Something went wrong! Please try again.'
+                    title: 'Error!',
+                    text: 'Something went wrong. Please try again.'
                 });
             }
         }
     });
 });
 
-// Live error removal
+// Live error clearing
 $('#gym_member_edit_form :input').on('input change', function () {
     const name = $(this).attr('name');
-    const value = $(this).val();
-    const rules = validationRules[name];
-    const messages = validationMessages[name];
     const errorDiv = $(`.error-message[data-error-for="${name}"]`);
-
-    if (!rules) return true;
-
-    let valid = true;
-
-    if (rules.required && (!value || value.trim() === '')) valid = false;
-    if (rules.number && value && isNaN(value)) valid = false;
-    // Min length
-    if (rules.minlength && value && value.length < rules.minlength) valid = false;
-
-    // Max length
-    if (rules.maxlength && value && value.length > rules.maxlength) valid = false;
-
-    if (valid) errorDiv.text('');
+    if (errorDiv.text()) errorDiv.text('');
 });

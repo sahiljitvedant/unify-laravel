@@ -83,7 +83,7 @@
 @endsection
 
 <style>
-      .btn-back {
+    .btn-back {
         display: inline-flex;
         align-items: center; 
         gap: 6px; 
@@ -147,7 +147,9 @@
     {
         font-size: 12px;
     }
-    @media (max-width: 768px) {
+
+    @media (max-width: 768px) 
+    {
         .paymentInvoice {
             padding: 1.5rem;
         }
@@ -159,69 +161,67 @@
         .mb-3 {
         text-align: left !important;
         }
-    }
-    @media (max-width: 768px) {
-    .paymentInvoice {
-        padding: 1.2rem;
-    }
+        .paymentInvoice {
+            padding: 1.2rem;
+        }
 
-    /* 1️⃣ Logo & Invoice date in one line */
-    .paymentInvoice .d-flex.flex-column.flex-md-row {
-        flex-direction: row !important;
-        align-items: center !important;
-        justify-content: space-between !important;
-        gap: 10px;
-    }
+        /* 1️⃣ Logo & Invoice date in one line */
+        .paymentInvoice .d-flex.flex-column.flex-md-row {
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 10px;
+        }
 
-    .paymentInvoice img {
-        height: 35px !important;
-        width: 100px !important;
-    }
+        .paymentInvoice img {
+            height: 35px !important;
+            width: 100px !important;
+        }
 
-    .paymentInvoice p.font_size {
-        font-size: 11px !important;
-        margin-bottom: 2px !important;
-    }
+        .paymentInvoice p.font_size {
+            font-size: 11px !important;
+            margin-bottom: 8px !important;
+        }
 
-    /* 2️⃣ Thank you text smaller + justified */
-    .paymentInvoice p.mb-4.font_size {
-        font-size: 11px !important;
-        text-align: justify !important;
-        line-height: 1.4;
-    }
+        /* 2️⃣ Thank you text smaller + justified */
+        .paymentInvoice p.mb-4.font_size {
+            font-size: 11px !important;
+            text-align: justify !important;
+            line-height: 1.4;
+        }
 
-    /* 3️⃣ Bill to section smaller + lighter */
-    .paymentInvoice .row.mb-3 p {
-        font-size: 11px !important;
-        font-weight: 400 !important;
-        line-height: 1.4;
-    }
+        /* 3️⃣ Bill to section smaller + lighter */
+        .paymentInvoice .row.mb-3 p {
+            font-size: 11px !important;
+            font-weight: 400 !important;
+            line-height: 1.4;
+        }
 
-    .btn-text {
-        text-align: left !important;
-        margin-left: 0 !important;
-        padding-left: 5px !important;
-    }
-    .mb-3 {
-        text-align: left !important;
-    }
+        .btn-text {
+            text-align: left !important;
+            margin-left: 0 !important;
+            padding-left: 5px !important;
+        }
+        .mb-3 {
+            text-align: left !important;
+        }
 
-    .table th, .table td {
-        font-size: 10px !important;
-        padding: 4px 6px !important;
-    }
-    .table thead th {
-        font-size: 10.5px !important;
-    }
-    .table tfoot td {
-        font-size: 10.5px !important;
-    }
+        .table th, .table td {
+            font-size: 10px !important;
+            padding: 4px 6px !important;
+        }
+        .table thead th {
+            font-size: 9px !important;
+        }
+        .table tfoot td {
+            font-size: 9px !important;
+        }
 
-    /* Optional: horizontal scroll for small screens */
-    .table-responsive {
-        border-radius: 6px;
-        box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-    }
+        /* Optional: horizontal scroll for small screens */
+        .table-responsive {
+            border-radius: 6px;
+            box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+        }
 
-}
+    }
 </style>

@@ -28,7 +28,7 @@
 
                 <div class="col-md-6 col-12">
                     <label class="form-label required">{{ __('membership.active_label') }}</label>
-                    <select class="form-select" name="is_active" id="is_active">
+                    <select class="form-control" name="is_active" id="is_active">
                         <option disabled>{{ __('membership.select_status') }}</option>
                         <option value="1" {{ $member->is_active == 1 ? 'selected' : '' }}>{{ __('membership.active') }}</option>
                         <option value="0" {{ $member->is_active == 0 ? 'selected' : '' }}>{{ __('membership.inactive') }}</option>
@@ -54,7 +54,14 @@
                 </div>
             </div>
 
-         
+            <div class="row g-3 mt-2">
+                <div class="col-12 col-md-6 mb-3">
+                    <label class="form-label required">Mobile Number</label>
+                    <input type="number" class="form-control" name="mobile_number" id="mobile_number" placeholder="Mobile Number">
+                    <div class="text-danger error-message" data-error-for="mobile_number"></div>
+                </div>
+
+            </div>
 
         <div class="text-end mt-4">
             <a href="{{ route('list_trainer') }}" class="btn btn-secondary me-2 cncl_btn">

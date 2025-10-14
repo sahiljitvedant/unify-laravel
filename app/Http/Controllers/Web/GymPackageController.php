@@ -108,108 +108,216 @@ class GymPackageController extends Controller
         return view('gym_packages.add_form', compact('memberships','trainer'));
     }
 
-    public function submit(Request $request)
-    {
-        // dd($request->all());
-        // Validation rules
-        $arr_rules = 
-        [
-            'profile_image' => 'nullable',
-            'first_name' => 'required|max:100',
-            'middle_name' => 'nullable|max:100',
-            'last_name' => 'required|max:100',
-            'dob' => 'required|date',
-            'gender' => 'required|string',
-            'email' => 'required|email',
-            'mobile' => 'required|digits:10',
-            'residence_address' => 'required|string',
-            'residence_area' => 'nullable|string',
-            'zipcode' => 'required|digits:6',
-            'city' => 'required|string',
-            'state' => 'required|string',
-            'country' => 'required|string',
+    // public function submit(Request $request)
+    // {
+    //     // dd($request->all());
+    //     // Validation rules
+    //     $arr_rules = 
+    //     [
+    //         'profile_image' => 'nullable',
+    //         'first_name' => 'required|max:100',
+    //         'middle_name' => 'nullable|max:100',
+    //         'last_name' => 'required|max:100',
+    //         'dob' => 'required|date',
+    //         'gender' => 'required|string',
+    //         'email' => 'required|email',
+    //         'mobile' => 'required|digits:10',
+    //         'residence_address' => 'required|string',
+    //         'residence_area' => 'nullable|string',
+    //         'zipcode' => 'required|digits:6',
+    //         'city' => 'required|string',
+    //         'state' => 'required|string',
+    //         'country' => 'required|string',
     
-            'membership_type' => 'required|int',
-            'joining_date' => 'required|date',
-            'expiry_date' => 'required|date',
-            'amount_paid' => 'required|numeric',
-            'payment_method' => 'required|string',
-            'trainer_assigned' => 'required|string',
+    //         'membership_type' => 'required|int',
+    //         'joining_date' => 'required|date',
+    //         'expiry_date' => 'required|date',
+    //         'amount_paid' => 'required|numeric',
+    //         'payment_method' => 'required|string',
+    //         'trainer_assigned' => 'required|string',
     
-            'fitness_goals' => 'required|string',
-            'preferred_workout_time' => 'required|string',
-            'current_weight' => 'nullable|numeric',
-            'additional_notes' => 'nullable|string',
-        ];
+    //         'fitness_goals' => 'required|string',
+    //         'preferred_workout_time' => 'required|string',
+    //         'current_weight' => 'nullable|numeric',
+    //         'additional_notes' => 'nullable|string',
+    //     ];
     
-        // Validate the inputs
-        $validator = Validator::make($request->all(), $arr_rules);
-        // dd($validator);
+    //     // Validate the inputs
+    //     $validator = Validator::make($request->all(), $arr_rules);
+    //     // dd($validator);
     
-        if ($validator->fails()) 
-        {
-            $arr_resp['status'] = 'error';
-            $arr_resp['message'] = $validator->messages();
-            return response()->json($arr_resp, 400);
-        }
+    //     if ($validator->fails()) 
+    //     {
+    //         $arr_resp['status'] = 'error';
+    //         $arr_resp['message'] = $validator->messages();
+    //         return response()->json($arr_resp, 400);
+    //     }
     
-        DB::beginTransaction();
+    //     DB::beginTransaction();
     
-        try 
-        {
-            // dd(1);
-            // Insert all request data exactly as received
+    //     try 
+    //     {
+    //         // dd(1);
+    //         // Insert all request data exactly as received
 
-            $user_details_arr = $request->all();
-            // dd( $user_details_arr);
+    //         $user_details_arr = $request->all();
+    //         // dd( $user_details_arr);
 
             
-            if ($request->hasFile('profile_image')) 
-            {
-                $image = $request->file('profile_image');
-                $imageName = time().'_'.$image->getClientOriginalName();
-                $image->move(public_path('uploads/profile_images'), $imageName);
-                $user_details_arr['profile_image'] = 'uploads/profile_images/' . $imageName;
-            } 
-            elseif ($request->filled('profile_image')) {
-                // If the input is a full URL, extract only the path
-                $imagePath = $request->input('profile_image');
-                $imagePath = parse_url($imagePath, PHP_URL_PATH); // removes domain
-                $imagePath = ltrim($imagePath, '/'); // remove leading slash if any
-                $user_details_arr['profile_image'] = $imagePath;
-            } else {
-                $user_details_arr['profile_image'] = null;
-            }
+    //         if ($request->hasFile('profile_image')) 
+    //         {
+    //             $image = $request->file('profile_image');
+    //             $imageName = time().'_'.$image->getClientOriginalName();
+    //             $image->move(public_path('uploads/profile_images'), $imageName);
+    //             $user_details_arr['profile_image'] = 'uploads/profile_images/' . $imageName;
+    //         } 
+    //         elseif ($request->filled('profile_image')) {
+    //             // If the input is a full URL, extract only the path
+    //             $imagePath = $request->input('profile_image');
+    //             $imagePath = parse_url($imagePath, PHP_URL_PATH); // removes domain
+    //             $imagePath = ltrim($imagePath, '/'); // remove leading slash if any
+    //             $user_details_arr['profile_image'] = $imagePath;
+    //         } else {
+    //             $user_details_arr['profile_image'] = null;
+    //         }
     
-            $inserted_id = DB::table('tbl_gym_members')->insertGetId($user_details_arr);
-            // Create user for login
-            $full_name = $request->first_name . ' ' . $request->last_name;
+    //         $inserted_id = DB::table('tbl_gym_members')->insertGetId($user_details_arr);
+    //         // Create user for login
+    //         $full_name = $request->first_name . ' ' . $request->last_name;
 
-            DB::table('users')->insert([
-                'name' => $full_name,
-                'email' => $request->email,
-                'password' => Hash::make('123456'),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-            DB::commit();
+    //         DB::table('users')->insert([
+    //             'name' => $full_name,
+    //             'email' => $request->email,
+    //             'password' => Hash::make('123456'),
+    //             'created_at' => now(),
+    //             'updated_at' => now(),
+    //         ]);
+    //         DB::commit();
     
-            $arr_resp['status'] = 'success';
-            $arr_resp['message'] = 'Member added successfully';
-            $arr_resp['member_id'] = $inserted_id;
-            return response()->json($arr_resp);
+    //         $arr_resp['status'] = 'success';
+    //         $arr_resp['message'] = 'Member added successfully';
+    //         $arr_resp['member_id'] = $inserted_id;
+    //         return response()->json($arr_resp);
     
-        } 
-        catch (\Exception $e) 
-        {
-            DB::rollback();
-            Log::error($e->getMessage());
+    //     } 
+    //     catch (\Exception $e) 
+    //     {
+    //         DB::rollback();
+    //         Log::error($e->getMessage());
     
-            $arr_resp['status'] = 'error';
-            $arr_resp['message'] = $e->getMessage();
-            return response()->json($arr_resp, 500);
-        }
+    //         $arr_resp['status'] = 'error';
+    //         $arr_resp['message'] = $e->getMessage();
+    //         return response()->json($arr_resp, 500);
+    //     }
+    // }
+    public function submit(Request $request)
+{
+    // Validation rules
+    $arr_rules = [
+        'profile_image' => 'nullable',
+        'first_name' => 'required|max:100',
+        'middle_name' => 'nullable|max:100',
+        'last_name' => 'required|max:100',
+        'dob' => 'required|date',
+        'gender' => 'required|string',
+        'email' => 'required|email',
+        'mobile' => 'required|digits:10',
+        'residence_address' => 'required|string',
+        'residence_area' => 'nullable|string',
+        'zipcode' => 'required|digits:6',
+        'city' => 'required|string',
+        'state' => 'required|string',
+        'country' => 'required|string',
+
+        'membership_type' => 'required|int',
+        'joining_date' => 'required|date',
+        'expiry_date' => 'required|date',
+        'amount_paid' => 'required|numeric',
+        'payment_method' => 'required|string',
+        'trainer_assigned' => 'required|string',
+
+        'fitness_goals' => 'required|string',
+        'preferred_workout_time' => 'required|string',
+        'current_weight' => 'nullable|numeric',
+        'additional_notes' => 'nullable|string',
+    ];
+
+    $validator = Validator::make($request->all(), $arr_rules);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $validator->messages()
+        ], 400);
     }
+
+    DB::beginTransaction();
+
+    try {
+        $user_details_arr = $request->all();
+
+        if ($request->hasFile('profile_image')) {
+            $image = $request->file('profile_image');
+            $imageName = time().'_'.$image->getClientOriginalName();
+            $image->move(public_path('uploads/profile_images'), $imageName);
+            $user_details_arr['profile_image'] = 'uploads/profile_images/' . $imageName;
+        } elseif ($request->filled('profile_image')) {
+            $imagePath = parse_url($request->input('profile_image'), PHP_URL_PATH);
+            $imagePath = ltrim($imagePath, '/');
+            $user_details_arr['profile_image'] = $imagePath;
+        } else {
+            $user_details_arr['profile_image'] = null;
+        }
+
+        $inserted_id = DB::table('tbl_gym_members')->insertGetId($user_details_arr);
+
+        $full_name = $request->first_name . ' ' . $request->last_name;
+        DB::table('users')->insert([
+            'name' => $full_name,
+            'email' => $request->email,
+            'password' => Hash::make('123456'),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::commit();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Member added successfully',
+            'member_id' => $inserted_id
+        ]);
+
+    } catch (\Illuminate\Database\QueryException $e) {
+        DB::rollback();
+        Log::error($e->getMessage());
+
+        $errorMessage = $e->getMessage();
+
+        // Check for duplicate email or mobile
+        if (str_contains($errorMessage, 'tbl_gym_members_email_unique')) {
+            $friendlyMessage = 'Integrity constraint: Email cannot be duplicate';
+        } elseif (str_contains($errorMessage, 'tbl_gym_members_mobile_unique')) {
+            $friendlyMessage = 'Integrity constraint: Mobile cannot be duplicate';
+        } else {
+            $friendlyMessage = $errorMessage;
+        }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => $friendlyMessage
+        ], 500);
+    } catch (\Exception $e) {
+        DB::rollback();
+        Log::error($e->getMessage());
+
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage()
+        ], 500);
+    }
+}
+
 
     public function edit($id)
     {

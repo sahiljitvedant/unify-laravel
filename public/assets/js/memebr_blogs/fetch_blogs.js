@@ -33,19 +33,19 @@ $(document).ready(function () {
 
                 html += `
                 <div class="col-md-4 mb-4">
-    <a href="{{ url('blog_details') }}/${blog.id}" class="text-decoration-none text-dark">
-        <div class="blog-card">
-            <img src="${image}" alt="Blog Image" class="blog-img">
-            <div class="blog-body">
-                <h6 class="fw-bold text-theme mb-2">${blog.blog_title}</h6>
-                <p class="text-muted small mb-2">${truncate(blog.description, 100)}</p>
-                <p class="text-secondary small mb-0">
-                    <i class="bi bi-calendar-event"></i> ${formatDate(blog.publish_date)}
-                </p>
-            </div>
-        </div>
-    </a>
-</div>
+                    <a href="/member_blogs_details/${blog.id}" class="text-decoration-none text-dark">
+                        <div class="blog-card">
+                            <img src="${image}" alt="Blog Image" class="blog-img">
+                            <div class="blog-body">
+                                <h6 class="fw-bold text-theme mb-2 blog_title">${blog.blog_title}</h6>
+                                <p class="text-muted small mb-2 blog_desc">${truncate(blog.description, 100)}</p>
+                                <p class="text-secondary small mb-0 blog_date">
+                                    <i class="bi bi-calendar-event"></i> ${formatDate(blog.publish_date)}
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
 `;
             });
         }

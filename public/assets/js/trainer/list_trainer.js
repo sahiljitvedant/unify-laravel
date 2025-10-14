@@ -19,6 +19,7 @@ $(document).ready(function ()
                 trainer: $("#filterTrainer").val(),
                 trainerName: $("#trainerName").val(),
                 joiningDate: $("#joiningDate").val(),
+                mobileNumber: $("#mobileNumber").val(),
             },
             success: function (res) {
                 $("#loader").hide();
@@ -47,8 +48,7 @@ $(document).ready(function ()
                         <td>${m.trainer_name}</td>
                         <td>${m.joining_date}</td>
                         <td>${m.expiry_date ? m.expiry_date : '-'}</td>
-
-                        
+                        <td>${m.mobile_number ? m.mobile_number : '-'}</td>
                         <td>${m.is_active ? 'Active' : 'Inactive'}</td>
                         <td>${m.action}</td>
                     </tr>
@@ -137,6 +137,7 @@ $("#btnCancel").on("click", function (e) {
     $("#filterTrainer").val('');
     $("#trainerName").val('');
     $("#joiningDate").val('');
+    $("#mobileNumber").val('');
     fetchData(1); // reload data with no filters
 });
 

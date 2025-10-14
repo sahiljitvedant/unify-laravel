@@ -12,8 +12,8 @@
         <div class="data-wrapper mt-3">
             
             <!-- Filters -->
-            <div class="filters p-3">
-                <div class="row g-3">
+            <div class="filters">
+                <div class="row g-2">
                     <div class="col-md-3">
                         <select id="plan_name" class="form-control">
                             <option value="">Select Plan</option>
@@ -55,7 +55,7 @@
             <!-- Separator -->
             <div class="separator"></div>
 
-            <div class="payments-cards-wrapper p-3" id="paymentsCards">
+            <div class="payments-cards-wrapper" id="paymentsCards">
             <!-- Cards will be injected here -->
             </div>
 
@@ -184,7 +184,7 @@
         display: inline-flex;         
         align-items: center;
         justify-content: center;
-        width: 80px;                
+        width: 60px;                
         height: 28px;                 
         border-radius: 50px;           
         background-color: #0B1061;      /* theme color */
@@ -205,7 +205,39 @@
         box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         color: #fff;
     }
-
+    .payments-cards-wrapper
+    {
+        padding: 15px !important;
+    }
+    .filters
+    {
+        padding : 15px !important;
+    }
+    @media (max-width: 768px) 
+    {
+        /* Title fully left aligned */
+        h4.text-theme {
+            text-align: center !important;
+            margin-left: 0 !important;
+            
+        }
+        .filters
+        {
+            padding:  4px  !important;
+        }
+        .payments-cards-wrapper
+        {
+            padding: 5px !important;
+            text-align: left !important;
+            font-size: 10px !important;
+        }
+        .container
+        {
+            padding : 1px !important;
+        }
+     
+        
+    }
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>

@@ -15,6 +15,7 @@ use App\Models\Preference;
 use App\Models\Blog;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Gallery;
+use App\Models\Payment;
 
 class DashboardController extends Controller
 {
@@ -100,6 +101,17 @@ class DashboardController extends Controller
 
     public function list_member()
     {
+        $user=Auth::user();
+        // dd($user);
+        $latestPayment = DB::table('tbl_payments')
+        ->join('tbl_gym_membership', 'tbl_payments.plan_id', '=', 'tbl_gym_membership.id')
+        ->select('tbl_payments.*', 'tbl_gym_membership.membership_name')
+        ->where('tbl_payments.user_id', $user->id)
+        ->orderBy('tbl_payments.id', 'desc')
+        ->first();
+
+
+        // dd($latestPayment);
         $members = DB::table('tbl_gym_members')
         ->select('*')
         ->where('is_deleted', '!=', 9)
@@ -123,6 +135,6 @@ class DashboardController extends Controller
         ->take(6)
         ->get();
 
-        return view('members.dashboard.list_dashboard',compact('members','latestMembers','blogs','authUserId','galleries'));
+        return view('members.dashboard.list_dashboard',compact('members','latestPayment','latestMembers','blogs','authUserId','galleries'));
     }
 }

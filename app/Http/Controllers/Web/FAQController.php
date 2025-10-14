@@ -19,9 +19,6 @@ class FAQController extends Controller
         return view('faqs.list_faqs');
 
     }
-    
-   
-
     public function fetch_faqs(Request $request)
     {
         // dd($request->all());
@@ -37,8 +34,9 @@ class FAQController extends Controller
       
         
         if ($request->filled('question')) {
-            $query->where('question', $request->question);
+            $query->where('question', 'like', '%' . $request->question . '%');
         }
+        
 
         // Sorting
         $allowedSorts = [
@@ -152,6 +150,66 @@ class FAQController extends Controller
       
         return view('faqs.add_form');
     }
+    public function submit(Request $request)
+    {
+        try {
+            // ✅ Validation Rules
+            $validated = $request->validate([
+                'question'      => 'required|string|max:500',
+                'answer'        => 'required|string|max:5000',
+                'faq_image'     => 'nullable|string', // handled via cropper upload
+                'youtube_link'  => 'nullable|url',
+                'is_active'     => 'required|boolean',
+            ]);
+    
+            DB::beginTransaction();
+    
+            // ✅ Handle Image
+            $faqImagePath = null;
+            if ($request->filled('faq_image')) {
+                // handle if coming as full URL
+                $faqImagePath = parse_url($request->input('faq_image'), PHP_URL_PATH);
+                $faqImagePath = ltrim($faqImagePath, '/');
+            }
+    
+            // ✅ Insert Data into tbl_faqs
+            $faqId = DB::table('tbl_faqs')->insertGetId([
+                'question'      => $validated['question'],
+                'answer'        => $validated['answer'],
+                'faq_image'     => $faqImagePath,
+                'youtube_link'  => $validated['youtube_link'] ?? null,
+                'status'     => $validated['is_active'],
+                'created_at'    => now(),
+                'updated_at'    => now(),
+            ]);
+    
+            DB::commit();
+    
+            return response()->json([
+                'status'    => 'success',
+                'message'   => 'FAQ added successfully!',
+                'faq_id'    => $faqId
+            ]);
+        } 
+        catch (\Illuminate\Validation\ValidationException $e) {
+            // Validation error handling
+            return response()->json([
+                'status' => 'error',
+                'errors' => $e->errors()
+            ], 422);
+        }
+        catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('FAQ Submit Error: ' . $e->getMessage());
+    
+            return response()->json([
+                'status'  => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    
+
 
     public function update_faqs(Request $request, $id)
     {

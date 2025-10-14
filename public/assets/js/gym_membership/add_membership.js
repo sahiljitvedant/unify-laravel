@@ -1,3 +1,35 @@
+let ckEditorInstance;
+
+ClassicEditor
+    .create(document.querySelector('#description'), {
+        toolbar: [
+            'heading', '|',
+            'bold', 'italic', 'underline', 'strikethrough', 'link',
+            'bulletedList', 'numberedList', 'blockQuote',
+            'undo', 'redo',
+            'fontSize' // <-- add font size control
+        ],
+        fontSize: {
+            options: [
+                10, 12, 14, 'default', 18, 20, 24, 28
+            ]
+        },
+        removePlugins: [
+            'EasyImage',
+            'Image',
+            'ImageUpload',
+            'CKFinder',
+            'CKFinderUploadAdapter',
+            'MediaEmbed'
+        ]
+    })
+    .then(editor => {
+        ckEditorInstance = editor;
+        console.log('CKEditor initialized without image upload, with font size');
+    })
+    .catch(error => console.error('CKEditor init error:', error));
+
+
 // Validation Rules
 const validationRules = {
     membership_name: { required: true, minlength: 2, maxlength: 15 },
@@ -38,12 +70,16 @@ const validationMessages = {
 };
 
 
-// Validate all form fields
-function validateForm() 
-{
+// Validate form
+function validateForm() {
     let isValid = true;
 
-    // Clear previous errors
+    // ✅ Sync CKEditor data
+    if (ckEditorInstance) {
+        $('#description').val(ckEditorInstance.getData().trim());
+    }
+
+    // Clear old errors
     $('.error-message').text('');
 
     $('#gym_member_add_form :input').each(function () {
@@ -55,34 +91,30 @@ function validateForm()
 
         if (!rules) return true; // skip if no rules
 
-        // Required check
         if (rules.required && (!value || value.trim() === '')) {
             errorDiv.text(messages.required);
             isValid = false;
             return;
         }
 
-        // Number check
         if (rules.number && value && isNaN(value)) {
             errorDiv.text(messages.number);
             isValid = false;
             return;
         }
 
-         // Min length check
-         if (rules.minlength && value.length < rules.minlength) {
+        if (rules.minlength && value.length < rules.minlength) {
             errorDiv.text(messages.minlength);
             isValid = false;
             return;
         }
 
-        // Max length check
         if (rules.maxlength && value.length > rules.maxlength) {
             errorDiv.text(messages.maxlength);
             isValid = false;
             return;
         }
-        // Min value check (catch negatives)
+
         if (rules.min !== undefined && value && parseFloat(value) < rules.min) {
             errorDiv.text(messages.min);
             isValid = false;
@@ -92,6 +124,7 @@ function validateForm()
 
     return isValid;
 }
+
 
 // Image preview
 $('#profileImage').on('change', function (e) 

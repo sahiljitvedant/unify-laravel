@@ -11,82 +11,75 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Crypt; 
+use App\Models\Gallery;
+
 
 class GallaryController extends Controller
 {
     public function list()
     {
-        return view('gallary.add_form');
+        return view('gallary.list_gallery');
 
     }
 
-    public function fetch_blogs(Request $request)
+   
+    
+    public function fetch_gallery(Request $request)
     {
-        // dd($request->all());
-        $query = DB::table('tbl_blogs')
-            ->select('*');
-            // ->where('is_deleted', '!=', 9);
-
+        // Start Eloquent query
+        $query = Gallery::query()->select('*');
+    
         // Apply filters
         if ($request->filled('active')) {
             $query->where('is_active', $request->active);
         }
-
-        // if ($request->filled('trainer')) {
-        //     // Convert 1 => 'yes', 0 => 'no'
-        //     $trainerValue = $request->trainer == 1 ? 'yes' : 'no';
-        //     $query->where('trainer_included', $trainerValue);
-        // }
-
-        if ($request->filled('blogname')) {
-            $query->where('blog_title', '=', $request->blogname);
+    
+        if ($request->filled('galleryName')) {
+            $query->where('gallery_name', 'like', '%' . $request->galleryName . '%');
         }
-
-        if ($request->filled('joiningDate')) {
-            $query->where('joining_date', '=', $request->joiningDate);
-        }
-
+    
         // Sorting
         $allowedSorts = [
             'id',
-            'blog_title',
-            'joining_date',
-            'expiry_date',
+            'gallery_name',
             'is_active',
-            'created_at'
+            'created_at',
         ];
-
+    
         $sort = $request->get('sort', 'id');
         $direction = $request->get('order', 'desc');
-
+    
         if (!in_array($sort, $allowedSorts)) {
             $sort = 'id';
         }
         if (!in_array(strtolower($direction), ['asc', 'desc'])) {
             $direction = 'desc';
         }
-
+    
         $query->orderBy($sort, $direction);
-
+    
         // Pagination
-        $trainer = $query->paginate(10);
-
+        $galleries = $query->paginate(10);
+    
         // Add action + encrypted_id
-        $trainer->getCollection()->transform(function ($row) {
+        $galleries->getCollection()->transform(function ($row) {
             $encryptedId = Crypt::encryptString($row->id);
             $row->encrypted_id = $encryptedId;
+    
             $row->action = '
-                <a href="'.route('edit_trainer', $encryptedId).'" class="btn btn-sm" title="Edit">
+                <a href="' . route('edit_gallery', $encryptedId) . '" class="btn btn-sm" title="Edit">
                     <i class="bi bi-pencil-square"></i>
                 </a>
-                <button type="button" class="btn btn-sm" onclick="deleteMembershipById('.$row->id.')">
+                <button type="button" class="btn btn-sm" onclick="deleteGalleryById(' . $row->id . ')">
                     <i class="bi bi-trash"></i>
                 </button>';
+    
             return $row;
         });
-
-        return response()->json($trainer);
+    
+        return response()->json($galleries);
     }
+    
     public function add()
     { 
         return view('gallary.add_form');
@@ -95,11 +88,13 @@ class GallaryController extends Controller
 
     public function submit(Request $request)
     {
-        // Validation rules
+        // dd($request->all());
+    
+        // ✅ Validation rules
         $arr_rules = [
             'gallery_name'    => 'required|string|max:150',
             'is_active'       => 'required|boolean',
-            'main_thumbnail'  => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'gallary_image'   => 'required|string', // comes as path from hidden input
             'gallery_images.*'=> 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'youtube_links.*' => 'nullable|url',
         ];
@@ -116,20 +111,23 @@ class GallaryController extends Controller
         DB::beginTransaction();
     
         try {
+            // ✅ Assign basic details
             $gallery_data = [
                 'gallery_name' => $request->gallery_name,
                 'is_active'    => $request->is_active,
             ];
     
-            // Handle main thumbnail upload
-            if ($request->hasFile('main_thumbnail')) {
-                $thumbnail = $request->file('main_thumbnail');
-                $thumbName = time() . '_thumb_' . $thumbnail->getClientOriginalName();
-                $thumbnail->move(public_path('uploads/gallery'), $thumbName);
-                $gallery_data['main_thumbnail'] = 'uploads/gallery/' . $thumbName;
+            // ✅ Store the cropped image path into main_thumbnail column
+            if ($request->filled('gallary_image')) {
+                $gallery_data['main_thumbnail'] = $request->gallary_image;
+            } else {
+                return response()->json([
+                    'status'  => 'error',
+                    'message' => 'Main thumbnail is required'
+                ], 422);
             }
     
-            // Handle multiple gallery images
+            // ✅ Handle additional gallery images (optional)
             $image_paths = [];
             if ($request->hasFile('gallery_images')) {
                 foreach ($request->file('gallery_images') as $image) {
@@ -140,7 +138,7 @@ class GallaryController extends Controller
             }
             $gallery_data['gallery_images'] = !empty($image_paths) ? json_encode($image_paths) : null;
     
-            // Handle YouTube links
+            // ✅ Handle YouTube links
             $links = [];
             if ($request->has('youtube_links')) {
                 foreach ($request->youtube_links as $link) {
@@ -151,14 +149,14 @@ class GallaryController extends Controller
             }
             $gallery_data['youtube_links'] = !empty($links) ? json_encode($links) : null;
     
-            // Insert into DB
+            // ✅ Insert into DB
             $inserted_id = DB::table('tbl_gallery')->insertGetId($gallery_data);
     
             DB::commit();
     
             return response()->json([
-                'status' => 'success',
-                'message' => 'Gallery added successfully',
+                'status'     => 'success',
+                'message'    => 'Gallery added successfully',
                 'gallery_id' => $inserted_id
             ]);
     
@@ -167,11 +165,12 @@ class GallaryController extends Controller
             Log::error($e->getMessage());
     
             return response()->json([
-                'status' => 'error',
+                'status'  => 'error',
                 'message' => $e->getMessage()
             ], 500);
         }
     }
+    
 
     
     public function edit($id)

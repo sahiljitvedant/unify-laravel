@@ -4,7 +4,7 @@ $(document).ready(function () {
 
     const $browseImage = $("#browseImage");
     const $browseBtn = $("#browseBtn");
-    const $uploadButton = $(".profilebtn"); // works for profile/blog/faq
+    const $uploadButton = $(".profilebtn"); // works for profile/blog/faq/gallery
     const $imageToCrop = $("#imageToCrop");
     const $imagePreviewContainer = $("#imagePreviewContainer");
     const $uploadCropped = $("#uploadCropped");
@@ -25,6 +25,13 @@ $(document).ready(function () {
         if (imageType === "faq_image" && $("#faq_image_path").length === 0) {
             $("#faqForm").append('<input type="hidden" name="faq_image" id="faq_image_path">');
         }
+        if (imageType === "gallary_image" && $("#gallary_image_path").length === 0) {
+            $("#add_gallery").append('<input type="hidden" name="gallary_image" id="gallary_image_path">');
+
+        }
+        // if (imageType === "gallery_multiple" && $("#gallery_images_path").length === 0) {
+        //     $("#add_gallery").append('<input type="hidden" name="gallery_images" id="gallery_images_path">');
+        // }
 
         const modal = new bootstrap.Modal($("#cropImageModal")[0]);
         modal.show();
@@ -49,7 +56,7 @@ $(document).ready(function () {
 
             if (cropper) cropper.destroy();
 
-            let aspect = imageType === "blog_image" ? 16 / 9 : 1; // blog 16:9, profile/faq 1:1
+            let aspect = imageType === "blog_image" ? 16 / 9 : 1; // blog 16:9, profile/faq/gallery 1:1
 
             cropper = new Cropper($imageToCrop[0], {
                 aspectRatio: aspect,
@@ -68,19 +75,32 @@ $(document).ready(function () {
     $uploadCropped.on("click", function () {
         if (!cropper) return;
 
-        // Set size based on type
         let width, height;
-        if (imageType === "blog_image") {
-            width = 1280; height = 720;
-        } else if (imageType === "faq_image") {
-            width = 500; height = 500;
-        } else {
-            width = 600; height = 600; // profile_image default
+        switch (imageType) {
+            case "blog_image":
+                width = 1280; height = 720; break;
+            case "faq_image":
+                width = 500; height = 500; break;
+            case "gallary_image":
+                width = 700; height = 700; break;
+            case "gallery_multiple":
+                width = 500; height = 500; break;
+            default:
+                width = 600; height = 600; // profile_image default
         }
 
-        cropper.getCroppedCanvas({ width: width, height: height }).toBlob(function (blob) {
+        cropper.getCroppedCanvas({ width, height }).toBlob(function (blob) {
             const formData = new FormData();
-            const fieldName = imageType === "blog_image" ? "blog_image" : (imageType === "faq_image" ? "faq_image" : "profile_image");
+            let fieldName;
+
+            switch (imageType) {
+                case "blog_image": fieldName = "blog_image"; break;
+                case "faq_image": fieldName = "faq_image"; break;
+                case "profile_image": fieldName = "profile_image"; break;
+                case "gallary_image": fieldName = "gallary_image"; break;
+                case "gallery_multiple": fieldName = "gallery_images[]"; break;
+                default: fieldName = "image";
+            }
 
             formData.append(fieldName, blob, "image.png");
             formData.append("type", imageType);
@@ -107,6 +127,7 @@ $(document).ready(function () {
                 },
                 success: function (data) {
                     if (data.success) {
+                        // profile, blog, faq, gallery thumbnail
                         if (imageType === "profile_image") {
                             $("#previewImage").attr("src", data.url);
                             $("#profile_image_path").val(data.path);
@@ -114,16 +135,43 @@ $(document).ready(function () {
                             $("#previewBlogImage").attr("src", data.url);
                             $("#blogImageWrapper").removeClass("d-none");
                             $("#blog_image_path").val(data.path);
-                        }else if (imageType === "faq_image") {
+                        } else if (imageType === "faq_image") {
                             $("#previewFaqImage").attr("src", data.url);
-                            $("#faqImageWrapper").removeClass("d-none"); // <-- show the wrapper
+                            $("#faqImageWrapper").removeClass("d-none");
                             if ($("#faq_image_path").length === 0) {
                                 $("#faq_add_form").append('<input type="hidden" name="faq_image" id="faq_image_path">');
                             }
                             $("#faq_image_path").val(data.path);
+                        } else if (imageType === "gallary_image") {
+                            $("#previewGallaryImage").attr("src", data.url);
+                            $("#galleryThumbWrapper").removeClass("d-none");
+                            $("#gallary_image_path").val(data.path);
+                        } 
+                        // Multiple gallery images
+                        else if (imageType === "gallery_multiple") {
+                            const currentVal = $("#gallery_images_path").val();
+                            const newVal = currentVal ? currentVal + ',' + data.path : data.path;
+                            $("#gallery_images_path").val(newVal);
+
+                            $('#multiGalleryWrapper').append(`
+                                <div class="position-relative d-inline-block" style="max-width:100px;">
+                                    <img src="${data.url}" style="max-width:100px; max-height:100px; border:1px solid #ddd; border-radius:5px;">
+                                    <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 remove-image">&times;</button>
+                                </div>
+                            `);
+
+                            // Reset modal for next image upload
+                            $browseImage.val("");
+                            $uploadCropped.prop("disabled", true);
+                            $imageToCrop.attr("src", "");
+                            $imagePreviewContainer.hide();
+                            if (cropper) cropper.destroy();
                         }
 
-                        bootstrap.Modal.getInstance($("#cropImageModal")[0]).hide();
+                        if (imageType !== "gallery_multiple") {
+                            bootstrap.Modal.getInstance($("#cropImageModal")[0]).hide();
+                        }
+
                         $progressContainer.hide();
                         $progressBar.css("width", "0%").text("0%");
                     } else {
@@ -136,6 +184,11 @@ $(document).ready(function () {
                 }
             });
         });
+    });
+
+    // Remove gallery image
+    $(document).on("click", ".remove-image", function () {
+        $(this).parent().remove();
     });
 
     // Reset modal

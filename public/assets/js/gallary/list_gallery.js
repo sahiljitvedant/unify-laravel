@@ -9,14 +9,14 @@ $(document).ready(function ()
         $("#loader").show();
 
         $.ajax({
-            url: fetchBlogs,
+            url: fetchGallery,
             type: "GET",
             data: {
                 page: page,
                 sort: sortColumn,
                 order: sortOrder,
                 active: $("#filterActive").val(),
-                blogname: $("#blogName").val(),
+                galleryName: $("#galleryName").val(),
                 trainerName: $("#trainerName").val(),
                 joiningDate: $("#joiningDate").val(),
             },
@@ -44,7 +44,7 @@ $(document).ready(function ()
                 rows += `
                     <tr>
                         <td>${m.id}</td>
-                        <td>${m.blog_title}</td>
+                        <td>${m.gallery_name}</td>
                         <td>${m.is_active ? 'Active' : 'Inactive'}</td>
                         <td>${m.action}</td>
                     </tr>
@@ -130,7 +130,7 @@ $(document).ready(function ()
 $("#btnCancel").on("click", function (e) {
     e.preventDefault();
     $("#filterActive").val('');
-    $("#blogName").val('');
+    $("#galleryName").val('');
     $("#trainerName").val('');
     $("#joiningDate").val('');
     fetchData(1); // reload data with no filters

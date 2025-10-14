@@ -1,3 +1,34 @@
+let ckEditorInstance;
+
+ClassicEditor
+    .create(document.querySelector('#description'), {
+        toolbar: [
+            'heading', '|',
+            'bold', 'italic', 'underline', 'strikethrough', 'link',
+            'bulletedList', 'numberedList', 'blockQuote',
+            'undo', 'redo',
+            'fontSize' // <-- add font size control
+        ],
+        fontSize: {
+            options: [
+                10, 12, 14, 'default', 18, 20, 24, 28
+            ]
+        },
+        removePlugins: [
+            'EasyImage',
+            'Image',
+            'ImageUpload',
+            'CKFinder',
+            'CKFinderUploadAdapter',
+            'MediaEmbed'
+        ]
+    })
+    .then(editor => {
+        ckEditorInstance = editor;
+        console.log('CKEditor initialized without image upload, with font size');
+    })
+    .catch(error => console.error('CKEditor init error:', error));
+
 // Validation Rules
 const validationRules = {
     blog_title: { 
@@ -52,7 +83,11 @@ const validationMessages = {
 function validateForm() 
 {
     let isValid = true;
-
+    let descriptionData = '';
+    if (ckEditorInstance) {
+        descriptionData = ckEditorInstance.getData().trim();
+        $('#description').val(descriptionData); // keep the textarea in sync
+    }
     // Clear previous errors
     $('.error-message').text('');
 

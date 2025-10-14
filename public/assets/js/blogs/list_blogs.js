@@ -98,25 +98,27 @@ $(document).ready(function ()
 
     // Sorting
    
+
+    
     $(document).on("click", ".sort-link", function (e) {
         e.preventDefault();
         let column = $(this).data("column");
-
+    
         // Toggle order
         sortOrder = (sortColumn === column && sortOrder === 'asc') ? 'desc' : 'asc';
         sortColumn = column;
-
+    
         // Reset all icons
         $(".sort-icons i").removeClass("active");
-
+    
         // Highlight correct icon
         if (sortOrder === "asc") {
             $(this).find(".asc").addClass("active");
         } else {
             $(this).find(".desc").addClass("active");
         }
-
-        fetchData(1);
+    
+        fetchData(1); // fetchData should send sortColumn & sortOrder to backend
     });
 
     // Filters change

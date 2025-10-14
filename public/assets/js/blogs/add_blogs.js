@@ -1,3 +1,34 @@
+let ckEditorInstance;
+
+ClassicEditor
+    .create(document.querySelector('#description'), {
+        toolbar: [
+            'heading', '|',
+            'bold', 'italic', 'underline', 'strikethrough', 'link',
+            'bulletedList', 'numberedList', 'blockQuote',
+            'undo', 'redo',
+            'fontSize' // <-- add font size control
+        ],
+        fontSize: {
+            options: [
+                10, 12, 14, 'default', 18, 20, 24, 28
+            ]
+        },
+        removePlugins: [
+            'EasyImage',
+            'Image',
+            'ImageUpload',
+            'CKFinder',
+            'CKFinderUploadAdapter',
+            'MediaEmbed'
+        ]
+    })
+    .then(editor => {
+        ckEditorInstance = editor;
+        console.log('CKEditor initialized without image upload, with font size');
+    })
+    .catch(error => console.error('CKEditor init error:', error));
+
 
 // Validation Rules
 const validationRules = {
@@ -55,20 +86,34 @@ function validateForm()
 {
     let isValid = true;
 
+    // ✅ Sync CKEditor data and strip HTML for validation
+    let descriptionData = '';
+    if (ckEditorInstance) {
+        descriptionData = ckEditorInstance.getData().trim();
+        $('#description').val(descriptionData); // keep the textarea in sync
+    }
+
     // Clear previous errors
     $('.error-message').text('');
 
     $('#add_blogs :input').each(function () {
         const name = $(this).attr('name');
-        const value = $(this).val();
+        let value = $(this).val();
         const rules = validationRules[name];
         const messages = validationMessages[name];
         const errorDiv = $(`.error-message[data-error-for="${name}"]`);
 
         if (!rules) return true; // skip if no rules
 
+        // Special handling for CKEditor description
+        if (name === 'description') {
+            // Remove HTML tags to get plain text
+            const plainText = descriptionData.replace(/<[^>]*>/g, '').trim();
+            value = plainText;
+        }
+
         // Required check
-        if (rules.required && (!value || value.trim() === '')) {
+        if (rules.required && (!value || value === '')) {
             errorDiv.text(messages.required);
             isValid = false;
             return;
@@ -81,8 +126,8 @@ function validateForm()
             return;
         }
 
-         // Min length check
-         if (rules.minlength && value.length < rules.minlength) {
+        // Min length check
+        if (rules.minlength && value.length < rules.minlength) {
             errorDiv.text(messages.minlength);
             isValid = false;
             return;
@@ -95,13 +140,16 @@ function validateForm()
             return;
         }
     });
+
     // Special check for blog image
     if (!$('#blog_image_path').val()) {
-            $(`.error-message[data-error-for="blog_image"]`).text(validationMessages.blog_image.required);
-            isValid = false;
+        $(`.error-message[data-error-for="blog_image"]`).text(validationMessages.blog_image.required);
+        isValid = false;
     }
+
     return isValid;
 }
+
 
 // Image preview
 $('#profileImage').on('change', function (e) 

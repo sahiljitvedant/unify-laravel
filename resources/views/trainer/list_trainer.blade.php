@@ -45,6 +45,9 @@
                             <input type="date" id="joiningDate" class="form-control">
                             <small class="form-text text-muted">Joining Date</small>
                         </div>
+                        <div class="col-md-3">
+                            <input type="text" id="mobileNumber" class="form-control" placeholder="Mobile Number">
+                        </div>
                         <div class="col-md-2">
                             <button id="submitBtn" class="btn ">
                                 <i class="bi bi-search"></i> 
@@ -100,6 +103,15 @@
                                 <th>
                                     <a href="#" class="sort-link" data-column="expiry_date">
                                         Leaving Date
+                                        <span class="sort-icons">
+                                            <i class="asc">▲</i>
+                                            <i class="desc">▼</i>
+                                        </span>
+                                    </a>
+                                </th>
+                                <th>
+                                    <a href="#" class="sort-link" data-column="expiry_date">
+                                        Mobile Number
                                         <span class="sort-icons">
                                             <i class="asc">▲</i>
                                             <i class="desc">▼</i>

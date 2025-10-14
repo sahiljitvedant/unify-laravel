@@ -8,7 +8,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('list_dashboard') }}">Dashboard</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('list_membership') }}">FAQS</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('list_faqs') }}">FAQS</a></li>
             <li class="breadcrumb-item" aria-current="page">Add FAQ</li>
         </ol>
     </nav>
@@ -60,8 +60,12 @@
         </div>
 
         <div class="text-end mt-4">
-            <a href="/list_faqs" class="btn btn-secondary me-2">Cancel</a>
-            <button type="submit" class="btn btn-primary" id="submitBtn">Submit</button>
+           
+            <a href="{{ route('list_faqs') }}" class="btn btn-secondary me-2 cncl_btn">
+                Cancel
+            </a>
+     
+            <button type="submit" class="btn" id="submitBtn">{{ __('membership.submit_button') }}</button>
         </div>
     </form>
 
@@ -98,14 +102,6 @@
         </div>
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    const uploadUrl  = "{{ route('profile.cropUpload') }}";
-    const submitfaq = "{{ route('add_faq') }}";
-</script>
-<script src="{{ asset('assets/js/global/image_crop.js') }}"></script>
-<script src="{{ asset('assets/js/faqs/add_faqs.js') }}"></script>
-
 <style>
     /* Keep label normal even if checkbox is disabled */
     .form-check-input:disabled + .form-check-label 
@@ -113,6 +109,26 @@
         color: inherit !important;
         opacity: 1 !important;
     }
+    .profilebtn{
+        background: #0b1061;
+        color: #fff;
+        border: 5px solid #0b1061 !important;
+        border-radius: 5px
+    }
    
 </style>
 @endsection
+@push('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- ✅ CKEditor 5 Classic build -->
+<script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
+
+<script>
+    const uploadUrl  = "{{ route('profile.cropUpload') }}";
+    const submitfaq = "{{ route('add_faq') }}";
+</script>
+<script src="{{ asset('assets/js/global/image_crop.js') }}"></script>
+<script src="{{ asset('assets/js/faqs/add_faqs.js') }}"></script>
+@endpush

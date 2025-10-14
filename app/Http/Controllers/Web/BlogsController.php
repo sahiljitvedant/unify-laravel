@@ -32,15 +32,11 @@ class BlogsController extends Controller
             $query->where('is_active', $request->active);
         }
 
-        // if ($request->filled('trainer')) {
-        //     // Convert 1 => 'yes', 0 => 'no'
-        //     $trainerValue = $request->trainer == 1 ? 'yes' : 'no';
-        //     $query->where('trainer_included', $trainerValue);
-        // }
-
+    
         if ($request->filled('blogname')) {
-            $query->where('blog_title', '=', $request->blogname);
+            $query->where('blog_title', 'like', '%' . $request->blogname . '%');
         }
+        
 
         if ($request->filled('joiningDate')) {
             $query->where('joining_date', '=', $request->joiningDate);
@@ -246,14 +242,10 @@ class BlogsController extends Controller
             $query->where('is_active', $request->active);
         }
 
-        // if ($request->filled('trainer')) {
-        //     // Convert 1 => 'yes', 0 => 'no'
-        //     $trainerValue = $request->trainer == 1 ? 'yes' : 'no';
-        //     $query->where('trainer_included', $trainerValue);
-        // }
+       
 
         if ($request->filled('blogname')) {
-            $query->where('blog_title', '=', $request->blogname);
+            $query->where('blog_title', 'like', '%' . $request->blogname . '%');
         }
 
         if ($request->filled('joiningDate')) {
@@ -333,9 +325,10 @@ class BlogsController extends Controller
         }
     
         $latest_blogs = $blogs->take(3);
-     // dd($latest_blogs );
+        // dd($latest_blogs );
         // Pass as string keys
-        return view('front.index', [
+        return view('front.index', 
+        [
             'blogs' => $blogs,
             'latest_blogs' => $latest_blogs,
         ]);

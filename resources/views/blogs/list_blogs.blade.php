@@ -74,7 +74,7 @@
                                     </a>
                                 </th>
                                 <th>
-                                    <a href="#" class="sort-link" data-column="membership_name">
+                                    <a href="#" class="sort-link" data-column="blog_title">
                                         Blog Name
                                         <span class="sort-icons">
                                             <i class="asc">▲</i>
@@ -83,7 +83,7 @@
                                     </a>
                                 </th>
                                 <th>
-                                    <a href="#" class="sort-link" data-column="duration_in_days">
+                                    <a href="#" class="sort-link" data-column="is_active">
                                         Satus
                                         <span class="sort-icons">
                                             <i class="asc">▲</i>
@@ -106,7 +106,7 @@
                 </nav>
             </div>
         </div>
-        </div>
+    </div>
 @endsection
 
 @push('styles')

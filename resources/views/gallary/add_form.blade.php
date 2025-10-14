@@ -8,172 +8,192 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('list_dashboard') }}">Dashboard</a></li>
-            <li class="breadcrumb-item"><a href="#">Gallery</a></li>
-            <li class="breadcrumb-item" aria-current="page">Add Gallery</li>
+            <li class="breadcrumb-item"><a href="{{ route('list_gallery') }}">Gallery</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Add Gallery</li>
         </ol>
     </nav>
 
-<form id="add_gallery" class="p-4 bg-light rounded shadow">
-    <!-- Form Heading -->
-    <h4 class="mb-4">Add Gallery</h4>
-    <div class="step" data-step="2">
-        <div class="row g-3">
-            <!-- Gallery Name -->
-            <div class="col-md-6 col-12">
-                <label class="form-label required">Gallery Name</label>
-                <input type="text" class="form-control" name="gallery_name" id="gallery_name" 
-                    placeholder="Enter gallery name">
-                <div class="text-danger error-message" data-error-for="gallery_name"></div>
-            </div>
+    <form id="add_gallery" class="p-4 bg-light rounded shadow">
+        <!-- Form Heading -->
+        <h4 class="mb-4">Add Gallery</h4>
 
-            <!-- Status -->
-            <div class="col-md-6 col-12">
-                <label class="form-label required">{{ __('membership.active_label') }}</label>
-                <select class="form-select" name="is_active" id="is_active">
-                    <option disabled selected>{{ __('membership.select_status') }}</option>
-                    <option value="1">{{ __('membership.active') }}</option>
-                    <option value="0">{{ __('membership.inactive') }}</option>
-                </select>
-                <div class="text-danger error-message" data-error-for="is_active"></div>
-            </div>
-        </div>
+        <div class="step" data-step="2">
+            <div class="row g-3">
+                <!-- Gallery Name -->
+                <div class="col-md-6 col-12">
+                    <label class="form-label required">Gallery Name</label>
+                    <input type="text" class="form-control" name="gallery_name" id="gallery_name" placeholder="Enter gallery name">
+                    <div class="text-danger error-message" data-error-for="gallery_name"></div>
+                </div>
 
-        <!-- Main Thumbnail -->
-        <div class="row g-3 mt-3">
-            <div class="col-12">
-                <label class="form-label required">Main Thumbnail</label>
-                <!-- Hidden input -->
-                <input type="file" class="form-control d-none" name="main_thumbnail" id="main_thumbnail" accept=".jpeg,.jpg,.png">
+                <!-- Status -->
+                <div class="col-md-6 col-12">
+                    <label class="form-label required">{{ __('membership.active_label') }}</label>
+                    <select class="form-control" name="is_active" id="is_active">
+                        <option disabled selected>{{ __('membership.select_status') }}</option>
+                        <option value="1">{{ __('membership.active') }}</option>
+                        <option value="0">{{ __('membership.inactive') }}</option>
+                    </select>
+                    <div class="text-danger error-message" data-error-for="is_active"></div>
+                </div>
+            </div>
+            <div class="row g-3">
+        
+
+            <div class="col-6 ">
+                <label class="form-label d-block mb-2 ">Upload Gallary Image</label>
+
+                <!-- Preview wrapper (hidden by default) -->
+                <div class="gallary-image-wrapper d-none" id="galleryThumbWrapper">
+                    <img id="previewGallaryImage" class="gallary-preview-image" style="max-width:200px; border-radius:10px;">
+                </div>
+
+                <div class="text-danger error-message" data-error-for="gallary_image"></div>
+
                 <!-- Upload button -->
-                <button type="button" class="btn btn-primary" id="uploadThumbnailBtn">Upload Thumbnail</button>
-                <div class="text-danger error-message" data-error-for="main_thumbnail"></div>
+                <button type="button" class="profilebtn mt-2" id="uploadGallaryButton" data-type="gallary_image">
+                    Upload Gallry Image
+                </button>
+            </div>
 
-                <!-- Preview -->
-                <div class="mt-2 position-relative d-inline-block" id="thumbnailWrapper" style="display:none;">
-                <img id="thumbnailPreview" src="" alt="Thumbnail" style="max-width:150px; border:1px solid #ddd; border-radius:5px;">
-                <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 remove-thumbnail">&times;</button>
+
+            <!-- Multiple Gallery Images (Crop 500x500 each) -->
+            <div class="col-12 text-center mt-4">
+                <label class="form-label d-block mb-2">Gallery Images (500x500)</label>
+
+                <div id="multiGalleryWrapper" class="d-flex flex-wrap justify-content-center gap-3"></div>
+                <div class="text-danger error-message" data-error-for="gallery_images[]"></div>
+
+                <button type="button" class="profilebtn mt-2" id="uploadMultipleGallery" data-type="gallery_images">
+                    Upload Gallery Images
+                </button>
+            </div>
+
+            <!-- YouTube Links -->
+            <div class="row g-3 mt-4">
+                <div class="col-12">
+                    <label class="form-label">YouTube Links</label>
+                    <div id="youtubeLinksWrapper"></div>
+                    <div class="text-danger error-message" data-error-for="youtube_links[]"></div>
+                    <button type="button" class="btn btn-primary mt-2" id="addYoutubeLink">+ Add Link</button>
                 </div>
             </div>
         </div>
 
-        <!-- Multiple Images -->
-        <div class="row g-3 mt-3">
-        <div class="col-12">
-            <label class="form-label">Gallery Images</label>
-            <!-- Hidden input -->
-            <input type="file" class="form-control d-none" name="gallery_images[]" id="gallery_images" accept=".jpeg,.jpg,.png" multiple>
-            <!-- Upload button -->
-            <button type="button" class="btn btn-primary" id="uploadGalleryBtn">Upload Images</button>
-            <div class="text-danger error-message" data-error-for="gallery_images"></div>
-
-            <!-- Preview area -->
-            <div class="mt-2 d-flex flex-wrap gap-2" id="galleryPreview"></div>
+        <!-- Buttons -->
+        <div class="text-end mt-4">
+            <a href="#" class="btn btn-secondary me-2 cncl_btn">Cancel</a>
+            <button type="submit" class="btn" id="submitBtn">{{ __('membership.submit_button') }}</button>
         </div>
-        </div>
+    </form>
+</div>
 
-        <!-- YouTube Links with Add/Remove -->
-        <div class="row g-3 mt-3">
-            <div class="col-12">
-                <label class="form-label">YouTube Links</label>
-                <div id="youtubeLinksWrapper"></div> <!-- start empty -->
-                <div class="text-danger error-message" data-error-for="youtube_links[]"></div>
-                <button type="button" class="btn btn-primary mt-2" id="addYoutubeLink">+ Add Link</button>
+<!-- Crop Image Modal -->
+<div class="modal fade" id="cropImageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!-- We'll update this title dynamically via JS -->
+                <h5 class="modal-title" id="cropModalTitle">Upload Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body d-flex flex-column">
+
+                <!-- Image Preview -->
+                <div class="text-center mb-3" id="imagePreviewContainer" style="display:none;">
+                    <img id="imageToCrop" style="max-width: 100%; border-radius:10px;">
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="progress mb-3" id="uploadProgress" style="display:none;">
+                    <div class="progress-bar" role="progressbar" style="width:0%">0%</div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="d-flex justify-content-center gap-2 mt-auto">
+                    <input type="file" id="browseImage" accept="image/*" class="d-none">
+                    <button type="button" id="browseBtn" class="btn btn-secondary">Browse</button>
+                    <button type="button" id="uploadCropped" class="btn btn-primary" disabled>Upload</button>
+                </div>
+
             </div>
         </div>
     </div>
-
-    <!-- Buttons -->
-    <div class="text-end mt-4">
-        <a href="#" class="btn btn-secondary me-2 cncl_btn">
-            Cancel
-        </a>
-        <button type="submit" class="btn" id="submitBtn">{{ __('membership.submit_button') }}</button>
-    </div>
-</form>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
 const submitGallary = "{{ route('add_gallery') }}";
+const uploadUrl = "{{ route('profile.cropUpload') }}"; // same controller handles crop upload
 </script>
 
+<script src="{{ asset('assets/js/global/image_crop.js') }}"></script>
 <script src="{{ asset('assets/js/gallary/add_gallary.js') }}"></script>
 
-<script>
-  // Trigger file inputs on button click
-$('#uploadThumbnailBtn').on('click', function() {
-    $('#main_thumbnail').click();
-});
-
-$('#uploadGalleryBtn').on('click', function() {
-    $('#gallery_images').click();
-});
-
-// Thumbnail preview + remove
-$('#main_thumbnail').on('change', function() {
-    const file = this.files[0];
-    if (file && /\.(jpe?g|png)$/i.test(file.name)) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            $('#thumbnailPreview').attr('src', e.target.result);
-            $('#thumbnailWrapper').show();
-        }
-        reader.readAsDataURL(file);
-    }
-});
-
-$(document).on('click', '.remove-thumbnail', function() {
-    let input = document.getElementById('main_thumbnail');
-    let dt = new DataTransfer(); // empty file list
-    input.files = dt.files;      // reset the file input
-    $('#thumbnailWrapper').hide();
-    $('#thumbnailPreview').attr('src', '');
-});
-
-// Gallery images preview + remove
-$('#gallery_images').on('change', function() {
-    $('#galleryPreview').html('');
-    const files = Array.from(this.files);
-
-    files.forEach((file, index) => {
-        if (/\.(jpe?g|png)$/i.test(file.name)) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                $('#galleryPreview').append(`
-                    <div class="position-relative d-inline-block" style="max-width:100px;">
-                        <img src="${e.target.result}" style="max-width:100px; max-height:100px; border:1px solid #ddd; border-radius:5px;">
-                        <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 remove-image" data-index="${index}">&times;</button>
-                    </div>
-                `);
-            }
-            reader.readAsDataURL(file);
-        }
-    });
-});
-
-// Remove selected gallery image
-$(document).on('click', '.remove-image', function() {
-    const index = $(this).data('index');
-    let dt = new DataTransfer();
-    let input = document.getElementById('gallery_images');
-    let { files } = input;
-
-    // Rebuild FileList without the removed file
-    Array.from(files).forEach((file, i) => {
-        if (i !== index) dt.items.add(file);
-    });
-
-    input.files = dt.files;
-    $(this).parent().remove();
-});
-
-</script>
-
 <style>
-    /* Keep label normal even if checkbox is disabled */
-    .form-check-input:disabled + .form-check-label {
-        color: inherit !important;
-        opacity: 1 !important;
+    .blog-image-wrapper {
+        width: 100%;
+        height: 100px;
+        overflow: hidden;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #f5f5f5;
+    }
+
+    .blog-preview-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .profilebtn {
+        background: #0b1061;
+        color: #fff;
+        border: 5px solid #0b1061 !important;
+        border-radius: 5px;
+    }
+
+    .progressbar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #ddd;
+        color: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+    }
+
+    .circle.active {
+        background: #0b1061;
+        color: #fff;
+    }
+
+    .circle.completed {
+        background: #28a745;
+        color: #fff;
+    }
+
+    .line {
+        flex: 1;
+        height: 4px;
+        background: #ddd;
+    }
+
+    .line.active {
+        background: #28a745;
     }
 </style>
 @endsection

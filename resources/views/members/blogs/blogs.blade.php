@@ -11,7 +11,7 @@
     <div class="container">
         <div class="row">
             <!-- LEFT: All Blogs -->
-            <div class="col-lg-8">
+            <div class="col-lg-8 blog_padding">
                 <div class="row g-4">
                 <h4 class="mb-3 text-theme fw-bold">All Blogs</h4>
                 </div>
@@ -25,28 +25,41 @@
             </div>
 
             <!-- RIGHT: Recent Blogs Sidebar -->
-            <div class="col-lg-4">
+            <div class="col-lg-4 blog_padding">
                 <div class="row g-4">
-                <h4 class="mb-3 text-theme fw-bold">Member Choice</h4>
+                    <h4 class="mb-3 text-theme fw-bold">Member Choice</h4>
                 </div>
                 <div class="recent-blogs-sidebar position-sticky" style="top: 20px;">
-                    @foreach($blogs->take(3) as $blog)
-                    <div class="blog-card shadow-hover mb-4">
-                        <img src="{{ asset($blog->image_path ?? 'assets/img/download.png') }}" class="blog-img" alt="{{ $blog->title }}">
-                        <div class="blog-body">
-                            <h6 class="fw-bold text-theme">{{ ucfirst($blog->title) }}</h6>
-                            <p class="text-muted small mb-0">{{ Str::limit($blog->description, 60) }}</p>
-                            <small class="text-theme fw-semibold">{{ \Carbon\Carbon::parse($blog->publish_date)->format('d M, Y') }}</small>
+                    @foreach($latestBlogs as $blog)
+                        <div class="blog-card shadow-hover mb-4">
+                            <a href="{{ route('member_blogs_details', $blog->id) }}" class="text-decoration-none">
+                                <img src="{{ asset($blog->blog_image ?? 'assets/img/download.png') }}" class="blog-img" alt="{{ $blog->blog_title }}">
+                                <div class="blog-body">
+                                    <h6 class="fw-bold text-theme blog_title">{{ ucfirst($blog->blog_title) }}</h6>
+                                    <p class="text-muted small mb-0 blog_desc">{{ Str::limit($blog->description, 60) }}</p>
+                                    <small class="text-theme fw-semibold blog_date">{{ \Carbon\Carbon::parse($blog->publish_date)->format('d M, Y') }}</small>
+                                </div>
+                            </a>
                         </div>
-                    </div>
                     @endforeach
+
                 </div>
             </div>
-        </div></div>
+
+        </div>
+    </div>
 </div>
 @endsection
 
+@push('scripts')
+<script>
+const fetchBlogsUrl = "{{ route('fetch_member_blogs') }}";
+const assetBase = "{{ asset('') }}";
+</script>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{{ asset('assets/js/memebr_blogs/fetch_blogs.js') }}"></script>
+@endpush
 <style>
     .container-custom {
         min-height: 80vh;
@@ -59,7 +72,6 @@
     .blog-card {
         border-radius: 12px;
         overflow: hidden;
-        background: linear-gradient(135deg, #ffffff, #f0f2ff);
         box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         cursor: pointer;
@@ -76,6 +88,7 @@
     }
     .blog-body {
         padding: 10px 15px;
+        background: #c7c7c7
     }
     .text-theme {
         color: #0B1061 !important;
@@ -128,11 +141,14 @@
   
     @media (max-width: 768px) 
     {
-        /* Title fully left aligned */
+        .blog_padding {
+            padding-left: 1px !important;  /* slightly more for mobile if needed */
+            padding-right: 1px !important;
+        }
         h4.text-theme {
-            text-align: left !important;
+            text-align: center !important;
             margin-left: 0 !important;
-            padding-left: 5px !important;
+            
         }
         .row > .col-md-4 {
             display: flex;
@@ -144,6 +160,10 @@
         .card {
             width: 100%;
             margin: 0 auto;
+        }
+        .blog_date,.blog_desc,.blog_title
+        {
+            font-size:12px !important;
         }
     }
     @media (max-width: 991px) {
@@ -166,15 +186,4 @@
 
 </style>
 
-@push('scripts')
-<script>
-const fetchBlogsUrl = "{{ route('fetch_member_blogs') }}";
-const assetBase = "{{ asset('') }}";
-</script>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="{{ asset('assets/js/memebr_blogs/fetch_blogs.js') }}"></script>
-
-
-
-@endpush

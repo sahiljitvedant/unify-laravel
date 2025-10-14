@@ -135,9 +135,9 @@
     {
         /* Title fully left aligned */
         h4.text-theme {
-            text-align: left !important;
+            text-align: center !important;
             margin-left: 0 !important;
-            padding-left: 5px !important;
+            
         }
         .row > .col-md-4 {
             display: flex;
@@ -149,6 +149,10 @@
         .card {
             width: 100%;
             margin: 0 auto;
+        }
+        .container
+        {
+            padding : 1px !important;
         }
     }
 </style>

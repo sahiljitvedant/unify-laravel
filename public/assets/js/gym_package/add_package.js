@@ -268,14 +268,72 @@ $('#submitBtn').on('click', function (e)
         {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
-        success: function (response) {
-            alert('Success: ' + response);
+        beforeSend: function () {
+            // Show loader before sending request
+            Swal.fire({
+                title: 'Submitting...',
+                text: 'Please wait while we process your form.',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
         },
+        success: function (response) {
+            // Close loader & show success popup
+            Swal.fire({
+                icon: 'success',
+                title: 'Form Submitted!',
+                text: 'Member added successfully.',
+                confirmButtonText: 'OK',
+                allowOutsideClick: false
+            }).then(() => {
+                // Redirect on OK
+                window.location.href = "/list_member";
+            });
+        },
+        // error: function (xhr) {
+        //     Swal.close(); // close loader
+        
+        //     if (xhr.status === 422) {
+        //         let errors = xhr.responseJSON.errors;
+        //         for (let key in errors) {
+        //             $(`.error-message[data-error-for="${key}"]`).text(errors[key][0]);
+        //         }
+        //     } else {
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'Oops...',
+        //             text: 'Something went wrong! Please try again.'
+        //         });
+        //     }
+        // }
         error: function (xhr) {
-            console.log(xhr.status);
-            console.log(xhr.responseText); // This may include the Sfdump HTML
-            alert("An error occurred. Check console for details.");
+            Swal.close(); // close loader
+        
+            if (xhr.status === 422) {
+                // Validation errors
+                let errors = xhr.responseJSON.errors;
+                for (let key in errors) {
+                    $(`.error-message[data-error-for="${key}"]`).text(errors[key][0]);
+                }
+            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                // Display actual server error message
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: xhr.responseJSON.message
+                });
+            } else {
+                // Fallback
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong! Please try again.'
+                });
+            }
         }
+        
     });
 });
 

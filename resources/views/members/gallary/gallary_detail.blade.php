@@ -9,7 +9,7 @@
 
 <div class="container-custom py-4">  
     <div class="container">
-        <a href="{{ route('member_gallary') }}" class="btn-back mb-2">
+        <a href="{{ url()->previous() }}" class="btn-back mb-2">
             <i class="bi bi-arrow-left"></i>
             <span class="btn-text">Back</span>
         </a>
@@ -30,7 +30,7 @@
         @endphp
 
         <!-- Wrapper for all gallery images -->
-        <div class="gallery-images-wrapper border p-3 rounded">
+        <div class="gallery-images-wrapper border rounded">
             <div class="row g-2">
                 @foreach($images as $img)
                     @php
@@ -89,7 +89,10 @@
         background: rgba(0,0,0,0.4);
         text-transform: capitalize;
     }
-
+    .gallery-images-wrapper
+    {
+        padding : 3px !important;
+    }
     /* Gallery images */
     .gallery-image img {
         width: 100%;
@@ -103,6 +106,8 @@
         transform: scale(1.05); /* pop-out effect */
         box-shadow: 0 8px 20px rgba(0,0,0,0.3);
     }
+  
+
    
     /* Responsive adjustments */
     @media (max-width: 768px) {
@@ -127,6 +132,14 @@
 
         .mb-3 {
             text-align: left !important;
+        }
+        .container
+        {
+            padding : 1px !important;
+        }
+        .gallery-images-wrapper
+        {
+            padding : 1px !important;
         }
     }
 

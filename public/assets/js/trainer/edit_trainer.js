@@ -2,7 +2,8 @@
 const validationRules = {
     trainer_name: { required: true, minlength: 2, maxlength: 15 },
     joining_date: { required: true, date: true },
-    is_active: { required: true }
+    is_active: { required: true },
+    mobile_number:{ required: true, minlength: 10, maxlength: 10 },
 };
 
 // Validation Messages
@@ -18,7 +19,14 @@ const validationMessages = {
         date: "date must be numeric" 
     },
     
-    is_active: { required: "Please select status" }
+    is_active: { required: "Please select status" },
+
+    mobile_number:
+    {
+        required: "Mobile Number name is required", 
+        minlength: "Mobile Number must be at least 10 characters", 
+        maxlength: "Mobile Number must not exceed 10 characters" 
+    }
 };
 
 
@@ -67,6 +75,13 @@ function validateForm()
             return;
         }
     });
+    const joiningDate = $('#joining_date').val();
+    const leavingDate = $('#expiry_date').val();
+
+    if (joiningDate && leavingDate && new Date(leavingDate) < new Date(joiningDate)) {
+        $(`.error-message[data-error-for="expiry_date"]`).text('Leaving date cannot be earlier than joining date');
+        isValid = false;
+    }
 
     return isValid;
 }

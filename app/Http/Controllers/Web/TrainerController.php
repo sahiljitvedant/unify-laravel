@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Crypt; 
-
+use Illuminate\Validation\Rule;
 class TrainerController extends Controller
 {
     public function list()
@@ -32,19 +32,18 @@ class TrainerController extends Controller
             $query->where('is_active', $request->active);
         }
 
-        // if ($request->filled('trainer')) {
-        //     // Convert 1 => 'yes', 0 => 'no'
-        //     $trainerValue = $request->trainer == 1 ? 'yes' : 'no';
-        //     $query->where('trainer_included', $trainerValue);
-        // }
-
+    
         if ($request->filled('trainerName')) {
-            $query->where('trainer_name', '=', $request->trainerName);
+            $query->where('trainer_name', 'LIKE', '%' . $request->trainerName . '%');
         }
 
         if ($request->filled('joiningDate')) {
             $query->where('joining_date', '=', $request->joiningDate);
         }
+        if ($request->filled('mobileNumber')) {
+            $query->where('mobile_number', 'LIKE', '%' . $request->mobileNumber . '%');
+        }
+        
 
         // Sorting
         $allowedSorts = [
@@ -102,6 +101,7 @@ class TrainerController extends Controller
             'joining_date' => 'required|date', 
             'expiry_date' => 'nullable|date', 
             'is_active' => 'required|boolean',
+            'mobile_number'=> 'required',
         ];
 
         // Validate the inputs
@@ -126,8 +126,7 @@ class TrainerController extends Controller
 
             $inserted_id = DB::table('tbl_trainer')->insertGetId($user_details_arr);
            
-            DB::commit();
-    
+            DB::commit();    
             $arr_resp['status'] = 'success';
             $arr_resp['message'] = 'Member added successfully';
             $arr_resp['member_id'] = $inserted_id;
@@ -166,45 +165,64 @@ class TrainerController extends Controller
        
     }
 
-    // Handle update
+  
     public function update(Request $request, $id)
     {
-        // dd('update');
-        // dd($request->all());
         try 
         {
+            // ✅ Validation
             $request->validate([
-                'trainer_name' => 'required|string|min:3|max:5',
-                'joining_date'     => 'required|date',
-                'is_active'       => 'required',
+                'trainer_name' => [
+                    'required',
+                    'string',
+                    'min:3',
+                    'max:50', // slightly more practical limit than 5
+                    Rule::unique('tbl_trainer', 'trainer_name')->ignore($id)
+                ],
+                'mobile_number' => [
+                    'required',
+                    'digits:10',
+                    Rule::unique('tbl_trainer', 'mobile_number')->ignore($id)
+                ],
+                'joining_date' => 'required|date',
+                'is_active' => 'required',
             ]);
 
-    
+            // ✅ Update record
             DB::table('tbl_trainer')
                 ->where('id', $id)
                 ->update([
-                    'trainer_name'     => $request->trainer_name,
-                    'is_active'           => $request->is_active,
-                    'joining_date'         => $request->joining_date,
-                    'expiry_date'    => $request->expiry_date,
+                    'trainer_name'  => $request->trainer_name,
+                    'mobile_number' => $request->mobile_number,
+                    'is_active'     => $request->is_active,
+                    'joining_date'  => $request->joining_date,
+                    'expiry_date'   => $request->expiry_date,
                 ]);
-    
-            return response()->json(['success' => true, 'message' => 'Trainer updated successfully!']);
+
+            // ✅ Return success
+            return response()->json([
+                'success' => true, 
+                'message' => 'Trainer updated successfully!'
+            ]);
         } 
         catch (\Illuminate\Validation\ValidationException $e) 
         {
-            // Return validation errors as JSON
+            // Validation errors
             return response()->json([
                 'success' => false, 
                 'errors'  => $e->errors()
             ], 422);
-        }
+        } 
         catch (\Exception $e) 
         {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            // Unexpected errors
+            return response()->json([
+                'success' => false, 
+                'message' => $e->getMessage()
+            ], 500);
         }
-
     }
+
     
     public function deleteTrainer($id)
     {
@@ -252,7 +270,7 @@ class TrainerController extends Controller
         // }
 
         if ($request->filled('trainerName')) {
-            $query->where('trainer_name', '=', $request->trainerName);
+            $query->where('trainer_name', 'LIKE', '%' . $request->trainerName . '%');
         }
 
         if ($request->filled('joiningDate')) {

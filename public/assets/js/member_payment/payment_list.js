@@ -39,21 +39,26 @@ function renderTable(data) {
 
         data.forEach(p => {
             let viewUrl = `/view_invoice/${p.id}`;
+            let pdfUrl = `${window.assetBase}storage/invoices/invoice_${p.invoice_number}.pdf`;
+
             html += `
             <div class="col-12 col-md-4">
                 <div class="card mb-3 shadow-sm">
-                    <div class="card-body d-flex flex-column justify-content-between">
+                    <div class="card-body d-flex flex-column">
                         <div>
                             <h6 class="card-title mb-1">Invoice: ${p.invoice_number}</h6>
                             <p class="mb-1"><strong>Plan:</strong> ${p.plan_name}</p>
                             <p class="mb-1"><strong>Amount:</strong> ₹${parseFloat(p.amount).toFixed(2)}</p>
                             <p class="mb-0"><strong>Status:</strong> ${p.status}</p>
                             <a href="${viewUrl}" class="view-btn d-inline-flex align-items-center justify-content-center mt-3">
-                                View
+                            <i class="bi bi-eye me-1"></i>
                             </a>
-                            <a href="${viewUrl}" class="download-btn d-inline-flex align-items-center justify-content-center mt-3">
-                                Download
-                            </a>
+                            <a href="${pdfUrl}" 
+                            target="_blank"
+                            class="download-btn d-inline-flex align-items-center justify-content-center mt-3"
+                            title="View Invoice PDF">
+                             <i class="bi bi-download me-1"></i>
+                         </a>
                         </div>
                         
                     </div>

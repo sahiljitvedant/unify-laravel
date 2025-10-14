@@ -8,9 +8,9 @@ const validationRules = {
     is_active: { 
         required: true 
     },
-    main_thumbnail: { 
-        required: true, 
-        extension: "jpg|jpeg|png" 
+    gallary_image: { 
+        required: true,
+      
     },
     "gallery_images[]": { 
         extension: "jpg|jpeg|png" 
@@ -30,9 +30,9 @@ const validationMessages = {
     is_active: { 
         required: "Please select the status" 
     },
-    main_thumbnail: { 
+    gallary_image: { 
         required: "Main thumbnail is required", 
-        extension: "Only JPG, JPEG, PNG images are allowed" 
+        
     },
     "gallery_images[]": { 
         extension: "Only JPG, JPEG, PNG images are allowed" 
@@ -43,11 +43,9 @@ const validationMessages = {
 };
 
 // Validate all form fields
-function validateForm() 
-{
-    let isValid = true;
 
-    // Clear previous errors
+function validateForm() {
+    let isValid = true;
     $('.error-message').text('');
 
     $('#add_gallery :input').each(function () {
@@ -57,39 +55,30 @@ function validateForm()
         const messages = validationMessages[name];
         const errorDiv = $(`.error-message[data-error-for="${name}"]`);
 
-        if (!rules) return true; // skip if no rules
+        if (!rules) return true;
 
-        // Required check
         if (rules.required && (!value || value.trim() === '')) {
             errorDiv.text(messages.required);
             isValid = false;
             return;
         }
-
-        // Number check
-        if (rules.number && value && isNaN(value)) {
-            errorDiv.text(messages.number);
-            isValid = false;
-            return;
-        }
-
-         // Min length check
-         if (rules.minlength && value.length < rules.minlength) {
-            errorDiv.text(messages.minlength);
-            isValid = false;
-            return;
-        }
-
-        // Max length check
-        if (rules.maxlength && value.length > rules.maxlength) {
-            errorDiv.text(messages.maxlength);
-            isValid = false;
-            return;
-        }
     });
+
+    // ✅ THIS MUST STAY
+    if (!$('#gallary_image_path').val()) {
+        $(`.error-message[data-error-for="gallary_image"]`).text(validationMessages.gallary_image.required);
+        isValid = false;
+    }
+
+    // ✅ Include YouTube validation too
+    if (!validateYouTubeLinks()) {
+        isValid = false;
+    }
 
     return isValid;
 }
+
+
 
 // Image preview
 $('#profileImage').on('change', function (e) 
@@ -138,7 +127,7 @@ $('#submitBtn').on('click', function (e) {
                 confirmButtonText: 'OK',
                 allowOutsideClick: false
             }).then(() => {
-                window.location.href = "/list_blogs";
+                window.location.href = "/list_gallery";
             });
         },
         error: function (xhr) {
@@ -242,41 +231,4 @@ function validateYouTubeLinks() {
     return isValid;
 }
 
-// Hook into form validation
-function validateForm() {
-    let isValid = true;
-
-    // existing validations...
-    $('.error-message').text('');
-    $('#add_gallery :input').each(function () {
-        const name = $(this).attr('name');
-        const value = $(this).val();
-        const rules = validationRules[name];
-        const messages = validationMessages[name];
-        const errorDiv = $(`.error-message[data-error-for="${name}"]`);
-
-        if (!rules) return true;
-
-        if (rules.required && (!value || value.trim() === '')) {
-            errorDiv.text(messages.required);
-            isValid = false;
-            return;
-        }
-        if (rules.minlength && value.length < rules.minlength) {
-            errorDiv.text(messages.minlength);
-            isValid = false;
-            return;
-        }
-        if (rules.maxlength && value.length > rules.maxlength) {
-            errorDiv.text(messages.maxlength);
-            isValid = false;
-            return;
-        }
-    });
-
-    // extra check for YouTube
-    if (!validateYouTubeLinks()) isValid = false;
-
-    return isValid;
-}
 

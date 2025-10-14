@@ -1,6 +1,6 @@
 @extends('members.layouts.app')
 
-@section('title', 'Gallery')
+@section('title', 'Blog Details')
 
 @section('content')
 <div id="loader" style="display:none;">
@@ -9,67 +9,76 @@
 
 <div class="container-custom py-4">  
     <div class="container">
-        <a href="{{ route('member_gallary') }}" class="btn-back mb-2">
+        <a href="{{ url()->previous() }}" class="btn-back mb-3">
             <i class="bi bi-arrow-left"></i>
             <span class="btn-text">Back</span>
         </a>
 
-        <!-- Main Thumbnail -->
-        <div class="card position-relative overflow-hidden mb-3" style="height: 300px;">
-            <img src="{{ asset($gallery->main_thumbnail) }}" class="card-img-top" style="object-fit: cover; width: 100%; height: 100%;" alt="{{ ucfirst($gallery->gallery_name) }}">
+        <!-- Blog Thumbnail -->
+        <div class="card position-relative overflow-hidden mb-1" style="height: 300px;">
+            <img src="{{ $blogs->blog_image ? asset($blogs->blog_image) : asset('assets/img/download.png') }}" 
+                 class="card-img-top" 
+                 style="object-fit: cover; width: 100%; height: 100%;" 
+                 alt="{{ ucfirst($blogs->blog_title) }}">
             
-            <!-- Overlay with Gallery Name -->
             <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center overlay">
-                <h2 class="text-white text-center px-2">{{ ucfirst($gallery->gallery_name) }}</h2>
+                <!-- optional title overlay removed -->
             </div>
         </div>
 
-        <!-- Gallery Images -->
-        @php
-            $images = $gallery->gallery_images ?? [];
-        @endphp
+        <!-- Blog Full Details -->
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-body">
 
-        <!-- Wrapper for all gallery images -->
-        <div class="gallery-images-wrapper border p-3 rounded">
-            <div class="row g-2">
-                @foreach($images as $img)
-                    @php
-                        // Define image path inside the loop
-                        $imagePath = $img && file_exists(public_path($img)) 
-                                    ? asset($img) 
-                                    : asset('assets/img/download.png');
-                    @endphp
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <!-- Blog Title -->
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <i class="bi bi-card-text text-theme fs-13"></i>
+                            <p class="mb-0 fw-semibold text-dark fs-14">{{ ucfirst($blogs->blog_title) }}</p>
+                        </div>
 
-                    <div class="col-12 col-sm-6 col-md-3">
-                        <div class="gallery-image">
-                            <img src="{{ $imagePath }}" alt="Gallery Image" class="img-thumbnail">
+                        <!-- Publish Date -->
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-calendar-event text-theme fs-13"></i>
+                            <p class="mb-0 fw-text-dark fs-14">{{ \Carbon\Carbon::parse($blogs->publish_date)->format('d M Y') }}</p>
                         </div>
                     </div>
-                @endforeach
+                </div>
+
+
+                <hr>
+
+                <h6 class="fw-semibold text-theme mb-2">Description</h6>
+                <p class="text-dark mb-3 fs-12">
+                    {!! nl2br(e($blogs->description)) !!}
+                </p>
+
             </div>
         </div>
 
-      
     </div>
 </div>
 @endsection
+
 <style>
+    /* ===== Theme Variables ===== */
+    .text-theme {
+        color: #0B1061 !important;
+    }
+    .fs-14 {
+        font-size: 14px;
+    }
+    .fs-12 {
+        font-size: 12px;
+    }
+
+    /* ===== Layout Styles ===== */
     .container-custom {
         min-height: 80vh;
         background-color: #f5f6fa;
         padding: 20px;
         border-radius: 12px;
-    }
-    /* Back Button */
-    .btn-back:hover {
-        color: #05093a;
-        transform: translateX(-3px);
-    }
-    .btn-back i {
-        font-size: 18px;
-    }
-    .btn-text {
-        font-size: 14px;
     }
     .btn-back {
         display: inline-flex;
@@ -83,48 +92,41 @@
         padding: 0;
         transition: transform 0.15s ease-in-out;
     }
+    .btn-back:hover {
+        color: #05093a;
+        transform: translateX(-3px);
+    }
+    .btn-back i {
+        font-size: 18px;
+    }
+    .btn-text {
+        font-size: 14px;
+    }
     .overlay {
         background: rgba(0,0,0,0.4);
         text-transform: capitalize;
     }
-    .gallery-image img {
-        width: 100%;
-        height: 250px;
-        object-fit: cover;
-        border: none;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        cursor: pointer;
+    .text-dark.mb-3.fs-12
+    {
+        text-align: justify;
     }
-    .gallery-image img:hover {
-        transform: scale(1.05); /* pop-out effect */
-        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    }
-   
     @media (max-width: 768px) {
-        .btn-back {
-        display: block;           /* full width */
-        text-align: left;         /* left align content */
-        justify-content: flex-start; /* optional */
-    }
-
-    .btn-text {
-        display: inline-block;
-        margin-left: 5px;
-        padding-left: 0;
-        text-align: left;
-    }
-
-        /* 1 image per row on mobile */
-        .col-12.col-sm-6.col-md-3 {
-            flex: 0 0 100%;
-            max-width: 100%;
+        .container
+        {
+            padding: 1px !important;
         }
-
-        .mb-3 {
+        .btn-back {
+            display: block;
+            text-align: left;
+            justify-content: flex-start;
+        }
+        .btn-text {
+            display: inline-block;
+            margin-left: 5px;
+        }
+        .fw-semibold.text-theme.mb-2
+        {
             text-align: left !important;
         }
     }
-
 </style>
-
-

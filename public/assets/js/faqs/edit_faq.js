@@ -1,3 +1,34 @@
+let ckEditorInstance;
+
+ClassicEditor
+    .create(document.querySelector('#answer'), {
+        toolbar: [
+            'heading', '|',
+            'bold', 'italic', 'underline', 'strikethrough', 'link',
+            'bulletedList', 'numberedList', 'blockQuote',
+            'undo', 'redo',
+            'fontSize' // <-- add font size control
+        ],
+        fontSize: {
+            options: [
+                10, 12, 14, 'default', 18, 20, 24, 28
+            ]
+        },
+        removePlugins: [
+            'EasyImage',
+            'Image',
+            'ImageUpload',
+            'CKFinder',
+            'CKFinderUploadAdapter',
+            'MediaEmbed'
+        ]
+    })
+    .then(editor => {
+        ckEditorInstance = editor;
+        console.log('CKEditor initialized without image upload, with font size');
+    })
+    .catch(error => console.error('CKEditor init error:', error));
+
 // Validation Rules
 const validationRules = {
     question: { required: true, maxlength: 500 },
@@ -21,8 +52,13 @@ const validationMessages = {
 // Validate form
 function validateForm() {
     let isValid = true;
+   
     $('.error-message').text('');
-
+    let descriptionData = '';
+    if (ckEditorInstance) {
+        descriptionData = ckEditorInstance.getData().trim();
+        $('#answer').val(descriptionData); // keep the textarea in sync
+    }
     $('#faq_edit_form :input').each(function () {
         const name = $(this).attr('name');
         const value = $(this).val();
@@ -61,6 +97,11 @@ $('#image').on('change', function () {
 // Submit button
 $('#submitBtn').on('click', function (e) {
     e.preventDefault();
+
+    if (ckEditorInstance) {
+        $('#answer').val(ckEditorInstance.getData().trim());
+    }
+    
     if (!validateForm()) return;
 
     let formData = new FormData($('#faq_edit_form')[0]);

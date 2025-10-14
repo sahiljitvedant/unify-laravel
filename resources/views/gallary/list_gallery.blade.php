@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Blogs List')
+@section('title', 'Gallary List')
 
 @section('content')
     <div id="loader">
@@ -11,17 +11,18 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('list_dashboard') }}">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('list_blogs') }}">Blogs</a></li>
-                <li class="breadcrumb-item" aria-current="page">List Blogs</li>
+                <li class="breadcrumb-item"><a href="{{ route('list_gallery') }}">Gallery</a></li>
+                
+                <li class="breadcrumb-item" aria-current="page">List Gallery</li>
             </ol>
         </nav>
         <div class="p-4 bg-light rounded shadow">
             <!-- Heading + Add Button -->
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 gap-2">
-                <h4 class="mb-2 mb-md-0">List Blogs</h4>
+                <h4 class="mb-2 mb-md-0">List Gallery</h4>
                 <div class="d-flex flex-column align-items-start align-items-md-end gap-2">
-                    <a href="{{ route('add_blogs') }}" class="btn-add">Add Blogs</a>
-                    <a href="{{ route('list_deleted_membership') }}" class="btn-link">Show Deleted Blogs</a>
+                    <a href="{{ route('add_gallery') }}" class="btn-add">Add Gallery</a>
+                    <a href="{{ route('list_deleted_membership') }}" class="btn-link">Show Deleted Gallery</a>
                 </div>
             </div>
             <div class="data-wrapper">
@@ -30,10 +31,10 @@
                     <div class="row g-3">
                         <!-- Row 1 -->
                         <div class="col-md-3">
-                            <input type="text" id="blogName" class="form-control" placeholder="Blog Name">
+                            <input type="text" id="galleryName" class="form-control" placeholder="Gallery Name">
                         </div>
                         <div class="col-md-3">
-                            <select id="filterActive" class="form-select">
+                            <select id="filterActive" class="form-control">
                                 <option value="">Select Status</option>
                                 <option value="1">Active</option>
                                 <option value="0">Inactive</option>
@@ -75,7 +76,7 @@
                                 </th>
                                 <th>
                                     <a href="#" class="sort-link" data-column="membership_name">
-                                        Blog Name
+                                        Gallery Name
                                         <span class="sort-icons">
                                             <i class="asc">▲</i>
                                             <i class="desc">▼</i>
@@ -84,7 +85,7 @@
                                 </th>
                                 <th>
                                     <a href="#" class="sort-link" data-column="duration_in_days">
-                                        Satus
+                                        Status
                                         <span class="sort-icons">
                                             <i class="asc">▲</i>
                                             <i class="desc">▼</i>
@@ -128,11 +129,12 @@
 
 @push('scripts')
 <script>
-    const fetchBlogs = "{{ route('fetch_blogs') }}";
+    const fetchGallery = "{{ route('fetch_gallery') }}";
     const deleteBlogs = "{{ route('delete_membership', ':id') }}";
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="{{ asset('assets/js/blogs/list_blogs.js') }}"></script>
+<script src="{{ asset('assets/js/gallary/list_gallery.js') }}"></script>
+
 
 <script>
 

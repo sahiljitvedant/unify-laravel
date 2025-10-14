@@ -27,7 +27,7 @@
                 </button>
             </div>
             <div class="col-12 col-md-3 mb-3">
-                <label class="form-label">{{ __('global.first_name') }}</label>
+                <label class="form-label required">{{ __('global.first_name') }}</label>
                 <input type="text" class="form-control" name="first_name" id="first_name" placeholder="{{ __('global.first_name_placeholder') }}">
                 <div class="text-danger error-message" data-error-for="first_name"></div>
             </div>
@@ -39,19 +39,19 @@
             </div>
 
             <div class="col-12 col-md-3 mb-3">
-                <label class="form-label">{{ __('global.last_name') }}</label>
+                <label class="form-label required">{{ __('global.last_name') }}</label>
                 <input type="text" class="form-control" name="last_name" id="last_name" placeholder="{{ __('global.last_name_placeholder') }}">
                 <div class="text-danger error-message" data-error-for="last_name"></div>
             </div>  
         </div>
         <div class="row mb-3">
             <div class="col-12 col-md-6 mb-3">
-                <label class="form-label">{{ __('global.dob') }}</label>
+                <label class="form-label required">{{ __('global.dob') }}</label>
                 <input type="date" class="form-control" name="dob" id="dob" placeholder="{{ __('global.dob_placeholder') }}">
                 <div class="text-danger error-message" data-error-for="dob"></div>
             </div>
             <div class="col-12 col-md-6 mb-3">
-                <label class="form-label">{{ __('global.gender_label') }}</label>
+                <label class="form-label required">{{ __('global.gender_label') }}</label>
                 <select class="form-select" name="gender" id="gender">
                     <option value="" selected disabled>{{ __('global.gender_placeholder') }}</option>
                     @foreach (config('app.gender_options') as $id => $gender)
@@ -65,12 +65,12 @@
 
         <div class="row mb-3">
             <div class="col-12 col-md-6 mb-3">
-                <label class="form-label">{{ __('global.email_label') }}</label>
+                <label class="form-label required">{{ __('global.email_label') }}</label>
                 <input type="email" class="form-control" name="email" id="email" placeholder="{{ __('global.email_placeholder') }}">
                 <div class="text-danger error-message" data-error-for="email"></div>
             </div>
             <div class="col-12 col-md-6 mb-3">
-                <label class="form-label">{{ __('global.mobile_label') }}</label>
+                <label class="form-label required">{{ __('global.mobile_label') }}</label>
                 <input type="text" class="form-control" name="mobile" id="mobile" placeholder="{{ __('global.mobile_placeholder') }}">
                 <div class="text-danger error-message" data-error-for="mobile"></div>
             </div>
@@ -78,7 +78,7 @@
 
         <div class="row mb-3">
             <div class="col-12 col-md-4 mb-3">
-                <label class="form-label">{{ __('global.residence_address_label') }}</label>
+                <label class="form-label required">{{ __('global.residence_address_label') }}</label>
                 <input type="text" class="form-control" name="residence_address" id="residence_address" placeholder="{{ __('global.residence_address_placeholder') }}">
                 <div class="text-danger error-message" data-error-for="residence_address"></div>
             </div>
@@ -88,7 +88,7 @@
                 <div class="text-danger error-message" data-error-for="residence_area"></div>
             </div>
             <div class="col-12 col-md-4 mb-3">
-                <label class="form-label">{{ __('global.zipcode_label') }}</label>
+                <label class="form-label required">{{ __('global.zipcode_label') }}</label>
                 <input type="text" class="form-control" name="zipcode" id="zipcode" placeholder="{{ __('global.zipcode_placeholder') }}">
                 <div class="text-danger error-message" data-error-for="zipcode"></div>
             </div>
@@ -96,7 +96,7 @@
 
         <div class="row mb-3">
             <div class="col-12 col-md-4 mb-3">
-                <label class="form-label">{{ __('global.city_label') }}</label>
+                <label class="form-label required">{{ __('global.city_label') }}</label>
                 <select class="form-select" name="city" id="city">
                     <option selected disabled>{{ __('global.select_option') }}</option>
                     <option value="city1">City 1</option>
@@ -106,7 +106,7 @@
                 <div class="text-danger error-message" data-error-for="city"></div>
             </div>
             <div class="col-12 col-md-4 mb-3">
-                <label class="form-label">{{ __('global.state_label') }}</label>
+                <label class="form-label required">{{ __('global.state_label') }}</label>
                 <select class="form-select" name="state" id="state">
                     <option selected disabled>{{ __('global.select_option') }}</option>
                     <option value="state1">State 1</option>
@@ -116,7 +116,7 @@
                 <div class="text-danger error-message" data-error-for="state"></div>
             </div>
             <div class="col-12 col-md-4 mb-3">
-                <label class="form-label">{{ __('global.country_label') }}</label>
+                <label class="form-label  required">{{ __('global.country_label') }}</label>
                 <select class="form-select" name="country" id="country">
                     <option selected disabled>{{ __('global.select_option') }}</option>
                     <option value="country1">Country 1</option>
@@ -133,7 +133,7 @@
         <div class="row g-3">
             <div class="col-md-6 col-12">
                 <label class="form-label">{{ __('global.membership_type_label') }}</label>
-                <select class="form-select" name="membership_type" id="membership_type" required>
+                <select class="form-control" name="membership_type" id="membership_type" required>
                     <option selected disabled>{{ __('global.select_option') }}</option>
                     @foreach($memberships as $id => $name)
                         <option value="{{ $id }}">{{ $name }}</option>
@@ -151,13 +151,13 @@
 
         <div class="row g-3 mt-2">
             <div class="col-md-6 col-12">
-                <label class="form-label">{{ __('global.expiry_date_label') }}</label>
+                <label class="form-label required">{{ __('global.expiry_date_label') }}</label>
                 <input type="date" class="form-control" name="expiry_date" id="expiry_date" placeholder="{{ __('global.expiry_date_placeholder') }}">
                 <div class="text-danger error-message" data-error-for="expiry_date"></div>
             </div>
 
             <div class="col-md-6 col-12">
-                <label class="form-label">{{ __('global.amount_paid_label') }}</label>
+                <label class="form-label required">{{ __('global.amount_paid_label') }}</label>
                 <input type="number" class="form-control" name="amount_paid" id="amount_paid" placeholder="{{ __('global.amount_paid_placeholder') }}">
                 <div class="text-danger error-message" data-error-for="amount_paid"></div>
             </div>
@@ -165,8 +165,8 @@
 
         <div class="row g-3 mt-2">
             <div class="col-md-6 col-12">
-                <label class="form-label">{{ __('global.payment_method_label') }}</label>
-                <select class="form-select" name="payment_method" id="payment_method">
+                <label class="form-label required">{{ __('global.payment_method_label') }}</label>
+                <select class="form-control" name="payment_method" id="payment_method">
                     <option selected disabled>{{ __('global.select_option') }}</option>
                     <option value="cash">{{ __('global.cash') }}</option>
                     <option value="card">{{ __('global.card') }}</option>
@@ -176,8 +176,8 @@
             </div>
 
             <div class="col-md-6 col-12">
-                <label class="form-label">{{ __('global.trainer_assigned_label') }}</label>
-                <select class="form-select" name="trainer_assigned" id="trainer_assigned">
+                <label class="form-label required">{{ __('global.trainer_assigned_label') }}</label>
+                <select class="form-control" name="trainer_assigned" id="trainer_assigned">
                     <option selected disabled>{{ __('global.select_option') }}</option>
                     @foreach($trainer as $id => $name)
                         <option value="{{ $id }}">{{ $name }}</option>
@@ -196,7 +196,7 @@
         <div class="row g-3">
             <div class="col-md-6 col-12">
                 <label class="form-label">{{ __('global.fitness_goals_label') }}</label>
-                <select class="form-select" name="fitness_goals" id="fitness_goals">
+                <select class="form-control" name="fitness_goals" id="fitness_goals">
                     <option value="weight_loss">{{ __('global.weight_loss') }}</option>
                     <option value="muscle_gain">{{ __('global.muscle_gain') }}</option>
                     <option value="flexibility">{{ __('global.flexibility') }}</option>
@@ -206,8 +206,8 @@
             </div>
 
             <div class="col-md-6 col-12">
-                <label class="form-label">{{ __('global.preferred_workout_time_label') }}</label>
-                <select class="form-select" name="preferred_workout_time" id="preferred_workout_time">
+                <label class="form-label required">{{ __('global.preferred_workout_time_label') }}</label>
+                <select class="form-control" name="preferred_workout_time" id="preferred_workout_time">
                     <option selected disabled>{{ __('global.select_option') }}</option>
                     <option value="morning">{{ __('global.morning') }}</option>
                     <option value="afternoon">{{ __('global.afternoon') }}</option>
@@ -220,7 +220,7 @@
         <div class="row g-3 mt-2">
             <div class="col-6 col-md-3">
                 <label class="form-label">{{ __('global.height_ft_label') }}</label>
-                <select class="form-select" name="height_ft" id="height_ft">
+                <select class="form-control" name="height_ft" id="height_ft">
                     <option selected disabled>{{ __('global.select_option') }}</option>
                     @for ($i = 3; $i <= 7; $i++)
                         <option value="{{ $i }}">{{ $i }} {{ __('global.ft') }}</option>
@@ -231,7 +231,7 @@
 
             <div class="col-6 col-md-3">
                 <label class="form-label">{{ __('global.height_in_label') }}</label>
-                <select class="form-select" name="height_in" id="height_in">
+                <select class="form-control" name="height_in" id="height_in">
                     <option selected disabled>{{ __('global.select_option') }}</option>
                     @for ($i = 0; $i < 12; $i++)
                         <option value="{{ $i }}">{{ $i }} {{ __('global.inches') }}</option>
@@ -358,10 +358,11 @@ const uploadUrl  = "{{ route('profile.cropUpload') }}";
 
 <style>
     .profilebtn{
+        font-size: 12px !important;
         background: #0b1061;
         color: #fff;
         border: 5px solid #0b1061 !important;
-        border-radius: 5px
+        border-radius: 30px
     }
     .progressbar {
         display: flex;

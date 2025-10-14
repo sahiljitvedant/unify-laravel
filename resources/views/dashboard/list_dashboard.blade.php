@@ -90,7 +90,7 @@
 
                             <!-- Year Dropdown -->
                             <form method="GET" action="{{ route('list_dashboard') }}">
-                                <select name="year" class="form-select" onchange="this.form.submit()">
+                                <select name="year" class="form-control" onchange="this.form.submit()">
                                     @foreach($years as $year)
                                         <option value="{{ $year }}" {{ $year == $selectedYear ? 'selected' : '' }}>
                                             {{ $year }}

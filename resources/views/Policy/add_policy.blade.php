@@ -18,13 +18,13 @@
         <h4 class="mb-4">Edit Policy</h4>
         <div class="step" data-step="2">
         <div class="row g-3 mt-3">
-    <div class="col-12">
-        <label class="form-label required">Policy Description</label>
-        <textarea class="form-control" name="policy_description" id="policy_description" 
-                  placeholder="Enter policy description" rows="4">{{ $policy_description ?? '' }}</textarea>
-        <div class="text-danger error-message" data-error-for="policy_description"></div>
-    </div>
-</div>
+            <div class="col-12">
+                <label class="form-label required">Policy Description</label>
+                <textarea class="form-control" name="policy_description" id="policy_description" 
+                        placeholder="Enter policy description" rows="4">{{ $policy_description ?? '' }}</textarea>
+                <div class="text-danger error-message" data-error-for="policy_description"></div>
+            </div>
+        </div>
 
         <div class="text-end mt-4">
             <a href="{{ route('list_trainer') }}" class="btn btn-secondary me-2 cncl_btn">
@@ -34,15 +34,6 @@
         </div>
     </form>
 </div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script>
-const submitPolicy = "{{ route('add_policy') }}";
-</script>
-
-<script src="{{ asset('assets\js\policy\add_policy.js') }}"></script>
-
-
 <style>
     /* Keep label normal even if checkbox is disabled */
     .form-check-input:disabled + .form-check-label 
@@ -53,3 +44,16 @@ const submitPolicy = "{{ route('add_policy') }}";
    
 </style>
 @endsection
+@push('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- ✅ CKEditor 5 Classic build -->
+<script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
+<script>
+const submitPolicy = "{{ route('add_policy') }}";
+</script>
+
+<script src="{{ asset('assets\js\policy\add_policy.js') }}"></script>
+
+@endpush
