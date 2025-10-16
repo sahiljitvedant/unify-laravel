@@ -30,8 +30,6 @@ class FAQController extends Controller
         if ($request->filled('active')) {
             $query->where('status', $request->active);
         }
-
-      
         
         if ($request->filled('question')) {
             $query->where('question', 'like', '%' . $request->question . '%');
@@ -100,8 +98,9 @@ class FAQController extends Controller
         }
         
         if ($request->filled('question')) {
-            $query->where('question', $request->question);
+            $query->where('question', 'like', '%' . $request->question . '%');
         }
+        
 
         // Sorting
         $allowedSorts = [
@@ -209,8 +208,6 @@ class FAQController extends Controller
         }
     }
     
-
-
     public function update_faqs(Request $request, $id)
     {
         // Validation rules
@@ -333,9 +330,7 @@ class FAQController extends Controller
             'status' => true,
             'message' => 'FAQ activated successfully'
         ]);
-    }
-
-    
+    }    
     public function get_membership_name(Request $request)
     {
         $query = trim($request->get('q'));

@@ -22,12 +22,12 @@ class GallaryController extends Controller
 
     }
 
-   
-    
     public function fetch_gallery(Request $request)
     {
         // Start Eloquent query
-        $query = Gallery::query()->select('*');
+        $query = Gallery::query()
+        ->select('*')
+        ->where('is_deleted',1);
     
         // Apply filters
         if ($request->filled('active')) {
@@ -67,10 +67,10 @@ class GallaryController extends Controller
             $row->encrypted_id = $encryptedId;
     
             $row->action = '
-                <a href="' . route('edit_gallery', $encryptedId) . '" class="btn btn-sm" title="Edit">
+                <a href="' . route('edit_gallery', $row->id) . '" class="btn btn-sm" title="Edit">
                     <i class="bi bi-pencil-square"></i>
                 </a>
-                <button type="button" class="btn btn-sm" onclick="deleteGalleryById(' . $row->id . ')">
+                <button type="button" class="btn btn-sm" onclick="deleteMembershipById(' . $row->id . ')">
                     <i class="bi bi-trash"></i>
                 </button>';
     
@@ -90,12 +90,11 @@ class GallaryController extends Controller
     {
         // dd($request->all());
     
-        // ✅ Validation rules
         $arr_rules = [
             'gallery_name'    => 'required|string|max:150',
             'is_active'       => 'required|boolean',
             'gallary_image'   => 'required|string', // comes as path from hidden input
-            'gallery_images.*'=> 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'gallery_images'  => 'nullable|string', // ✅ because it's comma-separated paths
             'youtube_links.*' => 'nullable|url',
         ];
     
@@ -111,32 +110,21 @@ class GallaryController extends Controller
         DB::beginTransaction();
     
         try {
-            // ✅ Assign basic details
             $gallery_data = [
                 'gallery_name' => $request->gallery_name,
                 'is_active'    => $request->is_active,
             ];
     
-            // ✅ Store the cropped image path into main_thumbnail column
-            if ($request->filled('gallary_image')) {
-                $gallery_data['main_thumbnail'] = $request->gallary_image;
-            } else {
-                return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Main thumbnail is required'
-                ], 422);
-            }
+            // ✅ Save main thumbnail
+            $gallery_data['main_thumbnail'] = $request->gallary_image;
     
-            // ✅ Handle additional gallery images (optional)
-            $image_paths = [];
-            if ($request->hasFile('gallery_images')) {
-                foreach ($request->file('gallery_images') as $image) {
-                    $imageName = time() . '_' . $image->getClientOriginalName();
-                    $image->move(public_path('uploads/gallery'), $imageName);
-                    $image_paths[] = 'uploads/gallery/' . $imageName;
-                }
+            // ✅ Save gallery_images as JSON (from hidden input)
+            if ($request->filled('gallery_images')) {
+                $paths = explode(',', $request->gallery_images);
+                $gallery_data['gallery_images'] = json_encode($paths);
+            } else {
+                $gallery_data['gallery_images'] = null;
             }
-            $gallery_data['gallery_images'] = !empty($image_paths) ? json_encode($image_paths) : null;
     
             // ✅ Handle YouTube links
             $links = [];
@@ -149,7 +137,7 @@ class GallaryController extends Controller
             }
             $gallery_data['youtube_links'] = !empty($links) ? json_encode($links) : null;
     
-            // ✅ Insert into DB
+            // ✅ Insert
             $inserted_id = DB::table('tbl_gallery')->insertGetId($gallery_data);
     
             DB::commit();
@@ -171,182 +159,209 @@ class GallaryController extends Controller
         }
     }
     
-
-    
     public function edit($id)
-    {
-        
-        // dd($id);
-        // dd('This is edit page');
+    {  
+        // Find the gallery by ID using Eloquent
+        $gallery = Gallery::find($id);
 
-        // dd($id);
-
-        // $decryptedId = Crypt::decryptString($id);
-        // dd($decryptedId);
-        $member = DB::table('tbl_gallery')->where('id', $id)->first();
-
-        if (!$member) {
-            dd(1);
-            abort(404, 'Member not found');
+        if (!$gallery) {
+            abort(404, 'Gallery not found');
         }
-        dd(2);
 
-        // Pass existing member data into the form
-        return view('trainer.edit_trainer', compact('member'));
-       
+        return view('gallary.edit_form', compact('gallery'));
     }
 
     // Handle update
     public function update(Request $request, $id)
     {
-        // dd('update');
         // dd($request->all());
-        try 
-        {
-            $request->validate([
-                'trainer_name' => 'required|string|min:3|max:5',
-                'joining_date'     => 'required|date',
-                'is_active'       => 'required',
-            ]);
-
+        // Validation rules
+        $rules = [
+            'gallery_name'    => 'required|string|max:150',
+            'is_active'       => 'required|in:0,1',
+            'gallary_image_path'   => 'nullable|string', // hidden input for main thumbnail
+            'gallery_images'  => 'nullable|string',     // comma-separated paths
+            'youtube_links.*' => 'nullable|url',        // each link should be valid URL
+        ];
     
-            DB::table('tbl_trainer')
-                ->where('id', $id)
-                ->update([
-                    'trainer_name'     => $request->trainer_name,
-                    'is_active'           => $request->is_active,
-                    'joining_date'         => $request->joining_date,
-                    'expiry_date'    => $request->expiry_date,
-                ]);
+        $validator = Validator::make($request->all(), $rules);
     
-            return response()->json(['success' => true, 'message' => 'Trainer updated successfully!']);
-        } 
-        catch (\Illuminate\Validation\ValidationException $e) 
-        {
-            // Return validation errors as JSON
+        if ($validator->fails()) {
             return response()->json([
-                'success' => false, 
-                'errors'  => $e->errors()
+                'status' => 'error',
+                'errors' => $validator->messages()
             ], 422);
         }
-        catch (\Exception $e) 
-        {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
-        }
+    
+        DB::beginTransaction();
+    
+        try {
+            $gallery = Gallery::findOrFail($id);
+    
+            // Update basic fields
+            $gallery->gallery_name = $request->gallery_name;
+            $gallery->is_active = $request->is_active;
+    
+            // ✅ Main thumbnail: use hidden input
+            $gallery->main_thumbnail = $request->filled('gallary_image_path') 
+                                       ? $request->gallary_image_path 
+                                       : $gallery->main_thumbnail;
+    
+            // ✅ Multiple gallery images
+           // Multiple gallery images
+if ($request->has('gallery_images')) {
+    $paths = $request->gallery_images ? explode(',', $request->gallery_images) : [];
+    $gallery->gallery_images = !empty($paths) ? json_encode($paths) : null;
+}
 
+    
+            // ✅ YouTube links
+            $links = $request->youtube_links ?? [];
+            $links = array_filter($links, fn($link) => !empty($link));
+            $gallery->youtube_links = !empty($links) ? json_encode(array_values($links)) : null;
+
+    
+            $gallery->save();
+            DB::commit();
+    
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Gallery updated successfully',
+                'gallery_id' => $gallery->id
+            ]);
+    
+        } catch (\Exception $e) {
+            DB::rollback();
+            Log::error('Gallery Update Error: ' . $e->getMessage());
+    
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Something went wrong while updating the gallery.'
+            ], 500);
+        }
     }
     
-    public function deleteTrainer($id)
+    
+    
+    public function delete_gallery($id)
     {
         // dd(1);
-        $trainer = DB::table('tbl_trainer')->where('id', $id)->first();
-        // dd($trainer);
-        if (!$trainer) 
-        {
-            return response()->json(['status' => false, 'message' => 'Trainer not found'], 404);
+        // Find the gallery
+        $gallery = Gallery::find($id);
+
+        // dd($gallery);
+    
+        // If not found, return error response
+        if (!$gallery) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Gallery not found'
+            ], 404);
         }
+    
+        // Soft delete by setting is_deleted flag
+        $gallery->is_deleted = 0;
 
-        DB::table('tbl_trainer')
-        ->where('id', $id)
-        ->update([
-            'is_deleted' => 9,  
-        ]);
-        return response()->json
-        ([
+        $gallery->save();
+
+        // dd($gallery);
+    
+        // Return success response
+        return response()->json([
             'status' => true,
-            'message' => 'Trainer deleted successfully'
+            'message' => 'Gallery deleted successfully'
         ]);
     }
+    
 
-    public function list_deleted_trainer()
+    public function list_deleted_gallery()
     {
-        return view('trainer.list_deleted_trainer');
+        return view('gallary.list_deleted_gallery');
+
     }
 
-    public function fetch_deleted_trainer(Request $request)
+    public function fetch_list_deleted_gallery(Request $request)
     {
-        // dd($request->all());
-        $query = DB::table('tbl_trainer')
-            ->select('*')
-            ->where('is_deleted', '=', 9);
-
+        // Start Eloquent query
+        $query = Gallery::query()
+        ->select('*')
+        ->where('is_deleted', 0);
+    
         // Apply filters
         if ($request->filled('active')) {
             $query->where('is_active', $request->active);
         }
-
-        // if ($request->filled('trainer')) {
-        //     // Convert 1 => 'yes', 0 => 'no'
-        //     $trainerValue = $request->trainer == 1 ? 'yes' : 'no';
-        //     $query->where('trainer_included', $trainerValue);
-        // }
-
-        if ($request->filled('trainerName')) {
-            $query->where('trainer_name', '=', $request->trainerName);
+    
+        if ($request->filled('galleryName')) {
+            $query->where('gallery_name', 'like', '%' . $request->galleryName . '%');
         }
-
-        if ($request->filled('joiningDate')) {
-            $query->where('joining_date', '=', $request->joiningDate);
-        }
-
+    
         // Sorting
         $allowedSorts = [
             'id',
-            'trainer_name',
-            'joining_date',
-            'expiry_date',
+            'gallery_name',
             'is_active',
-            'created_at'
+            'created_at',
         ];
-
+    
         $sort = $request->get('sort', 'id');
         $direction = $request->get('order', 'desc');
-
+    
         if (!in_array($sort, $allowedSorts)) {
             $sort = 'id';
         }
         if (!in_array(strtolower($direction), ['asc', 'desc'])) {
             $direction = 'desc';
         }
-
+    
         $query->orderBy($sort, $direction);
-
+    
         // Pagination
-        $trainer = $query->paginate(10);
-
+        $galleries = $query->paginate(10);
+    
         // Add action + encrypted_id
-        $trainer->getCollection()->transform(function ($row) {
+        $galleries->getCollection()->transform(function ($row) {
             $encryptedId = Crypt::encryptString($row->id);
             $row->encrypted_id = $encryptedId;
+    
             $row->action = '
-            <button type="button" class="btn btn-sm" onclick="activateTrainerID('.$row->id.')">
+            <button type="button" class="btn btn-sm" onclick="activateMembershipID('.$row->id.')">
                 <i class="bi bi-check-circle"></i>
             </button>';
+    
             return $row;
         });
-
-        return response()->json($trainer);
+    
+        return response()->json($galleries);
     }
 
-    public function activate_trainer($id)
+    public function activate_gallary($id)
     {
         // dd(1);
-        $trainer = DB::table('tbl_trainer')->where('id', $id)->first();
-        // dd($trainer);
-        if (!$trainer) 
-        {
-            return response()->json(['status' => false, 'message' => 'Trainer not found'], 404);
-        }
+        // Find the gallery
+        $gallery = Gallery::find($id);
 
-        DB::table('tbl_trainer')
-        ->where('id', $id)
-        ->update([
-            'is_deleted' => 1,  
-        ]);
-        return response()->json
-        ([
+        // dd($gallery);
+    
+        // If not found, return error response
+        if (!$gallery) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Gallery not found'
+            ], 404);
+        }
+    
+        // Soft delete by setting is_deleted flag
+        $gallery->is_deleted = 1;
+
+        $gallery->save();
+
+        // dd($gallery);
+    
+        // Return success response
+        return response()->json([
             'status' => true,
-            'message' => 'Trainer activated successfully'
+            'message' => 'Gallery Saved successfully'
         ]);
     }
 

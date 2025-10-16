@@ -14,28 +14,55 @@ $(document).ready(function () {
     // Open modal when upload button is clicked
     $uploadButton.on("click", function () {
         imageType = $(this).data("type") || null;
-
-        // Ensure hidden input exists BEFORE upload
+    
+        // ✅ Handle multiple gallery uploads limit
+        if (imageType === "gallery_multiple") {
+            const maxImages = 2;
+            // Count existing images already shown in edit form
+            const existingImages = $('#multiGalleryWrapper .gallery-thumb').length;
+            // Count new images (if any uploaded dynamically)
+            const newImages = $('#multiGalleryWrapper .gallery-thumb-wrapper').length;
+            // Combine both
+            const totalCount = existingImages + newImages;
+    
+            if (totalCount >= maxImages) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Limit Reached',
+                    text: `You can only upload up to ${maxImages} images.`,
+                    confirmButtonText: 'OK'
+                });
+                return false;
+            }
+        }
+    
+        // ✅ Ensure hidden inputs exist before upload
         if (imageType === "profile_image" && $("#profile_image_path").length === 0) {
             $("#multiStepForm").append('<input type="hidden" name="profile_image" id="profile_image_path">');
         }
+    
         if (imageType === "blog_image" && $("#blog_image_path").length === 0) {
             $("#add_blogs").append('<input type="hidden" name="blog_image" id="blog_image_path">');
         }
+    
         if (imageType === "faq_image" && $("#faq_image_path").length === 0) {
             $("#faqForm").append('<input type="hidden" name="faq_image" id="faq_image_path">');
         }
+    
         if (imageType === "gallary_image" && $("#gallary_image_path").length === 0) {
             $("#add_gallery").append('<input type="hidden" name="gallary_image" id="gallary_image_path">');
-
         }
-        // if (imageType === "gallery_multiple" && $("#gallery_images_path").length === 0) {
-        //     $("#add_gallery").append('<input type="hidden" name="gallery_images" id="gallery_images_path">');
-        // }
-
+    
+        if (imageType === "gallery_multiple" && $("#gallery_images_path").length === 0) {
+            $("#add_gallery").append('<input type="hidden" name="gallery_images" id="gallery_images_path">');
+        }
+    
+        // ✅ Finally open crop modal
         const modal = new bootstrap.Modal($("#cropImageModal")[0]);
         modal.show();
     });
+    
+    
 
     // Trigger file input inside modal
     $browseBtn.on("click", function () {
@@ -148,29 +175,53 @@ $(document).ready(function () {
                             $("#gallary_image_path").val(data.path);
                         } 
                         // Multiple gallery images
+                       
                         else if (imageType === "gallery_multiple") {
+                            // ✅ 1. Get the hidden input value
                             const currentVal = $("#gallery_images_path").val();
+                        
+                            // ✅ 2. Append the new image path
                             const newVal = currentVal ? currentVal + ',' + data.path : data.path;
                             $("#gallery_images_path").val(newVal);
-
+                        
+                            // ✅ 3. Append preview with remove button
                             $('#multiGalleryWrapper').append(`
-                                <div class="position-relative d-inline-block" style="max-width:100px;">
-                                    <img src="${data.url}" style="max-width:100px; max-height:100px; border:1px solid #ddd; border-radius:5px;">
-                                    <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 remove-image">&times;</button>
+                                <div class="gallery-thumb-wrapper position-relative d-inline-block m-2" data-path="${data.path}">
+                                    <img src="${data.url}" 
+                                         style="max-width:100px; max-height:100px; border:1px solid #ddd; border-radius:5px;">
+                                    <button type="button" 
+                                            class="btn btn-sm btn-danger position-absolute top-0 end-0 remove-image"
+                                            style="padding:2px 6px; font-size:14px;">&times;</button>
                                 </div>
                             `);
-
-                            // Reset modal for next image upload
-                            $browseImage.val("");
-                            $uploadCropped.prop("disabled", true);
-                            $imageToCrop.attr("src", "");
-                            $imagePreviewContainer.hide();
-                            if (cropper) cropper.destroy();
                         }
-
-                        if (imageType !== "gallery_multiple") {
+                        
+                        // ✅ Handle Remove Button (Make sure this is outside the main upload logic)
+                        $(document).on("click", ".remove-image", function () {
+                            const wrapper = $(this).closest(".gallery-thumb-wrapper");
+                            const imagePath = wrapper.data("path"); // get the path from data attribute
+                            wrapper.remove(); // remove the preview thumbnail
+                        
+                            // ✅ Update hidden input to remove path
+                            let allPaths = $("#gallery_images_path").val().split(",");
+                            allPaths = allPaths.filter(path => path !== imagePath);
+                            $("#gallery_images_path").val(allPaths.join(","));
+                        });
+                        
+                        
+                        if (imageType === "gallery_multiple") {
+                            // Force close popup manually for gallery_multiple too
+                            const modalEl = $("#cropImageModal")[0];
+                            const modalInstance = bootstrap.Modal.getInstance(modalEl);
+                            if (modalInstance) {
+                                modalInstance.hide();
+                            } else {
+                                $(modalEl).modal('hide'); // fallback
+                            }
+                        } else {
                             bootstrap.Modal.getInstance($("#cropImageModal")[0]).hide();
                         }
+                        
 
                         $progressContainer.hide();
                         $progressBar.css("width", "0%").text("0%");

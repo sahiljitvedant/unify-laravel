@@ -109,6 +109,7 @@ Route::middleware(['auth.custom', 'session.timeout','auth.admin'])->group(functi
     Route::get('/add_company', [CompanyController::class, 'add'])->name('add_company');
     Route::get('/list_company', [CompanyController::class, 'list'])->name('list_company');
     Route::get('/edit_company/{id}', [CompanyController::class, 'edit'])->name('edit_company');
+    Route::get('/list_deleted_gallery', [GallaryController::class, 'list_deleted_gallery'])->name('list_deleted_gallery');
 
     Route::get('/get_membership_name', [GymMembershipController::class, 'get_membership_name'])
     ->name('get_membership_name');
@@ -161,6 +162,11 @@ Route::middleware(['auth.custom', 'session.timeout','auth.admin'])->group(functi
         // Gallary:-
         Route::get('/fetch_gallery', [GallaryController::class, 'fetch_gallery'])->name('fetch_gallery');
         Route::post('/add_gallery', [GallaryController::class, 'submit'])->name('add_gallery');
+        Route::post('/add_gallery', [GallaryController::class, 'submit'])->name('add_gallery');
+        Route::post('/gallery_update/{id}', [GallaryController::class, 'update'])->name('update_gallery');
+        Route::post('/delete_gallery/{id}', [GallaryController::class, 'delete_gallery'])->name('delete_gallery');
+        Route::get('/fetch_list_deleted_gallery', [GallaryController::class, 'fetch_list_deleted_gallery'])->name('fetch_list_deleted_gallery');
+        Route::post('/activate_gallary/{id}', [GallaryController::class, 'activate_gallary'])->name('activate_gallary');
 
         Route::post('/create_company', [CompanyController::class, 'create_company'])->name('create_company');
         Route::get('/fetch_comapny_list', [CompanyController::class, 'fetch_comapny_list'])

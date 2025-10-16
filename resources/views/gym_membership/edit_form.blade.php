@@ -1,7 +1,5 @@
 @extends('layouts.app')
-
 @section('title', 'Edit Membership')
-
 @section('content')
 <div class="container-custom">
     <!-- Breadcrumb -->
@@ -112,21 +110,12 @@
         </div>
     </form>
 </div>
-
-<!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<!-- ✅ CKEditor 5 -->
 <script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
-
-<!-- Pass update URL -->
 <script>
     const stepperSubmitUrl = "{{ route('update_membership', ['id' => $member->id]) }}";
 </script>
-
-<!-- External JS -->
 <script src="{{ asset('assets/js/gym_membership/edit_membership.js') }}"></script>
-
 <style>
     .form-check-input:disabled + .form-check-label {
         color: inherit !important;

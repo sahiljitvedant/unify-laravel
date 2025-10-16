@@ -123,7 +123,7 @@ $('#submitBtn').on('click', function (e) {
             Swal.fire({
                 icon: 'success',
                 title: 'Form Submitted!',
-                text: 'Your Blog has been created successfully.',
+                text: 'Your Gallary has been created successfully.',
                 confirmButtonText: 'OK',
                 allowOutsideClick: false
             }).then(() => {
@@ -230,5 +230,56 @@ function validateYouTubeLinks() {
 
     return isValid;
 }
+// ✅ Limit gallery image uploads to max 2
+function handleMultipleGalleryUpload() {
+    const maxImages = 2;
+    const $wrapper = $('#multiGalleryWrapper');
+    const $button = $('#uploadMultipleGallery');
+
+    // Count current images
+    const currentCount = $wrapper.find('.gallery-thumb').length;
+
+    if (currentCount >= maxImages) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Limit Reached',
+            text: `You can only upload up to ${maxImages} images.`,
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
+
+  
+}
+
+// ✅ Observe gallery wrapper for changes (add/remove images)
+const observer = new MutationObserver(() => {
+    const maxImages = 2;
+    const $wrapper = $('#multiGalleryWrapper');
+    const $button = $('#uploadMultipleGallery');
+    const currentCount = $wrapper.find('.gallery-thumb').length;
+
+    // Disable or enable button dynamically
+    if (currentCount >= maxImages) {
+        $button.prop('disabled', true).addClass('disabled');
+    } else {
+        $button.prop('disabled', false).removeClass('disabled');
+    }
+});
+
+// ✅ Start observing for image count changes
+observer.observe(document.getElementById('multiGalleryWrapper'), { childList: true });
+
+// Optional CSS style for disabled button (add to your CSS)
+const style = document.createElement('style');
+style.textContent = `
+    #uploadMultipleGallery.disabled {
+        opacity: 0.6;
+        pointer-events: none;
+    }
+`;
+document.head.appendChild(style);
+
+
 
 

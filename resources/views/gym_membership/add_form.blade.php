@@ -114,26 +114,19 @@
 </div>
 
 <style>
-.form-check-input:disabled + .form-check-label {
-    color: inherit !important;
-    opacity: 1 !important;
-}
-
+    .form-check-input:disabled + .form-check-label {
+        color: inherit !important;
+        opacity: 1 !important;
+    }
 </style>
 @endsection
 
 @push('scripts')
-<!-- jQuery & Bootstrap -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- ✅ CKEditor 5 Classic build -->
 <script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
-
-
 <script>
     const stepperSubmitUrl = "{{ route('add_membership') }}";
 </script>
-
 <script src="{{ asset('assets/js/gym_membership/add_membership.js') }}"></script>
 @endpush

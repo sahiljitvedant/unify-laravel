@@ -142,15 +142,15 @@
                 <i class="bi bi-people me-2"></i>Members
             </a>
 
-          
-            <a href="{{ route('list_gallery') }}" 
-            class="{{ request()->routeIs('list_gallery','add_gallery') ? 'active' : '' }}">
-                <i class="bi bi-camera me-2"></i>Gallary
-            </a>
             <a href="#" 
             class="{{ request()->routeIs('list_member') ? '' : '' }}">
                 <i class="bi bi-chat-left-text me-2"></i>Enquiry
             </a>
+            <a href="{{ route('list_gallery') }}" 
+            class="{{ request()->routeIs('list_gallery','add_gallery','edit_gallery','list_deleted_gallery') ? 'active' : '' }}">
+                <i class="bi bi-camera me-2"></i>Gallary
+            </a>
+           
 
             <a class="d-flex justify-content-start align-items-center" 
                 data-bs-toggle="collapse" 

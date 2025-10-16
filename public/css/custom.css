@@ -686,3 +686,12 @@ table td {
 .ck-toolbar {
     z-index: 1 !important;
 }
+.profilebtn {
+    background: #0b1061;
+    color: #fff;
+    border: 5px solid #0b1061 !important;
+    border-radius: 5px;
+    font-size:12px;
+}
+.btn-add:hover { background-color: #090d4a; }
+th a { color: inherit; text-decoration: none; }

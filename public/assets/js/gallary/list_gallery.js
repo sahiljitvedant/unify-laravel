@@ -142,7 +142,7 @@ $("#btnCancel").on("click", function (e) {
 function deleteMembershipById(id)
 {
     $.ajax({
-        url: deleteBlogs.replace(':id', id), 
+        url: deleteGallary.replace(':id', id), 
         type: "POST",
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -150,7 +150,7 @@ function deleteMembershipById(id)
         beforeSend: function () {
             Swal.fire({
                 title: 'Deleting...',
-                text: 'Please wait while we delete the trainer.',
+                text: 'Please wait while we delete the gallary.',
                 allowOutsideClick: false,
                 didOpen: () => {
                     Swal.showLoading();

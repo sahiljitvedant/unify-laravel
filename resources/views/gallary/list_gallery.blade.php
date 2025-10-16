@@ -22,7 +22,7 @@
                 <h4 class="mb-2 mb-md-0">List Gallery</h4>
                 <div class="d-flex flex-column align-items-start align-items-md-end gap-2">
                     <a href="{{ route('add_gallery') }}" class="btn-add">Add Gallery</a>
-                    <a href="{{ route('list_deleted_membership') }}" class="btn-link">Show Deleted Gallery</a>
+                    <a href="{{ route('list_deleted_gallery') }}" class="btn-link">Show Deleted Gallery</a>
                 </div>
             </div>
             <div class="data-wrapper">
@@ -109,34 +109,11 @@
         </div>
         </div>
 @endsection
-
-@push('styles')
-<style>
-    .btn-add {
-        background-color: #0B1061;
-        color: #fff;
-        border-radius: 8px;
-        padding: 6px 16px;
-        border: none;
-        text-decoration: none;
-        font-size: 14px;
-    }
-    .btn-add:hover { background-color: #090d4a; }
-    th a { color: inherit; text-decoration: none; }
-
-</style>
-@endpush
-
 @push('scripts')
 <script>
     const fetchGallery = "{{ route('fetch_gallery') }}";
-    const deleteBlogs = "{{ route('delete_membership', ':id') }}";
+    const deleteGallary = "{{ route('delete_gallery', ':id') }}";
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{{ asset('assets/js/gallary/list_gallery.js') }}"></script>
-
-
-<script>
-
-</script>
 @endpush
