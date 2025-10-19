@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Web\GymPackageController;
 use App\Http\Controllers\Web\GymMembershipController;
@@ -57,7 +56,6 @@ Route::get('/access-denied', function () {
 
 // web.php
 Route::post('/profile/crop-upload', [ProfileController::class, 'cropUpload'])->name('profile.cropUpload');
-
 Route::middleware(['auth.custom', 'session.timeout','auth.admin'])->group(function () 
 {
     // Dashboard
@@ -66,7 +64,7 @@ Route::middleware(['auth.custom', 'session.timeout','auth.admin'])->group(functi
     // Members Route:-
     Route::get('/list_member', [GymPackageController::class, 'list'])->name('list_member');
     Route::get('/add_member', [GymPackageController::class, 'add'])->name('add_member');
-  
+    Route::get('/edit_members/{id}', [GymPackageController::class, 'edit_admin'])->name('edit_admin_member');
 
     // Membersip Route:-
     Route::get('/list_membership', [GymMembershipController::class, 'list'])->name('list_membership');
@@ -174,11 +172,8 @@ Route::middleware(['auth.custom', 'session.timeout','auth.admin'])->group(functi
         Route::post('/delete_company/{id}', [CompanyController::class, 'delete_comapny'])->name('delete_company');
         Route::post('/update_home_profile/{id}', [CompanyController::class, 'update_home_profile'])->name('update_home_profile');
         Route::post('/update_company_profile/{id}', [CompanyController::class, 'update_company_profile'])->name('update_company_profile');
-    
-   
     });
 });
-
 Route::middleware(['auth.custom', 'session.timeout','auth.member'])->group(function () 
 {
 
@@ -231,7 +226,6 @@ Route::get('/db-test', function () {
 });
 
 use Illuminate\Support\Facades\Log;
-
 Route::get('/test-log', function () {
     Log::info('Daily log test working!');
     return 'Log written';

@@ -122,35 +122,11 @@
         </div>
         </div>
 @endsection
-
-@push('styles')
-<style>
-    .btn-add {
-        background-color: #0B1061;
-        color: #fff;
-        border-radius: 8px;
-        padding: 6px 16px;
-        border: none;
-        text-decoration: none;
-        font-size: 14px;
-    }
-    .btn-add:hover { background-color: #090d4a; }
-    th a { color: inherit; text-decoration: none; }
-
-</style>
-@endpush
-
 @push('scripts')
 <script>
     const fetchDeletedTrainer = "{{ route('fetch_deleted_trainer') }}";
     const activateTrainerUrl = "{{ route('activate_trainer', ':id') }}";
-
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{{ asset('assets/js/trainer/list_deleted_trainer.js') }}"></script>
-
-
-<script>
-
-</script>
 @endpush

@@ -144,6 +144,7 @@ class LoginController extends Controller
 
     public function fetchLogin(Request $request)
     {
+        // dd(1);
         $user = Auth::user();
         $today = \Carbon\Carbon::today()->toDateString();
 
@@ -251,8 +252,6 @@ class LoginController extends Controller
         ]);
     }
 
-    
-
     public function member_team (Request $request)
     {
         $user = Auth::user(); 
@@ -343,6 +342,8 @@ class LoginController extends Controller
         ]);
     }
  
+
+ 
     public function verifyPayment(Request $request)
     {
         $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
@@ -405,21 +406,88 @@ class LoginController extends Controller
             ]);
         }
     }
+//     public function verifyPayment(Request $request)
+// {
+//     $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+
+//     try {
+//         // 1️⃣ Verify Razorpay signature
+//         $attributes = [
+//             'razorpay_order_id'   => $request->order_id,
+//             'razorpay_payment_id' => $request->payment_id,
+//             'razorpay_signature'  => $request->signature
+//         ];
+
+//         $api->utility->verifyPaymentSignature($attributes);
+
+//         // 2️⃣ Fetch payment details from Razorpay
+//         $razorpayPayment = $api->payment->fetch($request->payment_id);
+//         $gatewayMethod   = $razorpayPayment->method ?? 'unknown';
+
+//         // 3️⃣ Find existing payment record
+//         $payment = Payment::where('order_id', $request->order_id)->first();
+
+//         if (!$payment) {
+//             return response()->json([
+//                 'status'  => 'error',
+//                 'message' => 'Payment record not found'
+//             ]);
+//         }
+
+//         // 4️⃣ Calculate total paid and remaining for this user + plan
+//         $previousPaid = Payment::where('user_id', $payment->user_id)
+//             ->where('plan_id', $payment->plan_id)
+//             ->where('status', 'success')
+//             ->sum('amount');
+
+//         $newTotalPaid = $previousPaid + $payment->amount;
+//         $planTotalAmount = $payment->plan->price ?? 0; // assuming your Plan model has 'price'
+
+//         $remaining = max($planTotalAmount - $newTotalPaid, 0);
+
+//         // 5️⃣ Update payment record
+//         $payment->update([
+//             'payment_id'              => $request->payment_id,
+//             'signature'               => $request->signature,
+//             'gateway'                 => $gatewayMethod,
+//             'payment_status'          => 2,           // 2 = Completed
+//             'status'                  => 'success',
+//             'total_amount_paid'       => $newTotalPaid,
+//             'total_amount_remaining'  => $remaining,
+//         ]);
+
+//         // 6️⃣ Generate PDF invoice
+//         $pdf = Pdf::loadView('members.Payments.invoice_pdf', [
+//             'payment' => $payment
+//         ]);
+
+//         $fileName = 'invoice_' . $payment->invoice_number . '.pdf';
+//         $path = 'public/invoices/' . $fileName;
+//         Storage::put($path, $pdf->output());
+
+//         $payment->update(['invoice_path' => 'storage/invoices/' . $fileName]);
+
+//         return response()->json([
+//             'status'  => 'success',
+//             'payment' => $payment,
+//             'pdf_url' => asset('storage/invoices/' . $fileName)
+//         ]);
+
+//     } catch (\Exception $e) {
+//         return response()->json([
+//             'status'  => 'error',
+//             'message' => $e->getMessage(),
+//         ]);
+//     }
+// }
+
     public function member_my_team (Request $request)
     {
         $user = Auth::user(); 
-        // dd($user);
-        $loginRecord = UserLogin::where('user_id', $user->id)
-        ->whereDate('date', Carbon::now()->toDateString())
-        ->latest()
-        ->first();
-        $loginDisabled = $loginRecord && $loginRecord->status == 1; 
-        $logoutDisabled = !$loginDisabled; 
-
-        $members = GymMember::where('is_deleted', '!=', 9)->get();
+        $members = GymMember::count();
         // dd($members);
     
-        return view('members.Team.member_my_team', compact('loginDisabled', 'logoutDisabled','members'));
+        return view('members.Team.member_my_team', compact('members'));
 
     }
     public function my_profile (Request $request, $id)
@@ -488,8 +556,6 @@ class LoginController extends Controller
     {
         $memberships = DB::table('tbl_gym_membership')->pluck('membership_name', 'id');
         return view('members.Payments.payment_list', compact('memberships'));
-        
-
     }
 
     public function fetch_member_payments(Request $request)
@@ -564,7 +630,8 @@ class LoginController extends Controller
         // dd($blogs);
         $latestBlogs = $blogs->take(3);
 
-        return view('members.blogs.blogs', compact('blogs', 'latestBlogs'));
+        $blogCount=Blog::where('is_active', '1')->count();
+        return view('members.blogs.blogs', compact('blogs', 'latestBlogs','blogCount'));
        
     }
     public function fetch_member_blogs(Request $request)
@@ -595,9 +662,7 @@ class LoginController extends Controller
 
     public function member_gallary()
     {
-        $galleries = Gallery::where('is_active', 1)
-                        ->orderBy('created_at', 'desc')
-                        ->get();
+        $galleries = Gallery::where('is_active', '1')->count();
         // dd($galleries);
 
         return view('members.gallary.gallary', compact('galleries'));

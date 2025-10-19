@@ -1,19 +1,15 @@
 @extends('members.layouts.app')
-
 @section('title', 'Blog Details')
-
 @section('content')
 <div id="loader" style="display:none;">
     <img src="{{ asset('assets/img/logo.png') }}" alt="Loading..." class="loader-img">
 </div>
-
 <div class="container-custom py-4">  
     <div class="container">
         <a href="{{ url()->previous() }}" class="btn-back mb-3">
             <i class="bi bi-arrow-left"></i>
             <span class="btn-text">Back</span>
         </a>
-
         <!-- Blog Thumbnail -->
         <div class="card position-relative overflow-hidden mb-1" style="height: 300px;">
             <img src="{{ $blogs->blog_image ? asset($blogs->blog_image) : asset('assets/img/download.png') }}" 
@@ -25,7 +21,6 @@
                 <!-- optional title overlay removed -->
             </div>
         </div>
-
         <!-- Blog Full Details -->
         <div class="card shadow-sm border-0 rounded-3">
             <div class="card-body">
@@ -50,57 +45,26 @@
                 <hr>
 
                 <h6 class="fw-semibold text-theme mb-2">Description</h6>
-                <p class="text-dark mb-3 fs-12">
-                    {!! nl2br(e($blogs->description)) !!}
-                </p>
-
+                    <div class="text-dark mb-3 fs-12">
+                        {!! $blogs->description !!}
+                    </div>
             </div>
         </div>
-
     </div>
 </div>
 @endsection
-
 <style>
-    /* ===== Theme Variables ===== */
-    .text-theme {
-        color: #0B1061 !important;
-    }
     .fs-14 {
         font-size: 14px;
     }
     .fs-12 {
         font-size: 12px;
     }
-
-    /* ===== Layout Styles ===== */
-    .container-custom {
-        min-height: 80vh;
-        background-color: #f5f6fa;
-        padding: 20px;
-        border-radius: 12px;
-    }
-    .btn-back {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        color: #0B1061;
-        font-size: 22px;
-        text-decoration: none;
-        border: none;
-        background: none;
-        padding: 0;
-        transition: transform 0.15s ease-in-out;
-    }
-    .btn-back:hover {
-        color: #05093a;
-        transform: translateX(-3px);
-    }
-    .btn-back i {
-        font-size: 18px;
-    }
-    .btn-text {
-        font-size: 14px;
+    .fs-10 
+    {
+        font-size: 10px;
+        line-height: 1.6; 
+        text-align: justify; 
     }
     .overlay {
         background: rgba(0,0,0,0.4);
@@ -110,7 +74,8 @@
     {
         text-align: justify;
     }
-    @media (max-width: 768px) {
+    @media (max-width: 768px) 
+    {
         .container
         {
             padding: 1px !important;
@@ -127,6 +92,10 @@
         .fw-semibold.text-theme.mb-2
         {
             text-align: left !important;
+        }
+        .fs-10 
+        {
+            text-align: left; 
         }
     }
 </style>

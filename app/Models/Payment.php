@@ -25,6 +25,8 @@ class Payment extends Model
         'payment_status', // 1 = Pending, 2 = Completed
         'currency',
         'status',         // enum('pending','success','failed')
+        'total_amount_paid',
+        'total_amount_remaining',
     ];
 
     // Relationships

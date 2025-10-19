@@ -27,8 +27,17 @@ $(document).ready(function () {
     function renderMembers(members) {
         let html = '';
         if (members.length === 0) {
-            html = '<p class="text-center text-muted">No team members found.</p>';
-        } else {
+            html = `
+                <div class="no-members-wrapper">
+                    <div class="no-members-box">
+                        <img src="${window.assetBase}assets/img/download.png" alt="No Members" class="no-members-img">
+                        <p class="no-members-text">No Team Members Found</p>
+                    </div>
+                </div>
+            `;
+        }
+        
+         else {
             members.forEach(member => {
                 let profileImage = member.profile_image 
                     ? assetBase + member.profile_image 

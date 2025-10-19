@@ -1,12 +1,9 @@
 @extends('members.layouts.app')
-
 @section('title', 'Gallery')
-
 @section('content')
 <div id="loader" style="display:none;">
     <img src="{{ asset('assets/img/logo.png') }}" alt="Loading..." class="loader-img">
 </div>
-
 <div class="container-custom py-4">  
     <div class="container">
         <a href="{{ url()->previous() }}" class="btn-back mb-2">
@@ -26,7 +23,17 @@
 
         <!-- Gallery Images -->
         @php
-            $images = $gallery->gallery_images ?? [];
+            $images = [];
+
+            if(!empty($gallery->gallery_images)) {
+                // If it's a string, try json_decode
+                if(is_string($gallery->gallery_images)) {
+                    $decoded = json_decode($gallery->gallery_images, true);
+                    $images = is_array($decoded) ? $decoded : [];
+                } elseif(is_array($gallery->gallery_images)) {
+                    $images = $gallery->gallery_images;
+                }
+            }
         @endphp
 
         <!-- Wrapper for all gallery images -->
@@ -54,36 +61,6 @@
 </div>
 @endsection
 <style>
-      .container-custom {
-        min-height: 80vh;
-        background-color: #f5f6fa;
-        padding: 20px;
-        border-radius: 12px;
-    }
-    /* Back Button */
-    .btn-back:hover {
-        color: #05093a;
-        transform: translateX(-3px);
-    }
-    .btn-back i {
-        font-size: 18px;
-    }
-    .btn-text {
-        font-size: 14px;
-    }
-    .btn-back {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        color: #0B1061;
-        font-size: 22px;
-        text-decoration: none;
-        border: none;
-        background: none;
-        padding: 0;
-        transition: transform 0.15s ease-in-out;
-    }
-
     /* Overlay */
     .overlay {
         background: rgba(0,0,0,0.4);

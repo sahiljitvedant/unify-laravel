@@ -108,24 +108,6 @@
         </div>
     </div>
 @endsection
-
-@push('styles')
-<style>
-    .btn-add {
-        background-color: #0B1061;
-        color: #fff;
-        border-radius: 8px;
-        padding: 6px 16px;
-        border: none;
-        text-decoration: none;
-        font-size: 14px;
-    }
-    .btn-add:hover { background-color: #090d4a; }
-    th a { color: inherit; text-decoration: none; }
-
-</style>
-@endpush
-
 @push('scripts')
 <script>
     const fetchBlogs = "{{ route('fetch_blogs') }}";
@@ -133,8 +115,4 @@
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{{ asset('assets/js/blogs/list_blogs.js') }}"></script>
-
-<script>
-
-</script>
 @endpush

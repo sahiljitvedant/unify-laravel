@@ -17,6 +17,7 @@ class GymMember extends Model
 
     // Mass-assignable columns
     protected $fillable = [
+        'user_id',   
         'is_deleted',
         'first_name',
         'middle_name',
@@ -53,4 +54,10 @@ class GymMember extends Model
         'amount_paid'       => 'decimal:2',
         'is_deleted'        => 'boolean',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
 }

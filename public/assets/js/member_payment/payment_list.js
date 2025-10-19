@@ -33,7 +33,14 @@ function renderTable(data) {
     let html = '';
 
     if (data.length === 0) {
-        html = `<div class="text-center w-100">No payments found</div>`;
+        html = `
+        <div class="no-members-wrapper">
+            <div class="no-members-box">
+            <img src="/assets/img/download.png" alt="No Members" class="no-members-img">
+                <p class="no-members-text">No Payments Found</p>
+            </div>
+        </div>
+    `;
     } else {
         html += `<div class="row g-3">`; // start row
 
@@ -73,19 +80,67 @@ function renderTable(data) {
 }
 
 
-function renderPagination(current, last) {
-    let html = '';
-    html += `<li class="page-item ${current === 1 ? 'disabled' : ''}">
-                <a href="#" class="page-link" data-page="${current-1}">Prev</a>
+function renderPagination(data) {
+    let paginationHTML = '';
+    const current = data.current_page;
+    const last = data.last_page;
+
+    if (last > 1) 
+        {
+            // First button
+        
+
+            // Previous button
+            // paginationHTML += `
+            //     <li class="page-item ${!data.prev_page_url ? 'disabled' : ''}">
+            //         <a href="#" class="page-link" data-page="${current - 1}">
+            //             <i class="bi bi-chevron-left"></i>
+            //         </a>
+            //     </li>`;
+
+                paginationHTML += `
+                <li class="page-item ${current === 1 ? 'disabled' : ''}">
+                    <a href="#" class="page-link" data-page="1"><<</a>
+                </li>`;
+            // Sliding window of 3 pages
+            let start = current - 1;
+            let end = current + 1;
+
+            if (start < 1) {
+                start = 1;
+                end = Math.min(3, last);
+            }
+            if (end > last) {
+                end = last;
+                start = Math.max(1, last - 2);
+            }
+
+            for (let i = start; i <= end; i++) {
+                paginationHTML += `
+                    <li class="page-item ${i === current ? 'active' : ''}">
+                        <a href="#" class="page-link" data-page="${i}">${i}</a>
+                    </li>`;
+            }
+
+            // Last button
+            paginationHTML += `
+            <li class="page-item ${current === last ? 'disabled' : ''}">
+                <a href="#" class="page-link" data-page="${last}">>></a>
             </li>`;
-    html += `<li class="page-item active">
-                <a href="#" class="page-link" data-page="${current}">${current}</a>
-            </li>`;
-    html += `<li class="page-item ${current === last ? 'disabled' : ''}">
-                <a href="#" class="page-link" data-page="${current+1}">Next</a>
-            </li>`;
-    $("#pagination").html(html);
-}
+            // Next button
+            // paginationHTML += `
+            //     <li class="page-item ${!data.next_page_url ? 'disabled' : ''}">
+            //         <a href="#" class="page-link" data-page="${current + 1}">
+            //             <i class="bi bi-chevron-right"></i>
+            //         </a>
+            //     </li>`;
+
+        
+        }
+
+        $("#paginationLinks").html(paginationHTML);
+    }
+
 
 // Pagination click
 $(document).on("click", "#pagination .page-link", function(e) {

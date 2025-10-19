@@ -1,7 +1,5 @@
 @extends('members.layouts.app')
-
 @section('title', 'Member Profile')
-
 @section('content')
 <div class="container-custom py-4">
     <div class="container">
@@ -12,7 +10,6 @@
                 <span class="btn-text">Back</span>
             </a>
         </div>
-
         <!-- Member Profile Section -->
         <div class="row g-3">
             <div class="col-12">
@@ -92,54 +89,7 @@
     </div>
 </div>
 @endsection
-
 <style>
-   
-    .btn-back {
-        display: inline-flex;
-        align-items: center; 
-        gap: 6px; 
-        text-decoration: none;
-        color: #0B1061;
-        font-weight: 500;
-    }
-
-    .btn-back:hover {
-        color: #05093a;
-    }
-
-    .btn-back i {
-        font-size: 18px;
-        line-height: 1;
-    }
-
-    .btn-text {
-        font-size: 14px;
-        line-height: 1;
-    }
-
-    .container-custom {
-        min-height: 85vh;
-        background-color: #f5f6fa;
-        border-radius: 12px;
-    }
-
-    .btn-back {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        color: #0B1061;
-        font-size: 22px;
-        text-decoration: none;
-        border: none;
-        background: none;
-        padding: 0;
-        transition: transform 0.15s ease-in-out;
-    }
-    .btn-back:hover {
-        transform: translateX(-3px);
-    }
-
     .profile-card {
         border-radius: 12px;
         background-color: #fff;
@@ -156,8 +106,6 @@
         color: #0B1061;
         font-size: 18px;
     }
-
-    /* Info Cards */
     .info-card {
         border-radius: 12px;
         background-color: #fff;
@@ -189,17 +137,12 @@
     {
         font-size: 14px;
     }
-
-    /* Mobile view adjustments */
-
     @media (max-width: 768px) 
     {
         .info-card,
         .profile-card {
             text-align: left !important;
         }
-        
-        /* If some inner elements have flex or justify-content styles that center things, override them */
         .info-card .card-body,
         .info-card .card-header,
         .profile-card .profile-info,
@@ -275,5 +218,4 @@
             color: #444;
         }
     }
-
 </style>

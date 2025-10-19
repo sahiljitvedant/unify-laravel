@@ -18,27 +18,35 @@
         ======================== --}}
         <div class="row mb-3">
             <!-- Profile Completion -->
+            
+            @php
+                $user = auth()->user();
+            @endphp
+
             <div class="dashbaord_cards col-md-4 mb-2">
                 <a href="{{ $authUserId ? route('edit_member', ['id' => $authUserId]) : '#' }}" class="text-decoration-none">
                     <div class="card card-hover p-3 h-100 d-flex flex-row align-items-center justify-content-between cursor-pointer">
-                        <!-- Left: Circle + Text -->
-                       
                         <div class="d-flex align-items-center">
                             <div class="icon-wrapper me-3">
-                                <div class="icon-circle">
-                                    <i class="bi bi-star-fill fs-4 text-theme"></i>
+                                <div class="progress-circle" data-percentage="{{ $user->profile_completion }}">
+                                    <span class="progress-value">{{ $user->profile_completion }}%</span>
                                 </div>
                             </div>
                             <div class="text-start">
-                                <h6 class="card_text text-theme mb-1" style="font-weight: 600;">Profile Completed</h6>
-                                <small class="card_text_detail text-muted">Keep updating to reach 100%</small>
+                                <h6 class="card_text text-theme mb-1" style="font-weight: 600;">
+                                    Profile Completed - {{ $user->profile_completion }}%
+                                </h6>
+                                <small class="card_text_detail text-muted">
+                                    Update to reach 100%
+                                </small>
                             </div>
                         </div>
-                        <!-- Right: Arrow -->
                         <i class="bi bi-arrow-up-right fs-5 text-theme"></i>
                     </div>
                 </a>
             </div>
+
+
             <!-- Active Plan -->
             <div class="dashbaord_cards col-md-4 mb-2">
                 <a href="{{ route('member_subscription') }}" class="text-decoration-none">
@@ -82,7 +90,7 @@
                             </div>
                             <div class="text-start">
                                 <h6 class="card_text text-theme mb-1 fw-semibold">Payment</h6>
-                                <small class="card_text_detail text-muted">Manage your payments & invoices</small>
+                                <small class="card_text_detail text-muted">Manage your payments</small>
                             </div>
                         </div>
                         <i class="bi bi-arrow-up-right fs-5 text-theme"></i>
@@ -98,19 +106,19 @@
             <h5 class="fw-bold text-theme mb-0">Flashbacks of Sachii</h5>
             <a href="{{ route('member_gallary') }}" class="text-decoration-none text-theme fw-semibold small">See all</a>
         </div>
+        @if($galleries->isNotEmpty())
         <div class="row g-3 mb-3">
             <div class="swiper mySwiper">
                 <div class="swiper-wrapper blogs_section">
                     @foreach($galleries as $gallery)
                         <div class="swiper-slide">
                             <a href="{{ route('member_gallary_namewise', $gallery->id) }}" style="text-decoration: none; cursor: pointer;">
-                                <div class="card gallery-card ">
+                                <div class="card gallery-card">
                                     <img src="{{ asset($gallery->main_thumbnail) }}" 
                                         class="card-img-top" 
                                         alt="{{ $gallery->gallery_name }}">
                                     <div class="card-body text-center">
-                                    <h6 class="card-title">{{ ucfirst($gallery->gallery_name) }}</h6>
-
+                                        <h6 class="card-title">{{ ucfirst($gallery->gallery_name) }}</h6>
                                         <p class="card-text small text-muted">{{ $gallery->description }}</p>
                                     </div>
                                 </div>
@@ -118,11 +126,14 @@
                         </div>
                     @endforeach
                 </div>
-                <!-- Navigation buttons -->
                 <div class="swiper-button-next"></div>
                 <div class="swiper-button-prev"></div>
             </div>
         </div>
+        @else
+            <p class="text-muted no_member_text">No flashbacks available.</p>
+        @endif
+
        
         {{-- =======================
             2️⃣ Row: Recent Blogs
@@ -148,7 +159,7 @@
                     </a>
                 </div>
             @empty
-                <p class="text-muted">No recent blogs available.</p>
+                <p class="text-muted no_member_text">No recent blogs available.</p>
             @endforelse
         </div>
 
@@ -161,7 +172,7 @@
         </div>
 
         <div class="row g-3">
-            @foreach($latestMembers as $member)
+            @forelse($latestMembers as $member)
                 <div class="col-6 col-sm-6 col-md-4 col-lg-2 text-center blogs_section">
                     <a href="{{ route('my_profile', ['id' => $member->id]) }}" class="text-decoration-none">
                         <div class="card h-100 py-3 shadow-sm cursor-pointer hover-translate">
@@ -176,7 +187,9 @@
                         </div>
                     </a>
                 </div>
-            @endforeach
+                @empty
+                <p class="text-muted no_member_text">No recent blogs available.</p>
+            @endforelse
         </div>      
     </div>
 </div>
@@ -184,7 +197,29 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
 <style>
-   
+    .progress-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: conic-gradient(#8f91b1 calc(var(--percentage) * 1%), #e6e6e6 0)
+    ;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.progress-circle span.progress-value {
+    position: absolute;
+    font-size: 12px;
+    font-weight: bold;
+    color: #0b1061;
+}
+
+   .swiper.mySwiper:empty {
+    display: none;
+}
+
     .blog_text ,.blog_text_date, .memebr_name
     {
         font-size:12px;
@@ -346,6 +381,7 @@
         margin-top: 5px !important;
         position: relative !important;
     }
+  
     @media (max-width: 768px) 
     {
         /* Title fully left aligned */
@@ -354,7 +390,7 @@
             margin-left: 0 !important;
             padding-left: 5px !important;
         }
-
+       
         .fw-bold.text-theme.mb-0 {
             font-size: 16px !important;
         }
@@ -446,6 +482,11 @@
             992: { slidesPerView: 3 }
         }
     });
+    document.querySelectorAll('.progress-circle').forEach(circle => {
+    const percentage = circle.dataset.percentage;
+    circle.style.setProperty('--percentage', percentage);
+});
+
 </script>
 
 @endpush

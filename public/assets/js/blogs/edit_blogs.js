@@ -42,7 +42,7 @@ const validationRules = {
     description: { 
         required: true, 
         minlength: 10, 
-        maxlength: 1000 
+        maxlength: 10000 
     },
     publish_date: { 
         required: true, 
@@ -67,7 +67,7 @@ const validationMessages = {
     description: { 
         required: "Blog description is required", 
         minlength: "Description must be at least 10 characters", 
-        maxlength: "Description must not exceed 1000 characters" 
+        maxlength: "Description must not exceed 10000 characters" 
     },
     publish_date: { 
         required: "Publish date is required", 

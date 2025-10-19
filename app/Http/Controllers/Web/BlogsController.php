@@ -95,7 +95,7 @@ class BlogsController extends Controller
         // Validation rules
         $arr_rules = [
             'blog_title'   => 'required|string|max:150',
-            'description'  => 'required|string|max:1000',
+            'description'  => 'required|string|max:10000',
             'publish_date' => 'required|date',
             'is_active'    => 'required|boolean',
             'blog_image'   => 'required|string'

@@ -71,37 +71,7 @@
 
 </div>
 <!-- Crop Image Modal -->
-<div class="modal fade" id="cropImageModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-md modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <!-- We'll update this title dynamically via JS -->
-                <h5 class="modal-title" id="cropModalTitle">Upload Image</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body d-flex flex-column">
-
-                <!-- Image Preview -->
-                <div class="text-center mb-3" id="imagePreviewContainer" style="display:none;">
-                    <img id="imageToCrop" style="max-width: 100%; border-radius:10px;">
-                </div>
-
-                <!-- Progress Bar -->
-                <div class="progress mb-3" id="uploadProgress" style="display:none;">
-                    <div class="progress-bar" role="progressbar" style="width:0%">0%</div>
-                </div>
-
-                <!-- Buttons -->
-                <div class="d-flex justify-content-center gap-2 mt-auto">
-                    <input type="file" id="browseImage" accept="image/*" class="d-none">
-                    <button type="button" id="browseBtn" class="btn btn-secondary">Browse</button>
-                    <button type="button" id="uploadCropped" class="btn btn-primary" disabled>Upload</button>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
+@include('layouts.crop')
 <style>
     /* Keep label normal even if checkbox is disabled */
     .form-check-input:disabled + .form-check-label 
@@ -109,22 +79,12 @@
         color: inherit !important;
         opacity: 1 !important;
     }
-    .profilebtn{
-        background: #0b1061;
-        color: #fff;
-        border: 5px solid #0b1061 !important;
-        border-radius: 5px
-    }
-   
 </style>
 @endsection
 @push('scripts')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- ✅ CKEditor 5 Classic build -->
 <script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
-
 <script>
     const uploadUrl  = "{{ route('profile.cropUpload') }}";
     const submitfaq = "{{ route('add_faq') }}";

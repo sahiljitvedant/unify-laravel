@@ -340,12 +340,12 @@ body {
         }
     }
 
-    @media (min-width: 1024px) {
+    @media (min-width: 1024px)
+    {
         .mobile-toggle-btn {
             display: none;
         }
     }
-
 
 /* Sidebar wwith Responsive Query End */
 
@@ -519,8 +519,10 @@ table.dataTable tbody tr:hover {
 }
 /* Container for breadcrumb + form */
 .container-custom {
-    max-width: 105%;
-    margin: 0 auto;
+    min-height: 80vh;
+    background-color: #f5f6fa;
+    /* padding: 20px; */
+    border-radius: 12px;
 }
 
 /* Remove all default ol padding/margin */
@@ -877,3 +879,153 @@ table td {
     color: #fff;
     font-size: var(--font_size);
 }
+
+
+/* No Memeber Design Starts */
+    .no_member_text
+    {
+        font-size:13px;
+    }
+    .no-members-wrapper {
+        height: 100%;
+        width: 100%;
+        min-height: 60vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px; 
+        box-sizing: border-box;
+    }
+
+    .no-members-box {
+        border: 2px dashed #0B1061; 
+        border-radius: 15px;
+        background-color: #f9f9ff;
+        padding: 25px;
+        margin-top: 20px !important;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        transition: all 0.3s ease-in-out;
+        text-align: center;
+        width: 280px;
+        max-width: 90%;
+        width: 100%;
+    }
+
+    .no-members-box:hover {
+        background-color: #f1f3ff;
+    }
+
+    .no-members-img {
+        width: 90px;
+        height: auto;
+        opacity: 0.9;
+    }
+
+    .no-members-text {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #0B1061;
+        margin-top: 12px;
+    }
+
+    /* ✅ Responsive Design for Mobile */
+    @media (max-width: 768px) 
+    {
+        .no_member_text
+        {
+            font-size:12px;
+        }
+        .no-members-wrapper {
+            min-height: 75vh;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 25px 15px; 
+        }
+
+        .no-members-box {
+            width: 100%;
+            max-width: 260px;
+            padding: 20px;
+            margin-top: 100px !important;
+        }
+
+        .no-members-img {
+            width: 70px;
+        }
+
+        .no-members-text {
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+    }
+/* No Memeber Design Ends */
+
+/* Memebr Side Pagination Start*/
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.pagination .page-item .page-link {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0B1061;
+    border: 1px solid #0B1061;
+    background-color: #fff;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.pagination .page-item .page-link:hover {
+    background-color: #0B1061;
+    color: #fff;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #0B1061;
+    color: #fff;
+    border-color: #0B1061;
+}
+
+.pagination .page-item.disabled .page-link {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.pagination .page-link:focus {
+    box-shadow: none;
+}
+
+/* Memebr Side Pagination End*/
+.text-theme {
+    color: #0B1061 !important;
+}
+/* Memebr Side BAck button Start*/
+.btn-back:hover {
+    color: #05093a;
+    transform: translateX(-3px);
+}
+.btn-back i {
+    font-size: 18px;
+}
+.btn-text {
+    font-size: 14px;
+}
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #0B1061;
+    font-size: 22px;
+    text-decoration: none;
+    border: none;
+    background: none;
+    padding: 0;
+    transition: transform 0.15s ease-in-out;
+}
+/* Memebr Side BAck button End*/

@@ -93,7 +93,7 @@
                             <i class="bi bi-person-circle fs-3 me-2"></i>
                         @endif
 
-                        <span class="username d-none d-md-inline">{{ Auth::user()->name }}</span>
+                        <span class="username d-none d-md-inline">{{ $member->first_name ?? '' }}</span>
                     </a>
 
                     <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="profileDropdown">

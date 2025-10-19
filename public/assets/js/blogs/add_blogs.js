@@ -43,7 +43,7 @@ const validationRules = {
     description: { 
         required: true, 
         minlength: 10, 
-        maxlength: 1000 
+        maxlength: 10000 
     },
     publish_date: { 
         required: true, 

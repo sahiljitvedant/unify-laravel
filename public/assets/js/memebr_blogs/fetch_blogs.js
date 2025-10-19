@@ -24,13 +24,30 @@ $(document).ready(function () {
     function renderBlogs(blogs) {
         let html = '';
         if (blogs.length === 0) {
-            html = '<p class="text-center text-muted">No blogs available.</p>';
+            html = `
+            <div class="no-members-wrapper">
+                <div class="no-members-box">
+                <img src="/assets/img/download.png" alt="No Members" class="no-members-img">
+                    <p class="no-members-text">No Blog Found</p>
+                </div>
+            </div>
+        `;
         } else {
             blogs.forEach(blog => {
                 const image = blog.blog_image 
                     ? assetBase + blog.blog_image 
                     : assetBase + 'assets/img/default-blog.jpg';
-
+            
+                const description = blog.description
+                    ? blog.description.replace(/(<([^>]+)>)/gi, "")  // remove HTML tags
+                                      .replace(/&nbsp;/g, " ")       // decode &nbsp;
+                                      .replace(/&amp;/g, "&")       // decode &
+                    : '';
+            
+                const truncatedDesc = description.length > 100
+                    ? description.substring(0, 100) + '...'
+                    : description;
+            
                 html += `
                 <div class="col-md-4 mb-4">
                     <a href="/member_blogs_details/${blog.id}" class="text-decoration-none text-dark">
@@ -38,7 +55,7 @@ $(document).ready(function () {
                             <img src="${image}" alt="Blog Image" class="blog-img">
                             <div class="blog-body">
                                 <h6 class="fw-bold text-theme mb-2 blog_title">${blog.blog_title}</h6>
-                                <p class="text-muted small mb-2 blog_desc">${truncate(blog.description, 100)}</p>
+                                <p class="text-muted small mb-0 blog_desc">${truncatedDesc}</p>
                                 <p class="text-secondary small mb-0 blog_date">
                                     <i class="bi bi-calendar-event"></i> ${formatDate(blog.publish_date)}
                                 </p>
@@ -46,8 +63,9 @@ $(document).ready(function () {
                         </div>
                     </a>
                 </div>
-`;
+                `;
             });
+            
         }
         $("#blogsContainer").html(html);
     }
@@ -113,9 +131,6 @@ $(document).ready(function () {
 
         $("#paginationLinks").html(paginationHTML);
     }
-
-
-    
 
     // Pagination click
     $(document).on("click", ".page-link", function (e) {

@@ -204,15 +204,15 @@ class GallaryController extends Controller
     
             // ✅ Main thumbnail: use hidden input
             $gallery->main_thumbnail = $request->filled('gallary_image_path') 
-                                       ? $request->gallary_image_path 
-                                       : $gallery->main_thumbnail;
-    
+            ? preg_replace('#^https?://[^/]+/#', '', $request->gallary_image_path) 
+            : $gallery->main_thumbnail;
+        
             // ✅ Multiple gallery images
            // Multiple gallery images
-if ($request->has('gallery_images')) {
-    $paths = $request->gallery_images ? explode(',', $request->gallery_images) : [];
-    $gallery->gallery_images = !empty($paths) ? json_encode($paths) : null;
-}
+            if ($request->has('gallery_images')) {
+                $paths = $request->gallery_images ? explode(',', $request->gallery_images) : [];
+                $gallery->gallery_images = !empty($paths) ? json_encode($paths) : null;
+            }
 
     
             // ✅ YouTube links

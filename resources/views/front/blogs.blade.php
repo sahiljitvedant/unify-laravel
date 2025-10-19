@@ -41,9 +41,10 @@
                                     <h5><a href="{{ route('blogs_read_more', ['id' => encrypt($recent->id)]) }}">
                                         {{ \Illuminate\Support\Str::words($recent->blog_title, 10, '...') }}
                                     </a></h5>
-                                    <p class="recent-desc">
-                                    {{ \Illuminate\Support\Str::limit($recent->description, 30, '...') }}
-                                    </p>
+                                    <p class="text-muted small mb-0 blog_desc">
+    {{ \Illuminate\Support\Str::words(strip_tags(html_entity_decode($blog->description)), 20, '...') }}
+</p>
+
                                 </div>
                             </div>
                             @endforeach

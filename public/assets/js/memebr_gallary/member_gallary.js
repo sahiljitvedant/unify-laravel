@@ -24,7 +24,15 @@ $(document).ready(function () {
     function renderGalleries(galleries) {
         let html = '';
         if (galleries.length === 0) {
-            html = '<p class="text-center text-muted">No galleries available.</p>';
+            html = `
+                <div class="no-members-wrapper">
+                    <div class="no-members-box">
+                    <img src="/assets/img/download.png" alt="No Members" class="no-members-img">
+                        <p class="no-members-text">No Snapshot Found</p>
+                    </div>
+                </div>
+
+            `;
         } else {
             galleries.forEach(gallery => {
                 const thumb = gallery.main_thumbnail 
