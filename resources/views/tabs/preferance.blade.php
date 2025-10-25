@@ -1,69 +1,42 @@
 <form id="formSettings" class="">
-<div class="container mt-3">
-    <div class="row g-3 text-center">
+    <div class="container mt-3">
+        <div class="row g-3 text-center">
 
-        <div class="col-12 col-md-4 d-flex align-items-center justify-content-between px-4">
-            <label class="form-label mb-0">Profile Pic</label>
-            <div class="form-check form-switch">
-                <input class="form-check-input theme-toggle" type="checkbox" id="image" checked>
-            </div>
-        </div>
+        @php
+            $preferencesList = [
+                'Profile Pic' => 'image',
+                'Name'        => 'name',
+                'Email'       => 'email',
+                'Mobile'      => 'mobile',
+                'Preferred Time' => 'preferred_time',
+                'Date of Birth'  => 'dob',
+                'Address'        => 'address',
+                'Goal'           => 'goal',
+            ];
 
-        <div class="col-12 col-md-4 d-flex align-items-center justify-content-between px-4">
-            <label class="form-label mb-0">Name</label>
-            <div class="form-check form-switch">
-                <input class="form-check-input theme-toggle" type="checkbox" id="name" checked>
-            </div>
-        </div>
+            // Map user preferences for easy lookup
+            $userPrefMap = [];
+            foreach ($userPreferences as $pref) {
+                $userPrefMap[$pref->preference->name] = $pref->is_active;
+            }
+        @endphp
 
-        <div class="col-12 col-md-4 d-flex align-items-center justify-content-between px-4">
-            <label class="form-label mb-0">Email</label>
-            <div class="form-check form-switch">
-                <input class="form-check-input theme-toggle" type="checkbox" id="email" checked>
+        @foreach ($preferencesList as $label => $id)
+            <div class="col-12 col-md-4 d-flex align-items-center justify-content-between px-4">
+                <label class="form-label mb-0">{{ $label }}</label>
+                <div class="form-check form-switch">
+                    <input class="form-check-input theme-toggle" 
+                        type="checkbox" 
+                        id="{{ $id }}" 
+                        {{ isset($userPrefMap[$label]) ? ($userPrefMap[$label] ? 'checked' : '') : 'checked' }}>
+                </div>
             </div>
-        </div>
+        @endforeach
 
-        <div class="col-12 col-md-4 d-flex align-items-center justify-content-between px-4">
-            <label class="form-label mb-0">Mobile</label>
-            <div class="form-check form-switch">
-                <input class="form-check-input theme-toggle" type="checkbox" id="mobile" checked>
-            </div>
-        </div>
-
-        <div class="col-12 col-md-4 d-flex align-items-center justify-content-between px-4">
-            <label class="form-label mb-0">Preferred Time</label>
-            <div class="form-check form-switch">
-                <input class="form-check-input theme-toggle" type="checkbox" id="preferred_time" checked>
-            </div>
-        </div>
-
-        <div class="col-12 col-md-4 d-flex align-items-center justify-content-between px-4">
-            <label class="form-label mb-0">Date of Birth</label>
-            <div class="form-check form-switch">
-                <input class="form-check-input theme-toggle" type="checkbox" id="dob" checked>
-            </div>
-        </div>
-
-        <div class="col-12 col-md-4 d-flex align-items-center justify-content-between px-4">
-            <label class="form-label mb-0">Address</label>
-            <div class="form-check form-switch">
-                <input class="form-check-input theme-toggle" type="checkbox" id="address" checked>
-            </div>
-        </div>
-
-        <div class="col-12 col-md-4 d-flex align-items-center justify-content-between px-4">
-            <label class="form-label mb-0">Goal</label>
-            <div class="form-check form-switch">
-                <input class="form-check-input theme-toggle" type="checkbox" id="goal" checked>
-            </div>
         </div>
 
     </div>
-</div>
-
-</div>
-
-    
+    </div>
 </form>
 <style>
     .theme-toggle {
@@ -87,7 +60,6 @@
         padding: 10px 15px;
     }
 </style>
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 const stepperEditSettings = "{{ route('stepper.update_setings', ['id' => $member->id]) }}";
@@ -109,10 +81,23 @@ $(document).ready(function()
                 is_active: isActive
             },
             success: function(res) {
-                console.log(res.message);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Preference saved successfully.',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
             },
             error: function(err) {
                 console.error('Error saving preference', err);
+                $toggle.prop('checked', !$toggle.is(':checked'));
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'Failed to save preference.',
+                });
             }
         });
     });

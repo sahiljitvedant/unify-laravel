@@ -75,9 +75,10 @@
                 <label class="form-label required">{{ __('membership.trainer_label') }}</label>
                 <select class="form-control" name="trainer_included" id="trainer_included">
                     <option disabled selected>{{ __('membership.select_option') }}</option>
-                    <option value="yes">{{ __('membership.yes') }}</option>
-                    <option value="no">{{ __('membership.no') }}</option>
+                    <option value="1" {{ isset($member) && $member->trainer_included == '1' ? 'selected' : '' }}>{{ __('membership.yes') }}</option>
+                    <option value="0" {{ isset($member) && $member->trainer_included == '0' ? 'selected' : '' }}>{{ __('membership.no') }}</option>
                 </select>
+
                 <div class="text-danger error-message" data-error-for="trainer_included"></div>
             </div>
 

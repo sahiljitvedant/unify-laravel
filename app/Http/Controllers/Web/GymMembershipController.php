@@ -26,7 +26,7 @@ class GymMembershipController extends Controller
         // dd($request->all());
         $query = DB::table('tbl_gym_membership')
             ->select('*')
-            ->where('is_deleted', '!=', 9);
+            ->where('is_deleted', '!=','1');
 
         // Apply filters
         if ($request->filled('active')) {
@@ -34,10 +34,11 @@ class GymMembershipController extends Controller
         }
 
         if ($request->filled('trainer')) {
-            // Convert 1 => 'yes', 0 => 'no'
-            $trainerValue = $request->trainer == 1 ? 'yes' : 'no';
+            // Convert 1 => '1', 0 => '0' (string) to match ENUM in DB
+            $trainerValue = $request->trainer == 1 ? '1' : '0';
             $query->where('trainer_included', $trainerValue);
         }
+        
 
         if ($request->filled('durartion')) {  
             $query->where('duration_in_days', $request->durartion);
@@ -106,7 +107,7 @@ class GymMembershipController extends Controller
         // dd($request->all());
         $query = DB::table('tbl_gym_membership')
             ->select('*')
-            ->where('is_deleted', '=', 9) ;
+            ->where('is_deleted', '=','1') ;
 
         // Apply filters
          // Apply filters
@@ -115,8 +116,8 @@ class GymMembershipController extends Controller
         }
 
         if ($request->filled('trainer')) {
-            // Convert 1 => 'yes', 0 => 'no'
-            $trainerValue = $request->trainer == 1 ? 'yes' : 'no';
+            // Convert 1 => '1', 0 => '0' (string) to match ENUM in DB
+            $trainerValue = $request->trainer == 1 ? '1' : '0';
             $query->where('trainer_included', $trainerValue);
         }
 
@@ -180,21 +181,20 @@ class GymMembershipController extends Controller
 
     public function submit(Request $request)
     {
-        // dd($request->all());
-        // Validation rules
+        $input = $request->all();
+    
         $arr_rules = [
             'membership_name' => 'required|string|max:150|unique:tbl_gym_membership,membership_name',
             'description' => 'nullable|string|max:500',
             'duration_in_days' => 'required|integer|min:1',
             'price' => 'required|numeric|min:0',
-            'trainer_included' => 'required|in:yes,no',
+            'trainer_included' => 'required|in:0,1', // matches ENUM
             'facilities_included' => 'nullable|array',
             'facilities_included.*' => 'integer', 
-            'is_active' => 'required|boolean',
+            'is_active' => 'required|in:0,1', // matches ENUM
         ];
-        // Validate the inputs
-        $validator = Validator::make($request->all(), $arr_rules);
-        // dd($validator);
+    
+        $validator = Validator::make($input, $arr_rules);
     
         if ($validator->fails()) {
             return response()->json([
@@ -203,53 +203,35 @@ class GymMembershipController extends Controller
             ], 422);
         }
     
-    
         DB::beginTransaction();
     
-        try 
-        {
-            // dd(1);
-            // Insert all request data exactly as received
-
-            $user_details_arr = $request->all();
-            // dd( $user_details_arr);
-
-              // Convert array → JSON for DB
-        if ($request->has('facilities_included')) {
-            $user_details_arr['facilities_included'] = json_encode($request->facilities_included);
-        }
-
-            
-            // if ($request->hasFile('profile_image')) 
-            // {
-            //     $image = $request->file('profile_image');
-            //     $imageName = time().'_'.$image->getClientOriginalName();
-            //     $image->move(public_path('uploads/profile_images'), $imageName);
-            //     $user_details_arr['profile_image'] = 'uploads/profile_images/' . $imageName;
-            // } 
-            // else 
-            // {
-            //     $user_details_arr['profile_image'] = null; // or default path
-            // }
+        try {
+            // Convert facilities array → JSON
+            if (isset($input['facilities_included'])) {
+                $input['facilities_included'] = json_encode($input['facilities_included']);
+            }
     
-            $inserted_id = DB::table('tbl_gym_membership')->insertGetId($user_details_arr);
-           
+            // Set is_deleted = 0 for new memberships
+            $input['is_deleted'] = '0';
+    
+            $inserted_id = DB::table('tbl_gym_membership')->insertGetId($input);
+    
             DB::commit();
     
-            $arr_resp['status'] = 'success';
-            $arr_resp['message'] = 'Member added successfully';
-            $arr_resp['member_id'] = $inserted_id;
-            return response()->json($arr_resp);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Member added successfully',
+                'member_id' => $inserted_id
+            ]);
     
-        } 
-        catch (\Exception $e) 
-        {
+        } catch (\Exception $e) {
             DB::rollback();
             Log::error($e->getMessage());
     
-            $arr_resp['status'] = 'error';
-            $arr_resp['message'] = $e->getMessage();
-            return response()->json($arr_resp, 500);
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 
@@ -266,7 +248,7 @@ class GymMembershipController extends Controller
         DB::table('tbl_gym_membership')
         ->where('id', $id)
         ->update([
-            'is_deleted' => 9,  
+            'is_deleted' => '1',  
         ]);
         return response()->json
         ([
@@ -279,10 +261,6 @@ class GymMembershipController extends Controller
     {
         
         // dd($id);
-        // dd('This is edit page');
-
-        // dd($id);
-
         $decryptedId = Crypt::decryptString($id);
         // dd($decryptedId);
         $member = DB::table('tbl_gym_membership')->where('id', $decryptedId)->first();
@@ -301,21 +279,22 @@ class GymMembershipController extends Controller
         try 
         {
             $request->validate([
-                'membership_name' => 'required|string|unique:tbl_gym_membership,membership_name,' . $id,
-                'description'     => 'required|string',
-                'duration_in_days'=> 'required|numeric',
-                'price'           => 'required|numeric',
-                'trainer_included'=> 'required',
-                'facilities_included' => 'required|array',
-                'is_active'       => 'required',
+                'membership_name'      => 'required|string|unique:tbl_gym_membership,membership_name,' . $id,
+                'description'          => 'required|string',
+                'duration_in_days'     => 'required|numeric',
+                'price'                => 'required|numeric',
+                'trainer_included'     => 'required|in:0,1',
+                'facilities_included'  => 'required|array',
+                'is_active'            => 'required|in:0,1',
             ]);
     
-            // Ensure facilities is always array, even if only one checkbox selected
-            $facilities = $request->facilities_included ?? [];
+            // Ensure facilities is always array
+            $facilities = $request->facilities_included;
             if (!is_array($facilities)) {
                 $facilities = [$facilities];
             }
     
+            // Update using DB
             DB::table('tbl_gym_membership')
                 ->where('id', $id)
                 ->update([
@@ -329,7 +308,11 @@ class GymMembershipController extends Controller
                     'updated_at'          => now(),
                 ]);
     
-            return response()->json(['success' => true, 'message' => 'Membership updated successfully!']);
+            return response()->json([
+                'success' => true,
+                'message' => 'Membership updated successfully!'
+            ]);
+    
         } 
         catch (\Illuminate\Validation\ValidationException $e) 
         {
@@ -341,15 +324,14 @@ class GymMembershipController extends Controller
         }
         catch (\Exception $e) 
         {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
-        }
-        catch (\Exception $e) 
-        {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            // Return general errors
+            return response()->json([
+                'success' => false, 
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
     
-
     public function activate_membership($id)
     {
         // dd(1);
@@ -372,7 +354,6 @@ class GymMembershipController extends Controller
         ]);
     }
 
-    
     public function get_membership_name(Request $request)
     {
         $query = trim($request->get('q'));

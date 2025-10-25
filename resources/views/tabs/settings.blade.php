@@ -5,7 +5,7 @@
             <div class="col-md-6 col-12">
                 <label class="form-label">{{ __('global.fitness_goals_label') }}</label>
                 <select class="form-control" name="fitness_goals" id="fitness_goals" disabled>
-                    <option value="" disabled>{{ __('global.select_option') }}</option>
+                    <option value="" selected >{{ __('global.select_option') }}</option>
                     @foreach(config('app.fitness_goals', []) as $key => $value)
                         <option value="{{ $value }}" {{ old('fitness_goals', $member->fitness_goals ?? '') == $value ? 'selected' : '' }}>
                             {{ __('global.' . $value) }}
@@ -35,7 +35,7 @@
         </div>
         <div class="row g-3 mt-2">
             <!-- Height (ft) -->
-            <div class="col-6 col-md-3">
+            <!-- <div class="col-6 col-md-3">
                 <label class="form-label">{{ __('global.height_ft_label') }}</label>
                 <select class="form-control" name="height_ft" id="height_ft" disabled>
                     <option value="" disabled {{ old('height_ft', $member->height_ft ?? '') == '' ? 'selected' : '' }}>
@@ -49,10 +49,10 @@
 
                 </select>
                 <div class="text-danger error-message" data-error-for="height_ft"></div>
-            </div>
+            </div> -->
 
             <!-- Height (inches) -->
-            <div class="col-6 col-md-3">
+            <!-- <div class="col-6 col-md-3">
                 <label class="form-label">{{ __('global.height_in_label') }}</label>
                 <select class="form-control" name="height_in" id="height_in" disabled>
                     <option value="" disabled {{ old('height_in', $member->height_in ?? '') == '' ? 'selected' : '' }}>
@@ -66,7 +66,7 @@
                     @endforeach
                 </select>
                 <div class="text-danger error-message" data-error-for="height_in"></div>
-            </div>
+            </div> -->
 
             <!-- Current Weight -->
             <div class="col-12 col-md-6">

@@ -6,6 +6,9 @@
     <div id="loader">
         <img src="{{ asset('assets/img/logo.png') }}" alt="Loading..." class="loader-img">
     </div>
+    <div id="importLoader" style="display:none;">
+    <img src="{{ asset('assets/img/logo.png') }}" alt="Loading..." class="loader-img">
+    </div>
     <div class="container-custom">
         <!-- Breadcrumb -->
         <nav aria-label="breadcrumb">
@@ -18,11 +21,24 @@
         <div class="p-4 bg-light rounded shadow">
             <!-- Heading + Add Button -->
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 gap-2">
+                <div class="d-flex flex-column align-items-start align-items-md-start gap-2">
                 <h4 class="mb-2 mb-md-0">List Members</h4>
+                <a href="javascript:void(0)" id="import-users-link" class="btn-link">Import Members</a>
+                    <a href="{{ asset('assets/sample/sample_member.xlsx') }}" 
+                        class="btn-link text-primary" 
+                        download>
+                        <i class="bi bi-download"></i> Download Sample File
+                    </a>
+                    </div>
                 <div class="d-flex flex-column align-items-start align-items-md-end gap-2">
                     <a href="{{ route('add_member') }}" class="btn-add">Add Members</a>
-                    <a href="{{ route('list_deleted_membership') }}" class="btn-link">Show Deleted Members</a>
+                    <a href="{{ route('list_deleted_member') }}" class="btn-link">Show Deleted Members</a>
+                    
                 </div>
+                <form id="import-form" enctype="multipart/form-data" style="display:none;">
+                    @csrf
+                    <input type="file" name="excel_file" id="excel_file" accept=".xlsx,.xls,.csv">
+                </form>
             </div>
             <div class="data-wrapper">
                 <!-- Filters -->
@@ -97,7 +113,7 @@
                                         </span>
                                     </a>
                                 </th>
-                                <th>Membership Type</th>
+                               
                                
                                 <th>Action</th>
                             </tr>
@@ -129,8 +145,43 @@
     }
     .btn-add:hover { background-color: #090d4a; }
     th a { color: inherit; text-decoration: none; }
+    #importLoader {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(255,255,255,0.9);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.import-loader-overlay {
+    text-align: center;
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 6px solid #e0e0e0;
+    border-top: 6px solid #0B1061;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.import-loader-text {
+    color: #0B1061;
+    font-weight: 500;
+}
 
 </style>
+
 @endpush
 
 @push('scripts')
@@ -142,6 +193,42 @@
 <script src="{{ asset('assets/js/gym_package/list_members.js') }}"></script>
 
 <script>
+    $(document).ready(function() 
+    {
+        $('#import-users-link').on('click', function() {
+            $('#excel_file').click();
+        });
 
+        $('#excel_file').on('change', function() {
+    let formData = new FormData($('#import-form')[0]);
+    
+    $("#loader").show(); // show import loader
+
+    $.ajax({
+        url: "{{ route('import_members') }}",
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(res) {
+            $("#loader").hide(); // hide loader on success
+            Swal.fire('Success', 'Users imported successfully!', 'success').then(() => {
+                $('#excel_file').val('');
+                location.reload();
+            });
+        },
+        error: function(err) {
+            $("#loader").hide(); // hide loader on error
+            console.error(err);
+            Swal.fire('Error', 'Failed to import users!', 'error').then(() => {
+                $('#excel_file').val('');
+            });
+        }
+    });
+});
+
+    });
 </script>
+
+
 @endpush

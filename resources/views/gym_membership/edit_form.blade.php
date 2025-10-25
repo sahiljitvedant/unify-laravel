@@ -5,7 +5,7 @@
     <!-- Breadcrumb -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('list_dashboard') }}">Dashboard</a></li>
             <li class="breadcrumb-item"><a href="{{ route('list_membership') }}">Memberships</a></li>
             <li class="breadcrumb-item" aria-current="page">Edit Membership</li>
         </ol>
@@ -75,10 +75,11 @@
             <div class="col-md-6 col-12">
                 <label class="form-label required">{{ __('membership.trainer_label') }}</label>
                 <select class="form-control" name="trainer_included" id="trainer_included">
-                    <option disabled>{{ __('membership.select_option') }}</option>
-                    <option value="yes" {{ $member->trainer_included == 'yes' ? 'selected' : '' }}>{{ __('membership.yes') }}</option>
-                    <option value="no" {{ $member->trainer_included == 'no' ? 'selected' : '' }}>{{ __('membership.no') }}</option>
-                </select>
+    <option disabled>{{ __('membership.select_option') }}</option>
+    <option value="1" {{ $member->trainer_included == '1' ? 'selected' : '' }}>Yes</option>
+    <option value="0" {{ $member->trainer_included == '0' ? 'selected' : '' }}>No</option>
+</select>
+
                 <div class="text-danger error-message" data-error-for="trainer_included"></div>
             </div>
 

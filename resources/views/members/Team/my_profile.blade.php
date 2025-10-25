@@ -1,87 +1,120 @@
 @extends('members.layouts.app')
 @section('title', 'Member Profile')
+
 @section('content')
 <div class="container-custom py-4">
     <div class="container">
         <!-- Back Button -->
         <div class="mb-3">
-            <a href="{{ url()->previous() }}" class="btn-back">
-                <i class="bi bi-arrow-left"></i>
+            <a href="{{ url()->previous() }}" class="btn-back d-inline-flex align-items-center text-decoration-none">
+                <i class="bi bi-arrow-left me-1"></i>
                 <span class="btn-text">Back</span>
             </a>
         </div>
-        <!-- Member Profile Section -->
+
+        <!-- Profile Section -->
         <div class="row g-3">
             <div class="col-12">
                 <div class="card profile-card shadow-sm d-flex flex-row p-3 align-items-start">
-                    <img src="{{ $member->profile_image ? asset($member->profile_image) : asset('assets/img/download.png') }}"
-                        class="rounded-circle me-3"
-                        alt="{{ $member->first_name }}"
-                        style="width:80px; height:80px; object-fit:cover;">
+                    @if(isset($userPreferences['Profile Pic']) && $userPreferences['Profile Pic'])
+                        <img src="{{ $member->profile_image ? asset($member->profile_image) : asset('assets/img/download.png') }}"
+                            class="rounded-circle me-3"
+                            alt="{{ $member->first_name }}"
+                            style="width:80px; height:80px; object-fit:cover;">
+                    @endif
+
                     <div class="profile-info">
-                        <div class="name-row d-flex align-items-center mb-1">
-                            <h5 class="fw-bold mb-0 name">
+                        @if(isset($userPreferences['Name']) && $userPreferences['Name'])
+                            <h5 class="fw-bold mb-0">
                                 {{ $member->first_name ?? 'Not Available' }} {{ $member->last_name ?? '' }}
                             </h5>
-                            <span class="verified-badge ms-2">
-                                <i class="bi bi-patch-check-fill"></i>
-                            </span>
-                        </div>
-                        <div class="email mb-1">
-                            <i class="bi bi-envelope me-1"></i>{{ $member->email ?? 'Not Available' }}
-                        </div>
-                        <div class="mobile">
-                            <i class="bi bi-telephone me-1"></i>{{ $member->mobile ?? 'Not Available' }}
-                        </div>
+                        @endif
+
+                        @if(isset($userPreferences['Email']) && $userPreferences['Email'])
+                            <div class="text-muted small mb-1">
+                                <i class="bi bi-envelope me-1"></i>{{ $member->email ?? 'Not Available' }}
+                            </div>
+                        @endif
+
+                        @if(isset($userPreferences['Mobile']) && $userPreferences['Mobile'])
+                            <div class="text-muted small">
+                                <i class="bi bi-telephone me-1"></i>{{ $member->mobile ?? 'Not Available' }}
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
+
             <!-- Membership Info -->
             <div class="col-md-6">
-            <div class="card info-card shadow-sm">
-                <div class="card-header text-white fw-semibold">Membership Details</div>
+                <div class="card info-card shadow-sm h-100">
+                    <div class="card-header bg-theme text-white fw-semibold">Membership Details</div>
                     <div class="card-body small text-muted">
-                        <p class="font_size"><strong>Type:</strong> {{ $member->membership_type ?? 'Not Available' }}</p>
-                        <p class="font_size"><strong>Joining Date:</strong> {{ $member->joining_date ? date('d-m-Y', strtotime($member->joining_date)) : 'Not Available' }}</p>
-                        <p class="font_size"><strong>Expiry Date:</strong> {{ $member->expiry_date ? date('d-m-Y', strtotime($member->expiry_date)) : 'Not Available' }}</p>
-                        <p class="font_size"><strong>Payment Method:</strong> {{ $member->payment_method ?? 'Not Available' }}</p>
+                        <p class="font_size"><strong>Type:</strong>  {{ $member->membership->membership_name ?? 'Not Available' }}</p>
+                        <p class="font_size"><strong>Joining Date:</strong>
+                            {{ $member->joining_date ? date('d-m-Y', strtotime($member->joining_date)) : 'Not Available' }}
+                        </p>
+                        <p class="font_size"><strong>Expiry Date:</strong>
+                            {{ $member->expiry_date ? date('d-m-Y', strtotime($member->expiry_date)) : 'Not Available' }}
+                        </p>
+                        <p class="font_size">
+                            <strong>Payment Method:</strong>
+                            @php
+                                $paymentMethods = [
+                                    1 => 'Cash',
+                                    2 => 'Card',
+                                    3 => 'Online'
+                                ];
+                            @endphp
+
+                            {{ $paymentMethods[$member->payment_method] ?? 'Not Available' }}
+                        </p>
+
                     </div>
                 </div>
             </div>
 
             <!-- Fitness Info -->
             <div class="col-md-6">
-                <div class="card info-card shadow-sm">
-                    <div class="card-header text-white fw-semibold">Fitness Information</div>
+                <div class="card info-card shadow-sm h-100">
+                    <div class="card-header bg-theme text-white fw-semibold">Fitness Information</div>
                     <div class="card-body small text-muted">
-                        <p class="font_size"><strong>Goal:</strong> {{ $member->fitness_goals ?? 'Not Available' }}</p>
-                        <p class="font_size"><strong>Preferred Time:</strong> {{ $member->preferred_workout_time ?? 'Not Available' }}</p>
-                        <p class="font_size"><strong>Current Weight:</strong> {{ $member->current_weight ?? 'Not Available' }}</p>
-                        <p class="font_size"><strong>Notes:</strong> {{ $member->additional_notes ?? 'Not Available' }}</p>
+                        @if(isset($userPreferences['Goal']) && $userPreferences['Goal'])
+                            <p class="font_size"><strong>Goal:</strong> 
+                                {{ isset($member->fitness_goals) 
+                                    ? ucwords(str_replace('_', ' ', $member->fitness_goals)) 
+                                    : 'Not Available' 
+                                }}
+                            </p>
+                        @endif
+
+                        @if(isset($userPreferences['Preferred Time']) && $userPreferences['Preferred Time'])
+                            <p class="font_size"><strong>Preferred Time:</strong> 
+                                {{ $member->preferred_workout_time 
+                                    ? ucwords($member->preferred_workout_time) 
+                                    : 'Not Available' 
+                                }}
+                            </p>
+                        @endif
+
                     </div>
                 </div>
             </div>
+
             <!-- Personal Info -->
             <div class="col-12">
                 <div class="card info-card shadow-sm">
-                    <div class="card-header text-white fw-semibold">Personal Information</div>
+                    <div class="card-header bg-theme text-white fw-semibold">Personal Information</div>
                     <div class="card-body small text-muted">
-                        <p class="font_size"><strong>Date of Birth:</strong> 
-                            {{ $member->dob ? \Carbon\Carbon::parse($member->dob)->format('d-m-Y') : 'Not Available' }}
-                        </p>
+                        @if(isset($userPreferences['Date of Birth']) && $userPreferences['Date of Birth'])
+                            <p class="font_size"><strong>Date of Birth:</strong> 
+                                {{ $member->dob ? \Carbon\Carbon::parse($member->dob)->format('d-m-Y') : 'Not Available' }}
+                            </p>
+                        @endif
 
-                        <p class="font_size"><strong>Gender:</strong> 
-                            @php
-                                $genderMap = [
-                                    1 => 'Male',
-                                    2 => 'Female',
-                                    3 => 'Other'
-                                ];
-                            @endphp
-                            {{ isset($genderMap[$member->gender]) ? $genderMap[$member->gender] : 'Not Available' }}
-                        </p>
-
-                        <p class="font_size"><strong>Address:</strong> {{ $member->residence_address ?? 'Not Available' }}</p>
+                        @if(isset($userPreferences['Address']) && $userPreferences['Address'])
+                            <p class="font_size"><strong>Address:</strong> {{ $member->residence_address ?? 'Not Available' }}</p>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -89,6 +122,7 @@
     </div>
 </div>
 @endsection
+
 <style>
     .profile-card {
         border-radius: 12px;
@@ -198,8 +232,11 @@
         }
 
         .email, .mobile {
-            font-size: 11px;
+            font-size: 8px !important;
             margin-top: 4px;
+        }
+        .text-muted.small {
+            font-size: 12px !important;
         }
         .name
         {
@@ -207,6 +244,7 @@
         }
         .email i, .mobile i {
             margin-right: 5px;
+            font-size: 8px !important;
         }
         .card-header.text-white.fw-semibold
         {

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
-
+use Illuminate\Support\Facades\DB;
 class AuthController extends Controller
 {
    
@@ -98,6 +98,19 @@ class AuthController extends Controller
         {
             $user = Auth::user();
             // dd($user);
+            $member = DB::table('tbl_gym_members')
+            ->where('user_id', $user->id)
+            ->first();
+
+            if ($member && $member->is_deleted == 9) 
+            {
+                Auth::logout(); // clear session
+                return response()->json
+                ([
+                    'status' => 'error',
+                    'message' => 'Your gym membership has been deactivated. Please contact the administrator.',
+                ],422);
+            }
             if ($user->is_admin == 1) 
             {
                 // dd(1);

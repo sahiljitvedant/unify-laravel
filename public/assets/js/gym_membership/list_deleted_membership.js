@@ -3,7 +3,7 @@ $(document).ready(function ()
 {
    
     let sortColumn = 'id';
-    let sortOrder = 'asc';
+    let sortOrder = 'desc';
 
     function fetchData(page = 1) {
         $("#loader").show();
@@ -57,8 +57,8 @@ $(document).ready(function ()
                         }
                       </td>
                         <td>${m.price}</td>
-                        <td>${m.trainer_included === 'yes' ? 'Yes' : 'No'}</td>
-                        <td>${m.is_active ? 'Active' : 'Inactive'}</td>
+                        <td>${m.trainer_included === '1' ? 'Yes' : 'No'}</td>
+                        <td>${m.is_active === '1' ? 'Active' : 'Inactive'}</td>
                         <td>${m.action}</td>
                     </tr>
                 `;

@@ -4,7 +4,6 @@ $(document).ready(function ()
    
     let sortColumn = 'id';
     let sortOrder = 'asc';
-
     function fetchData(page = 1) {
         $("#loader").show();
 
@@ -38,7 +37,7 @@ $(document).ready(function ()
             // Show "No memberships found" message spanning all columns
             rows = `
                 <tr>
-                    <td colspan="7" class="text-center">No memberships found</td>
+                    <td colspan="7" class="text-center">No members found</td>
                 </tr>
             `;
         } else {
@@ -46,23 +45,23 @@ $(document).ready(function ()
                 rows += `
                     <tr>
                         <td>${m.id}</td>
-                        <td>${m.first_name} ${m.middle_name ?? ''} ${m.last_name ?? ''}</td>
-                        <td>${m.mobile}</td>
+                        <td>${m.name}</td>
+                        <td>${m.email}</td>
                         <td>${m.membership_name}</td>
                         <td>${m.price}</td>
                         <td>${m.amount_paid}</td>
-                        <td>${m.price - m.amount_paid}</td>
+                        <td>${m.remaining_amount}</td>
                     </tr>
                 `;
             });
         }
+        
     
         $("#membershipBody").html(rows);
     }
     
     
-
-    function renderPagination(currentPage, lastPage) 
+    function renderPagination(currentPage, lastPage)
     {
         let paginationHtml = "";
 
@@ -106,23 +105,30 @@ $(document).ready(function ()
     $(document).on("click", ".sort-link", function (e) {
         e.preventDefault();
         let column = $(this).data("column");
-
+    
         // Toggle order
-        sortOrder = (sortColumn === column && sortOrder === 'asc') ? 'desc' : 'asc';
-        sortColumn = column;
-
+        if (sortColumn === column) {
+            sortOrder = sortOrder === "asc" ? "desc" : "asc";
+        } else {
+            sortColumn = column;
+            sortOrder = "asc"; // default to ascending when changing column
+        }
+    
         // Reset all icons
         $(".sort-icons i").removeClass("active");
-
-        // Highlight correct icon
+    
+        // Highlight correct icon for current column
+        const currentSortIcons = $(this).find(".sort-icons i");
         if (sortOrder === "asc") {
-            $(this).find(".asc").addClass("active");
+            currentSortIcons.filter(".asc").addClass("active");
         } else {
-            $(this).find(".desc").addClass("active");
+            currentSortIcons.filter(".desc").addClass("active");
         }
-
+    
+        // Fetch sorted data
         fetchData(1);
     });
+    
 
     // Filters change
     $("#submitBtn").on("click", function (e) {
@@ -144,51 +150,4 @@ $(document).ready(function ()
     // Initial load
     fetchData();
 });
-function delete_members(id)
-{
-    $.ajax({
-        url: deleteMembershipUrl.replace(':id', id), 
-        type: "POST",
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        beforeSend: function () {
-            Swal.fire({
-                title: 'Deleting...',
-                text: 'Please wait while we delete the membership.',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
-        },
-        success: function (response) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Deleted!',
-                text: response.message,
-                confirmButtonText: 'OK',
-                allowOutsideClick: false
-            }).then(() => {
-                // alert('hii');
-                location.reload();
-            });
-        },
-        error: function (xhr) {
-            console.log(xhr.status);
-            console.log(xhr.responseText);
 
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Something went wrong! Please try again.',
-                confirmButtonText: 'OK',
-                allowOutsideClick: false
-            }).then(() => {
-                location.reload();
-            });
-               
-          
-        }
-    });
-}

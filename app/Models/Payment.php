@@ -22,11 +22,17 @@ class Payment extends Model
         'gateway',
         'invoice_number',
         'amount',
-        'payment_status', // 1 = Pending, 2 = Completed
+        'payment_status', 
         'currency',
-        'status',         // enum('pending','success','failed')
+        'status',        
         'total_amount_paid',
         'total_amount_remaining',
+        'discount',         
+        'payment_done_by',  
+        'membership_start_date',
+        'membership_end_date',
+        'cycle_id',
+        'payment_method'
     ];
 
     // Relationships
@@ -34,9 +40,15 @@ class Payment extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    public function plan()
+   
+    public function membership()
     {
-        return $this->belongsTo(Plan::class);
+        return $this->belongsTo(Membership::class, 'plan_id'); 
     }
+
+    public function doneByUser()
+    {
+        return $this->belongsTo(User::class, 'payment_done_by');
+    }
+
 }

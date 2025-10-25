@@ -9,19 +9,19 @@
                     style="max-height: 80px; display:block; margin: 0 auto; border-radius:10px;"
                     src="{{ $member->profile_image ? asset($member->profile_image) : asset('assets/img/default.png') }}">
 
-                <button type="button" 
+                <!-- <button type="button" 
                         class="profilebtn" 
                         id="uploadButton" 
                         data-type="profile_image">
                     Upload Photo
-                </button>
+                </button> -->
             </div>
             <div class="col-12 col-md-3 mb-3">
                 <label class="form-label required">{{ __('global.first_name') }}</label>
                 <input type="text" class="form-control" 
                     name="first_name" id="first_name" 
                     placeholder="{{ __('global.first_name_placeholder') }}"
-                    value="{{ old('first_name', $member->first_name) }}">
+                    value="{{ old('first_name', $member->first_name) }}" disabled>
                 <div class="text-danger error-message" data-error-for="first_name"></div>
             </div>
 
@@ -30,7 +30,7 @@
                 <input type="text" class="form-control" 
                     name="middle_name" id="middle_name" 
                     placeholder="{{ __('global.middle_name_placeholder') }}"
-                    value="{{ old('middle_name', $member->middle_name) }}">
+                    value="{{ old('middle_name', $member->middle_name) }}" disabled>
                 <div class="text-danger error-message" data-error-for="middle_name"></div>
             </div>
 
@@ -39,7 +39,7 @@
                 <input type="text" class="form-control" 
                     name="last_name" id="last_name" 
                     placeholder="{{ __('global.last_name_placeholder') }}"
-                    value="{{ old('last_name', $member->last_name) }}">
+                    value="{{ old('last_name', $member->last_name) }}" disabled>
                 <div class="text-danger error-message" data-error-for="last_name"></div>
             </div>
         </div>
@@ -49,13 +49,13 @@
                 <label class="form-label required">{{ __('global.dob') }}</label>
                 <input type="date" class="form-control" 
                     name="dob" id="dob" 
-                    value="{{ old('dob', $member->dob) }}">
+                    value="{{ old('dob', $member->dob) }}" disabled>
                 <div class="text-danger error-message" data-error-for="dob"></div>
             </div>
 
             <div class="col-12 col-md-6 mb-3">
                 <label class="form-label required">{{ __('global.gender_label') }}</label>
-                <select class="form-control" name="gender" id="gender">
+                <select class="form-control" name="gender" id="gender" disabled>
                     <option value="" disabled>{{ __('global.gender_placeholder') }}</option>
                     @foreach (config('app.gender_options') as $id => $gender)
                         <option value="{{ $id }}" 
@@ -75,7 +75,7 @@
                 <input type="email" class="form-control" 
                     name="email" id="email" 
                     placeholder="{{ __('global.email_placeholder') }}"
-                    value="{{ old('email', $member->email) }}">
+                    value="{{ old('email', $member->email) }}" disabled>
                 <div class="text-danger error-message" data-error-for="email"></div>
             </div>
 
@@ -84,7 +84,7 @@
                 <input type="text" class="form-control" 
                     name="mobile" id="mobile" 
                     placeholder="{{ __('global.mobile_placeholder') }}"
-                    value="{{ old('mobile', $member->mobile) }}">
+                    value="{{ old('mobile', $member->mobile) }}" disabled>
                 <div class="text-danger error-message" data-error-for="mobile"></div>
             </div>
         </div>
@@ -95,7 +95,7 @@
                 <input type="text" class="form-control" 
                     name="residence_address" id="residence_address" 
                     placeholder="{{ __('global.residence_address_placeholder') }}"
-                    value="{{ old('residence_address', $member->residence_address) }}">
+                    value="{{ old('residence_address', $member->residence_address) }}" disabled>
                 <div class="text-danger error-message" data-error-for="residence_address"></div>
             </div>
 
@@ -104,7 +104,7 @@
                 <input type="text" class="form-control" 
                     name="residence_area" id="residence_area" 
                     placeholder="{{ __('global.residence_area_placeholder') }}"
-                    value="{{ old('residence_area', $member->residence_area) }}">
+                    value="{{ old('residence_area', $member->residence_area) }}" disabled>
                 <div class="text-danger error-message" data-error-for="residence_area"></div>
             </div>
 
@@ -113,7 +113,7 @@
                 <input type="text" class="form-control" 
                     name="zipcode" id="zipcode" 
                     placeholder="{{ __('global.zipcode_placeholder') }}"
-                    value="{{ old('zipcode', $member->zipcode) }}">
+                    value="{{ old('zipcode', $member->zipcode) }}" disabled>
                 <div class="text-danger error-message" data-error-for="zipcode"></div>
             </div>
         </div>
@@ -121,7 +121,7 @@
         <div class="row mb-1">
             <div class="col-12 col-md-6 mb-3">
                 <label class="form-label required">{{ __('global.city_label') }}</label>
-                <select class="form-control" name="city" id="city">
+                <select class="form-control" name="city" id="city" disabled>
                     <option disabled>{{ __('global.select_option') }}</option>
                     <option value="city1" {{ old('city', $member->city) == 'city1' ? 'selected' : '' }}>City 1</option>
                     <option value="city2" {{ old('city', $member->city) == 'city2' ? 'selected' : '' }}>City 2</option>
@@ -132,7 +132,7 @@
 
             <div class="col-12 col-md-6 mb-3">
                 <label class="form-label required">{{ __('global.state_label') }}</label>
-                <select class="form-control" name="state" id="state">
+                <select class="form-control" name="state" id="state" disabled>
                     <option disabled>{{ __('global.select_option') }}</option>
                     <option value="state1" {{ old('state', $member->state) == 'state1' ? 'selected' : '' }}>State 1</option>
                     <option value="state2" {{ old('state', $member->state) == 'state2' ? 'selected' : '' }}>State 2</option>
@@ -143,7 +143,7 @@
 
             <div class="col-12 col-md-6 mb-3">
                 <label class="form-label required">{{ __('global.country_label') }}</label>
-                <select class="form-control" name="country" id="country">
+                <select class="form-control" name="country" id="country" disabled>
                     <option disabled>{{ __('global.select_option') }}</option>
                     <option value="country1" {{ old('country', $member->country) == 'country1' ? 'selected' : '' }}>Country 1</option>
                     <option value="country2" {{ old('country', $member->country) == 'country2' ? 'selected' : '' }}>Country 2</option>
@@ -153,39 +153,11 @@
             </div>
         </div>
     </div>
-    <div class="text-end mt-4">
+    <!-- <div class="text-end mt-4">
         <button type="submit" class="btn btn-primary" id="submitBtn">Submit</button>
-    </div>
+    </div> -->
 </form>
-<div class="modal fade" id="cropImageModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-md modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Upload Image</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body d-flex flex-column">
 
-                <!-- Image Preview -->
-                <div class="text-center mb-3" id="imagePreviewContainer" style="display:none;">
-                    <img id="imageToCrop" style="max-width: 100%; border-radius:10px;">
-                </div>
-
-                <!-- Progress Bar -->
-                <div class="progress mb-3" id="uploadProgress" style="display:none;">
-                    <div class="progress-bar" role="progressbar" style="width:0%">0%</div>
-                </div>
-
-                <!-- Controls -->
-                <div class="d-flex justify-content-center gap-2 mt-auto">
-                    <input type="file" id="browseImage" accept="image/*" class="d-none">
-                    <button type="button" id="browseBtn" class="btn btn-secondary">Browse</button>
-                    <button type="button" id="uploadCropped" class="btn btn-primary" disabled>Upload</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 const stepperEditUrl = "{{ route('stepper.update_profile', ['id' => $member->id]) }}";

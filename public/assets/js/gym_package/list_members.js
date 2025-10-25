@@ -38,7 +38,7 @@ $(document).ready(function ()
             // Show "No memberships found" message spanning all columns
             rows = `
                 <tr>
-                    <td colspan="7" class="text-center">No memberships found</td>
+                    <td colspan="7" class="text-center">No Members found</td>
                 </tr>
             `;
         } else {
@@ -49,7 +49,7 @@ $(document).ready(function ()
                         <td>${m.first_name} ${m.middle_name ?? ''} ${m.last_name ?? ''}</td>
                         <td>${m.email}</td>
                         <td>${m.mobile}</td>
-                        <td>${m.membership_name}</td>
+                        
                         <td>${m.action}</td>
                     </tr>
                 `;
@@ -154,7 +154,7 @@ function delete_members(id)
         beforeSend: function () {
             Swal.fire({
                 title: 'Deleting...',
-                text: 'Please wait while we delete the membership.',
+                text: 'Please wait while we delete the member.',
                 allowOutsideClick: false,
                 didOpen: () => {
                     Swal.showLoading();

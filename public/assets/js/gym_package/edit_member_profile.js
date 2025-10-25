@@ -2,19 +2,13 @@ $(document).ready(function() {
 
     // Unique validation rules for membership tab
     const validationRulesMembership = {
-        membership_type: { required: true },
-        joining_date: { required: true },
-        expiry_date: { required: true },
-        amount_paid: { required: true },
+      
         payment_method: { required: true },
         trainer_assigned: { required: true },
     };
 
     const validationMessagesMembership = {
-        membership_type: { required: "Please select membership type" },
-        joining_date: { required: "Please select joining date" },
-        expiry_date: { required: "Please select expiry date" },
-        amount_paid: { required: "Please enter amount paid" },
+      
         payment_method: { required: "Please select payment method" },
         trainer_assigned: { required: "Please select trainer" },
     };

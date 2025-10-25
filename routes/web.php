@@ -53,6 +53,11 @@ Route::get('/access-denied', function () {
     return view('access_denied');
 })->name('access_denied');
 
+Route::get('/view_invoice/{encryptedId}', [LoginController::class, 'view_invoice'])
+    ->name('view_invoice');
+Route::get('/no_internet', function() {
+    return view('no_network');
+})->name('no_internet');
 
 // web.php
 Route::post('/profile/crop-upload', [ProfileController::class, 'cropUpload'])->name('profile.cropUpload');
@@ -60,11 +65,28 @@ Route::middleware(['auth.custom', 'session.timeout','auth.admin'])->group(functi
 {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'list'])->name('list_dashboard');
-    
+    // Edit Admin:-
+    Route::get('/edit_admin/{id}', [ProfileController::class, 'edit_admin'])->name('edit_admin');
     // Members Route:-
     Route::get('/list_member', [GymPackageController::class, 'list'])->name('list_member');
+
+    
+    Route::get('/list_deleted_member', [GymPackageController::class, 'list_deleted_member'])->name('list_deleted_member');
+    Route::get('/list_payment', [GymPackageController::class, 'list_payment'])->name('list_payment');
+    Route::get('/member_payment/{id}', [GymPackageController::class, 'member_payment'])->name('member_payment');
     Route::get('/add_member', [GymPackageController::class, 'add'])->name('add_member');
     Route::get('/edit_members/{id}', [GymPackageController::class, 'edit_admin'])->name('edit_admin_member');
+    Route::get('/add_member_payment/{id}', [GymPackageController::class, 'add_member_payment'])->name('add_member_payment');
+    Route::get('/view_admin_invoice/{encryptedId}', [GymPackageController::class, 'view_admin_invoice'])
+    ->name('view_admin_invoice');
+
+    Route::get('/change_member_password/{id}', [GymPackageController::class, 'change_member_password'])->name('change_member_password');
+
+    //Enquiry
+    Route::get('/list_enquiry', [EnquiryController::class, 'list_enquiry'])->name('list_enquiry'); 
+    Route::get('/list_replied_enquiry', [EnquiryController::class, 'list_replied_enquiry'])->name('list_replied_enquiry'); 
+
+
 
     // Membersip Route:-
     Route::get('/list_membership', [GymMembershipController::class, 'list'])->name('list_membership');
@@ -111,15 +133,40 @@ Route::middleware(['auth.custom', 'session.timeout','auth.admin'])->group(functi
 
     Route::get('/get_membership_name', [GymMembershipController::class, 'get_membership_name'])
     ->name('get_membership_name');
-
+   
     Route::middleware(['web'])->group(function () 
     {
+        Route::post('/update_member_password/{id}', [GymPackageController::class, 'update_member_password'])->name('update_member_password');
         Route::post('/stepper-submit', [GymPackageController::class, 'submit'])->name('stepper.submit');
-   
+        Route::post('/stepper_update_setings/{id}', [GymPackageController::class, 'update_setings'])->name('stepper.update_setings');
+        Route::post('/stepper-update/{id}', [GymPackageController::class, 'update'])->name('stepper.update');
+        Route::get('/members/deleted/fetch', [GymPackageController::class, 'fetchDeletedMemberList'])
+        ->name('fetch_deleted_member_list');
+        Route::post('/activate_member/{id}', [GymPackageController::class, 'activate_member'])->name('activate_member');
         Route::get('/members/fetch', [GymPackageController::class, 'fetchMemberList'])
         ->name('fetch_member_list');
+        Route::get('/fetch_member_list_pending_payment', [GymPackageController::class, 'fetch_member_list_pending_payment'])
+        ->name('fetch_member_list_pending_payment');
         Route::post('/delete_members/{id}', [GymPackageController::class, 'delete_members'])->name('delete_members');
+        Route::get('/fetch_member_payment/{id}', [GymPackageController::class, 'fetch_member_payment'])
+        ->name('fetch_member_payment');
+        Route::post('/submit_member_payment/{id}', [GymPackageController::class, 'submit_member_payment'])->name('submit_member_payment');
+        Route::get('/get_remaining_balance', [GymPackageController::class, 'getRemainingBalance'])
+        ->name('get_remaining_balance');
 
+        Route::post('/import_members', [GymPackageController::class, 'import_members'])->name('import_members');
+        
+        // Edit Admin:-
+        Route::post('/update_admin_profile/{id}', [ProfileController::class, 'update_admin_profile'])->name('update_admin_profile');
+        // Enquiry Route:-
+        Route::get('/fetch_enquiry', [EnquiryController::class, 'fetch_enquiry'])
+        ->name('fetch_enquiry');
+        Route::get('/fetch_replied_enquiry', [EnquiryController::class, 'fetch_replied_enquiry'])
+        ->name('fetch_replied_enquiry');
+        Route::post('/send_enquiry_reply/{id}', [EnquiryController::class, 'send_enquiry_reply'])->name('send_enquiry_reply');
+
+
+        // Memebrship Routes:-
         Route::post('/add_membership', [GymMembershipController::class, 'submit'])->name('add_membership');
         Route::get('/fetch_membership', [GymMembershipController::class, 'fetchMembership'])
         ->name('fetch_membership');
@@ -190,7 +237,7 @@ Route::middleware(['auth.custom', 'session.timeout','auth.member'])->group(funct
     Route::get('/member_my_team', [LoginController::class, 'member_my_team'])->name('member_my_team');
     Route::get('/my_team/{id}', [LoginController::class, 'my_profile'])->name('my_profile');
     Route::get('/member_payments', [LoginController::class, 'member_payments'])->name('member_payments');
-    Route::get('/view_invoice/{id}', [LoginController::class, 'view_invoice'])->name('view_invoice');
+
     Route::get('/member_blogs', [LoginController::class, 'member_blogs'])->name('member_blogs');
     Route::get('/member_blogs_details/{id}', [LoginController::class, 'member_blogs_details'])->name('member_blogs_details');
     Route::get('/member_gallary', [LoginController::class, 'member_gallary'])->name('member_gallary');
@@ -205,9 +252,9 @@ Route::middleware(['auth.custom', 'session.timeout','auth.member'])->group(funct
     Route::get('/fetch_member_payments', [LoginController::class, 'fetch_member_payments'])->name('fetch_member_payments');
 
 
-    Route::post('/stepper-update/{id}', [GymPackageController::class, 'update'])->name('stepper.update');
+
     Route::post('/stepper_update_profile/{id}', [GymPackageController::class, 'update_profile'])->name('stepper.update_profile');
-    Route::post('/stepper_update_setings/{id}', [GymPackageController::class, 'update_setings'])->name('stepper.update_setings');
+   
     Route::post('/save-user-preference', [LoginController::class, 'saveUserPreference'])->name('save_user_preference');
     Route::get('/fetch_member_blogs', [LoginController::class, 'fetch_member_blogs'])->name('fetch_member_blogs');
     Route::get('/fetch_member_gallary', [LoginController::class, 'fetch_member_gallary'])->name('fetch_member_gallary');

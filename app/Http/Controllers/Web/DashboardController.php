@@ -16,24 +16,30 @@ use App\Models\Blog;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Gallery;
 use App\Models\Payment;
+use App\Models\Membership;
+
 
 class DashboardController extends Controller
 {
     public function list()
     {
-        $members = DB::table('tbl_gym_members')
-        ->select('*')
+        $members = GymMember::with(['membership', 'user'])
         ->where('is_deleted', '!=', 9)
+        ->whereHas('user', function ($query) {
+            $query->where('is_admin', '!=', 1);
+        })
         ->count();
+    
 
         $membership = DB::table('tbl_gym_membership')
         ->select('*')
-        ->where('is_deleted', '!=', 9)
+        ->where('is_deleted', '=', "0")
         ->count();
 
         $trainer = DB::table('tbl_trainer')
         ->select('*')
         ->where('is_deleted', '!=', 9)
+        ->where('is_active', '=', 1)
         ->count();
         // Controller
         $years = DB::table('tbl_gym_members')

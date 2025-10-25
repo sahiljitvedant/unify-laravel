@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Crypt; 
-
+use Carbon\Carbon;
 class PolicyController extends Controller
 {
     public function list()
@@ -20,73 +20,7 @@ class PolicyController extends Controller
        
     }
 
-    public function fetch_trainer_list(Request $request)
-    {
-        // dd($request->all());
-        $query = DB::table('tbl_trainer')
-            ->select('*')
-            ->where('is_deleted', '!=', 9);
-
-        // Apply filters
-        if ($request->filled('active')) {
-            $query->where('is_active', $request->active);
-        }
-
-        // if ($request->filled('trainer')) {
-        //     // Convert 1 => 'yes', 0 => 'no'
-        //     $trainerValue = $request->trainer == 1 ? 'yes' : 'no';
-        //     $query->where('trainer_included', $trainerValue);
-        // }
-
-        if ($request->filled('trainerName')) {
-            $query->where('trainer_name', '=', $request->trainerName);
-        }
-
-        if ($request->filled('joiningDate')) {
-            $query->where('joining_date', '=', $request->joiningDate);
-        }
-
-        // Sorting
-        $allowedSorts = [
-            'id',
-            'trainer_name',
-            'joining_date',
-            'expiry_date',
-            'is_active',
-            'created_at'
-        ];
-
-        $sort = $request->get('sort', 'id');
-        $direction = $request->get('order', 'desc');
-
-        if (!in_array($sort, $allowedSorts)) {
-            $sort = 'id';
-        }
-        if (!in_array(strtolower($direction), ['asc', 'desc'])) {
-            $direction = 'desc';
-        }
-
-        $query->orderBy($sort, $direction);
-
-        // Pagination
-        $trainer = $query->paginate(10);
-
-        // Add action + encrypted_id
-        $trainer->getCollection()->transform(function ($row) {
-            $encryptedId = Crypt::encryptString($row->id);
-            $row->encrypted_id = $encryptedId;
-            $row->action = '
-                <a href="'.route('edit_trainer', $encryptedId).'" class="btn btn-sm" title="Edit">
-                    <i class="bi bi-pencil-square"></i>
-                </a>
-                <button type="button" class="btn btn-sm" onclick="deleteMembershipById('.$row->id.')">
-                    <i class="bi bi-trash"></i>
-                </button>';
-            return $row;
-        });
-
-        return response()->json($trainer);
-    }
+   
     public function add()
     { 
         // // dd(1);
@@ -101,6 +35,7 @@ class PolicyController extends Controller
 
     public function submit(Request $request)
     {
+        $now = Carbon::now(); 
         // Only get the description
         $policy_data = $request->only(['policy_description']);
 
@@ -127,7 +62,8 @@ class PolicyController extends Controller
                 DB::table('tbl_policy')
                     ->where('id', $existingPolicy->id)
                     ->update([
-                        'description' => $policy_data['policy_description'] // will save HTML
+                        'description' => $policy_data['policy_description'] ,
+                        'updated_at' => $now,// will save HTML
                     ]);
 
                 $message = 'Policy updated successfully';
@@ -135,7 +71,9 @@ class PolicyController extends Controller
             } else {
                 // Insert new record
                 $policy_id = DB::table('tbl_policy')->insertGetId([
-                    'description' => $policy_data['policy_description']
+                    'description' => $policy_data['policy_description'],
+                    'created_at' => $now, // set created_at
+                    'updated_at' => $now, // set updated_at
                 ]);
 
                 $message = 'Policy added successfully';

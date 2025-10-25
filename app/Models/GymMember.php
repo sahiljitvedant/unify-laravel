@@ -43,6 +43,8 @@ class GymMember extends Model
         'current_weight',
         'additional_notes',
         'profile_image',
+        'manual_payment_flag',
+        'cron_flag'
     ];
 
     // Casts for better handling
@@ -59,5 +61,8 @@ class GymMember extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
+    public function membership()
+    {
+        return $this->belongsTo(Membership::class, 'membership_type'); // membership_type is foreign key
+    }
 }

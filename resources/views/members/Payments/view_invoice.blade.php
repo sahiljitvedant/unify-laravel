@@ -28,7 +28,7 @@
         <div class="row mb-3">
             <div class="col-md-6">
                 <p class="mb-1 fw-bold  text-theme font_size">Bill to:</p>
-                <p class="mb-0 font_size">{{ Auth::user()->first_name ?? 'N/A' }} {{ Auth::user()->last_name ?? '' }}</p> 
+                <p class="mb-0 font_size">{{ Auth::user()->name ?? 'N/A' }}</p> 
                 <p class="mb-0 font_size">{{ Auth::user()->email ?? '' }}</p>
             </div>
         </div>
@@ -67,7 +67,7 @@
                     </tr>
                     <tr class="fw-bold">
                         <td colspan="4" class="text-end">Balance</td>
-                        <td class="text-end">₹0.00</td>
+                        <td class="text-end">₹{{ number_format($payment->total_amount_remaining, 2) }}</td>
                     </tr>
                 </tfoot>
             </table>

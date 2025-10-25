@@ -3,7 +3,7 @@ $(document).ready(function ()
 {
    
     let sortColumn = 'id';
-    let sortOrder = 'asc';
+    let sortOrder = 'desc';
 
     function fetchData(page = 1) {
         $("#loader").show();

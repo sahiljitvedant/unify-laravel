@@ -62,27 +62,60 @@ $(document).ready(function () {
     });
 
     // --- Form Validation ---
+    // function validateForm() {
+    //     let isValid = true;
+    //     $('.error-message').text('');
+
+    //     form.find(':input').each(function () {
+    //         const name = $(this).attr('name');
+    //         const value = $(this).val();
+    //         const rules = validationRules[name];
+    //         const messages = validationMessages[name];
+    //         const errorDiv = $(`.error-message[data-error-for="${name}"]`);
+
+    //         if (!rules) return true; // skip fields without rules
+
+    //         if (rules.required && (!value || value.trim() === '')) {
+    //             errorDiv.text(messages);
+    //             isValid = false;
+    //         }
+    //     });
+
+    //     return isValid;
+    // }
     function validateForm() {
         let isValid = true;
         $('.error-message').text('');
-
+    
+        let firstEmpty = null;
+    
         form.find(':input').each(function () {
             const name = $(this).attr('name');
             const value = $(this).val();
             const rules = validationRules[name];
             const messages = validationMessages[name];
             const errorDiv = $(`.error-message[data-error-for="${name}"]`);
-
-            if (!rules) return true; // skip fields without rules
-
+    
+            if (!rules) return true;
+    
             if (rules.required && (!value || value.trim() === '')) {
                 errorDiv.text(messages);
                 isValid = false;
+    
+                if (!firstEmpty) firstEmpty = $(this); // store first empty field
             }
         });
-
+    
+        if (firstEmpty) {
+            $('html, body').animate({
+                scrollTop: firstEmpty.offset().top - 100
+            }, 600);
+            firstEmpty.focus();
+        }
+    
         return isValid;
     }
+    
 
     // --- AJAX Submit ---
     submitBtn.off('click').on('click', function (e) {
@@ -105,11 +138,29 @@ $(document).ready(function () {
                 submitBtn.prop('disabled', true).text('Submitting...');
             },
             success: function (response) {
-                alert('Profile updated successfully!');
+                // alert('Profile updated successfully!');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Form Submitted!',
+                    text: 'Your Profile has been updated successfully.',
+                    confirmButtonText: 'OK',
+                    allowOutsideClick: false
+                }).then(() => {
+                    window.location.href = "/member_dashboard";
+                });;
             },
             error: function (xhr) {
                 console.log(xhr.responseText);
-                alert('An error occurred. Check console for details.');
+                // alert('An error occurred. Check console for details.');
+                let res = xhr.responseJSON;
+                let message = res && res.message ? res.message : 'An error occurred. Check console for details.';
+                
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops!',
+                    text: message,
+                    confirmButtonText: 'OK'
+                });
             },
             complete: function () {
                 submitBtn.prop('disabled', false).text('Submit');

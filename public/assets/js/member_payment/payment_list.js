@@ -41,11 +41,13 @@ function renderTable(data) {
             </div>
         </div>
     `;
-    } else {
+    } 
+    else 
+    {
         html += `<div class="row g-3">`; // start row
 
         data.forEach(p => {
-            let viewUrl = `/view_invoice/${p.id}`;
+            let viewUrl = `/view_invoice/${p.encoded_id}`;
             let pdfUrl = `${window.assetBase}storage/invoices/invoice_${p.invoice_number}.pdf`;
 
             html += `
@@ -86,7 +88,7 @@ function renderPagination(data) {
     const last = data.last_page;
 
     if (last > 1) 
-        {
+    {
             // First button
         
 
@@ -134,12 +136,10 @@ function renderPagination(data) {
             //             <i class="bi bi-chevron-right"></i>
             //         </a>
             //     </li>`;
-
-        
         }
 
         $("#paginationLinks").html(paginationHTML);
-    }
+}
 
 
 // Pagination click
@@ -181,8 +181,6 @@ $(document).ready(function() {
     // Initial load
     fetchPayments();
 });
-
-
 // Initial load
 $(document).ready(function() { fetchPayments(); });
 

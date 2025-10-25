@@ -76,7 +76,7 @@
                                     </a>
                                 </th>
                                 <th>
-                                    <a href="#" class="sort-link" data-column="membership_name">
+                                    <a href="#" class="sort-link" data-column="question">
                                         Name
                                         <span class="sort-icons">
                                             <i class="asc">▲</i>

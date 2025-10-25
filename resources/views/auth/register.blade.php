@@ -7,7 +7,7 @@
 @section('right-section')
     <div class="d-flex flex-column align-items-center w-100 px-4">
         <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" 
-        style="height: 65px; width:200px; object-fit:cover; border-radius:10px; border:1px solid #0B1061" class="mt-2">
+        style="height: 65px; width:180px; object-fit:cover; border-radius:10px; border:1px solid #0B1061" class="mt-2">
 
         <div class="login-box mt-4">
             <h5 class="text-center mb-4">Register</h5>

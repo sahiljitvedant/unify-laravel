@@ -21,8 +21,8 @@
                 <input type="text" class="form-control" 
                     name="first_name" id="first_name" 
                     placeholder="{{ __('global.first_name_placeholder') }}"
-                    value="{{ old('first_name', $member->first_name) }}">
-                <div class="text-danger error-message" data-error-for="first_name"></div>
+                    value="{{ old('first_name', $member->first_name) }}" required>
+                <div class="text-danger error-message" data-error-for="first_name" ></div>
             </div>
 
             <div class="col-12 col-md-3 mb-3">
@@ -30,8 +30,8 @@
                 <input type="text" class="form-control" 
                     name="middle_name" id="middle_name" 
                     placeholder="{{ __('global.middle_name_placeholder') }}"
-                    value="{{ old('middle_name', $member->middle_name) }}">
-                <div class="text-danger error-message" data-error-for="middle_name"></div>
+                    value="{{ old('middle_name', $member->middle_name) }}" required>
+                <div class="text-danger error-message" data-error-for="middle_name" ></div>
             </div>
 
             <div class="col-12 col-md-3 mb-3">
@@ -39,7 +39,7 @@
                 <input type="text" class="form-control" 
                     name="last_name" id="last_name" 
                     placeholder="{{ __('global.last_name_placeholder') }}"
-                    value="{{ old('last_name', $member->last_name) }}">
+                    value="{{ old('last_name', $member->last_name) }}" required>
                 <div class="text-danger error-message" data-error-for="last_name"></div>
             </div>
         </div>
@@ -49,7 +49,7 @@
                 <label class="form-label required">{{ __('global.dob') }}</label>
                 <input type="date" class="form-control" 
                     name="dob" id="dob" 
-                    value="{{ old('dob', $member->dob) }}">
+                    value="{{ old('dob', $member->dob) }}" required>
                 <div class="text-danger error-message" data-error-for="dob"></div>
             </div>
 
@@ -75,7 +75,7 @@
                 <input type="email" class="form-control" 
                     name="email" id="email" 
                     placeholder="{{ __('global.email_placeholder') }}"
-                    value="{{ old('email', $member->email) }}">
+                    value="{{ old('email', $member->email) }}" required>
                 <div class="text-danger error-message" data-error-for="email"></div>
             </div>
 
@@ -84,7 +84,7 @@
                 <input type="text" class="form-control" 
                     name="mobile" id="mobile" 
                     placeholder="{{ __('global.mobile_placeholder') }}"
-                    value="{{ old('mobile', $member->mobile) }}">
+                    value="{{ old('mobile', $member->mobile) }}" required>
                 <div class="text-danger error-message" data-error-for="mobile"></div>
             </div>
         </div>
@@ -95,7 +95,7 @@
                 <input type="text" class="form-control" 
                     name="residence_address" id="residence_address" 
                     placeholder="{{ __('global.residence_address_placeholder') }}"
-                    value="{{ old('residence_address', $member->residence_address) }}">
+                    value="{{ old('residence_address', $member->residence_address) }}" required>
                 <div class="text-danger error-message" data-error-for="residence_address"></div>
             </div>
 
@@ -104,7 +104,7 @@
                 <input type="text" class="form-control" 
                     name="residence_area" id="residence_area" 
                     placeholder="{{ __('global.residence_area_placeholder') }}"
-                    value="{{ old('residence_area', $member->residence_area) }}">
+                    value="{{ old('residence_area', $member->residence_area) }}" required>
                 <div class="text-danger error-message" data-error-for="residence_area"></div>
             </div>
 
@@ -113,7 +113,7 @@
                 <input type="text" class="form-control" 
                     name="zipcode" id="zipcode" 
                     placeholder="{{ __('global.zipcode_placeholder') }}"
-                    value="{{ old('zipcode', $member->zipcode) }}">
+                    value="{{ old('zipcode', $member->zipcode) }}" required>
                 <div class="text-danger error-message" data-error-for="zipcode"></div>
             </div>
         </div>
@@ -191,9 +191,7 @@
 const stepperEditUrl = "{{ route('stepper.update_profile', ['id' => $member->id]) }}";
 const uploadUrl = "{{ route('profile.cropUpload') }}";
 </script>
-
 <script src="{{ asset('assets/js/gym_package/edit_package.js') }}"></script>
-
 <script src="{{ asset('assets/js/global/image_crop.js') }}"></script>
 <script>
 // Profile Image Preview JS:-
@@ -228,6 +226,27 @@ $(document).ready(function ()
         $(this).addClass('d-none');
     });
 });
+$('#multiStepForm').on('submit', function(e) {
+    let firstEmpty = $(this).find('input[required], select[required], textarea[required]').filter(function() {
+        return !$(this).val();
+    }).first();
+
+    if (firstEmpty.length) {
+        $('html, body').animate({
+            scrollTop: firstEmpty.offset().top - 100
+        }, 600);
+
+        firstEmpty.focus();
+
+        // Optional: highlight the empty field
+        firstEmpty.addClass('border border-danger');
+        setTimeout(() => firstEmpty.removeClass('border border-danger'), 3000);
+
+        e.preventDefault();
+    }
+});
+
+
 </script>
 <style>
     #submitBtn

@@ -39,12 +39,7 @@ class FAQController extends Controller
         // Sorting
         $allowedSorts = [
             'id',
-            'membership_name',
-            'duration_in_days',
-            'price',
-            'trainer_included',
-            'is_active',
-            'created_at'
+            'question'
         ];
 
         $sort = $request->get('sort', 'id');
@@ -105,12 +100,8 @@ class FAQController extends Controller
         // Sorting
         $allowedSorts = [
             'id',
-            'membership_name',
-            'duration_in_days',
-            'price',
-            'trainer_included',
-            'is_active',
-            'created_at'
+            'question',
+           
         ];
 
         $sort = $request->get('sort', 'id');

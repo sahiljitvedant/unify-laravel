@@ -87,4 +87,5 @@ return [
     'additional_notes_label' => 'Additional Notes',
     'additional_notes_placeholder' => 'Any special notes or requirements',
     'select_option' => 'Select an option',
+    'online'=>'Online',
 ];

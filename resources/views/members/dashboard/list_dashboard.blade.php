@@ -207,18 +207,18 @@
     align-items: center;
     justify-content: center;
     position: relative;
-}
+    }
 
-.progress-circle span.progress-value {
-    position: absolute;
-    font-size: 12px;
-    font-weight: bold;
-    color: #0b1061;
-}
+    .progress-circle span.progress-value {
+        position: absolute;
+        font-size: 12px;
+        font-weight: bold;
+        color: #0b1061;
+    }
 
-   .swiper.mySwiper:empty {
-    display: none;
-}
+    .swiper.mySwiper:empty {
+        display: none;
+    }
 
     .blog_text ,.blog_text_date, .memebr_name
     {
@@ -273,30 +273,7 @@
         background:#c7c7c7;
     }
 
-    .circle {
-        position: relative;
-        width: 60px;      /* match smaller size */
-        height: 60px;
-        background: conic-gradient(#0B1061 0deg 288deg, #e9ecef 288deg 360deg);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .inside-circle {
-        position: absolute;
-        background: #fff;
-        width: 46px;      /* smaller inner circle */
-        height: 46px;
-        border-radius: 50%;
-        font-weight: bold;
-        font-size: 0.8rem;  /* smaller font to fit */
-        color: #0B1061;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+    
     .swiper {
         width: 100%;
         margin-bottom: 0;
@@ -350,11 +327,11 @@
     }
 
     .swiper-slide .card:hover img {
-        opacity: 0.6; /* reduce image opacity on hover */
+        opacity: 0.6;
     }
 
     .swiper-slide .card:hover .card-body {
-        opacity: 1; /* show text on hover */
+        opacity: 1; 
     }
 
     .swiper-button-next,
@@ -384,7 +361,6 @@
   
     @media (max-width: 768px) 
     {
-        /* Title fully left aligned */
         h4.text-theme {
             text-align: left !important;
             margin-left: 0 !important;
@@ -407,8 +383,6 @@
         {
             font-size:12px;
         }
-
-        
     }
     .swiper-slide {
         display: flex;
@@ -416,8 +390,8 @@
     }
 
     .swiper-slide .card {
-        width: 100%;        /* let Swiper control the width */
-        height: 220px;      /* default card height */
+        width: 100%;       
+        height: 220px;   
         border: none;
         border-radius: 15px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -457,14 +431,13 @@
     .swiper-slide .card:hover .card-body {
         opacity: 1;
     }
-
 </style>
-
 @push('scripts')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 <script>
-    const swiper = new Swiper(".mySwiper", {
+    const swiper = new Swiper(".mySwiper", 
+    {
         slidesPerView: 3,
         spaceBetween: 30,
         loop: true,
@@ -482,11 +455,10 @@
             992: { slidesPerView: 3 }
         }
     });
-    document.querySelectorAll('.progress-circle').forEach(circle => {
-    const percentage = circle.dataset.percentage;
-    circle.style.setProperty('--percentage', percentage);
-});
-
+    document.querySelectorAll('.progress-circle').forEach(circle => 
+    {
+        const percentage = circle.dataset.percentage;
+        circle.style.setProperty('--percentage', percentage);
+    });
 </script>
-
 @endpush

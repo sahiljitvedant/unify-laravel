@@ -84,7 +84,7 @@
 
             <div style="margin-bottom: 10px;">
                 <p class="mb-1 fw-bold text-theme font_size">Bill to:</p>
-                <p class="mb-0 font_size">{{ Auth::user()->first_name ?? 'N/A' }} {{ Auth::user()->last_name ?? '' }}</p> 
+                <p class="mb-0 font_size">{{ Auth::user()->name ?? 'N/A' }}</p> 
                 <p class="mb-0 font_size">{{ Auth::user()->email ?? '' }}</p>
             </div>
 
@@ -104,7 +104,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{{ $payment->plan_name }}</td>
+                        <td class="text-end">   {{ $payment->membership ? $payment->membership->membership_name : 'N/A' }}</td>
                         <td class="text-end">1</td>
                         <td class="text-end">Rs.{{ number_format($payment->amount, 2) }}</td>
                         <td class="text-end">Rs.0.00</td>

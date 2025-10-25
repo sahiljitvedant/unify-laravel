@@ -63,12 +63,6 @@
                 </div>
             </div>
 
-            <div class="row g-3 mt-2">
-                
-
-                
-            </div>
-
            
         </div>
 

@@ -3,7 +3,7 @@
 @section('right-section')
 <div class="d-flex flex-column align-items-center w-100 px-4">
     <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" 
-         style="height: 65px; width:200px; object-fit:cover; border-radius:10px; border:1px solid #0B1061" class="mt-2">
+         style="height: 65px; width:180px; object-fit:cover; border-radius:10px; border:1px solid #0B1061" class="mt-2">
 
     <div class="login-box mt-4">
         <h5 class="text-center mb-4">Login</h5>
@@ -26,10 +26,10 @@
                 </div>
                 <span class="text-danger error-password error-message"></span>
             </div>
-
-
+            <span class="text-danger error-all error-message"></span>
+      
             <button type="submit" id="submitBtn" class="btn login_btn w-100">Submit</button>
-
+            <small class="text-muted admin_pass mb-2">In case, If you forgot password, kindly contact the administrator.</small>
             <div class="register-link">
                 <p>New user? <a href="{{ url('/register') }}">Register here</a></p>
             </div>
@@ -43,11 +43,13 @@
 
 <script>
     let previousRequest = null;
-    var addValidationRules = {
+    var addValidationRules = 
+    {
         'email': { 'required': true, 'email': true, 'maxlength': 100 },
         'password': { 'required': true, 'minlength': 6, 'maxlength': 10 }
     };
-    var addValidationMessages = {
+    var addValidationMessages = 
+    {
         'email': {
             'required': 'Email field is required',
             'email': 'Please enter a valid email address',
@@ -59,76 +61,82 @@
             'maxlength': 'Password cannot exceed 10 characters'
         }
     };
-    $(document).ready(function () {
-    $('#login_post').validate({
-        rules: addValidationRules,
-        messages: addValidationMessages,
-        errorPlacement: function (error, element) {
-            $(".error-" + element.attr("name")).html(error);
-        },
-        submitHandler: function (form) {
-            let formData = new FormData(form);
+    $(document).ready(function () 
+    {
+        $('#login_post').validate({
+            rules: addValidationRules,
+            messages: addValidationMessages,
+            errorPlacement: function (error, element) 
+            {
+                $(".error-" + element.attr("name")).html(error);
+            },
+            submitHandler: function (form) 
+            {
+                let formData = new FormData(form);
 
-            // Append CSRF token to form data
-            formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
+                // Append CSRF token to form data
+                formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
 
-            // Disable the submit button to prevent multiple clicks
-            let $submitBtn = $(form).find('button[type="submit"]');
-            $submitBtn.prop('disabled', true);
+                // Disable the submit button to prevent multiple clicks
+                let $submitBtn = $(form).find('button[type="submit"]');
+                $submitBtn.prop('disabled', true);
 
-            if (previousRequest) return false;
+                if (previousRequest) return false;
 
-            previousRequest = $.ajax({
-                url: '{{ url("/login") }}',
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                
-                beforeSend: function () {
-                    Swal.fire({
-                        title: 'Please wait...',
-                        allowOutsideClick: false,
-                        didOpen: () => Swal.showLoading()
-                    });
-                },
-
-                success: function (response) {
-                    Swal.close();
-
-                    if (response.status === 'success' && response.redirect) {
-                        window.location.href = response.redirect; // conditional redirect
-                    } else {
+                previousRequest = 
+                $.ajax
+                ({
+                    url: '{{ url("/login") }}',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    
+                    beforeSend: function () {
                         Swal.fire({
-                            icon: 'error',
-                            title: 'Login Failed',
-                            text: response.message || 'Unexpected error occurred.',
+                            title: 'Please wait...',
+                            allowOutsideClick: false,
+                            didOpen: () => Swal.showLoading()
                         });
+                    },
+
+                    success: function (response) 
+                    {
+                        Swal.close();
+
+                        if (response.status === 'success' && response.redirect) {
+                            window.location.href = response.redirect; // conditional redirect
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Login Failed',
+                                text: response.message || 'Unexpected error occurred.',
+                            });
+                            $submitBtn.prop('disabled', false);
+                        }
+                    },
+
+                    error: function (xhr) 
+                    {
+                        Swal.close();
                         $submitBtn.prop('disabled', false);
+
+                        if (xhr.status === 422) {
+                            let response = xhr.responseJSON;
+                            $(".error-all").text(response.message);
+                        } else {
+                            console.log('Error occurred');
+                        }
+                    },
+
+                    complete: function () 
+                    {
+                        previousRequest = null;
                     }
-                },
-
-                error: function (xhr) {
-                    Swal.close();
-                    $submitBtn.prop('disabled', false);
-
-                    if (xhr.status === 422) {
-                        let response = xhr.responseJSON;
-                        $(".error-email").text(response.message);
-                    } else {
-                        console.log('Error occurred');
-                    }
-                },
-
-                complete: function () {
-                    previousRequest = null;
-                }
-            });
-        }
+                });
+            }
+        });
     });
-});
-
-
     $(document).ready(function() 
     {
         $('#togglePassword').click(function() {

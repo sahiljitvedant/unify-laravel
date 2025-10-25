@@ -45,6 +45,12 @@
 </head>
 
 <body>
+    <div id="noInternetOverlay" style="display:none;">
+        <div class="offline-box">
+            <h1>😞 No Internet Connection</h1>
+            <p>Please check your connection and try again.</p>
+        </div>
+    </div>
     @php
         $hideSidebarRoutes = ['login_get', 'register_get', 'access_denied'];
     @endphp
@@ -133,7 +139,7 @@
                 <li>
                     <a href="{{ route('member_subscription') }}" 
                         class="{{ request()->routeIs('member_subscription') ? 'active' : '' }}">
-                        <i class="bi bi-card-checklist"></i><span>Subsription</span>
+                        <i class="bi bi-card-checklist"></i><span>Subscription</span>
                     </a>
                 </li>
                 <li>
@@ -228,8 +234,27 @@
 
 
 <script>
-    
-</script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const overlay = document.getElementById('noInternetOverlay');
+
+            function showOfflineMessage() {
+                overlay.style.display = 'flex';
+            }
+
+            function hideOfflineMessage() {
+                overlay.style.display = 'none';
+            }
+
+            // Attach listeners
+            window.addEventListener('offline', showOfflineMessage);
+            window.addEventListener('online', hideOfflineMessage);
+
+            // Check immediately on page load
+            if (!navigator.onLine) {
+                showOfflineMessage();
+            }
+        });
+    </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('assets/js/gym_membership/app.js') }}"></script>
     @stack('scripts')
@@ -365,4 +390,35 @@
         }
     }
 
+</style>
+<style>
+    #noInternetOverlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(248,249,250,0.95);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        font-family: sans-serif;
+    }
+    .offline-box {
+        background: #f2f2f2;
+        padding: 40px 50px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+    .offline-box h1 {
+        font-size: 32px;
+        color: #0B1061;
+        margin-bottom: 10px;
+    }
+    .offline-box p {
+        font-size: 18px;
+        color: #555;
+    }
 </style>

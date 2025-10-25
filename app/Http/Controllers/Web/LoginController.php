@@ -23,7 +23,7 @@ use App\Models\Blog;
 use App\Models\Gallery;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
-
+use App\Models\Membership;
 
 class LoginController extends Controller
 {
@@ -268,37 +268,56 @@ class LoginController extends Controller
     }
 
 
+    // public function member_subscription()
+    // {
+
+    //     $user=Auth::User();
+    //     // dd($user);
+    //     $memberships = DB::table('tbl_gym_membership')
+    //     ->where('is_active', "1")
+    //     ->where('is_deleted', "0")
+    //     ->orderBy('price', 'asc')
+    //     ->get();
+
+    //     // dd($memberships);
+
+    //     $currentSubscription = DB::table('tbl_payments')
+    //     ->where('user_id', Auth::id())
+    //     ->where('status', 'success')
+    //     ->orderBy('amount', 'desc')
+    //     ->first();
+    //     // dd( $currentSubscription);
+
+    //     // Map facility IDs to names
+    //     $facilityNames = [
+    //         1 => 'Cardio',
+    //         2 => 'Yoga',
+    //         3 => 'Zumba',
+    //         4 => 'Steam Bath',
+    //         5 => 'Swimming Pool',
+    //         6 => 'Sauna',
+    //         // add more as needed
+    //     ];
+
+    //     return view('members.Subscriptions.member_subscription', compact('memberships','currentSubscription','facilityNames'));
+ 
+    // }
     public function member_subscription()
     {
-        $memberships = DB::table('tbl_gym_membership')
-        ->where('is_active', 1)
-        ->where('is_deleted', 1)
-        ->orderBy('price', 'asc')
-        ->get();
+        $user = Auth::user();
+        $latestPayment = Payment::with('membership')
+                        ->where('user_id', $user->id)
+                        ->latest('id')
+                        ->first();
+        
+        // dd($latestPayment);
+        $memberships = Membership::all();
 
-        // dd($memberships);
-
-        $currentSubscription = DB::table('tbl_payments')
-        ->where('user_id', Auth::id())
-        ->where('status', 'success')
-        ->orderBy('amount', 'desc')
-        ->first();
-        // dd( $currentSubscription);
-
-        // Map facility IDs to names
-        $facilityNames = [
-            1 => 'Cardio',
-            2 => 'Yoga',
-            3 => 'Zumba',
-            4 => 'Steam Bath',
-            5 => 'Swimming Pool',
-            6 => 'Sauna',
-            // add more as needed
-        ];
-
-        return view('members.Subscriptions.member_subscription', compact('memberships','currentSubscription','facilityNames'));
- 
+        return view('members.Subscriptions.member_subscription', compact('memberships', 'latestPayment'));
     }
+    
+
+    
     public function createOrder(Request $request)
     {
         $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
@@ -344,6 +363,70 @@ class LoginController extends Controller
  
 
  
+    // public function verifyPayment(Request $request)
+    // {
+    //     $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+
+    //     try {
+    //         // 1️⃣ Verify Razorpay signature
+    //         $attributes = [
+    //             'razorpay_order_id'   => $request->order_id,
+    //             'razorpay_payment_id' => $request->payment_id,
+    //             'razorpay_signature'  => $request->signature
+    //         ];
+
+    //         $api->utility->verifyPaymentSignature($attributes);
+
+    //         // 2️⃣ Fetch payment details from Razorpay
+    //         $razorpayPayment = $api->payment->fetch($request->payment_id);
+    //         $gatewayMethod   = $razorpayPayment->method ?? 'unknown';
+
+    //         // 3️⃣ Update existing payment record
+    //         // $payment = Payment::where('order_id', $request->order_id)->first();
+    //         $payment = Payment::with('membership')->where('order_id', $request->order_id)->first();
+    //         if (!$payment) {
+    //             return response()->json([
+    //                 'status'  => 'error',
+    //                 'message' => 'Payment record not found'
+    //             ]);
+    //         }
+
+    //         $payment->update([
+    //             'payment_id'     => $request->payment_id,
+    //             'signature'      => $request->signature,
+    //             'gateway'        => $gatewayMethod,
+    //             'payment_status' => 2,           // 2 = Completed
+    //             'status'         => 'success',   // enum tracking
+    //         ]);
+        
+    //         // 4️⃣ Generate PDF invoice
+    //         $pdf = Pdf::loadView('members.Payments.invoice_pdf', [
+    //             'payment' => $payment,
+    //             'plan_name' => $payment->membership ? $payment->membership->membership_name : 'N/A'
+    //         ]);
+
+    //         // 5️⃣ Save to storage/app/public/invoices/
+    //         $fileName = 'invoice_' . $payment->invoice_number . '.pdf';
+    //         $path = 'public/invoices/' . $fileName;
+    //         Storage::put($path, $pdf->output());
+
+    //         // Optional: store invoice path in DB
+    //         $payment->update(['invoice_path' => 'storage/invoices/' . $fileName]);
+
+    //         return response()->json([
+    //             'status'  => 'success',
+    //             'payment' => $payment,
+    //             'plan_name' => $payment->membership ? $payment->membership->membership_name : null,
+    //             'pdf_url' => asset('storage/invoices/' . $fileName)
+    //         ]);
+
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'status'  => 'error',
+    //             'message' => $e->getMessage(),
+    //         ]);
+    //     }
+    // }
     public function verifyPayment(Request $request)
     {
         $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
@@ -362,8 +445,8 @@ class LoginController extends Controller
             $razorpayPayment = $api->payment->fetch($request->payment_id);
             $gatewayMethod   = $razorpayPayment->method ?? 'unknown';
 
-            // 3️⃣ Update existing payment record
-            $payment = Payment::where('order_id', $request->order_id)->first();
+            // 3️⃣ Find existing payment record
+            $payment = Payment::with('membership')->where('order_id', $request->order_id)->first();
 
             if (!$payment) {
                 return response()->json([
@@ -372,25 +455,37 @@ class LoginController extends Controller
                 ]);
             }
 
+            // 4️⃣ Calculate total paid and remaining for this user + plan
+            $previousPaid = Payment::where('user_id', $payment->user_id)
+                ->where('plan_id', $payment->plan_id)
+                ->where('status', 'success')
+                ->sum('amount');
+
+            $newTotalPaid = $previousPaid + $payment->amount;
+            $planTotalAmount = $payment->membership->price ?? 0; // assuming your Plan model has 'price'
+
+            $remaining = max($planTotalAmount - $newTotalPaid, 0);
+
+            // 5️⃣ Update payment record
             $payment->update([
-                'payment_id'     => $request->payment_id,
-                'signature'      => $request->signature,
-                'gateway'        => $gatewayMethod,
-                'payment_status' => 2,           // 2 = Completed
-                'status'         => 'success',   // enum tracking
+                'payment_id'              => $request->payment_id,
+                'signature'               => $request->signature,
+                'gateway'                 => $gatewayMethod,
+                'payment_status'          => 2,           // 2 = Completed
+                'status'                  => 'success',
+                'total_amount_paid'       => $newTotalPaid,
+                'total_amount_remaining'  => $remaining,
             ]);
-        
-            // 4️⃣ Generate PDF invoice
+
+            // 6️⃣ Generate PDF invoice
             $pdf = Pdf::loadView('members.Payments.invoice_pdf', [
                 'payment' => $payment
             ]);
 
-            // 5️⃣ Save to storage/app/public/invoices/
             $fileName = 'invoice_' . $payment->invoice_number . '.pdf';
             $path = 'public/invoices/' . $fileName;
             Storage::put($path, $pdf->output());
 
-            // Optional: store invoice path in DB
             $payment->update(['invoice_path' => 'storage/invoices/' . $fileName]);
 
             return response()->json([
@@ -406,80 +501,6 @@ class LoginController extends Controller
             ]);
         }
     }
-//     public function verifyPayment(Request $request)
-// {
-//     $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
-
-//     try {
-//         // 1️⃣ Verify Razorpay signature
-//         $attributes = [
-//             'razorpay_order_id'   => $request->order_id,
-//             'razorpay_payment_id' => $request->payment_id,
-//             'razorpay_signature'  => $request->signature
-//         ];
-
-//         $api->utility->verifyPaymentSignature($attributes);
-
-//         // 2️⃣ Fetch payment details from Razorpay
-//         $razorpayPayment = $api->payment->fetch($request->payment_id);
-//         $gatewayMethod   = $razorpayPayment->method ?? 'unknown';
-
-//         // 3️⃣ Find existing payment record
-//         $payment = Payment::where('order_id', $request->order_id)->first();
-
-//         if (!$payment) {
-//             return response()->json([
-//                 'status'  => 'error',
-//                 'message' => 'Payment record not found'
-//             ]);
-//         }
-
-//         // 4️⃣ Calculate total paid and remaining for this user + plan
-//         $previousPaid = Payment::where('user_id', $payment->user_id)
-//             ->where('plan_id', $payment->plan_id)
-//             ->where('status', 'success')
-//             ->sum('amount');
-
-//         $newTotalPaid = $previousPaid + $payment->amount;
-//         $planTotalAmount = $payment->plan->price ?? 0; // assuming your Plan model has 'price'
-
-//         $remaining = max($planTotalAmount - $newTotalPaid, 0);
-
-//         // 5️⃣ Update payment record
-//         $payment->update([
-//             'payment_id'              => $request->payment_id,
-//             'signature'               => $request->signature,
-//             'gateway'                 => $gatewayMethod,
-//             'payment_status'          => 2,           // 2 = Completed
-//             'status'                  => 'success',
-//             'total_amount_paid'       => $newTotalPaid,
-//             'total_amount_remaining'  => $remaining,
-//         ]);
-
-//         // 6️⃣ Generate PDF invoice
-//         $pdf = Pdf::loadView('members.Payments.invoice_pdf', [
-//             'payment' => $payment
-//         ]);
-
-//         $fileName = 'invoice_' . $payment->invoice_number . '.pdf';
-//         $path = 'public/invoices/' . $fileName;
-//         Storage::put($path, $pdf->output());
-
-//         $payment->update(['invoice_path' => 'storage/invoices/' . $fileName]);
-
-//         return response()->json([
-//             'status'  => 'success',
-//             'payment' => $payment,
-//             'pdf_url' => asset('storage/invoices/' . $fileName)
-//         ]);
-
-//     } catch (\Exception $e) {
-//         return response()->json([
-//             'status'  => 'error',
-//             'message' => $e->getMessage(),
-//         ]);
-//     }
-// }
 
     public function member_my_team (Request $request)
     {
@@ -490,23 +511,36 @@ class LoginController extends Controller
         return view('members.Team.member_my_team', compact('members'));
 
     }
-    public function my_profile (Request $request, $id)
-    {
-        // dd(1);
-        // dd($id); 
-        // dd($request->all());
-        $member = GymMember::where('id', $id)->first();
 
-        // Check if member exists
+    public function my_profile(Request $request, $id)
+    {
+        // $member = GymMember::find($id);
+        $member = GymMember::with('membership')->find($id);
+        // dd($member);
+    
         if (!$member) {
             abort(404, "Member not found");
         }
-        // dd($member);
     
-        return view('members.Team.my_profile', compact('member'));
-
+        // Fetch all preferences
+        $allPreferences =Preference::pluck('name')->toArray();
+    
+        // Fetch user preferences if they exist
+        $userPrefs =UserPreference::with('preference')
+            ->where('user_id', $member->user_id)
+            ->get()
+            ->pluck('is_active', 'preference.name')
+            ->toArray();
+    
+        // ✅ Build final array: default active if not found
+        $userPreferences = [];
+        foreach ($allPreferences as $pref) {
+            $userPreferences[$pref] = $userPrefs[$pref] ?? 1;
+        }
+    
+        return view('members.Team.my_profile', compact('member', 'userPreferences'));
     }
- 
+    
     public function fetch_member_my_team(Request $request)
     {
         $query = GymMember::query()->where('is_deleted', '!=', 9);
@@ -531,6 +565,8 @@ class LoginController extends Controller
     {
         // dd(2);
         $user = Auth::user();
+
+        // dd($user);
         $preference = Preference::where('name', $request->preference_name)->first();
 
         if (!$preference) {
@@ -593,13 +629,25 @@ class LoginController extends Controller
         }
     
         $payments = $query->paginate(10); // pagination
-    
+        $payments->getCollection()->transform(function ($payment) {
+            $payment->encoded_id = encrypt($payment->id); // encrypt ID
+            return $payment;
+        });
         return response()->json($payments);
     }
 
-    public function view_invoice(Request $request,$id)
+    public function view_invoice(Request $request,$encryptedId)
     {
-          // Fetch payment entry by ID
+        // dd($encryptedId);
+        try {
+            $id = decrypt(urldecode($encryptedId));
+        // dd($id); // will print the actual payment ID
+        } catch (\Exception $e) {
+            abort(404, 'Invalid invoice ID');
+        }
+        // dd(1);
+        // dd($id);
+        // Fetch payment entry by ID
         $payment = DB::table('tbl_payments')
         ->leftJoin('tbl_gym_membership', 'tbl_payments.plan_id', '=', 'tbl_gym_membership.id')
         ->select(
@@ -616,8 +664,7 @@ class LoginController extends Controller
         }
 
         // Optionally, if you need all memberships
-        $memberships = DB::table('tbl_gym_membership')->pluck('membership_name', 'id');
-
+        $memberships =  Membership::pluck('membership_name', 'id');
         return view('members.Payments.view_invoice', compact('payment', 'memberships'));
       
     }

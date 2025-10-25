@@ -138,7 +138,7 @@
                                         </a>
                                     </th>
                                     <th>
-                                        <a href="#" class="sort-link" data-column="membership_name">
+                                        <a href="#" class="sort-link" data-column="name">
                                             Members Name
                                             <span class="sort-icons">
                                                 <i class="asc">▲</i>
@@ -156,8 +156,8 @@
                                         </a>
                                     </th> -->
                                     <th>
-                                        <a href="#" class="sort-link" data-column="price">
-                                            Mobile
+                                        <a href="#" class="sort-link" data-column="email">
+                                            Email
                                             <span class="sort-icons">
                                                 <i class="asc">▲</i>
                                                 <i class="desc">▼</i>
@@ -166,7 +166,7 @@
                                     </th>
                                     <th>Membership Type</th>
                                     <th>
-                                        <a href="#" class="sort-link" data-column="ms.price">
+                                        <a href="#" class="sort-link" data-column="price">
                                             Total Fees
                                             <span class="sort-icons">
                                                 <i class="asc">▲</i>
@@ -175,7 +175,7 @@
                                         </a>
                                     </th>
                                     <th>
-                                        <a href="#" class="sort-link" data-column="gm.amount_paid">
+                                        <a href="#" class="sort-link" data-column="amount_paid">
                                             Fees Paid
                                             <span class="sort-icons">
                                                 <i class="asc">▲</i>
@@ -209,47 +209,13 @@
 </div>
 
 @endsection
-
-@push('styles')
-<style>
-    .btn-add {
-        background-color: #0B1061;
-        color: #ffffff;
-        border-radius: 8px;
-        padding: 6px 16px;
-        border: none;
-        text-decoration: none;
-        font-size: 14px;
-    }
-
-    .btn-add:hover {
-        background-color: #090d4a;
-    }
-    .table-responsive {
-    overflow-x: auto;
-    }
-
-    #members-table {
-        width: 100% !important;
-        table-layout: auto; /* allows columns to shrink */
-        font-size: 14px; /* optional: smaller text for better fit */
-    }
-
-    #members-table thead th {
-        font-size: 13px; /* smaller header text */
-        text-align: center; /* optional: center headers */
-    }
-</style>
-
-@endpush
-
 @push('scripts')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
     <script>
-        const fetchMembership = "{{ route('fetch_member_list') }}";
+        const fetchMembership = "{{ route('fetch_member_list_pending_payment') }}";
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
@@ -348,3 +314,37 @@
     <script src="{{ asset('assets/js/dashboard/list_dashboard.js') }}"></script>
  
 @endpush
+@push('styles')
+<style>
+    .btn-add {
+        background-color: #0B1061;
+        color: #ffffff;
+        border-radius: 8px;
+        padding: 6px 16px;
+        border: none;
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+    .btn-add:hover {
+        background-color: #090d4a;
+    }
+    .table-responsive {
+    overflow-x: auto;
+    }
+
+    #members-table {
+        width: 100% !important;
+        table-layout: auto; /* allows columns to shrink */
+        font-size: 14px; /* optional: smaller text for better fit */
+    }
+
+    #members-table thead th {
+        font-size: 13px; /* smaller header text */
+        text-align: center; /* optional: center headers */
+    }
+</style>
+
+@endpush
+
+

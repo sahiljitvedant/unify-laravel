@@ -11,22 +11,21 @@
             <button class="tab active" data-tab="home">Profile</button>
             <button class="tab" data-tab="profile">Membership</button>
             <button class="tab" data-tab="settings">Fitness Goals</button>
-            <button class="tab" data-tab="preferance">Preferance</button>
+          
+           
         </div>
 
             <div class="tab-content" id="home">
-                @include('tabs.home')
+                @include('member_admin_edit.home')
+             
             </div>
             <div class="tab-content" id="profile" style="display: none;">
-                @include('tabs.profile')
+                @include('member_admin_edit.profile')
             </div>
             <div class="tab-content" id="settings" style="display: none;">
-                @include('tabs.settings')
+                @include('member_admin_edit.settings')
             </div>
-            <div class="tab-content" id="preferance" style="display: none;">
-                @include('tabs.preferance')
-            </div>
-
+          
         </div>
     </div>
 </div>

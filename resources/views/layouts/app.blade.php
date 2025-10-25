@@ -12,7 +12,6 @@
     <link  href="{{ asset('css/all.min.css') }}"   rel="stylesheet">
     <!-- Google Fonts: Inter -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link href="{{ asset('css/bootstrap-icons.css') }}" rel="stylesheet">
     <link href="{{ asset('css/css2.css') }}" rel="stylesheet">
     <!-- Swal Js -->
     <script src="{{ asset('css/sweetalert2@11.js') }}"></script>
@@ -42,6 +41,13 @@
 </head>
 
 <body>
+    <div id="noInternetOverlay" style="display:none;">
+        <div class="offline-box">
+            <h1>😞 No Internet Connection</h1>
+            <p>Please check your connection and try again.</p>
+        </div>
+    </div>
+
     @php
         $hideSidebarRoutes = ['login_get', 'register_get', 'access_denied'];
     @endphp
@@ -63,27 +69,29 @@
                     <img src="{{ asset('assets/img/logo.png') }}" alt="Logo"
                         style="height:50px; width:150px; object-fit:cover; border-radius:8px; border:1px solid var(--sidebar_color)">
                 </a>
+              
             </div>
 
             <!-- Center: Search Bar + Welcome -->
             <div class="d-flex align-items-center flex-grow-1 justify-content-center mx-3 gap-3">
-                <form id="membershipSearchForm" class="d-none d-md-flex flex-grow-1" style="max-width: 400px;">
+                <!-- <form id="membershipSearchForm" class="d-none d-md-flex flex-grow-1" style="max-width: 400px;">
                     <input type="text" id="membershipSearchInput" class="form-control" placeholder="Search Member">
                     <button type="submit" class="btn btn_bg_color ms-2">
                         <i class="bi bi-search"></i>
                     </button>
-                </form>
+                </form> -->
                 <!-- Welcome Text -->
-                <div class="welcome-text d-none d-md-block">
+                
+            </div>
+
+            <!-- Right: Time, Notifications, Profile -->
+            <div class="d-flex align-items-center gap-4">
+            <div class="welcome-text d-none d-md-block">
                     <span class="admin_text">
                         Welcome back, {{ Auth::user()->name ?? 'Admin' }}
                     </span>
                    
                 </div>
-            </div>
-
-            <!-- Right: Time, Notifications, Profile -->
-            <div class="d-flex align-items-center gap-4">
                 <!-- Static Time & Day -->
                 <div class="text-end d-none d-md-block">
                     <span id="day" class="day_time"></span>
@@ -107,17 +115,18 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="profileDropdown">
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
+                            <a class="dropdown-item d-flex align-items-center" href="{{ route('edit_admin', Auth::user()->id) }}">
                                 <i class="bi bi-person me-2"></i> 
                                 <span class="dropdown-text">Profile</span>
                             </a>
                         </li>
-                        <li>
+
+                        <!-- <li>
                             <a class="dropdown-item d-flex align-items-center" href="#">
                                 <i class="bi bi-gear me-2"></i> 
                                 <span class="dropdown-text">Settings</span>
                             </a>
-                        </li>
+                        </li> -->
                         <li><hr class="dropdown-divider"></li>
                         <li>
                             <a class="dropdown-item d-flex align-items-center" href="{{ route('logout') }}">
@@ -131,20 +140,26 @@
         </div>
         <!-- Sidebar -->
         <div id="sidebar" class="sidebar d-lg-block">
-          
+           
+
             <a href="{{ route('list_dashboard') }}" 
                 class="{{ request()->routeIs('list_dashboard') ? 'active' : '' }}">
                     <i class="bi bi-speedometer2 me-2"></i>
                     Dashboard
             </a>
+            <a href="{{ route('list_enquiry') }}" 
+            class="{{ request()->routeIs('list_enquiry','list_replied_enquiry') ? 'active' : '' }}">
+                <i class="bi bi-chat-left-text me-2"></i>Enquiry
+            </a>
             <a href="{{ route('list_member') }}" 
-            class="{{ request()->routeIs('list_member','add_member') ? 'active' : '' }}">
+            class="{{ request()->routeIs('list_member','add_member','edit_admin_member','list_deleted_member') ? 'active' : '' }}">
                 <i class="bi bi-people me-2"></i>Members
             </a>
 
-            <a href="#" 
-            class="{{ request()->routeIs('list_member') ? '' : '' }}">
-                <i class="bi bi-chat-left-text me-2"></i>Enquiry
+            
+            <a href="{{ route('list_payment') }}" 
+            class="{{ request()->routeIs('list_payment','add_member_payment','view_admin_invoice') ? 'active' : '' }}">
+                <i class="bi bi-credit-card me-2"></i>Payments
             </a>
             <a href="{{ route('list_gallery') }}" 
             class="{{ request()->routeIs('list_gallery','add_gallery','edit_gallery','list_deleted_gallery') ? 'active' : '' }}">
@@ -159,7 +174,8 @@
                 aria-expanded="{{ request()->routeIs('list_membership','list_trainer') ? 'true' : 'false' }}" 
                 aria-controls="modulesDropdown">
             <span><i class="bi bi-briefcase me-2"></i>Modules</span>
-            <i class="fas fa-chevron-down small ms-2 mt-0"></i>
+            <i class="bi bi-chevron-down small ms-2 mt-0"></i>
+
             </a>
             <div class="collapse ps-4 {{ request()->routeIs('list_membership','add_membership','edit_membership','list_deleted_membership','list_trainer','add_trainer','edit_trainer','list_deleted_trainer') ? 'show' : '' }}" 
                 id="modulesDropdown">
@@ -192,7 +208,13 @@
             class="{{ request()->routeIs('logout') ? 'active' : '' }}">
                 <i class="bi bi-box-arrow-right me-2"></i>Logout
             </a>
-
+            
+        </div>
+        <!-- Desktop Sidebar Toggle Button (floating) -->
+        <div class="desktop-sidebar-toggle d-none d-lg-block">
+            <button id="desktopSidebarToggle" class="btn btn-outline-secondary">
+                <i class="bi bi-chevron-right" id="desktopSidebarIcon"></i>
+            </button>
         </div>
     @endif
     <!-- Main Content -->
@@ -227,19 +249,69 @@
         setInterval(updateTime, 1000);
         updateTime();
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() 
+        {
+            const desktopToggle = document.getElementById('desktopSidebarToggle');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const icon = document.getElementById('desktopSidebarIcon');
+
+            desktopToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('collapsed');
+                mainContent.classList.toggle('expanded');
+
+                // Change icon
+                if(sidebar.classList.contains('collapsed')) {
+                    icon.classList.remove('bi-chevron-left');
+                    icon.classList.add('bi-x-lg'); // X icon
+                } else {
+                    icon.classList.remove('bi-x-lg');
+                    icon.classList.add('bi-chevron-left'); // back to chevron
+                }
+
+                // optional alert for testing
+                // alert('Sidebar toggled!');
+            });
+        });
+    </script>
+   
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const overlay = document.getElementById('noInternetOverlay');
+
+            function showOfflineMessage() {
+                overlay.style.display = 'flex';
+            }
+
+            function hideOfflineMessage() {
+                overlay.style.display = 'none';
+            }
+
+            // Attach listeners
+            window.addEventListener('offline', showOfflineMessage);
+            window.addEventListener('online', hideOfflineMessage);
+
+            // Check immediately on page load
+            if (!navigator.onLine) {
+                showOfflineMessage();
+            }
+        });
+    </script>
+
     @stack('scripts')
 </body>
 </html>
 <style>
     .topbar {
-    height: 70px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
+        height: 70px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
     }
 
     .topbar .form-control {
@@ -280,5 +352,72 @@
         --bs-dropdown-link-active-bg: var(--sidebar_color) !important;
         --bs-dropdown-link-hover-color: var(--theme-color) !important;
         --bs-dropdown-link-active-color: var(--theme-color) !important;
+    }
+    /* Sidebar collapsed state */
+    #sidebar.collapsed {
+        width: 0;
+        min-width: 0;
+        overflow: hidden;
+        transition: width 0.3s ease;
+    }
+
+   
+    #mainContent.expanded {
+        margin-left: 0 !important;
+        transition: margin-left 0.3s ease;
+    }
+
+    /* Desktop toggle button - always visible */
+    .desktop-sidebar-toggle {
+        position: fixed; 
+        top: 95%;        
+        left: 150px;    
+        transform: translateY(-50%);
+        z-index: 1050;   
+    }
+
+    #sidebar.collapsed + .desktop-sidebar-toggle {
+        left: 10px; 
+    }
+
+    .desktop-sidebar-toggle button {
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+</style>
+<style>
+    #noInternetOverlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(248,249,250,0.95);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        font-family: sans-serif;
+    }
+    .offline-box {
+        background: #f2f2f2;
+        padding: 40px 50px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+    .offline-box h1 {
+        font-size: 32px;
+        color: #0B1061;
+        margin-bottom: 10px;
+    }
+    .offline-box p {
+        font-size: 18px;
+        color: #555;
     }
 </style>
