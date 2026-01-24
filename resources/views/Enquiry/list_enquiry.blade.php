@@ -144,77 +144,7 @@
 
 @endsection
 
-<style>
-    /* Modal overall styling */
-    #replyModal .modal-content {
-        border: none;
-        border-radius: 16px;
-        background: #ffffff;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-    }
 
-    /* Header */
-    #replyModal .modal-header {
-        background:#0B1061;
-        color: #fff;
-        border-bottom: none;
-        border-top-left-radius: 16px;
-        border-top-right-radius: 16px;
-        padding: 1rem 1.5rem;
-    }
-
-    #replyModal .modal-title {
-        font-weight: 400;
-        font-size: 16px;
-        letter-spacing: 0.3px;
-    }
-
-    /* Close (X) button */
-    #replyModal .btn-close {
-        filter: brightness(0) invert(1);
-        opacity: 0.9;
-    }
-    #replyModal .btn-close:hover {
-        opacity: 1;
-    }
-
-    /* Body */
-    #replyModal .modal-body {
-        padding: 1.5rem;
-        border-bottom: none; /* remove divider */
-    }
-
-    /* Textarea */
-    #replyModal textarea#replyMessage {
-        border-radius: 10px;
-        border: 1px solid #dee2e6;
-        transition: all 0.3s ease;
-    }
-    #replyModal textarea#replyMessage:focus {
-        border-color: #0d6efd;
-        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
-    }
-
-    /* Footer */
-    #replyModal .modal-footer {
-        border-top: none; /* remove bottom border line */
-        padding: 1rem 1.5rem 1.5rem;
-        justify-content: flex-end;
-    }
-
-    /* Buttons */
-    #replyModal .btn {
-        background-color: #0B1061;
-        color: #fff;
-        border: none;
-        border-radius: 10px;
-        padding: 0.5rem 1.25rem;
-        font-weight: 400;
-        transition: all 0.25s ease;
-        transform: translateY(-1px);
-    }
-
-</style>
 @push('scripts')
 <script>
     const fetchEnquiry = "{{ route('fetch_enquiry') }}";

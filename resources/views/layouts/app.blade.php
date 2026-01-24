@@ -29,6 +29,7 @@
             --font_size: {{ config('app.font_size') }};
             --font_size_10px: {{ config('app.font_size_10px') }};
             --black_color:{{config('app.black_color')}};
+            --sidebar_light:{{config('app.sidebar_light')}};
         }
         .no-sidebar {
             margin-left: 0 !important;
@@ -115,10 +116,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="profileDropdown">
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" href="{{ route('edit_admin', Auth::user()->id) }}">
-                                <i class="bi bi-person me-2"></i> 
-                                <span class="dropdown-text">Profile</span>
-                            </a>
+                           
                         </li>
 
                         <!-- <li>
@@ -147,27 +145,40 @@
                     <i class="bi bi-speedometer2 me-2"></i>
                     Dashboard
             </a>
-            <a href="{{ route('list_enquiry') }}" 
-            class="{{ request()->routeIs('list_enquiry','list_replied_enquiry') ? 'active' : '' }}">
-                <i class="bi bi-chat-left-text me-2"></i>Enquiry
-            </a>
             <a href="{{ route('list_member') }}" 
-            class="{{ request()->routeIs('list_member','add_member','edit_admin_member','list_deleted_member') ? 'active' : '' }}">
+            class="{{ request()->routeIs('list_member','list_deleted_member','list_payment','add_member','change_member_password') ? 'active' : '' }}">
                 <i class="bi bi-people me-2"></i>Members
             </a>
-
+            <a href="{{ route('list_headers') }}" 
+            class="{{ request()->routeIs('list_headers','add_header','edit_header','list_deleted_headers') ? 'active' : '' }}">
+                <i class="bi bi-list me-2"></i>Headers
+            </a>
+            <a href="{{ route('list_subheaders') }}" 
+            class="{{ request()->routeIs('list_subheaders','add_subheader','edit_subheader','list_deleted_headers') ? 'active' : '' }}">
+                <i class="bi bi-diagram-2 me-2"></i>Sub-Headers
+            </a>
             
-            <a href="{{ route('list_payment') }}" 
+            <a href="{{ route('home_banner') }}" 
+            class="{{ request()->routeIs('home_banner','home_banner_add','home_banner_edit','list_deleted_banner') ? 'active' : '' }}">
+                <i class="bi bi-image me-2"></i>Home Banner
+            </a>
+            
+            <a href="{{ route('about_page') }}" 
+            class="{{ request()->routeIs('about_page','list_deleted_about_page','about_page_add','about_page_edit') ? 'active' : '' }}">
+                <i class="bi bi-chat-left-text me-2"></i>About Page
+            </a>
+            
+            <!-- <a href="{{ route('list_payment') }}" 
             class="{{ request()->routeIs('list_payment','add_member_payment','view_admin_invoice') ? 'active' : '' }}">
                 <i class="bi bi-credit-card me-2"></i>Payments
-            </a>
+            </a> -->
             <a href="{{ route('list_gallery') }}" 
             class="{{ request()->routeIs('list_gallery','add_gallery','edit_gallery','list_deleted_gallery') ? 'active' : '' }}">
                 <i class="bi bi-camera me-2"></i>Gallary
             </a>
            
 
-            <a class="d-flex justify-content-start align-items-center" 
+            <!-- <a class="d-flex justify-content-start align-items-center" 
                 data-bs-toggle="collapse" 
                 href="#modulesDropdown" 
                 role="button" 
@@ -187,7 +198,7 @@
                 class="d-block py-1 {{ request()->routeIs('list_trainer','add_trainer','edit_trainer','list_deleted_trainer') ? 'active' : '' }}">
                     <i class="bi bi-person-plus me-2"></i>Trainer
                 </a>
-            </div>
+            </div> -->
             <a href="{{ route('list_blogs') }}" 
             class="{{ request()->routeIs('list_blogs','add_blogs','edit_blogs','list_deleted_blogs') ? 'active' : '' }}">
                 <i class="bi bi-journal me-2"></i>Blogs
@@ -200,10 +211,29 @@
             class="{{ request()->routeIs('add_policy') ? 'active' : '' }}">
                 <i class="bi bi-shield-lock me-2"></i>Privacy Policy
             </a>
+            <a href="{{ route('add_terms_conditions') }}" 
+            class="{{ request()->routeIs('add_terms_conditions') ? 'active' : '' }}">
+                <i class="bi bi-file-earmark-check me-2"></i>Terms & Condition
+            </a>
+            <a href="{{ route('list_careers') }}" 
+            class="{{ request()->routeIs('list_careers','add_career','edit_career','list_deleted_careers') ? 'active' : '' }}">
+                <i class="bi bi-briefcase me-2"></i>Careers
+            </a>
+            <a href="{{ route('list_enquiry') }}" 
+            class="{{ request()->routeIs('list_enquiry','list_replied_enquiry') ? 'active' : '' }}">
+                <i class="bi bi-chat-left-text me-2"></i>Enquiry
+            </a>
+            <a href="{{ route('themes') }}" 
+                class="{{ request()->routeIs('themes') ? 'active' : '' }}">
+                    <i class="bi bi-palette me-2"></i>
+                    Themes
+            </a>
             <a  target="_blank" href="{{ route('home') }}" 
             class="{{ request()->routeIs('list_member') ? '' : '' }}">
                 <i class="bi bi-globe me-2"></i>Go Live
             </a>
+
+           
             <a href="{{ route('logout') }}" 
             class="{{ request()->routeIs('logout') ? 'active' : '' }}">
                 <i class="bi bi-box-arrow-right me-2"></i>Logout
@@ -212,7 +242,7 @@
         </div>
         <!-- Desktop Sidebar Toggle Button (floating) -->
         <div class="desktop-sidebar-toggle d-none d-lg-block">
-            <button id="desktopSidebarToggle" class="btn btn-outline-secondary">
+            <button id="desktopSidebarToggle" class="btn btn-outline-primary">
                 <i class="bi bi-chevron-right" id="desktopSidebarIcon"></i>
             </button>
         </div>

@@ -44,7 +44,7 @@ class EnquiryController extends Controller
             'messageText' => $request->message, // avoid using variable name "message"
         ], function ($message) use ($request) {
             $message->to($request->email)
-                    ->subject('Enquiry Confirmation - Sachii Support');
+                    ->subject('Enquiry Confirmation - Brainstar Support');
         });
         return redirect()->route('home')
         ->with('success', 'Enquiry submitted successfully. A confirmation email has been sent. Your Request ID is: ' . $requestId);

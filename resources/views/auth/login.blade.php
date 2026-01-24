@@ -100,13 +100,35 @@
                         });
                     },
 
+                    // success: function (response) 
+                    // {
+                    //     Swal.close();
+
+                    //     if (response.status === 'success' && response.redirect) {
+                    //         window.location.href = response.redirect; // conditional redirect
+                    //     } else {
+                    //         Swal.fire({
+                    //             icon: 'error',
+                    //             title: 'Login Failed',
+                    //             text: response.message || 'Unexpected error occurred.',
+                    //         });
+                    //         $submitBtn.prop('disabled', false);
+                    //     }
+                    // },
+
                     success: function (response) 
                     {
                         Swal.close();
 
                         if (response.status === 'success' && response.redirect) {
-                            window.location.href = response.redirect; // conditional redirect
-                        } else {
+                            window.location.href = response.redirect; // normal login redirect
+                        } 
+                        else if (response.status === 'pending_approval' && response.redirect) {
+
+                            // alert(1);
+                            window.location.href = response.redirect; // redirect to pending approval page
+                        }
+                        else {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Login Failed',
@@ -115,6 +137,7 @@
                             $submitBtn.prop('disabled', false);
                         }
                     },
+
 
                     error: function (xhr) 
                     {

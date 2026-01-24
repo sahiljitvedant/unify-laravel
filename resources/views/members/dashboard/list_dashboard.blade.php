@@ -103,7 +103,7 @@
             5️⃣ Row: Upcoming Sessions / Trainers
         ======================== --}}
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="fw-bold text-theme mb-0">Flashbacks of Sachii</h5>
+            <h5 class="fw-bold text-theme mb-0">Flashbacks of Brainstar</h5>
             <a href="{{ route('member_gallary') }}" class="text-decoration-none text-theme fw-semibold small">See all</a>
         </div>
         @if($galleries->isNotEmpty())

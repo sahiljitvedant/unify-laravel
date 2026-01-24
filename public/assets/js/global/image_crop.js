@@ -48,7 +48,10 @@ $(document).ready(function () {
         if (imageType === "faq_image" && $("#faq_image_path").length === 0) {
             $("#faqForm").append('<input type="hidden" name="faq_image" id="faq_image_path">');
         }
-    
+        if (imageType === "about_image" && $("#about_image_path").length === 0) {
+            $("form").append('<input type="hidden" name="about_image" id="about_image_path">');
+        }
+        
         if (imageType === "gallary_image" && $("#gallary_image_path").length === 0) {
             $("#add_gallery").append('<input type="hidden" name="gallary_image" id="gallary_image_path">');
         }
@@ -112,6 +115,8 @@ $(document).ready(function () {
                 width = 700; height = 700; break;
             case "gallery_multiple":
                 width = 500; height = 500; break;
+            case "about_image":                      // ✅ NEW
+                width = 1000; height = 1000; break;
             default:
                 width = 600; height = 600; // profile_image default
         }
@@ -126,6 +131,7 @@ $(document).ready(function () {
                 case "profile_image": fieldName = "profile_image"; break;
                 case "gallary_image": fieldName = "gallary_image"; break;
                 case "gallery_multiple": fieldName = "gallery_images[]"; break;
+                case "about_image": fieldName = "about_image"; break;
                 default: fieldName = "image";
             }
 
@@ -168,8 +174,24 @@ $(document).ready(function () {
                             if ($("#faq_image_path").length === 0) {
                                 $("#faq_add_form").append('<input type="hidden" name="faq_image" id="faq_image_path">');
                             }
+                            
                             $("#faq_image_path").val(data.path);
-                        } else if (imageType === "gallary_image") {
+                        } 
+                        // else if (imageType === "about_image") {
+                        //     $("#previewAboutImage").attr("src", data.url);
+                        //     $("#aboutImageWrapper").removeClass("d-none");
+                        //     $("#about_image_path").val(data.path);
+                        // }
+                        else if (imageType === "about_image") {
+                            $("#previewAboutImage").attr("src", data.url);
+                            $("#aboutImageWrapper").removeClass("d-none");
+                            $("#page_image").val(data.path);
+                        
+                            // ✅ ADD THIS LINE
+                            $('[data-error-for="page_image"]').text('');
+                        }
+                        
+                        else if (imageType === "gallary_image") {
                             $("#previewGallaryImage").attr("src", data.url);
                             $("#galleryThumbWrapper").removeClass("d-none");
                             $("#gallary_image_path").val(data.path);

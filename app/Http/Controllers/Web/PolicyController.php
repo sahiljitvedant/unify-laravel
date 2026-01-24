@@ -17,7 +17,6 @@ class PolicyController extends Controller
     public function list()
     {
         return view('trainer.list_trainer');
-       
     }
 
    

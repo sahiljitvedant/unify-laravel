@@ -45,23 +45,37 @@
         </div>
 
         <div class="row mb-1">
-            <div class="col-12 col-md-6 mb-3">
+            <!-- <div class="col-12 col-md-6 mb-3">
                 <label class="form-label required">{{ __('global.dob') }}</label>
                 <input type="date" class="form-control" 
                     name="dob" id="dob" 
                     value="{{ old('dob', $member->dob) }}" required>
                 <div class="text-danger error-message" data-error-for="dob"></div>
+            </div> -->
+            <div class="col-12 col-md-6 mb-3">
+                <label class="form-label required">{{ __('global.dob') }}</label>
+                <input 
+                    type="date" 
+                    class="form-control" 
+                    name="dob" 
+                    id="dob"
+                    value="{{ old('dob', isset($member->dob) ? \Carbon\Carbon::parse($member->dob)->format('Y-m-d') : '') }}" 
+                    required
+                >
+                <div class="text-danger error-message" data-error-for="dob"></div>
             </div>
+
 
             <div class="col-12 col-md-6 mb-3">
                 <label class="form-label required">{{ __('global.gender_label') }}</label>
                 <select class="form-control" name="gender" id="gender">
                     <option value="" disabled>{{ __('global.gender_placeholder') }}</option>
                     @foreach (config('app.gender_options') as $id => $gender)
-                        <option value="{{ $id }}" 
-                            {{ (isset($user) && $user->gender == $id) ? 'selected' : '' }}>
-                            {{ __('global.' . $gender) }}
-                        </option>
+                    <option value="{{ $id }}" 
+                        {{ (isset($member) && $member->gender == $id) ? 'selected' : '' }}>
+                        {{ __('global.' . $gender) }}
+                    </option>
+
                     @endforeach
                 </select>
                 <div class="text-danger error-message" data-error-for="gender"></div>

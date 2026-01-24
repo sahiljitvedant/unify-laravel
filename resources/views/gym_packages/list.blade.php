@@ -21,20 +21,20 @@
         <div class="p-4 bg-light rounded shadow">
             <!-- Heading + Add Button -->
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 gap-2">
-                <div class="d-flex flex-column align-items-start align-items-md-start gap-2">
-                <h4 class="mb-2 mb-md-0">List Members</h4>
-                <a href="javascript:void(0)" id="import-users-link" class="btn-link">Import Members</a>
+                <!-- <div class="d-flex flex-column align-items-start align-items-md-start gap-2">
+                    <h4 class="mb-2 mb-md-0">List Members</h4>
+                    <a href="javascript:void(0)" id="import-users-link" class="btn-link">Import Members</a>
                     <a href="{{ asset('assets/sample/sample_member.xlsx') }}" 
                         class="btn-link text-primary" 
                         download>
                         <i class="bi bi-download"></i> Download Sample File
                     </a>
-                    </div>
+                </div>-->
                 <div class="d-flex flex-column align-items-start align-items-md-end gap-2">
-                    <a href="{{ route('add_member') }}" class="btn-add">Add Members</a>
+                    <!-- <a href="{{ route('add_member') }}" class="btn-add">Add Members</a> -->
                     <a href="{{ route('list_deleted_member') }}" class="btn-link">Show Deleted Members</a>
                     
-                </div>
+                </div> 
                 <form id="import-form" enctype="multipart/form-data" style="display:none;">
                     @csrf
                     <input type="file" name="excel_file" id="excel_file" accept=".xlsx,.xls,.csv">
@@ -52,12 +52,6 @@
                         <div class="col-md-3">
                             <input type="text" id="filterEmail" class="form-control" placeholder="Enter Email Address">
                         </div>
-                        <div class="col-md-3">
-                            <input type="number" id="filterMobile" class="form-control" placeholder="Enter Mobile Number">
-                        </div>
-                    </div>
-                    <div class="row g-3 mt-2">
-                        <!-- Row 2 -->
                         <div class="col-md-2">
                             <button id="submitBtn" class="btn ">
                                 <i class="bi bi-search"></i> 
@@ -68,6 +62,7 @@
                             </button>
                         </div>
                     </div>
+                   
                 </div>
                 <!-- Separator -->
                 <div class="separator"></div>
@@ -104,15 +99,7 @@
                                         </span>
                                     </a>
                                 </th>
-                                <th>
-                                    <a href="#" class="sort-link" data-column="price">
-                                        Mobile
-                                        <span class="sort-icons">
-                                            <i class="asc">▲</i>
-                                            <i class="desc">▼</i>
-                                        </span>
-                                    </a>
-                                </th>
+                               
                                
                                
                                 <th>Action</th>
@@ -154,31 +141,44 @@
     display: flex;
     align-items: center;
     justify-content: center;
-}
+    }
 
-.import-loader-overlay {
-    text-align: center;
-}
+    .import-loader-overlay {
+        text-align: center;
+    }
 
-.spinner {
-    width: 60px;
-    height: 60px;
-    border: 6px solid #e0e0e0;
-    border-top: 6px solid #0B1061;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 10px;
-}
+    .spinner {
+        width: 60px;
+        height: 60px;
+        border: 6px solid #e0e0e0;
+        border-top: 6px solid #0B1061;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 10px;
+    }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
 
-.import-loader-text {
-    color: #0B1061;
-    font-weight: 500;
-}
+    .import-loader-text {
+        color: #0B1061;
+        font-weight: 500;
+    }
+    /* Remove hover background for dropdown items */
+    .dropdown-menu .dropdown-item {
+        background: transparent !important;
+        color: inherit !important; /* keep original color */
+        padding: 0.25rem; /* optional: adjust spacing */
+    }
+
+    .dropdown-menu .dropdown-item:hover,
+    .dropdown-menu .dropdown-item:focus {
+        background: transparent !important;
+        color: inherit !important;
+    }
+
 
 </style>
 
@@ -188,6 +188,7 @@
 <script>
     const fetchMembership = "{{ route('fetch_member_list') }}";
     const deleteMembershipUrl = "{{ route('delete_members', ':id') }}";
+    const approveMemberUrl = "{{ route('approve_member', ':id') }}";
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{{ asset('assets/js/gym_package/list_members.js') }}"></script>
@@ -199,33 +200,35 @@
             $('#excel_file').click();
         });
 
-        $('#excel_file').on('change', function() {
-    let formData = new FormData($('#import-form')[0]);
-    
-    $("#loader").show(); // show import loader
+        $('#excel_file').on('change', function() 
+        {
+            let formData = new FormData($('#import-form')[0]);
+            
+            $("#loader").show(); // show import loader
 
-    $.ajax({
-        url: "{{ route('import_members') }}",
-        type: "POST",
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function(res) {
-            $("#loader").hide(); // hide loader on success
-            Swal.fire('Success', 'Users imported successfully!', 'success').then(() => {
-                $('#excel_file').val('');
-                location.reload();
+            $.ajax
+            ({
+                url: "{{ route('import_members') }}",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(res) {
+                    $("#loader").hide(); // hide loader on success
+                    Swal.fire('Success', 'Users imported successfully!', 'success').then(() => {
+                        $('#excel_file').val('');
+                        location.reload();
+                    });
+                },
+                error: function(err) {
+                    $("#loader").hide(); // hide loader on error
+                    console.error(err);
+                    Swal.fire('Error', 'Failed to import users!', 'error').then(() => {
+                        $('#excel_file').val('');
+                    });
+                }
             });
-        },
-        error: function(err) {
-            $("#loader").hide(); // hide loader on error
-            console.error(err);
-            Swal.fire('Error', 'Failed to import users!', 'error').then(() => {
-                $('#excel_file').val('');
-            });
-        }
-    });
-});
+        });
 
     });
 </script>

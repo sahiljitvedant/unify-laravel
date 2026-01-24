@@ -23,6 +23,7 @@
             --sidebar_color: {{ config('app.sidebar_color') }};
             --other_color_fff: {{ config('app.other_color_fff') }};
             --font_size: {{ config('app.font_size') }};
+            --sidebar_light:{{config('app.sidebar_light')}};
         }
     </style>
 </head>
@@ -91,7 +92,7 @@
                     </a>
 
                     <!-- Right: Copyright -->
-                    <p class="text-white small mt-3">&copy; 2025 Sachii. All rights reserved.</p>
+                    <p class="text-white small mt-3">&copy; 2026 Brainstar. All rights reserved.</p>
                 </div>
             </div>--}}
             <div class="col-md-6 left-panel d-none d-md-flex position-relative">
@@ -103,7 +104,7 @@
                     <a href="{{ route('home') }}" target="_blank" class="website-link oval-btn">
                         Corporate Website <i class="bi bi-arrow-right ms-2"></i>
                     </a>
-                    <p class="text-white small">&copy;2025 Sachii. All rights reserved</p>
+                    <p class="text-white small">&copy;2026 Brainstar. All rights reserved</p>
                 </div>
             </div>
 

@@ -32,7 +32,7 @@
         </div>
 
         <div class="text-end mt-4">
-            <a href="{{ url()->previous() }}" class="btn btn-secondary me-2 cncl_btn">Cancel</a>
+            <a href="{{ route('list_dashboard') }}" class="btn btn-secondary me-2 cncl_btn">Cancel</a>
             <button type="submit" class="btn btn-primary" id="submitBtn">Update Profile</button>
         </div>
     </form>

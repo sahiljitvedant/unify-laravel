@@ -15,18 +15,18 @@
         <div class="row g-3">
             <!-- Card 1 -->
             <div class="col-md-4">
-                <div class="card shadow-sm border-0 rounded-3 h-100 card-hover">
+                <div class="card shadow-sm border-0 rounded-3 h-100 card-hover" >
                     <div class="card-body d-flex flex-column p-4">
                     <div>
                         <h5 class="card-title text-start fw-bold mb-2">
                         <i class="bi bi-people text-icon me-2 fs-4"></i>
             
-                        <span class="fs-3 counter" data-target="{{ $members }}">0</span>
+                        <span class="fs-3 counter" data-target="{{ $activeHeaders }}">0</span>
                         </h5>
-                        <p class="card-text text-muted text-start mb-0">Current Members</p>
+                        <p class="card-text text-muted text-start mb-0">Active Headers</p>
                     </div>
                     <div class="mt-auto d-flex justify-content-end">
-                        <a href="{{ route('list_member') }}" 
+                        <a href="{{ route('list_headers') }}" 
                         class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm text-icon"
                         style="width: 36px; height: 36px; background-color: #f0f4ff;">
                         <i class="bi bi-box-arrow-up-right fs-5"></i>

@@ -33,7 +33,7 @@
             </div>
         </div>
 
-        <p class="mb-4 font_size">Thank you for your payment at <span class="fw-bold text-theme">Sachii</span>. For any queries, please contact us at <a class="fw-bold text-theme" mailto="sjstsabhamumbai@gmail.com">sachii@gmail.com</a>.</p>
+        <p class="mb-4 font_size">Thank you for your payment at <span class="fw-bold text-theme">Brainstar</span>. For any queries, please contact us at <a class="fw-bold text-theme" mailto="sjstsabhamumbai@gmail.com">Brainstar@gmail.com</a>.</p>
 
         <!-- Invoice Table -->
         <div class="table-responsive mb-4">

@@ -36,12 +36,9 @@
                         <div class="col-md-3">
                             <input type="text" id="filterEmail" class="form-control" placeholder="Enter Email Address">
                         </div>
-                        <div class="col-md-3">
+                        <!-- <div class="col-md-3">
                             <input type="number" id="filterMobile" class="form-control" placeholder="Enter Mobile Number">
-                        </div>
-                    </div>
-                    <div class="row g-3 mt-2">
-                        <!-- Row 2 -->
+                        </div> -->
                         <div class="col-md-2">
                             <button id="submitBtn" class="btn ">
                                 <i class="bi bi-search"></i> 
@@ -51,6 +48,10 @@
                                 <i class="bi bi-x-circle"></i> 
                             </button>
                         </div>
+                    </div>
+                    <div class="row g-3 mt-2">
+                        <!-- Row 2 -->
+                       
                     </div>
                 </div>
                 <!-- Separator -->
@@ -88,15 +89,7 @@
                                         </span>
                                     </a>
                                 </th>
-                                <th>
-                                    <a href="#" class="sort-link" data-column="price">
-                                        Mobile
-                                        <span class="sort-icons">
-                                            <i class="asc">▲</i>
-                                            <i class="desc">▼</i>
-                                        </span>
-                                    </a>
-                                </th>
+                                
                                
                                
                                 <th>Action</th>

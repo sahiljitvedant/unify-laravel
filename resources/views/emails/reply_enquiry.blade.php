@@ -23,6 +23,6 @@
     <br>
 
     <p>Thanks for visiting,</p>
-    <p><strong>Your regards,</strong><br>Sachi</p>
+    <p><strong>Your regards,</strong><br>Brainstar</p>
 </body>
 </html>

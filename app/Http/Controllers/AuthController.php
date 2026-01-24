@@ -26,6 +26,7 @@ class AuthController extends Controller
 
     public function registerPost(Request $request)
     {
+        // dd(1);
         try {
            
             $validator = Validator::make($request->all(), [
@@ -52,6 +53,7 @@ class AuthController extends Controller
                 'name'     => $request->name,
                 'email'    => $request->email,
                 'password' => $request->password, // automatically hashed via 'hashed' cast in User model
+                'is_admin'=>1
             ]);
     
             // 4️⃣ Create GymMember
@@ -60,6 +62,7 @@ class AuthController extends Controller
                 'first_name' => $firstName,
                 'last_name'  => $lastName,
                 'email'    => $request->email,
+               
             ]);
     
 
@@ -83,10 +86,9 @@ class AuthController extends Controller
         }
     }
     
-    
+
     public function loginPost(Request $request)
     {
-        // dd(1);
         // Validate the input fields
         $request->validate([
             'email' => 'required|email',
@@ -97,30 +99,43 @@ class AuthController extends Controller
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) 
         {
             $user = Auth::user();
-            // dd($user);
-            $member = DB::table('tbl_gym_members')
-            ->where('user_id', $user->id)
-            ->first();
 
+            // Get gym member record for the user
+            $member = DB::table('tbl_gym_members')
+                ->where('user_id', $user->id)
+                ->first();
+
+            // Check if membership is deactivated
             if ($member && $member->is_deleted == 9) 
             {
-                Auth::logout(); // clear session
-                return response()->json
-                ([
+                Auth::logout();
+                return response()->json([
                     'status' => 'error',
                     'message' => 'Your gym membership has been deactivated. Please contact the administrator.',
-                ],422);
+                ], 422);
             }
+
+            // Check if admin_approved is 0 (not approved yet)
+            if ($member && $member->admin_approved == 0) {
+                Auth::logout(); // clear session
+                return response()->json([
+                    'status' => 'pending_approval',
+                    'redirect' => route('account_pending_approval'),
+                ]);
+            }
+            
+
+            // Admin redirect
             if ($user->is_admin == 1) 
             {
-                // dd(1);
                 return response()->json([
                     'status' => 'success',
                     'redirect' => route('list_dashboard'), 
                 ]);
-            } else {
-                // dd(2);
-                // redirect normal user
+            } 
+            else 
+            {
+                // Normal user redirect
                 return response()->json([
                     'status' => 'success',
                     'redirect' => route('member_dashboard'), 
@@ -128,12 +143,13 @@ class AuthController extends Controller
             }
         }
 
-        // Return JSON error response instead of redirecting
+        // Invalid credentials
         return response()->json([
             'status' => 'error',
             'message' => 'Invalid credentials. Please try again.',
         ], 422);
     }
+
 
    
 }

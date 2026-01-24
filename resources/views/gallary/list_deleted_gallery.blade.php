@@ -75,7 +75,7 @@
                                     </a>
                                 </th>
                                 <th>
-                                    <a href="#" class="sort-link" data-column="membership_name">
+                                    <a href="#" class="sort-link" data-column="gallery_name">
                                         Gallery Name
                                         <span class="sort-icons">
                                             <i class="asc">▲</i>

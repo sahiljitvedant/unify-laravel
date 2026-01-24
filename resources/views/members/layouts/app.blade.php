@@ -73,7 +73,7 @@
                 <!-- Home link -->
                 <a href="{{ route('home') }}" class="oval-link d-flex align-items-center">
                     <i class="bi bi-globe2 me-2"></i>
-                    <span class="d-none d-sm-inline">Sachii</span>
+                    <span class="d-none d-sm-inline">Brainstar</span>
                 </a>
 
                 <!-- Notifications -->
@@ -84,7 +84,7 @@
 
                 <!-- Profile Dropdown -->
                 @php
-                    $member = DB::table('tbl_gym_members')->where('id', Auth::id())->first();
+                    $member = DB::table('tbl_gym_members')->where('user_id', Auth::id())->first();
                     $profileImage = $member && $member->profile_image ? asset($member->profile_image) : null;
                 @endphp
 
@@ -109,11 +109,11 @@
                                 <i class="bi bi-person me-2"></i> Profile
                             </a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a class="dropdown-item d-flex align-items-center" href="#">
                                 <i class="bi bi-gear me-2"></i> Settings
                             </a>
-                        </li>
+                        </li> -->
                         <li><hr class="dropdown-divider"></li>
                         <li>
                             <a class="dropdown-item d-flex align-items-center" href="{{ route('logout') }}">

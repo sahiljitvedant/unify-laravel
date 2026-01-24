@@ -15,7 +15,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #0B1061; 
+    background-color:var(--sidebar_color);
     border-radius: 10px;
     border: 1px solid #f5f6fa; 
 }
@@ -73,7 +73,7 @@ body {
 .sidebar a {
     padding: 10px 20px;
     font-size: 14px;    
-    font-weight: 400;
+    font-weight: 500;
     display: block;
     color: var(--other_color_fff);
     text-decoration: none;
@@ -93,6 +93,23 @@ body {
 #mainContent {
     margin-left: 220px;
     padding: 100px 20px 20px 20px;
+}
+#desktopSidebarToggle {
+    background-color: #010e0c; /* teal */
+    border: none;
+    color: #ffffff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+#desktopSidebarToggle:hover {
+    background-color: #010e0c; /* darker teal on hover */
+}
+#desktopSidebarIcon {
+    font-size: 18px;
+    font-weight: bold;
 }
 
 /* Responsive */
@@ -153,7 +170,7 @@ table.dataTable tbody tr:hover {
     min-width: 150px;
     padding: 0.5rem 0;
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    /* box-shadow: 0 4px 10px rgba(0,0,0,0.1); */
 }
 
 .dropdown.actionbtn .dropdown-item {
@@ -236,7 +253,7 @@ table.dataTable tbody tr:hover {
 .form-control::placeholder 
 {
     font-size:  var(--font_size); 
-    color: #777;     
+    color: var(--sidebar_color);     
     opacity: 1;      
 }
 
@@ -435,7 +452,7 @@ table.dataTable tbody tr:hover {
 }
 
 .filters {
-    background-color: #eee3fb; 
+    background-color: var(--sidebar_light);
     color: var(--other_color_fff);
 }
 
@@ -687,11 +704,81 @@ table td {
     z-index: 1 !important;
 }
 .profilebtn {
-    background: #0b1061;
+    background: var(--sidebar_color);
     color: #fff;
-    border: 5px solid #0b1061 !important;
+    border: 5px solid var(--sidebar_color) !important;
     border-radius: 5px;
     font-size:12px;
 }
-.btn-add:hover { background-color: #090d4a; }
+.btn-add:hover { background-color: var(--sidebar_color); }
 th a { color: inherit; text-decoration: none; }
+
+
+    /* Modal overall styling */
+    #replyModal .modal-content {
+        border: none;
+        border-radius: 16px;
+        background: #ffffff;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Header */
+    #replyModal .modal-header {
+        background: var(--sidebar_color);
+        color: #fff;
+        border-bottom: none;
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+        padding: 1rem 1.5rem;
+    }
+
+    #replyModal .modal-title {
+        font-weight: 400;
+        font-size: 16px;
+        letter-spacing: 0.3px;
+    }
+
+    /* Close (X) button */
+    #replyModal .btn-close {
+        filter: brightness(0) invert(1);
+        opacity: 0.9;
+    }
+    #replyModal .btn-close:hover {
+        opacity: 1;
+    }
+
+    /* Body */
+    #replyModal .modal-body {
+        padding: 1.5rem;
+        border-bottom: none; /* remove divider */
+    }
+
+    /* Textarea */
+    #replyModal textarea#replyMessage {
+        border-radius: 10px;
+        border: 1px solid #dee2e6;
+        transition: all 0.3s ease;
+    }
+    #replyModal textarea#replyMessage:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    }
+
+    /* Footer */
+    #replyModal .modal-footer {
+        border-top: none; /* remove bottom border line */
+        padding: 1rem 1.5rem 1.5rem;
+        justify-content: flex-end;
+    }
+
+    /* Buttons */
+    #replyModal .btn {
+        background-color: var(--sidebar_color);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 0.5rem 1.25rem;
+        font-weight: 400;
+        transition: all 0.25s ease;
+        transform: translateY(-1px);
+    }

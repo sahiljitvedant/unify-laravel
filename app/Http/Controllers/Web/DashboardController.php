@@ -17,78 +17,85 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Gallery;
 use App\Models\Payment;
 use App\Models\Membership;
-
+use App\Services\DashboardService;
 
 class DashboardController extends Controller
 {
-    public function list()
-    {
-        $members = GymMember::with(['membership', 'user'])
-        ->where('is_deleted', '!=', 9)
-        ->whereHas('user', function ($query) {
-            $query->where('is_admin', '!=', 1);
-        })
-        ->count();
+    // public function list()
+    // {
+    //     $members = GymMember::with(['membership', 'user'])
+    //     ->where('is_deleted', '!=', 9)
+    //     ->whereHas('user', function ($query) {
+    //         $query->where('is_admin', '!=', 1);
+    //     })
+    //     ->count();
     
 
-        $membership = DB::table('tbl_gym_membership')
-        ->select('*')
-        ->where('is_deleted', '=', "0")
-        ->count();
+    //     $membership = DB::table('tbl_gym_membership')
+    //     ->select('*')
+    //     ->where('is_deleted', '=', "0")
+    //     ->count();
 
-        $trainer = DB::table('tbl_trainer')
-        ->select('*')
-        ->where('is_deleted', '!=', 9)
-        ->where('is_active', '=', 1)
-        ->count();
-        // Controller
-        $years = DB::table('tbl_gym_members')
-        ->select(DB::raw("YEAR(joining_date) as year"))
-        ->where('is_deleted', '!=', 9)
-        ->distinct()
-        ->orderBy('year', 'desc')
-        ->pluck('year');
+    //     $trainer = DB::table('tbl_trainer')
+    //     ->select('*')
+    //     ->where('is_deleted', '!=', 9)
+    //     ->where('is_active', '=', 1)
+    //     ->count();
+    //     // Controller
+    //     $years = DB::table('tbl_gym_members')
+    //     ->select(DB::raw("YEAR(joining_date) as year"))
+    //     ->where('is_deleted', '!=', 9)
+    //     ->distinct()
+    //     ->orderBy('year', 'desc')
+    //     ->pluck('year');
 
-        // Selected year (default = current year if not passed)
-        $selectedYear = request()->get('year', now()->year);
+    //     // Selected year (default = current year if not passed)
+    //     $selectedYear = request()->get('year', now()->year);
 
-        $members_data = DB::table('tbl_gym_members')
-        ->select(
-            DB::raw("DATE_FORMAT(joining_date, '%b') as month"), // only month
-            DB::raw("COUNT(*) as total")
-        )
-        ->where('is_deleted', '!=', 9)
-        ->whereYear('joining_date', $selectedYear)
-        ->groupBy('month')
-        ->orderByRaw("MIN(joining_date)")
-        ->get();
+    //     $members_data = DB::table('tbl_gym_members')
+    //     ->select(
+    //         DB::raw("DATE_FORMAT(joining_date, '%b') as month"), // only month
+    //         DB::raw("COUNT(*) as total")
+    //     )
+    //     ->where('is_deleted', '!=', 9)
+    //     ->whereYear('joining_date', $selectedYear)
+    //     ->groupBy('month')
+    //     ->orderByRaw("MIN(joining_date)")
+    //     ->get();
 
-        // Convert to arrays for Chart.js
-        $labels = $members_data->pluck('month'); // ["Jan","Feb","Mar"]
-        $values = $members_data->pluck('total');
+    //     // Convert to arrays for Chart.js
+    //     $labels = $members_data->pluck('month'); // ["Jan","Feb","Mar"]
+    //     $values = $members_data->pluck('total');
 
-        $memebrs_query=DB::table('tbl_gym_members')
-        ->select('*')
-        ->where('is_deleted', '!=', 9)
-        ->get();
-        // Membership type distribution
-        $membership_distribution = DB::table('tbl_gym_members as gm')
-        ->join('tbl_gym_membership as ms', 'gm.membership_type', '=', 'ms.id')
-        ->select('ms.membership_name', DB::raw('COUNT(gm.id) as total'))
-        ->where('gm.is_deleted', '!=', 9)
-        ->groupBy('ms.membership_name')
-        ->get();
+    //     $memebrs_query=DB::table('tbl_gym_members')
+    //     ->select('*')
+    //     ->where('is_deleted', '!=', 9)
+    //     ->get();
+    //     // Membership type distribution
+    //     $membership_distribution = DB::table('tbl_gym_members as gm')
+    //     ->join('tbl_gym_membership as ms', 'gm.membership_type', '=', 'ms.id')
+    //     ->select('ms.membership_name', DB::raw('COUNT(gm.id) as total'))
+    //     ->where('gm.is_deleted', '!=', 9)
+    //     ->groupBy('ms.membership_name')
+    //     ->get();
     
-            // dd($membership_distribution);
-        // Labels & values for Chart.js
-        $membershipLabels = $membership_distribution->pluck('membership_name'); 
-        $membershipValues = $membership_distribution->pluck('total');
+    //         // dd($membership_distribution);
+    //     // Labels & values for Chart.js
+    //     $membershipLabels = $membership_distribution->pluck('membership_name'); 
+    //     $membershipValues = $membership_distribution->pluck('total');
 
 
-        return view('dashboard.list_dashboard',compact('members','membership_distribution','membershipLabels','membershipValues','memebrs_query','membership','trainer','labels','values','years','selectedYear'));
+    //     return view('dashboard.list_dashboard',compact('members','membership_distribution','membershipLabels','membershipValues','memebrs_query','membership','trainer','labels','values','years','selectedYear'));
        
+    // }
+    public function list(DashboardService $dashboardService)
+    {
+        $selectedYear = request()->get('year', now()->year);
+    
+        $data = $dashboardService->getDashboardData($selectedYear);
+    
+        return view('dashboard.list_dashboard', array_merge($data, compact('selectedYear')));
     }
-
     public function fetchMemberList(Request $request)
     {
         // ONE variable that fetches everything you need

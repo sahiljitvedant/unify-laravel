@@ -21,6 +21,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Services\PaymentEmailService;
 use App\Imports\ImportUsersExcel;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Events\PaymentCompleted;
 
 class GymPackageController extends Controller
 {
@@ -53,7 +54,7 @@ class GymPackageController extends Controller
         $query = GymMember::with(['membership', 'user'])
         ->where('is_deleted', '!=', 9)
         ->whereHas('user', function ($q) {
-            $q->where('is_admin', '!=', 1);
+            $q->where('is_admin', '=', 1);
         });
 
         // dd($query);
@@ -92,90 +93,108 @@ class GymPackageController extends Controller
         $memberships = $query->paginate(10);
         // dd( $memberships);
         // Add action + encrypted_id
+        // $memberships->getCollection()->transform(function ($row) {
+        //     $encryptedId = Crypt::encryptString($row->id);
+        //     $row->encrypted_id = $encryptedId;
+        //     $row->action = '
+        //         <a href="'.route('edit_admin_member', $row->id).'" class="btn btn-sm" title="Edit">
+        //             <i class="bi bi-pencil-square"></i>
+        //         </a>
+        //         <a href="'.route('change_member_password', $row->id).'" class="btn btn-sm" title="Password">
+        //             <i class="bi bi-eye"></i>
+        //         </a>
+        //         <button type="button" class="btn btn-sm" onclick="approve_member('.$row->id.')">
+        //             <i class="bi bi-check-circle text-success"></i>
+        //         </button>
+        //         <button type="button" class="btn btn-sm" onclick="delete_members('.$row->id.')">
+        //             <i class="bi bi-trash"></i>
+        //         </button>';
+        //     return $row;
+        // });
+        // $memberships->getCollection()->transform(function ($row) {
+        //     $encryptedId = Crypt::encryptString($row->id);
+        //     $row->encrypted_id = $encryptedId;
+        
+        //     $actions = '<div class="d-flex flex-column gap-1">'; // start vertical stack
+        
+        //     // Edit
+        //     $actions .= '
+        //         <a href="'.route('edit_admin_member', $row->id).'" class="btn btn-sm" title="Edit">
+        //             <i class="bi bi-pencil-square"></i>
+        //         </a>
+        //     ';
+        
+        //     // Password
+        //     $actions .= '
+        //         <a href="'.route('change_member_password', $row->id).'" class="btn btn-sm" title="Password">
+        //             <i class="bi bi-eye"></i>
+        //         </a>
+        //     ';
+        
+        //     // Delete
+        //     $actions .= '
+        //         <button type="button" class="btn btn-sm" onclick="delete_members('.$row->id.')">
+        //             <i class="bi bi-trash"></i>
+        //         </button>
+        //     ';
+        
+        //     // Approve (only if admin_approved = 0)
+        //     if ($row->admin_approved == 0) {
+        //         $actions .= '
+        //             <button type="button" class="btn btn-sm" onclick="approve_member('.$row->id.')">
+        //                 <i class="bi bi-check-circle text-success"></i>
+        //             </button>
+        //         ';
+        //     }
+        
+        //     $actions .= '</div>'; // close vertical stack
+        
+        //     $row->action = $actions;
+        
+        //     return $row;
+        // });
         $memberships->getCollection()->transform(function ($row) {
             $encryptedId = Crypt::encryptString($row->id);
             $row->encrypted_id = $encryptedId;
-            $row->action = '
-                <a href="'.route('edit_admin_member', $row->id).'" class="btn btn-sm" title="Edit">
-                    <i class="bi bi-pencil-square"></i>
-                </a>
-                <a href="'.route('change_member_password', $row->id).'" class="btn btn-sm" title="Password">
-                    <i class="bi bi-eye"></i>
-                </a>
-                <button type="button" class="btn btn-sm" onclick="delete_members('.$row->id.')">
-                    <i class="bi bi-trash"></i>
-                </button>';
+        
+            // Dropdown with three dots
+            $actions = '
+            <div class="dropdown text-center">
+                <button class="btn btn-sm btn-light p-0" type="button" id="actionMenu'.$row->id.'" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-three-dots-vertical"></i>
+                </button>
+                <ul class="dropdown-menu " aria-labelledby="actionMenu'.$row->id.'" style="min-width: auto;">
+                   
+                    <li>
+                        <a class="dropdown-item d-inline-flex align-items-center justify-content-center" href="'.route('change_member_password', $row->id).'" title="Password">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                    </li>';
+        
+                    if ($row->admin_approved == 0) {
+                        $actions .= '
+                            <li>
+                                <button class="dropdown-item d-inline-flex align-items-center justify-content-center" onclick="approve_member('.$row->id.')" title="Approve">
+                                    <i class="bi bi-check-circle "></i>
+                                </button>
+                            </li>';
+                    }
+                
+                    $actions .= '
+                            <li>
+                                <button class="dropdown-item d-inline-flex align-items-center justify-content-center" onclick="delete_members('.$row->id.')" title="Delete">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>';
+        
+            $row->action = $actions;
+        
             return $row;
         });
-
         return response()->json($memberships);
     }
-
-    // public function fetch_member_list_pending_payment(Request $request)
-    // {
-    //     try {
-    //         $query = Payment::with(['user', 'membership'])
-    //             ->where('total_amount_remaining', '>', 0)   
-    //             ->where('payment_status', 1);
-
-    //         $sort = $request->get('sort', 'id');
-    //         $direction = strtolower($request->get('order', 'desc')) === 'asc' ? 'asc' : 'desc';
-
-    //         // Relational / computed columns sorting
-    //         if ($sort === 'name') {
-    //             $query->join('tbl_users as u', 'tbl_payments.user_id', '=', 'u.id')
-    //                 ->select('tbl_payments.*')
-    //                 ->orderBy('u.name', $direction);
-    //         } elseif ($sort === 'email') {
-    //             $query->join('tbl_users as u', 'tbl_payments.user_id', '=', 'u.id')
-    //                 ->select('tbl_payments.*')
-    //                 ->orderBy('u.email', $direction);
-    //         } elseif ($sort === 'price') {
-    //             $query->join('tbl_gym_membership as m', 'tbl_payments.plan_id', '=', 'm.id')
-    //                 ->select('tbl_payments.*')
-    //                 ->orderBy('m.price', $direction);
-    //         } elseif ($sort === 'amount_paid') {
-    //             $query->orderBy('tbl_payments.total_amount_paid', $direction);
-    //         } elseif ($sort === 'fees_pending') {
-    //             $query->orderBy('tbl_payments.total_amount_remaining', $direction);
-    //         } else {
-    //             $query->orderBy('tbl_payments.id', $direction);
-    //         }
-
-    //         $payments = $query->paginate(10);
-
-    //         // Map data for frontend
-    //         $data = $payments->getCollection()->map(function ($p) {
-    //             return [
-    //                 'id' => $p->id,
-    //                 'name' => optional($p->user)->name ?? 'N/A',
-    //                 'email' => optional($p->user)->email ?? 'N/A',
-    //                 'membership_name' => optional($p->membership)->membership_name ?? 'N/A',
-    //                 'price' => optional($p->membership)->price ?? 0,
-    //                 'amount_paid' => $p->total_amount_paid ?? 0,
-    //                 'remaining_amount' => $p->total_amount_remaining ?? 0,
-    //             ];
-    //         });
-
-    //         $payments->setCollection($data);
-
-    //         return response()->json([
-    //             'status' => 'success',
-    //             'data' => $payments->items(),
-    //             'current_page' => $payments->currentPage(),
-    //             'last_page' => $payments->lastPage(),
-    //             'per_page' => $payments->perPage(),
-    //             'total' => $payments->total(),
-    //         ]);
-
-    //     } catch (\Exception $e) {
-    //         Log::error('Fetch pending payment members failed: ' . $e->getMessage());
-    //         return response()->json([
-    //             'status' => 'error',
-    //             'message' => 'Something went wrong while fetching pending payments.'
-    //         ], 500);
-    //     }
-    // }
 
 
     public function fetch_member_list_pending_payment(Request $request)
@@ -431,9 +450,11 @@ class GymPackageController extends Controller
     {
         try 
         {
-            $user = Auth::user(); 
+            // dd($id);
+            // $user = Auth::user(); 
             // dd($user);
-            $member = GymMember::find($id);
+            $member = GymMember::where('user_id', $id)->first();
+            // dd($member);
             $latestPayment = Payment::where('user_id', $id)
             ->with('membership') // optional if you need membership name/price
             ->latest()
@@ -443,10 +464,10 @@ class GymPackageController extends Controller
             }
             // dd($latestPayment);
             // ✅ Restrict access (only the logged-in user can edit their own member profile)
-            if ($member->user_id !== $user->id) {
-                // abort(403, 'Unauthorized access.');
-                return view('access_denied');
-            }
+            // if ($member->user_id !== $user->id) {
+            //     // abort(403, 'Unauthorized access.');
+            //     return view('access_denied');
+            // }
             $memberships = DB::table('tbl_gym_membership')
             ->where('is_active',"1")     
             ->select('id', 'membership_name', 'trainer_included')
@@ -522,31 +543,30 @@ class GymPackageController extends Controller
 
     public function change_member_password($id)
     {
+        // dd($id);
         $member = DB::table('tbl_gym_members')->where('id', $id)->first();
         $user = User::find($member->user_id);
 
         return view('member_admin_edit.password', compact('member'));
 
     }
-    public function update_member_password(Request $request,$id)
-    {
-        $request->validate([
-            'password' => 'required|string|min:6|confirmed',
-        ]);
-    
-        // Find the user
-        $user = User::findOrFail($id);
+    public function update_member_password(Request $request)
+{
+    $request->validate([
+        'password' => 'required|string|min:6|confirmed',
+    ]);
 
-        // dd($user);
-        $user->password = Hash::make($request->password);
-        $user->save();
+    $user = User::findOrFail($request->user_id);
 
-        // Return JSON response for AJAX
-        return response()->json([
-            'success' => true,
-            'message' => 'Password updated successfully!',
-        ]);
-    }
+    $user->password = Hash::make($request->password);
+    $user->save();
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Password updated successfully!',
+    ]);
+}
+
     public function update(Request $request,$id)
     {
         // dd(12);
@@ -697,6 +717,7 @@ class GymPackageController extends Controller
     }
     public function update_setings(Request $request, $id)
     {
+        // dd($id);
         // Validation rules (only the fields that are required)
         $arr_rules = [
             'fitness_goals'          => 'required|string',
@@ -783,6 +804,28 @@ class GymPackageController extends Controller
         ([
             'status' => true,
             'message' => 'Member deleted successfully'
+        ]);
+    }
+
+    public function approve_member($id)
+    {
+        // dd(1);
+        $membership = DB::table('tbl_gym_members')->where('id', $id)->first();
+        // dd($membership);
+        if (!$membership) 
+        {
+            return response()->json(['status' => false, 'message' => 'Member not found'], 404);
+        }
+
+        DB::table('tbl_gym_members')
+        ->where('id', $id)
+        ->update([
+            'admin_approved' =>"1",  
+        ]);
+        return response()->json
+        ([
+            'status' => true,
+            'message' => 'Member approved successfully'
         ]);
     }
     public function activate_member ($id)
@@ -909,6 +952,132 @@ class GymPackageController extends Controller
         ]);
     }
     
+    // public function submit_member_payment(Request $request, $id)
+    // {
+    //     $request->validate([
+    //         'membership_id' => 'required|integer',
+    //         'price' => 'required|numeric|min:50',
+    //         'user_id' => 'required|integer',
+    //         'discount' => 'required|numeric|min:0',
+    //         'membership_start_date' => 'required|date',
+    //         'membership_end_date' => 'required|date|after_or_equal:membership_start_date',
+    //         'payment_method' => 'required|in:1,2,3',
+    //     ]);
+
+    //     $membership = Membership::find($request->membership_id);
+    //     if (!$membership) {
+    //         return response()->json([
+    //             'status' => 'error',
+    //             'message' => 'Membership not found'
+    //         ]);
+    //     }
+
+    //     // Get last payment for this user + membership
+    //     $lastPayment = Payment::where('user_id', $request->user_id)
+    //         ->where('plan_id', $request->membership_id)
+    //         ->latest()
+    //         ->first();
+
+    //     // Determine cycle ID
+    //     if ($lastPayment && $lastPayment->total_amount_remaining == 0) {
+    //         // Last membership fully paid → start a new cycle
+    //         $cycleId = uniqid('cycle_id');
+    //     } elseif ($lastPayment) {
+    //         // Continue same cycle
+    //         $cycleId = $lastPayment->cycle_id ?? uniqid('cycle_id');
+    //     } else {
+    //         // First purchase ever
+    //         $cycleId = uniqid('cycle_id');
+    //     }
+
+    //     $currentAmount = $request->price;
+    //     $currentDiscount = $request->discount ?? 0;
+
+    //     // Total paid so far in this cycle (excluding current)
+    //     $previousPaid = Payment::where('user_id', $request->user_id)
+    //         ->where('plan_id', $request->membership_id)
+    //         ->where('cycle_id', $cycleId)
+    //         ->sum('amount');
+
+    //     // Total discount so far in this cycle (excluding current)
+    //     $previousDiscount = Payment::where('user_id', $request->user_id)
+    //         ->where('plan_id', $request->membership_id)
+    //         ->where('cycle_id', $cycleId)
+    //         ->sum('discount');
+
+    //     // Add current payment + discount
+    //     $totalPaid = $previousPaid + $currentAmount;
+    //     $totalDiscount = $previousDiscount + $currentDiscount;
+
+    //     // Calculate remaining
+    //     $remaining = max($membership->price - $totalPaid - $totalDiscount, 0);
+
+    //     // Determine payment status for current payment
+    //     $paymentStatus = $remaining == 0 ? 2 : 1;
+
+    //     // Generate invoice number
+    //     $invoiceNumber = 'MEM' . $request->user_id . '-' . rand(100, 999) . '-' . now()->format('dMMy');
+
+    //     // Insert current payment
+    //     $payment = Payment::create([
+    //         'user_id' => $request->user_id,
+    //         'plan_id' => $request->membership_id,
+    //         'cycle_id' => $cycleId,
+    //         'amount' => $currentAmount,
+    //         'discount' => $currentDiscount,
+    //         'membership_start_date' => $request->membership_start_date,
+    //         'membership_end_date' => $request->membership_end_date,
+    //         'payment_done_by' => auth()->id() ?? $id,
+    //         'invoice_number' => $invoiceNumber,
+    //         'total_amount_paid' => $totalPaid,
+    //         'total_amount_remaining' => $remaining,
+    //         'payment_status' => $paymentStatus,
+    //         'payment_method' => $request->payment_method,
+    //         'created_at' => now(),
+    //         'updated_at' => now(),
+    //     ]);
+
+    //     // ✅ If fully paid, update all previous payments in this cycle to status 2
+    //     if ($remaining == 0) {
+    //         Payment::where('user_id', $request->user_id)
+    //             ->where('plan_id', $request->membership_id)
+    //             ->where('cycle_id', $cycleId)
+    //             ->update(['payment_status' => 2]);
+    //     }
+
+    //     // Update member info
+    //     GymMember::updateOrCreate(
+    //         ['user_id' => $id],
+    //         [
+    //             'membership_type' => $request->membership_id,
+    //             'joining_date' => $request->membership_start_date,
+    //             'expiry_date' => $request->membership_end_date,
+    //             'payment_method' => $request->payment_method,
+    //             'amount_paid'=> $totalPaid,
+    //             'manual_payment_flag'=>"1",
+    //             'cron_flag'=>"1"
+    //         ]
+    //     );
+
+    //     // Generate PDF invoice
+    //     $pdf = PDF::loadView('gym_packages.invoice_pdf', ['payment' => $payment]);
+    //     $fileName = 'invoice_' . $payment->invoice_number . '.pdf';
+    //     $path = 'public/invoices/' . $fileName;
+    //     Storage::put($path, $pdf->output());
+    //     $payment->update(['invoice_path' => 'storage/invoices/' . $fileName]);
+
+    //     $email = 'sahilsunilj@gmail.com';
+    //     PaymentEmailService::sendInvoice($payment, 'storage/invoices/' . $fileName, $email);
+
+    //     return response()->json([
+    //         'status'  => 'success',
+    //         'payment' => $payment,
+    //         'pdf_url' => asset('storage/invoices/' . $fileName),
+    //         'total_paid' => $totalPaid,
+    //         'remaining' => $remaining
+    //     ]);
+    // }
+
     public function submit_member_payment(Request $request, $id)
     {
         $request->validate([
@@ -1004,7 +1173,7 @@ class GymPackageController extends Controller
 
         // Update member info
         GymMember::updateOrCreate(
-            ['id' => $id],
+            ['user_id' => $id],
             [
                 'membership_type' => $request->membership_id,
                 'joining_date' => $request->membership_start_date,
@@ -1017,25 +1186,24 @@ class GymPackageController extends Controller
         );
 
         // Generate PDF invoice
-        $pdf = PDF::loadView('gym_packages.invoice_pdf', ['payment' => $payment]);
-        $fileName = 'invoice_' . $payment->invoice_number . '.pdf';
-        $path = 'public/invoices/' . $fileName;
-        Storage::put($path, $pdf->output());
-        $payment->update(['invoice_path' => 'storage/invoices/' . $fileName]);
+        // $pdf = PDF::loadView('gym_packages.invoice_pdf', ['payment' => $payment]);
+        // $fileName = 'invoice_' . $payment->invoice_number . '.pdf';
+        // $path = 'public/invoices/' . $fileName;
+        // Storage::put($path, $pdf->output());
+        // $payment->update(['invoice_path' => 'storage/invoices/' . $fileName]);
 
-        $email = 'sahilsunilj@gmail.com';
-        PaymentEmailService::sendInvoice($payment, 'storage/invoices/' . $fileName, $email);
+        // $email = 'sahilsunilj@gmail.com';
+        // PaymentEmailService::sendInvoice($payment, 'storage/invoices/' . $fileName, $email);
+        event(new PaymentCompleted($payment));
 
         return response()->json([
             'status'  => 'success',
             'payment' => $payment,
-            'pdf_url' => asset('storage/invoices/' . $fileName),
+            // 'pdf_url' => asset('storage/invoices/' . $fileName),
             'total_paid' => $totalPaid,
             'remaining' => $remaining
         ]);
     }
-
-
     public function list_payment()
     { 
         $users = User::where('is_admin', 0) ->orderBy('name', 'asc')->get(); 

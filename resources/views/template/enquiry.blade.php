@@ -55,7 +55,7 @@
           <tr>
             <td style="padding-top:30px; border-top:1px solid #e0e0e0;">
               <p style="font-size:13px; color:#888; margin:0;">
-                ©2025 Sachii. All rights reserved.
+                ©2026 Brainstar. All rights reserved.
               </p>
             </td>
           </tr>

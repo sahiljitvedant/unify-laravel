@@ -1,37 +1,36 @@
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Inter', sans-serif;
+        background-color: var(--theme-color);
 
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Inter', sans-serif;
-    background-color: var(--theme-color);
+    }
+    :root {
+        --sidebar-bg: #0B1061;    
+        --sidebar-hover: #1A1E7A;    
+        --sidebar-width: 60px;     
+        --sidebar-expanded: 200px;    
+    }
+    ::-webkit-scrollbar {
+        width: 6px; 
+        height: 6px; 
+    }
+    ::-webkit-scrollbar-track {
+        background: #f5f6fa; 
+        border-radius: 10px;
+    }
 
-}
-:root {
-    --sidebar-bg: #0B1061;    
-    --sidebar-hover: #1A1E7A;    
-    --sidebar-width: 60px;     
-    --sidebar-expanded: 200px;    
-}
-::-webkit-scrollbar {
-    width: 6px; 
-    height: 6px; 
-}
-::-webkit-scrollbar-track {
-    background: #f5f6fa; 
-    border-radius: 10px;
-}
+    ::-webkit-scrollbar-thumb {
+        background-color: #0B1061; 
+        border-radius: 10px;
+        border: 1px solid #f5f6fa; 
+    }
 
-::-webkit-scrollbar-thumb {
-    background-color: #0B1061; 
-    border-radius: 10px;
-    border: 1px solid #f5f6fa; 
-}
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: #090d4a; 
+    }
 
-::-webkit-scrollbar-thumb:hover {
-    background-color: #090d4a; 
-}
-
-/* Topbar wwith Responsive Query Start */
+    /* Topbar wwith Responsive Query Start */
     .topbar {
         position: fixed;
         top: 0;
@@ -112,7 +111,7 @@ body {
             gap: 0.8rem;
         }
 
-        /* Hide Sachii text, keep globe icon only */
+        /* Hide Brainstar text, keep globe icon only */
         .oval-link span {
             display: none !important;
         }
@@ -146,8 +145,8 @@ body {
             display: none !important;
         }
     }
-/* Topbar wwith Responsive Query End */
-/* Sidebar wwith Responsive Query End */
+    /* Topbar wwith Responsive Query End */
+    /* Sidebar wwith Responsive Query End */
     .sidebar 
     {
         position: fixed;

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Add Membership')
+@section('title', 'Members Password')
 
 @push('styles')
 <!-- Bootstrap CSS -->
@@ -17,6 +17,8 @@
         </ol>
     </nav>
     <form id="memebrPasswordForm" class="p-4 bg-light rounded shadow">
+        <input type="hidden" name="user_id" value="{{ $member->user_id }}">
+
         <h4 class="mb-4">Chnage User Password</h4>
         <div class="col-md-6 col-12 position-relative mt-2">
             <label class="form-label required">New Password</label>
@@ -70,9 +72,9 @@ const stepperupdatePasswordUrl = "{{ route('update_member_password', ['id' => $m
 <style>
     #submitPasswordBtn
     {
-        background: #0b1061;
+        background: var(--sidebar_color);
         color: #fff;
-        border: 5px solid #0b1061 !important;
+        border: 5px solid var(--sidebar_color); !important;
         border-radius: 30px;
         font-size: 12px;
         padding: 5px;

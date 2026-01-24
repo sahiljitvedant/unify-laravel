@@ -1,34 +1,250 @@
 @extends('front.app')
 
+@section('title', 'About Us')
+
 @section('content')
-    <!-- ABOUT US INFO SECTION -->
+<section class="about-section py-5">
+    <div class="container">
 
-    <section id="about-contact" class="about-contact py-5" style="background:#f9f9f9;">
-        <div class="container">
-            <div class="row g-4">
-                <!-- Contact Info -->
-                <div class="col-md-6">
-                    <div class="contact-card p-4 shadow rounded" style="background:#fff;">
-                        <h2 class="mb-4" style="color: #0B1061;">Get in Touch</h2>
-                        <p><strong>Address:</strong> Fitness Club, FC Road, Pune, Maharashtra, India</p>
-                        <p><strong>Phone:</strong> +91 98765 43210</p>
-                        <p><strong>Email:</strong> support@fitnessclub.com</p>
-                        <p><strong>Hours:</strong> Mon – Sat: 6:00 AM – 10:00 PM</p>
-                    </div>
-                </div>
+        <!-- Heading -->
+        <div class="text-center mb-5">
+            <h2 class="about-title">About Brainstar</h2>
+            <p class="about-subtitle">Driven by innovation. Powered by technology.</p>
+            <div class="title-underline"></div>
+        </div>
 
-                <!-- Google Map -->
-                <div class="col-md-6">
-                    <div class="ratio ratio-16x9 shadow rounded">
-                        <iframe 
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3783.339948926727!2d73.84296771489123!3d18.5167260874091!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2c07c61e9bb8f%3A0xbee72d1c8e0f5f9c!2sFergusson%20College%20Rd%2C%20Shivajinagar%2C%20Pune%2C%20Maharashtra%20411004!5e0!3m2!1sen!2sin!4v1674123456789!5m2!1sen!2sin" 
-                            style="border:0;" 
-                            allowfullscreen 
-                            loading="lazy">
-                        </iframe>
-                    </div>
-                </div>
+        <!-- Company Intro -->
+        <div class="row align-items-center mb-5">
+            <div class="col-lg-6">
+            <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200" class="img-fluid about-img" alt="About Company">
+
+
+            </div>
+            <div class="col-lg-6">
+                <h3 class="about-heading">Who We Are</h3>
+                <p class="about-text">
+                    Brainstar Technologies is a leading system integrator delivering advanced safety,
+                    security and automation solutions across India. With over 5+ years of experience,
+                    we specialize in designing, implementing and maintaining mission-critical systems.
+                </p>
+
+                <p class="about-text">
+                    Our expertise spans CCTV, Fire Detection, Access Control, Gas Suppression,
+                    Public Addressing Systems, BMS, IBMS and Industrial Automation.
+                </p>
             </div>
         </div>
-    </section>
+
+        <!-- Vision / Mission -->
+        <div class="row g-4 mb-5">
+
+            <div class="col-md-6">
+                <div class="about-card">
+                    <div class="about-icon"><i class="bi bi-bullseye"></i></div>
+                    <h5>Our Mission</h5>
+                    <p>
+                        To deliver reliable, scalable and secure technology solutions
+                        that empower businesses and industries to operate safely and efficiently.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="about-card">
+                    <div class="about-icon"><i class="bi bi-eye"></i></div>
+                    <h5>Our Vision</h5>
+                    <p>
+                        To become India’s most trusted system integrator by continuously
+                        innovating and delivering world-class infrastructure solutions.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Our Founders -->
+        <div class="text-center mb-5">
+            <h2 class="about-title">Our Founders</h2>
+            <p class="about-subtitle">The leaders behind Brainstar</p>
+            <div class="title-underline"></div>
+        </div>
+
+        <!-- Founder 1 -->
+        <div class="row align-items-center founder-card mb-5">
+            <div class="col-lg-4 text-center">
+                <img src="https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=600" class="founder-img" alt="Founder">
+
+            </div>
+            <div class="col-lg-8">
+                <h4 class="founder-name">Rahul Sharma</h4>
+                <span class="founder-role">Co-Founder & CEO</span>
+                <p class="founder-text">
+                    Rahul Sharma is a visionary entrepreneur with over a decade of experience
+                    in industrial automation and security systems. His leadership has helped
+                    Brainstar scale rapidly across multiple sectors including manufacturing,
+                    logistics and IT.
+                </p>
+            </div>
+        </div>
+
+        <!-- Founder 2 -->
+        <div class="row align-items-center founder-card mb-5 flex-row-reverse">
+            <div class="col-lg-4 text-center">
+                <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=600" class="founder-img" alt="Founder">
+
+            </div>
+            <div class="col-lg-8">
+                <h4 class="founder-name">Anita Verma</h4>
+                <span class="founder-role">Co-Founder & CTO</span>
+                <p class="founder-text">
+                    Anita Verma leads the technology and engineering division at Brainstar.
+                    With deep expertise in integrated systems and automation, she ensures
+                    every project meets the highest global standards.
+                </p>
+            </div>
+        </div>
+
+        <!-- Why Choose Us -->
+        <div class="text-center mb-5">
+            <h2 class="about-title">Why Choose Brainstar</h2>
+            <p class="about-subtitle">What makes us different</p>
+            <div class="title-underline"></div>
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-md-4">
+                <div class="about-card">
+                    <div class="about-icon"><i class="bi bi-award"></i></div>
+                    <h5>Proven Expertise</h5>
+                    <p>
+                        5+ years of experience delivering enterprise-grade solutions
+                        across multiple industries.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="about-card">
+                    <div class="about-icon"><i class="bi bi-shield-check"></i></div>
+                    <h5>Reliable Systems</h5>
+                    <p>
+                        We design robust, scalable and secure infrastructure
+                        that protects critical assets.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="about-card">
+                    <div class="about-icon"><i class="bi bi-people"></i></div>
+                    <h5>Customer First</h5>
+                    <p>
+                        Long-term partnerships built on trust, transparency and performance.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section>
 @endsection
+<style>
+    /* ===============================
+   ABOUT US – CORPORATE THEME
+================================ */
+
+.about-section {
+    background: var(--theme-color);
+}
+
+/* Headings */
+.about-title {
+    font-weight: 700;
+    color: var(--sidebar_color);
+}
+
+.about-subtitle {
+    color: #666;
+    font-size: var(--front_font_size);
+    margin-top: 6px;
+}
+
+/* Image */
+.about-img {
+    border-radius: 14px;
+    box-shadow: 0 14px 32px rgba(0,0,0,0.15);
+}
+
+/* Text */
+.about-heading {
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.about-text {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #555;
+}
+
+/* Cards */
+.about-card {
+    background: var(--other_color_fff);
+    border-radius: 12px;
+    padding: 30px 22px;
+    text-align: center;
+    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.about-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 36px rgba(0,0,0,0.15);
+}
+
+.about-icon {
+    font-size: 38px;
+    color: var(--sidebar_color);
+    margin-bottom: 15px;
+}
+
+/* Founder Section */
+.founder-card {
+    background: var(--other_color_fff);
+    padding: 35px;
+    border-radius: 14px;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.12);
+}
+
+.founder-img {
+    width: 220px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 10px 26px rgba(0,0,0,0.25);
+}
+
+.founder-name {
+    font-weight: 700;
+    color: var(--sidebar_color);
+    margin-bottom: 5px;
+}
+
+.founder-role {
+    display: block;
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 15px;
+}
+
+.founder-text {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #555;
+}
+
+</style>

@@ -44,7 +44,8 @@ class GymMember extends Model
         'additional_notes',
         'profile_image',
         'manual_payment_flag',
-        'cron_flag'
+        'cron_flag',
+        'admin_approved'
     ];
 
     // Casts for better handling

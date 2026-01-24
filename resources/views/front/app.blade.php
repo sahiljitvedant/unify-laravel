@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>@yield('title', 'Sachii-Front')</title>
+  <title>@yield('title', 'Brainstar-Front')</title>
   <link rel="icon" type="image/png" href="{{ asset('assets/img/logo.png') }}">
   <link rel="stylesheet" href="style.css">
  
@@ -15,245 +15,491 @@
     {
         --theme-color: {{ config('app.theme_color') }};
         --sidebar_color: {{ config('app.sidebar_color') }};
+        --sidebar_light:{{ config('app.sidebar_light') }};
         --other_color_fff: {{ config('app.other_color_fff') }};
         --front_font_size: {{ config('app.front_font_size') }};
     }
+    html, body {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+    }
+
+    .footer
+    {
+        background: #333333;
+        box-shadow: 0 -18px 40px rgba(0, 0, 0, 0.25);
+    }
+    /* Quick Inquiry Button */
+    .quick-inquiry-btn {
+        position: fixed;
+        right: -48px;   /* pull it inside */
+        top: 30%;
+        transform: translateY(-50%) rotate(-90deg);
+        background: var(--sidebar_color);
+        color: #fff;
+        padding: 12px 30px;
+        font-weight: 600;
+        border-radius: 6px 6px 0 0;
+        cursor: pointer;
+        z-index: 999;
+        box-shadow: -4px 0 12px rgba(0,0,0,0.25);
+    }
+    /* Drawer Panel */
+    .inquiry-drawer {
+        position: fixed;
+        top: 0;
+        right: -360px;
+        width: 360px;
+        height: 100vh;
+        background: #fff;
+        box-shadow: -10px 0 30px rgba(0,0,0,0.25);
+        transition: 0.4s ease;
+        z-index: 1000;
+        padding: 20px;
+    }
+
+    /* Active Drawer */
+    .inquiry-drawer.active {
+        right: 0;
+    }
+
+    /* Header */
+    .inquiry-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
+    }
+
+    .inquiry-header h4 {
+        margin: 0;
+        font-weight: 600;
+        color: var(--sidebar_color);
+    }
+
+    .close-btn {
+        font-size: 28px;
+        cursor: pointer;
+    }
+
+    /* Form */
+    .inquiry-form {
+        margin-top: 20px;
+    }
+
+    .inquiry-form .form-control {
+        margin-bottom: 14px;
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .btn-submit {
+        width: 100%;
+        padding: 12px;
+        background: var(--sidebar_color);
+        color: #fff;
+        border: none;
+        font-weight: 600;
+        border-radius: 6px;
+    }
+
   </style>
 </head>
-<body>
-    <!-- HEADER -->
-    <header class="header">
-        <nav class="navbar">
+    <body>
+        
+        <!-- HEADER -->
+        <header class="header">
+            <nav class="navbar">
+                <div class="container nav-container">
+
+                    <!-- Logo -->
+                    <a href="{{ route('home') }}" class="logo">
+                        <img src="{{ asset('assets/img/logo.png') }}" alt="Logo">
+                    </a>
+
+                    <!-- Desktop Menu -->
+                    <ul class="nav-links">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/about_us">About</a></li>
+                      
+                        @foreach($menus as $menu)
+                            <li class="has-dropdown">
+                                <a href="javascript:void(0)">
+                                    {{ $menu['title'] }}
+                                    <i class="bi-caret-down-fill menu-icon"></i>
+                                </a>
+
+                                <ul class="menu-dropdown">
+
+                                    {{-- With subheaders --}}
+                                    @if(!empty($menu['with_subheader']))
+                                        @foreach($menu['with_subheader'] as $sub)
+                                            <li class="has-dropdown-sub">
+                                                <a href="javascript:void(0)">
+                                                    {{ $sub['name'] }}
+                                                    <i class="bi bi-caret-right-fill menu-icon"></i>
+                                                </a>
+
+                                                <ul class="menu-dropdown-sub">
+                                                    @foreach($sub['pages'] as $page)
+                                                        <li>
+                                                            <a href="{{ url($page->slug) }}">
+                                                                {{ $page->title }}
+                                                            </a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </li>
+                                        @endforeach
+                                    @endif
+
+                                    {{-- Without subheader --}}
+                                    @if(!empty($menu['without_subheader']))
+                                        @foreach($menu['without_subheader'] as $page)
+                                            <li>
+                                                <a href="{{ url($page->slug) }}">
+                                                    {{ $page->title }}
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    @endif
+
+                                </ul>
+                            </li>
+                        @endforeach
+
+                        <li><a href="/contact_us">Contact Us</a></li>
+                        <li><a href="/careers">Carrers</a></li>
+                        <li><a target="_blank" href="{{ route('login_get') }}">Login</a></li>
+                    </ul>
+
+                    <!-- Hamburger -->
+                    <!-- <div class="hamburger" id="hamburger">
+                        <i class="bi bi-list"></i>
+                    </div> -->
+
+                </div>
+            </nav>
+        </header>
+
+        <!-- Quick Inquiry Button -->
+        <div class="quick-inquiry-btn" id="openInquiry">
+            Quick Enquiry
+        </div>
+
+        <!-- Enquiry Drawer -->
+        <div class="inquiry-drawer" id="inquiryDrawer">
+
+            <div class="inquiry-header">
+                <h4>Quick Enquiry</h4>
+                <span class="close-btn" id="closeInquiry">&times;</span>
+            </div>
+
+            <form class="inquiry-form">
+
+                <input type="text" class="form-control" placeholder="Name*" required>
+
+                <input type="email" class="form-control" placeholder="Email*" required>
+
+                <input type="tel" class="form-control" placeholder="Mobile Number*" required>
+
+                <select class="form-control" required>
+                    <option value="">Select Product</option>
+                    <option value="A">Product A</option>
+                    <option value="B">Product B</option>
+                    <option value="C">Product C</option>
+                </select>
+
+                <textarea class="form-control" rows="4" placeholder="Reason*" required></textarea>
+
+                <button type="submit" class="btn-submit">Submit Inquiry</button>
+
+            </form>
+
+        </div>
+
+        <!-- ABOUT US INFO SECTION -->
+        <main>
+            @yield('content')
+        </main>
+        <!-- Scroll Controls -->
+        <div class="scroll-controls">
+            <button id="scrollUp" class="scroll-btn up" title="Scroll Up">
+                <i class="bi bi-arrow-up"></i>
+            </button>
+            <button id="scrollDown" class="scroll-btn down" title="Scroll Down">
+                <i class="bi bi-arrow-down"></i>
+            </button>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="footer">
             <div class="container">
-            <div class="logo">
-                <a href="{{ route('home') }}" class="d-flex align-items-center text-decoration-none">
-                    <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" 
-                        style="height:50px; width:160px; object-fit:cover; border-radius:10px; border:1px solid #0B1061">
-                </a>
-            </div>
-            <ul class="nav-links">
-                <li><a href="/">Home</a></li>
-                <li><a href="/about_us">About</a></li>
-                <li><a href="/blogs">Blogs</a></li>
-                <li><a href="#contact">Contact</a></li>
-                <li><a target="_blank" href="{{ route('login_get') }}">Login</a></li>
-            </ul>
-            </div>
-            <div class="hamburger">&#9776;</div>
-        </nav>
-    </header>
-    <!-- MOBILE MENU -->
-    <div class="mobile-menu" id="mobileMenu">
-        <a href="/">Home</a>
-        <a href="/about_us">About</a>
-        <a href="#classes">Classes</a>
-        <a href="#contact">Contact</a>
-        <li><a href="{{ route('login_get') }}">Login</a></li>
-    </div>
-    <!-- ABOUT US INFO SECTION -->
-    <main>
-        @yield('content')
-    </main>
-   
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-grid">
-            
-            <!-- Column 1 -->
-            <div class="footer-col">
-                <h3>We at Sachiii</h3>
+                <div class="footer-grid">
+                
+                    <!-- Column 1 -->
+                    <div class="footer-col">
+                        <h3>BRAINSTAR,</h3>
+                        <p class="footer_p">
+                        We as a system integrator are serving satisfied customers
+                        across PAN India from last 5 years.
+                        We provide Maintenance services (AMC) Safety and security system, low
+                        voltage systems, such as CCTV, Fire Alarm system, Fire detection system, Gas
+                        suppression system, Access Control system, Public addressing system, BMS,
+                        IBMS, Intrusion alarm system etc.
+                        We have successfully provided solutions to diversified market segments such
+                        as Manufacturing industry, Logistics and Warehouse,IT Sectors, Ports ,
+                        Pharma Industries and Other system Integrators
+                        </p>
+                        <div class="social-links">
+                            <a href="#" class="btn-read"><i class="bi bi-facebook"></i></a>
+                            <a href="#"  class="btn-read"><i class="bi bi-instagram"></i></a>
+                            <a href="https://www.linkedin.com/company/brainstar-technologies-private-limited/?viewAsMember=true" 
+                            target="_blank" 
+                            class="btn-read">
+                                <i class="bi bi-linkedin"></i>
+                            </a>
+                            <a href="#"  class="btn-read"><i class="bi bi-youtube"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Column 2 -->
+                    <div class="footer-col">
+                        <h3>Navigation</h3>
+                        <ul class="footer-links">
+                            <li><a href="/about_us">About Us</a></li>
+                            <li><a href="/contact_us">Contact Us</a></li>
+                            <li><a href="/careers">Careers</a></li>
+                            <li><a href="/privacy_policy">Privacy Policy</a></li>
+                            <li><a href="/terms_and_conditions">Terms & Conditions</a></li>
+                            <li><a href="/faqs">FAQ's</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Column 3 -->
+                    <div class="footer-col">
+                        <h3>Contact Info</h3>
+
+                        <p><i class="bi bi-building"></i> Brainstar Technologies Pvt. Ltd.</p>
+                        <p><i class="bi bi-envelope"></i> support@brainstar.com</p>
+                        <p><i class="bi bi-telephone"></i> +91 98765 43210</p>
+                        <p><i class="bi bi-geo-alt"></i> Pune, Maharashtra, India</p>
+                    </div>
+                </div>
+
+                <div class="footer-bottom">
                 <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vitae orci sed libero consequat tincidunt. Vivamus vel urna eget arcu ultricies sagittis. Integer euismod, sapien nec pretium pharetra, magna justo volutpat magna, et bibendum justo libero eget risus.Lorem ipsum dolor sit ame
+                    &copy; <script>document.write(new Date().getFullYear())</script> Brainstar|2026 All Rights Reserved.
+                    <a href="/privacy_policy"><b>Privacy Policy</b></a> |
+                    <a href="/terms_and_conditions"> <b>Terms & Conditions</b></a>
                 </p>
-                <div class="social-links">
-                    <a href="#" class="btn-read"><i class="bi bi-facebook"></i></a>
-                    <a href="#"  class="btn-read"><i class="bi bi-instagram"></i></a>
-                    <a href="#"  class="btn-read"><i class="bi bi-linkedin"></i></a>
-                    <a href="#"  class="btn-read"><i class="bi bi-youtube"></i></a>
                 </div>
             </div>
+        </footer>
 
-            <!-- Column 2 -->
-            <div class="footer-col">
-                <h3>Navigation</h3>
-                <ul class="footer-links">
-                    <li><a href="/about_us">About Us</a></li>
-                    <li><a href="#">Gallary</a></li>
-                    <li><a href="/blogs">Blogs</a></li>
-                    <li><a href="/privacy_policy">Privacy Policy</a></li>
-                    <li><a href="#">Terms & Conditions</a></li>
-                    <li><a href="/faqs">FAQ's</a></li>
-                </ul>
-            </div>
-
-            <!-- Column 3 -->
-            <div class="footer-col">
-                <h3>Contact</h3>
-                <p> Fitness Club, FC Road, Pune, Maharashtra, India</p>
-                <p>support@fitnessclub.com</p>
-                <p>+91 98765 43210</p>
-
-                <form class="newsletter">
-                <input type="email" class="form-control" placeholder="Subscribe email" required>
-                <button type="submit" class="btn-read">Subscribe</button>
-                </form>
-            </div>
-            </div>
-
-            <div class="footer-bottom">
-            <p>
-                &copy; <script>document.write(new Date().getFullYear())</script> Sachi|2025 All Rights Reserved.
-                <a href="/privacy_policy">Privacy Policy</a> |
-                <a href="#">Terms & Conditions</a>
-            </p>
-            </div>
-        </div>
-    </footer>
-
-    <style>
-        .nav-links a,
-        .mobile-menu a {
-            text-decoration: none;
-            color: inherit;    
-        }
-        .btn-read {
-            display: inline-flex;
-            justify-content: center; 
-            align-items: center;
-            gap: 5px; 
-            transition: transform 0.3s ease;
-        }
-
-        .btn-read:hover {
-            transform: translateX(5px);
-        }
-        .nav-links a.active 
-        {
-            color: #0B1061; 
-            font-weight: bold;
-            border-bottom: 2px solid #0B1061;
-        }
-        .contact-card
-        {
-            background: #f2f2f2 !important;
-        }
-    </style>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        const hamburger = document.querySelector('.hamburger');
-        const mobileMenu = document.getElementById('mobileMenu');
-
-        hamburger.addEventListener('click', () => {
-            mobileMenu.classList.toggle('active');
-        });
-
-        // Close menu when clicking a link
-        document.querySelectorAll('.mobile-menu a').forEach(link => {
-            link.addEventListener('click', () => {
-            mobileMenu.classList.remove('active');
-            });
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-        const slider = document.querySelector('.hero-slider');
-        if (!slider) return;
-
-        const slides = slider.querySelectorAll('.slide');
-        const dots   = slider.querySelectorAll('.dot');
-
-        if (!slides.length || !dots.length) return;
-
-        let current = 0;
-        const autoplayInterval = 130000; // 3s (change to 5000 if you want 5s)
-        let autoplayTimer = null;
-
-        function showSlide(index) {
-            index = (index + slides.length) % slides.length; // always wrap around
-            slides.forEach((s, i) => {
-            s.classList.toggle('active', i === index);
-            s.setAttribute('aria-hidden', i === index ? 'false' : 'true');
-            });
-            dots.forEach((d, i) => d.classList.toggle('active', i === index));
-            current = index;
-        }
-
-        function startAutoplay() {
-            stopAutoplay();
-            autoplayTimer = setInterval(() => showSlide(current + 1), autoplayInterval);
-        }
-        function stopAutoplay() {
-            if (autoplayTimer) clearInterval(autoplayTimer);
-            autoplayTimer = null;
-        }
-
-        // dot controls
-        dots.forEach(dot => {
-            dot.addEventListener('click', () => {
-            showSlide(parseInt(dot.dataset.index, 10));
-            startAutoplay(); // 🔥 restart autoplay after clicking
-            });
-        });
-
-        // keyboard arrows
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') { showSlide(current - 1); startAutoplay(); }
-            if (e.key === 'ArrowRight') { showSlide(current + 1); startAutoplay(); }
-        });
-
-        // pause on hover/touch
-        slider.addEventListener('mouseenter', stopAutoplay);
-        slider.addEventListener('mouseleave', startAutoplay);
-        slider.addEventListener('touchstart', stopAutoplay);
-        slider.addEventListener('touchend', startAutoplay);
-
-        // init
-        showSlide(0);
-        startAutoplay();
-        });
-    </script>
-
-    <script>
-        $(document).ready(function () {
-            $("#enquiryForm").on("submit", function () {
-                var btn = $("#submitBtn");
-                btn.prop("disabled", true).text("Please wait...");
-            });
-        });
-        // $(document).ready(function () {
-        //     $(".nav-links a").on("click", function () {
-        //         $(".nav-links a").removeClass("active"); // remove from all
-        //         $(this).addClass("active"); // add to clicked
-        //     });
-        // });
-        $(document).ready(function () {
-            const sections = $("section"); // all sections
-            const navLinks = $(".nav-links a");
-
-            function setActiveLink() {
-                let scrollPos = $(window).scrollTop();
-
-                sections.each(function () {
-                    let top = $(this).offset().top - 100; // offset for navbar height
-                    let bottom = top + $(this).outerHeight();
-                    let id = $(this).attr("id");
-
-                    if (scrollPos >= top && scrollPos < bottom) {
-                        navLinks.removeClass("active");
-                        $(".nav-links a[href='#" + id + "']").addClass("active");
-                    }
-                });
+        <style>
+            /* Logo */
+            .logo img {
+                height: 40px;
+                width: auto;
+                border-radius: 8px;
             }
+        </style>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-            // run on page load + scroll
-            setActiveLink();
-            $(window).on("scroll", setActiveLink);
-        });
+        <!-- Hamburger js -->
+        <script>
+            const hamburger = document.getElementById("hamburger");
+            const mobileMenu = document.getElementById("mobileMenu");
 
-    </script>
+            hamburger.addEventListener("click", () => {
+                mobileMenu.classList.toggle("active");
+            });
 
-</body>
+            // Close menu when clicking link
+            document.querySelectorAll(".mobile-menu a").forEach(link => {
+                link.addEventListener("click", () => {
+                    mobileMenu.classList.remove("active");
+                });
+            });
+        </script>
+        <!-- Slider code -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const slider = document.querySelector('.hero-slider');
+                if (!slider) return;
 
+                const slides = slider.querySelectorAll('.slide');
+                const prevBtn = slider.querySelector('.prev-btn');
+                const nextBtn = slider.querySelector('.next-btn');
 
+                if (!slides.length) return;
+
+                let current = 0;
+                const autoplayInterval = 5000; // 5 seconds
+                let autoplayTimer = null;
+
+                function showSlide(index) {
+                    index = (index + slides.length) % slides.length;
+
+                    slides.forEach((s, i) => {
+                        s.classList.toggle('active', i === index);
+                        s.setAttribute('aria-hidden', i === index ? 'false' : 'true');
+                    });
+
+                    current = index;
+                }
+
+                function nextSlide() {
+                    showSlide(current + 1);
+                    restartAutoplay();
+                }
+
+                function prevSlide() {
+                    showSlide(current - 1);
+                    restartAutoplay();
+                }
+
+                function startAutoplay() {
+                    stopAutoplay();
+                    autoplayTimer = setInterval(() => showSlide(current + 1), autoplayInterval);
+                }
+
+                function stopAutoplay() {
+                    if (autoplayTimer) clearInterval(autoplayTimer);
+                    autoplayTimer = null;
+                }
+
+                function restartAutoplay() {
+                    startAutoplay();
+                }
+
+                // Button events
+                nextBtn.addEventListener('click', nextSlide);
+                prevBtn.addEventListener('click', prevSlide);
+
+                // Keyboard arrows
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft') prevSlide();
+                    if (e.key === 'ArrowRight') nextSlide();
+                });
+
+                // Pause on hover
+                slider.addEventListener('mouseenter', stopAutoplay);
+                slider.addEventListener('mouseleave', startAutoplay);
+                slider.addEventListener('touchstart', stopAutoplay);
+                slider.addEventListener('touchend', startAutoplay);
+
+                // Init
+                showSlide(0);
+                startAutoplay();
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                $("#enquiryForm").on("submit", function () {
+                    var btn = $("#submitBtn");
+                    btn.prop("disabled", true).text("Please wait...");
+                });
+            });
+            // $(document).ready(function () {
+            //     $(".nav-links a").on("click", function () {
+            //         $(".nav-links a").removeClass("active"); // remove from all
+            //         $(this).addClass("active"); // add to clicked
+            //     });
+            // });
+            $(document).ready(function () {
+                const sections = $("section"); // all sections
+                const navLinks = $(".nav-links a");
+
+                function setActiveLink() {
+                    let scrollPos = $(window).scrollTop();
+
+                    sections.each(function () {
+                        let top = $(this).offset().top - 100; // offset for navbar height
+                        let bottom = top + $(this).outerHeight();
+                        let id = $(this).attr("id");
+
+                        if (scrollPos >= top && scrollPos < bottom) {
+                            navLinks.removeClass("active");
+                            $(".nav-links a[href='#" + id + "']").addClass("active");
+                        }
+                    });
+                }
+
+                // run on page load + scroll
+                setActiveLink();
+                $(window).on("scroll", setActiveLink);
+            });
+
+        </script>
+
+        <!-- Enquiry Model -->
+        <script>
+            const openInquiry = document.getElementById("openInquiry");
+            const closeInquiry = document.getElementById("closeInquiry");
+            const inquiryDrawer = document.getElementById("inquiryDrawer");
+
+            openInquiry.addEventListener("click", () => {
+                inquiryDrawer.classList.add("active");
+            });
+
+            closeInquiry.addEventListener("click", () => {
+                inquiryDrawer.classList.remove("active");
+            });
+        </script>
+
+        <!-- SCROLL TOP BOTTOM JS -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const scrollUpBtn = document.getElementById("scrollUp");
+                const scrollDownBtn = document.getElementById("scrollDown");
+
+                const sectionHeight = window.innerHeight;
+
+                // Scroll Down 100vh
+                scrollDownBtn.addEventListener("click", () => {
+                    window.scrollBy({
+                        top: sectionHeight,
+                        behavior: "smooth"
+                    });
+                });
+
+                // Scroll Up 100vh
+                scrollUpBtn.addEventListener("click", () => {
+                    window.scrollBy({
+                        top: -sectionHeight,
+                        behavior: "smooth"
+                    });
+                });
+
+                // Show / Hide buttons based on position
+                function toggleButtons() {
+                    const scrollTop = window.scrollY;
+                    const docHeight = document.body.scrollHeight;
+                    const winHeight = window.innerHeight;
+
+                    // Top of page → hide up
+                    if (scrollTop < 50) {
+                        scrollUpBtn.classList.add("hide");
+                    } else {
+                        scrollUpBtn.classList.remove("hide");
+                    }
+
+                    // Bottom of page → hide down
+                    if (scrollTop + winHeight >= docHeight - 50) {
+                        scrollDownBtn.classList.add("hide");
+                    } else {
+                        scrollDownBtn.classList.remove("hide");
+                    }
+                }
+
+                toggleButtons();
+                window.addEventListener("scroll", toggleButtons);
+            });
+        </script>
+    </body>
+  
 </html>

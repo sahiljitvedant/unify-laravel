@@ -182,7 +182,7 @@
         $('#membership_id').on('change', calculateEndDate);
     });
 
-        // Calculate end date when start date or membership changes
+    // Calculate end date when start date or membership changes
     function calculateEndDate() {
         const startDateStr = $('#membership_start_date').val();
         const membershipDuration = parseInt($('#membership_id option:selected').data('duration')) || 0;

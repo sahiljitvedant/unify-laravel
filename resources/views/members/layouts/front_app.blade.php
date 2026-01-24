@@ -91,7 +91,7 @@
                 </a>
 
                 <!-- Right: Copyright -->
-                <p class="text-white small mt-3">&copy; 2025 Sachii. All rights reserved.</p>
+                <p class="text-white small mt-3">&copy; 2026 Brainstar. All rights reserved.</p>
             </div>
         </div>
 

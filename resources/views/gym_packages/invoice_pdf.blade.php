@@ -88,8 +88,8 @@
                 <p class="mb-0 font_size">{{ $payment->user->email ?? '' }}</p>
             </div>
 
-            <p class="thankyou">Thank you for your payment at <strong class="text-theme">Sachii</strong>. 
-                For any queries, please contact us at <strong class="text-theme">sachii@gmail.com</strong>.
+            <p class="thankyou">Thank you for your payment at <strong class="text-theme">Brainstar</strong>. 
+                For any queries, please contact us at <strong class="text-theme">Brainstar@gmail.com</strong>.
             </p>
 
             <table>

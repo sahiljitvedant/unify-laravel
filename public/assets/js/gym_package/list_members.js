@@ -48,8 +48,7 @@ $(document).ready(function ()
                         <td>${m.id}</td>
                         <td>${m.first_name} ${m.middle_name ?? ''} ${m.last_name ?? ''}</td>
                         <td>${m.email}</td>
-                        <td>${m.mobile}</td>
-                        
+
                         <td>${m.action}</td>
                     </tr>
                 `;
@@ -165,6 +164,54 @@ function delete_members(id)
             Swal.fire({
                 icon: 'success',
                 title: 'Deleted!',
+                text: response.message,
+                confirmButtonText: 'OK',
+                allowOutsideClick: false
+            }).then(() => {
+                // alert('hii');
+                location.reload();
+            });
+        },
+        error: function (xhr) {
+            console.log(xhr.status);
+            console.log(xhr.responseText);
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong! Please try again.',
+                confirmButtonText: 'OK',
+                allowOutsideClick: false
+            }).then(() => {
+                location.reload();
+            });
+               
+          
+        }
+    });
+}
+function approve_member(id)
+{
+    $.ajax({
+        url: approveMemberUrl.replace(':id', id), 
+        type: "POST",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        beforeSend: function () {
+            Swal.fire({
+                title: 'Aprroving...',
+                text: 'Please wait while we approve the member.',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        },
+        success: function (response) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Approved!',
                 text: response.message,
                 confirmButtonText: 'OK',
                 allowOutsideClick: false

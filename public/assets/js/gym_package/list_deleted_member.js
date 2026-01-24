@@ -48,7 +48,6 @@ $(document).ready(function ()
                         <td>${m.id}</td>
                         <td>${m.first_name} ${m.middle_name ?? ''} ${m.last_name ?? ''}</td>
                         <td>${m.email}</td>
-                        <td>${m.mobile}</td>
                         
                         <td>${m.action}</td>
                     </tr>

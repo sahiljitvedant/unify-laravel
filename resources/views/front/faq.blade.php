@@ -7,8 +7,8 @@
 @section('content')
 <section id="faq-section" class="faq-section py-5">
     <div class="container">
-        <h2 class="mb-4" style="color: #0B1061;">FAQ</h2>
-        <div class="faq-description" style="background: #f2f2f2; padding:20px; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1);">
+        <h2 class="mb-4" style="color: var(--sidebar_color);">FAQ</h2>
+        <div class="faq-description" style="background: var(--other_color_fff); padding:20px; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1);">
         <div class="accordion" id="faqAccordion">
             @foreach ($faqs as $faq)
                 <div class="accordion-item mb-3">
@@ -81,7 +81,7 @@
 
 <style>
     .faq-section {
-        background: #f8f9fa;
+        background: var(--theme-color);
         min-height: 100vh;
     }
 
@@ -92,8 +92,8 @@
     }
 
     .accordion-button:not(.collapsed) {
-        color: inherit !important;
-        background-color: transparent !important;
+        color: var(--sidebar_color) !important;
+        background-color: var(--theme-color) !important;
         box-shadow: 0 4px 6px #052c65 !important;
     }
 

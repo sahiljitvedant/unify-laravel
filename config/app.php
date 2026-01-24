@@ -151,6 +151,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        App\Providers\ViewServiceProvider::class,
     ])->toArray(),
 
 
@@ -203,16 +204,12 @@ return [
     ],
 
 
-    // Body color
-    'theme_color' => '#e3e3e3',
-    //Dattable Header,Sidebar, Add button on listing page,breadcrum, submit bt on add&edit form
-    'sidebar_color'=> '#0B1061',  
-    // Sidebar menu color, button color,select drodpown bg color, datatale filter bg,datatable bg,select drodpdown bg
-    // Datatble icon color
-    'other_color_fff'=>'#fff' ,
-    // Font size variable:-
-    'font_size'=>'12px',
-    'font_size_10px'=>'10px',
-    'black_color'=>'#000',
-    'front_font_size'=>'14px',
+    // 'theme_color' => '#d9f1e2',
+    // 'sidebar_color'=> '#009D9D', 
+    // 'sidebar_light'=> '#85d1d1', 
+    // 'other_color_fff'=>'#fff' ,
+    // 'black_color'=>'#000',
+    // 'font_size'=>'12px',
+    // 'font_size_10px'=>'10px',
+    // 'front_font_size'=>'14px',
 ];
