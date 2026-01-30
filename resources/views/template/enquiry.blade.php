@@ -23,7 +23,7 @@
           <tr>
             <td>
            
-              <h3 style="color:#0B1061; margin-bottom:10px;">Hi {{ $name }},Thank You for Reaching Out!</h3>
+              <h3 style="color:#009D9D; margin-bottom:10px;">Hi {{ $name }},Thank You for Reaching Out!</h3>
               <p style="color:#555; font-size:15px; margin:0;">
                 We have received your enquiry and will get back to you shortly.
               </p>
@@ -35,7 +35,7 @@
           <tr>
             <td style="padding:20px 0;">
               <p style="font-size:16px; font-weight:bold; color:#333; margin:0;">
-                Your Request ID is: <span style="color:#0B1061;">{{ $requestId }}</span>
+                Your Request ID is: <span style="color:#009D9D;">{{ $requestId }}</span>
               </p>
             </td>
           </tr>

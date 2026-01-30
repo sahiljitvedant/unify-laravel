@@ -1,0 +1,121 @@
+/* ================= MOBILE NAV SYSTEM ================= */
+
+/* Hide mobile items on desktop */
+.hamburger,
+.mobile-menu {
+  display: none;
+}
+
+/* ---------- MOBILE ---------- */
+@media (max-width: 768px) {
+
+  /* Hide desktop nav */
+  .nav-links {
+    display: none;
+  }
+
+  /* Show hamburger */
+  .hamburger {
+    display: block;
+    font-size: 26px;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  /* Slide menu panel FROM LEFT */
+  .mobile-menu {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 85%;
+    height: 100vh;
+    background: var(--sidebar_color);
+    z-index: 5000;
+    padding: 20px;
+    overflow-y: auto;
+    transition: left 0.3s ease;
+  }
+
+  .mobile-menu.active {
+    left: 0;
+  }
+
+  .mobile-menu-header {
+    text-align: right;
+  }
+
+  .close-menu {
+    font-size: 28px;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  /* Mobile links */
+  .mobile-nav-links {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+  }
+
+  .mobile-nav-links li {
+    margin-bottom: 10px;
+  }
+
+  .mobile-menu a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 15px;
+    display: block;
+    padding: 6px 0;
+  }
+
+  /* Dropdown containers */
+  .mobile-dropdown,
+  .mobile-sub-dropdown {
+    display: none;
+    padding-left: 15px;
+    margin-top: 5px;
+  }
+
+  .mobile-dropdown.active,
+  .mobile-sub-dropdown.active {
+    display: block;
+  }
+
+  /* Toggle rows */
+  .mobile-dropdown-toggle,
+  .mobile-sub-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    cursor: pointer;
+    padding: 8px 0;
+  }
+
+  /* Arrow animation */
+  .mobile-dropdown-toggle i,
+  .mobile-sub-title i {
+    transition: transform 0.3s ease;
+  }
+
+  /* Rotate main arrow (down → up) */
+  .mobile-dropdown-toggle.active i {
+    transform: rotate(180deg);
+  }
+
+  /* Rotate sub arrow (right → left) */
+  .mobile-sub-title.active i {
+    transform: rotate(180deg);
+  }
+
+  /* Hide floating buttons on mobile */
+  .quick-inquiry-btn {
+    display: none !important;
+  }
+
+  .scroll-controls {
+    display: none !important;
+  }
+}

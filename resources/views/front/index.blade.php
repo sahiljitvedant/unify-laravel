@@ -1,10 +1,8 @@
 @extends('front.app')
-
 @section('title', 'Home')
-
 @section('content')
     <!-- HERO -->
-    <section id="hero" class="hero-slider" aria-label="Hero slider">
+    <section id="hero" class="hero-slider hero-slider snap-section" aria-label="Hero slider">
         <!-- <div class="slides">
             <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1558611848-73f7eb4001a1?w=1200');" aria-hidden="false">
             <div class="slide-content">
@@ -65,155 +63,74 @@
 
     </section>
     <!-- ABOUT -->
-    <section id="about" class="about-section">
-    <div class="container">
-        <div class="row align-items-center gy-5">
-
-            <!-- LEFT CONTENT -->
-            <div class="col-lg-6">
-                <div class="about-content">
-
-                    <span class="about-tag">Who We Are</span>
-                    <h2>Building Smarter, Safer & Connected Infrastructure</h2>
-
-                    <p class="about-lead">
-                        Brainstar Technologies is a leading system integrator delivering advanced safety,
-                        security and automation solutions across India.
-                    </p>
-
-                    <!-- <p>
-                        With 5+ years of expertise, we design, implement and maintain mission-critical systems
-                        including CCTV, Fire Detection, Access Control, Gas Suppression, Public Addressing,
-                        BMS, IBMS and Industrial Automation.
-                    </p> -->
-
-                    <!-- HIGHLIGHTS -->
-                    <div class="about-highlights">
-                        <div class="highlight-box">
-                            <i class="bi bi-shield-check"></i>
-                            <h5>Security & Safety Experts</h5>
-                            <p>Advanced surveillance, fire & access control systems</p>
-                        </div>
-
-                        <div class="highlight-box">
-                            <i class="bi bi-gear-wide-connected"></i>
-                            <h5>Automation Solutions</h5>
-                            <p>BMS, IBMS & industrial automation integration</p>
-                        </div>
-
-                        <div class="highlight-box">
-                            <i class="bi bi-globe"></i>
-                            <h5>PAN India Presence</h5>
-                            <p>Serving clients across industries nationwide</p>
-                        </div>
-                    </div>
-
-                    <!-- CTA -->
-                    <a href="/about_us" class="about-btn">
-                        Explore Our Journey <i class="bi bi-arrow-right"></i>
-                    </a>
-
-                </div>
-            </div>
-
-            <!-- RIGHT IMAGE -->
-            <div class="col-lg-6">
-                <div class="about-image-card">
-                    <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200" alt="Brainstar Office">
-
-                    <div class="about-badge">
-                        <h4>5+ Years</h4>
-                        <span>Industry Experience</span>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</section>
-
-
-
-    <!-- Industry Section -->
-    <section class="industries-section">
+    <section id="about" class="about-section about-section snap-section">
         <div class="container">
+            <div class="row align-items-center gy-5">
 
-            <div class="section-head text-center mb-5">
-                <span class="section-badge">INDUSTRIES</span>
-                <h2 class="section-title">Industries We Are Into</h2>
-            </div>
+                <!-- LEFT CONTENT -->
+                <div class="col-lg-6">
+                    <div class="about-content">
 
-            <div class="row g-4">
+                        <span class="about-tag">Who We Are</span>
+                        <h2>Building Smarter, Safer & Connected Infrastructure</h2>
 
-                <!-- Card 1 -->
-                <div class="col-md-4">
-                    <div class="industry-card">
-                        <div class="icon-box">
-                            <i class="bi bi-building"></i>
-                        </div>
-                        <h5>Steel & Metal</h5>
-                        <p>
-                            Delivering robust solutions for steel and metal industries with precision and reliability.
+                        <p class="about-lead">
+                            Brainstar Technologies is a leading system integrator delivering advanced safety,
+                            security and automation solutions across India.
                         </p>
+
+                        <!-- <p>
+                            With 5+ years of expertise, we design, implement and maintain mission-critical systems
+                            including CCTV, Fire Detection, Access Control, Gas Suppression, Public Addressing,
+                            BMS, IBMS and Industrial Automation.
+                        </p> -->
+
+                        <!-- HIGHLIGHTS -->
+                        <div class="about-highlights">
+                            <div class="highlight-box">
+                                <i class="bi bi-shield-check"></i>
+                                <h5>Security & Safety Experts</h5>
+                                <p>Advanced surveillance, fire & access control systems</p>
+                            </div>
+
+                            <div class="highlight-box">
+                                <i class="bi bi-gear-wide-connected"></i>
+                                <h5>Automation Solutions</h5>
+                                <p>BMS, IBMS & industrial automation integration</p>
+                            </div>
+
+                            <div class="highlight-box">
+                                <i class="bi bi-globe"></i>
+                                <h5>PAN India Presence</h5>
+                                <p>Serving clients across industries nationwide</p>
+                            </div>
+                        </div>
+
+                        <!-- CTA -->
+                        <a href="/about_us" class="about-btn">
+                            Explore Our Journey <i class="bi bi-arrow-right"></i>
+                        </a>
+
                     </div>
                 </div>
 
-                <!-- Card 2 -->
-                <div class="col-md-4">
-                    <div class="industry-card">
-                        <div class="icon-box">
-                            <i class="bi bi-fuel-pump"></i>
+                <!-- RIGHT IMAGE -->
+                <div class="col-lg-6">
+                    <div class="about-image-card">
+                        <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200" alt="Brainstar Office">
+
+                        <div class="about-badge">
+                            <h4>5+ Years</h4>
+                            <span>Industry Experience</span>
                         </div>
-                        <h5>Oil & Gas</h5>
-                        <p>
-                            Trusted automation and monitoring systems tailored for Oil & Gas operations.
-                        </p>
                     </div>
                 </div>
 
-                <!-- Card 3 -->
-                <div class="col-md-4">
-                    <div class="industry-card">
-                        <div class="icon-box">
-                            <i class="bi bi-bricks"></i>
-                        </div>
-                        <h5>Cement</h5>
-                        <p>
-                            Enabling high-performance cement plants with scalable industrial solutions.
-                        </p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Our Clients -->
-    <section class="trusted-section">
-        <div class="container">
-            <h2 class="trusted-title">Trusted by Industry Leaders</h2>
-
-            <div class="logo-slider">
-                <div class="logo-track">
-                    <!-- Logos (repeat once for smooth infinite scroll) -->
-                    <img src="{{ asset('assets/img/logos/aware.png') }}" alt="Aware">
-                    <img src="{{ asset('assets/img/logos/est.png') }}" alt="EST">
-                    <img src="{{ asset('assets/img/logos/esser.png') }}" alt="Esser">
-                    <img src="{{ asset('assets/img/logos/honeywell.png') }}" alt="Honeywell">
-                    <img src="{{ asset('assets/img/logos/fipron.png') }}" alt="Fipron">
-
-                    <!-- Duplicate -->
-                    <img src="{{ asset('assets/img/logos/aware.png') }}" alt="Aware">
-                    <img src="{{ asset('assets/img/logos/est.png') }}" alt="EST">
-                    <img src="{{ asset('assets/img/logos/esser.png') }}" alt="Esser">
-                    <img src="{{ asset('assets/img/logos/honeywell.png') }}" alt="Honeywell">
-                    <img src="{{ asset('assets/img/logos/fipron.png') }}" alt="Fipron">
-                </div>
             </div>
         </div>
     </section>
     <!-- Testimonial -->
-    <section class="testimonial-section">
+    <section class="testimonial-section testimonial-section snap-section">
         <div class="container">
             <h2 class="section-title">What Our Clients Say</h2>
             <p class="section-subtitle">Trusted by professionals across industries</p>
@@ -223,7 +140,8 @@
                 <!-- Card 1 -->
                 <div class="col-md-4">
                     <div class="testimonial-card">
-                        <img src="{{ asset('assets/img/testimonials/user1.jpg') }}" class="testimonial-img" alt="User">
+                        <img src="https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg
+                        " class="testimonial-img" alt="User">
 
                         <p class="testimonial-text">
                             “Excellent service and quick support. Their solutions helped our business grow significantly.”
@@ -232,21 +150,22 @@
                         <h5 class="testimonial-name">Rahul Mehta</h5>
                         <span class="testimonial-role">Operations Manager</span>
 
-                        <div class="testimonial-socials">
+                        <!-- <div class="testimonial-socials">
                             <a href="https://instagram.com" target="_blank">
                                 <i class="bi bi-instagram"></i>
                             </a>
                             <a href="https://facebook.com" target="_blank">
                                 <i class="bi bi-facebook"></i>
                             </a>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
 
                 <!-- Card 2 -->
                 <div class="col-md-4">
                     <div class="testimonial-card">
-                        <img src="{{ asset('assets/img/testimonials/user2.jpg') }}" class="testimonial-img" alt="User">
+                        <img src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg
+                        " class="testimonial-img" alt="User">
 
                         <p class="testimonial-text">
                             “Very professional team. Implementation was smooth and the support is outstanding.”
@@ -255,21 +174,22 @@
                         <h5 class="testimonial-name">Anita Sharma</h5>
                         <span class="testimonial-role">Founder</span>
 
-                        <div class="testimonial-socials">
+                        <!-- <div class="testimonial-socials">
                             <a href="https://instagram.com" target="_blank">
                                 <i class="bi bi-instagram"></i>
                             </a>
                             <a href="https://facebook.com" target="_blank">
                                 <i class="bi bi-facebook"></i>
                             </a>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
 
                 <!-- Card 3 -->
                 <div class="col-md-4">
                     <div class="testimonial-card">
-                        <img src="{{ asset('assets/img/testimonials/user3.jpg') }}" class="testimonial-img" alt="User">
+                        <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg
+                        " class="testimonial-img" alt="User">
 
                         <p class="testimonial-text">
                             “Reliable, scalable, and easy to use. Highly recommended for growing companies.”
@@ -278,13 +198,13 @@
                         <h5 class="testimonial-name">Vikram Patel</h5>
                         <span class="testimonial-role">Tech Lead</span>
 
-                        <div class="testimonial-socials">
+                        <!-- <div class="testimonial-socials">
                             <a href="https://instagram.com" target="_blank">
                                 <i class="bi bi-instagram"></i>
                             </a>
                             <a href="https://facebook.com" target="_blank">
                                 <i class="bi bi-facebook"></i>
-                            </a>
+                            </a> -->
                         </div>
                     </div>
                 </div>
@@ -293,96 +213,94 @@
         </div>
     </section>
 
-    <!-- CLASSES -->
-    <!-- <section id="classes" class="classes">
+    <!-- Our Clients -->
+    <section class="home-trusted-section">
         <div class="container">
-        <h2>Blogs</h2>
-        <div class="class-grid">
-            @foreach($recent_blogs as $blog)
-            <div class="blog-card">
-                <img src="{{ $blog->blog_image ?? 'https://images.unsplash.com/photo-1605296867424-35fc25c9212a?w=600' }}" alt="{{ $blog->blog_title }}">
-                <div class="blog-content">
-                    <span class="blog-date">{{ \Carbon\Carbon::parse($blog->publish_date)->format('d M') }}</span>
-                    <h3 class="blog-title">{{ \Illuminate\Support\Str::limit($blog->blog_title, 50, '...') }}</h3>
-                    <p>{{ \Illuminate\Support\Str::limit($blog->description, 120, '...') }}</p>
-                    <div class="text-end mt-auto">
-                        <a href="{{ route('blogs_read_more', ['id' => encrypt($blog->id)]) }}" class="btn-read">
-                            Read More
-                        </a>
-                    </div>
+            <h2 class="home-trusted-title">Trusted by Industry Leaders</h2>
+
+            <div class="home-logo-slider">
+                <div class="home-logo-track">
+
+                    <!-- Real Brand Logos (online placeholders) -->
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Microsoft">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple">
+
+                    <!-- Duplicate for infinite scroll -->
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="">
+
                 </div>
             </div>
-            @endforeach
         </div>
+    </section>
+    @php
+        $adminContact = DB::table('tbl_admin_contact')->first();
 
-        <div class="see-more-container">
-            <a href="{{ route('blogs') }}" class="btn-see-more btn-read">See More</a>
-        </div></div>
-    </section> -->
+        if($adminContact){
+            $email1 = $adminContact->email_address1 ? $adminContact->email_address1 : 'support@yourdomain.com';
+            $email2 = $adminContact->email_address2 ? $adminContact->email_address2 : 'info@yourdomain.com';
+
+            $phone1 = $adminContact->mobile_number1 ? $adminContact->mobile_number1 : '+91 98765 43210';
+            $phone2 = $adminContact->mobile_number2 ? $adminContact->mobile_number2 : '+91 91234 56789';
+
+            $businessHours = $adminContact->business_hours ? $adminContact->business_hours : 'Mon – Fri: 10 AM – 6 PM';
+            $businessDay   = $adminContact->business_day ? $adminContact->business_day : 'Sat: 10 AM – 5 PM';
+        } else {
+            $email1 = 'support@yourdomain.com';
+            $email2 = 'info@yourdomain.com';
+            $phone1 = '+91 98765 43210';
+            $phone2 = '+91 91234 56789';
+            $businessHours = 'Mon – Fri: 10 AM – 6 PM';
+            $businessDay   = 'Sat: 10 AM – 5 PM';
+        }
+    @endphp
+
     <!-- CONTACT -->
-    <section class="contact-info-section">
+    <section class="home-contact-section">
         <div class="container">
 
-            <div class="section-head text-center mb-5">
-                <span class="section-badge">QUICK CONTACT INFO</span>
-                <h2 class="section-title">Contact Information</h2>
+            <div class="home-contact-head text-center">
+                <span class="home-contact-badge">QUICK CONTACT INFO</span>
+                <h2 class="home-contact-title">Contact Information</h2>
             </div>
 
-            <div class="row g-4">
+            <div class="row g-4 home-contact-grid">
 
-                <!-- Location -->
                 <div class="col-md-3">
-                    <div class="contact-card">
-                        <div class="contact-icon">
-                            <i class="bi bi-geo-alt"></i>
-                        </div>
+                    <div class="home-contact-card">
+                        <div class="home-contact-icon"><i class="bi bi-geo-alt"></i></div>
                         <h5>Our Location</h5>
-                        <p>
-                            1363 Naskarhat Madhya Para,<br>
-                            Kolkata – 700039
-                        </p>
+                        <p>1363 Naskarhat Madhya Para,<br>Kolkata – 700039</p>
                     </div>
                 </div>
 
-                <!-- Email -->
                 <div class="col-md-3">
-                    <div class="contact-card">
-                        <div class="contact-icon">
-                            <i class="bi bi-envelope"></i>
-                        </div>
+                    <div class="home-contact-card">
+                        <div class="home-contact-icon"><i class="bi bi-envelope"></i></div>
                         <h5>Email Us</h5>
-                        <p>
-                            support@yourdomain.com<br>
-                            info@yourdomain.com
-                        </p>
+                        <p>{{ $email1 }}<br>{{ $email2 }}</p>
                     </div>
                 </div>
 
-                <!-- Phone -->
                 <div class="col-md-3">
-                    <div class="contact-card">
-                        <div class="contact-icon">
-                            <i class="bi bi-telephone"></i>
-                        </div>
+                    <div class="home-contact-card">
+                        <div class="home-contact-icon"><i class="bi bi-telephone"></i></div>
                         <h5>Phone Number</h5>
-                        <p>
-                            +91 98765 43210<br>
-                            +91 91234 56789
-                        </p>
+                        <p>{{ $phone1 }}<br>{{ $phone2 }}</p>
                     </div>
                 </div>
 
-                <!-- Business Hours -->
                 <div class="col-md-3">
-                    <div class="contact-card">
-                        <div class="contact-icon">
-                            <i class="bi bi-clock"></i>
-                        </div>
+                    <div class="home-contact-card">
+                        <div class="home-contact-icon"><i class="bi bi-clock"></i></div>
                         <h5>Business Hours</h5>
-                        <p>
-                            Mon – Fri: 10 AM – 6 PM<br>
-                            Sat: 10 AM – 5 PM
-                        </p>
+                        <p>{{ $businessHours }}<br>{{ $businessDay }}</p>
                     </div>
                 </div>
 
@@ -390,52 +308,434 @@
         </div>
     </section>
 
-    @endsection
-    <style>
-        /* Slider Navigation */
-        .slider-nav {
-            position: absolute;
-            top: 50%;
-            width: 100%;
-            transform: translateY(-50%);
-            display: flex;
-            justify-content: space-between;
-            padding: 0 25px;
-            z-index: 10;
-            pointer-events: none;
+    <!-- Scroll Controls -->
+    <div class="scroll-controls">
+        <button id="scrollUp" class="scroll-btn up" title="Scroll Up">
+            <i class="bi bi-arrow-up"></i>
+        </button>
+        <button id="scrollDown" class="scroll-btn down" title="Scroll Down">
+            <i class="bi bi-arrow-down"></i>
+        </button>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- SCROLL TOP BOTTOM JS -->
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () 
+        {
+
+            const scrollUpBtn = document.getElementById("scrollUp");
+            const scrollDownBtn = document.getElementById("scrollDown");
+
+            const sections = Array.from(document.querySelectorAll("section"));
+            const footer = document.querySelector("footer");
+
+            function scrollToNextSection(direction) {
+                const scrollPos = window.scrollY;
+                const headerOffset = 64;
+
+                let targetSection = null;
+
+                if (direction === "down") {
+
+                    for (let section of sections) {
+                        if (section.offsetTop > scrollPos + headerOffset + 5) {
+                            targetSection = section;
+                            break;
+                        }
+                    }
+
+                    if (!targetSection && footer) {
+                        window.scrollTo({
+                            top: footer.offsetTop,
+                            behavior: "smooth"
+                        });
+                        return;
+                    }
+
+                } else {
+
+                    for (let i = sections.length - 1; i >= 0; i--) {
+                        if (sections[i].offsetTop < scrollPos - 5) {
+                            targetSection = sections[i];
+                            break;
+                        }
+                    }
+                }
+
+                if (targetSection) {
+                    window.scrollTo({
+                        top: targetSection.offsetTop,
+                        behavior: "smooth"
+                    });
+                }
+            }
+
+            /* ================= BUTTON VISIBILITY CONTROL ================= */
+            function updateScrollButtons() {
+                const scrollPos = window.scrollY;
+                const windowHeight = window.innerHeight;
+                const pageHeight = document.body.scrollHeight;
+
+                // Hide UP button at very top
+                if (scrollPos < 50) {
+                    scrollUpBtn.style.display = "none";
+                } else {
+                    scrollUpBtn.style.display = "flex";
+                }
+
+                // Hide DOWN button when footer is fully in view
+                if (scrollPos + windowHeight >= pageHeight - 50) {
+                    scrollDownBtn.style.display = "none";
+                } else {
+                    scrollDownBtn.style.display = "flex";
+                }
+            }
+
+            scrollDownBtn.addEventListener("click", () => scrollToNextSection("down"));
+            scrollUpBtn.addEventListener("click", () => scrollToNextSection("up"));
+
+            window.addEventListener("scroll", updateScrollButtons);
+            updateScrollButtons(); // run on load
+
+        });
+    </script>
+
+@endsection
+<style>
+    /* Slider Navigation */
+    .slider-nav {
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        transform: translateY(-50%);
+        display: flex;
+        justify-content: space-between;
+        padding: 0 25px;
+        z-index: 10;
+        pointer-events: none;
+    }
+
+    .slider-btn {
+        pointer-events: all;
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(0,0,0,0.45);
+        color: #fff;
+        font-size: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(4px);
+    }
+
+    .slider-btn:hover {
+        background: var(--sidebar_color);
+        transform: scale(1.12);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    }
+
+    /* Mobile size */
+    @media(max-width:768px){
+        .slider-btn{
+            width:42px;
+            height:42px;
+            font-size:20px;
+        }
+    }
+   
+
+    /* ================= TRUSTED CLIENTS ================= */
+    .home-trusted-title {
+        text-align: center;
+        margin-bottom: 20px;
+        font-weight: 600;
+        color: var(--sidebar_color);
+    }
+
+    .home-logo-slider {
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .home-logo-track {
+        display: flex;
+        gap: 60px;
+        animation: home-scroll 25s linear infinite;
+    }
+
+    .home-logo-track img {
+        height: 40px;
+        filter: grayscale(100%);
+        opacity: 0.7;
+        transition: 0.3s;
+    }
+
+    .home-logo-track img:hover {
+        filter: grayscale(0%);
+        opacity: 1;
+    }
+
+    @keyframes home-scroll {
+        from { transform: translateX(0); }
+        to { transform: translateX(-50%); }
+    }
+
+    /* ================= CONTACT SECTION ================= */
+    .home-contact-head {
+        margin-bottom: 40px;
+    }
+
+    .home-contact-badge {
+        font-size: 12px;
+        letter-spacing: 2px;
+        color: var(--sidebar_color);
+        font-weight: 600;
+    }
+
+    .home-contact-title {
+        font-weight: 700;
+        color: var(--sidebar_color);
+    }
+
+    .home-contact-card {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 25px;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+        transition: 0.3s;
+        height: 100%;
+    }
+
+    .home-contact-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 14px 35px rgba(0,0,0,0.12);
+    }
+
+    .home-contact-icon {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 15px;
+        border-radius: 50%;
+        background: rgba(0,150,136,0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: var(--sidebar_color);
+    }
+
+    .home-contact-card h5 {
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .home-contact-card p {
+        font-size: 14px;
+        color: #555;
+        margin: 0;
+    }
+
+    /* ================= MOBILE FIX ================= */
+    @media (max-width: 768px) {
+
+        /* Let sections grow naturally */
+        .home-trusted-section,
+        .home-contact-section {
+            height: auto;
+            padding: 50px 0;
         }
 
-        .slider-btn {
-            pointer-events: all;
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            border: none;
-            background: rgba(0,0,0,0.45);
-            color: #fff;
-            font-size: 26px;
+        /* ---------- TRUSTED SECTION ---------- */
+        .home-trusted-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .home-logo-track {
+            gap: 35px;
+            animation: home-scroll 18s linear infinite;
+        }
+
+        .home-logo-track img {
+            height: 28px;
+        }
+
+        /* ---------- CONTACT SECTION ---------- */
+        .home-contact-head {
+            margin-bottom: 25px;
+            padding: 0 15px;
+        }
+
+        .home-contact-badge {
+            font-size: 11px;
+            letter-spacing: 1.5px;
+        }
+
+        .home-contact-title {
+            font-size: 20px;
+            line-height: 1.3;
+        }
+
+        .home-contact-grid {
+            padding: 0 10px;
+        }
+
+        .home-contact-card {
+            padding: 20px 15px;
+            border-radius: 10px;
+        }
+
+        .home-contact-icon {
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .home-contact-card h5 {
+            font-size: 15px;
+            margin-bottom: 6px;
+        }
+
+        .home-contact-card p {
+            font-size: 13px;
+            line-height: 1.5;
+        }
+    }
+    /* ================= DESKTOP LAYOUT ================= */
+    @media (min-width: 1025px) {
+
+            .home-trusted-section {
+            background: #f9fbfb;
+        }
+
+        .home-logo-slider {
+            overflow: hidden;
+            width: 100%;
+            position: relative;
+        }
+
+        .home-logo-track {
+            display: flex;
+            gap: 60px;
+            width: max-content;
+            animation: home-scroll 25s linear infinite;
+        }
+
+        .home-contact-section {
+          
             display: flex;
             align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(4px);
+            background: #ffffff;
+        }
         }
 
-        .slider-btn:hover {
-            background: var(--sidebar_color);
-            transform: scale(1.12);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        /* ================= TABLET & MOBILE ================= */
+        @media (max-width: 1024px) {
+
+        .home-trusted-section,
+        .home-contact-section {
+            height: auto;            /* 🔥 allow natural height */
+            padding: 60px 0;
+        }
+    }
+    /* ================= GLOBAL MOBILE SAFETY FIX ================= */
+    @media (max-width: 768px) 
+    {
+
+        /* Prevent any section from being viewport-locked */
+        section {
+            height: auto !important;
+            min-height: auto !important;
         }
 
-        /* Mobile size */
-        @media(max-width:768px){
-            .slider-btn{
-                width:42px;
-                height:42px;
-                font-size:20px;
-            }
+        /* Fix About image badge overlapping */
+        .about-image-card {
+            position: relative;
         }
 
-    </style>
+        .about-image-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .about-badge {
+            position: static !important;
+            margin-top: 15px;
+            display: inline-block;
+        }
+
+        /* Stop scroll snapping issues on mobile */
+        html {
+            scroll-snap-type: none !important;
+        }
+
+        .snap-section {
+            scroll-snap-align: none !important;
+        }
+    }
+
+    /* Prevent horizontal scroll caused by absolute elements */
+    body {
+    overflow-x: hidden;
+    }
+    /* ================= HERO SLIDER FIX ================= */
+
+
+    #hero .slides {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    #hero .slide {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+    }
+    @media (max-width: 768px) 
+    {
+       
+        .slide-content {
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .slide-content h1 {
+            font-size: 26px;
+            line-height: 1.2;
+        }
+
+        .slide-content p {
+            font-size: 14px;
+        }
+    }
+    /* ================= HERO VISIBILITY FIX ================= */
+    #hero {
+        position: relative;
+        z-index: 1;
+    }
+
+    #about {
+        position: relative;
+        z-index: 2;
+    }
+    /* ===== FIX HERO HIDDEN BEHIND HEADER ===== */
+    /* ===== HERO MUST NOT USE SNAP FLEX LAYOUT ===== */
+    #hero.snap-section {
+    display: block;
+    min-height: 100vh;
+    height: 100vh;
+    scroll-snap-align: none;
+    }
+
+</style>
 

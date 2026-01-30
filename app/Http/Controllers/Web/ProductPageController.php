@@ -11,10 +11,15 @@ class ProductPageController extends Controller
     {
         // dd(2);
         // dd($slug);
-        $page = AboutPage::where('slug', $slug)
-            ->where('status', 1)
-            ->firstOrFail();
+        $product = AboutPage::with('header')
+        ->where('slug', $slug)
+        ->where('status', 1)
+        ->firstOrFail();
+        
 
-        return view('front.product_page', compact('page'));
+        // dd($product);
+        
+        return view('front.product_page', compact('product'));
+      
     }
 }

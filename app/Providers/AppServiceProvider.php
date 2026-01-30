@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 use App\Models\AboutPage;
 use Illuminate\Support\Facades\View;
-use App\Models\Subheader;
+use App\Models\SubHeader;
 use App\Models\Header;
 class AppServiceProvider extends ServiceProvider
 {
@@ -62,7 +62,9 @@ class AppServiceProvider extends ServiceProvider
                 ->where('is_deleted', 0)
                 ->orderBy('sequence_no')
                 ->get();
-    
+            
+            $view->with('headers', $headers);
+            
             $menus = [];
     
             foreach ($headers as $header) {
@@ -74,7 +76,7 @@ class AppServiceProvider extends ServiceProvider
     
                 if ($pages->isEmpty()) continue;
     
-                $subheaders = Subheader::where('header_id', $header->id)
+                $subheaders = SubHeader::where('header_id', $header->id)
                     ->where('status', 1)
                     ->where('is_deleted', 0)
                     ->get()

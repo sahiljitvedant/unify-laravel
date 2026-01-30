@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>@yield('title', 'Brainstar-Front')</title>
   <link rel="icon" type="image/png" href="{{ asset('assets/img/logo.png') }}">
-  <link rel="stylesheet" href="style.css">
- 
+
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
   <style>
@@ -33,7 +34,7 @@
     /* Quick Inquiry Button */
     .quick-inquiry-btn {
         position: fixed;
-        right: -48px;   /* pull it inside */
+        right: -48px;
         top: 30%;
         transform: translateY(-50%) rotate(-90deg);
         background: var(--sidebar_color);
@@ -45,6 +46,7 @@
         z-index: 999;
         box-shadow: -4px 0 12px rgba(0,0,0,0.25);
     }
+
     /* Drawer Panel */
     .inquiry-drawer {
         position: fixed;
@@ -56,7 +58,7 @@
         box-shadow: -10px 0 30px rgba(0,0,0,0.25);
         transition: 0.4s ease;
         z-index: 1000;
-        padding: 20px;
+        padding: 22px 20px; /* improved spacing */
     }
 
     /* Active Drawer */
@@ -71,6 +73,7 @@
         align-items: center;
         border-bottom: 1px solid #ddd;
         padding-bottom: 10px;
+        margin-bottom: 15px; /* spacing before form */
     }
 
     .inquiry-header h4 {
@@ -85,19 +88,33 @@
     }
 
     /* Form */
-    .inquiry-form {
-        margin-top: 20px;
+    #enquiry_form {
+        margin-top: 5px;
     }
 
-    .inquiry-form .form-control {
-        margin-bottom: 14px;
+    #enquiry_form .form-control {
+        margin-bottom: 10px; /* consistent spacing */
         padding: 10px;
         font-size: 14px;
     }
 
+    /* Error messages */
+    .error-message {
+        margin-top: -6px;
+        margin-bottom: 8px;
+        font-size: 12px;
+    }
+
+    /* Textarea */
+    #enquiry_form textarea.form-control {
+        margin-bottom: 12px;
+    }
+
+    /* Submit button */
     .btn-submit {
         width: 100%;
         padding: 12px;
+        margin-top: 6px; /* spacing above button */
         background: var(--sidebar_color);
         color: #fff;
         border: none;
@@ -107,8 +124,19 @@
 
   </style>
 </head>
+    @php
+        $adminContact = DB::table('tbl_admin_contact')->first();
+
+        $facebook  = $adminContact->facebook_url ?? '#';
+        $instagram = $adminContact->instagram_url ?? '#';
+        $linkedin  = $adminContact->linkedin_url ?? 'https://www.linkedin.com/company/brainstar-technologies-private-limited/?viewAsMember=true';
+        $youtube   = $adminContact->youtube_url ?? '#';
+
+        $email  = $adminContact->email_address1 ?? 'support@brainstar.com';
+        $mobile = $adminContact->mobile_number1 ?? '+91 98765 43210';
+    @endphp
+
     <body>
-        
         <!-- HEADER -->
         <header class="header">
             <nav class="navbar">
@@ -172,16 +200,67 @@
 
                         <li><a href="/contact_us">Contact Us</a></li>
                         <li><a href="/careers">Carrers</a></li>
-                        <li><a target="_blank" href="{{ route('login_get') }}">Login</a></li>
+                        <!-- <li><a target="_blank" href="{{ route('login_get') }}">Login</a></li> -->
                     </ul>
 
-                    <!-- Hamburger -->
-                    <!-- <div class="hamburger" id="hamburger">
-                        <i class="bi bi-list"></i>
-                    </div> -->
+                    <!-- Hamburger (Mobile Only) -->
+                    <div class="hamburger" id="hamburger">
+                    <i class="bi bi-list"></i>
+                    </div>
+
 
                 </div>
+
             </nav>
+            <!-- Mobile Slide Menu -->
+            <div class="mobile-menu" id="mobileMenu">
+                <div class="mobile-menu-header">
+                    <span class="close-menu" id="closeMenu">&times;</span>
+                </div>
+
+                <ul class="mobile-nav-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about_us">About</a></li>
+
+                    @foreach($menus as $menu)
+                    <li class="mobile-has-dropdown">
+                        <div class="mobile-dropdown-toggle">
+                        {{ $menu['title'] }}
+                        <i class="bi bi-caret-down-fill"></i>
+                        </div>
+
+                        <ul class="mobile-dropdown">
+                        @if(!empty($menu['with_subheader']))
+                            @foreach($menu['with_subheader'] as $sub)
+                            <li class="mobile-sub-toggle">
+                                <div class="mobile-sub-title">
+                                {{ $sub['name'] }}
+                                <i class="bi bi-caret-right-fill"></i>
+                                </div>
+                                <ul class="mobile-sub-dropdown">
+                                @foreach($sub['pages'] as $page)
+                                    <li><a href="{{ url($page->slug) }}">{{ $page->title }}</a></li>
+                                @endforeach
+                                </ul>
+                            </li>
+                            @endforeach
+                        @endif
+
+                        @if(!empty($menu['without_subheader']))
+                            @foreach($menu['without_subheader'] as $page)
+                            <li><a href="{{ url($page->slug) }}">{{ $page->title }}</a></li>
+                            @endforeach
+                        @endif
+                        </ul>
+                    </li>
+                    @endforeach
+
+                    <li><a href="/contact_us">Contact Us</a></li>
+                    <li><a href="/careers">Careers</a></li>
+                    <!-- <li><a href="{{ route('login_get') }}">Login</a></li> -->
+                </ul>
+            </div>
+  
         </header>
 
         <!-- Quick Inquiry Button -->
@@ -197,25 +276,36 @@
                 <span class="close-btn" id="closeInquiry">&times;</span>
             </div>
 
-            <form class="inquiry-form">
+            <form id="enquiry_form">
 
-                <input type="text" class="form-control" placeholder="Name*" required>
+                <input type="text" name="name" class="form-control" placeholder="Name*">
+                <div class="text-danger error-message" data-error-for="name"></div>
 
-                <input type="email" class="form-control" placeholder="Email*" required>
+                <input type="email" name="email" class="form-control" placeholder="Email*">
+                <div class="text-danger error-message" data-error-for="email"></div>
 
-                <input type="tel" class="form-control" placeholder="Mobile Number*" required>
+                <input type="tel" name="mobile" class="form-control" placeholder="Mobile Number*">
+                <div class="text-danger error-message" data-error-for="mobile"></div>
 
-                <select class="form-control" required>
-                    <option value="">Select Product</option>
-                    <option value="A">Product A</option>
-                    <option value="B">Product B</option>
-                    <option value="C">Product C</option>
+                <!-- HEADER DROPDOWN -->
+                <select name="header_id" id="enquiry_header_id" class="form-control">
+                    <option value="">Select Category</option>
+                    @foreach($headers as $header)
+                        <option value="{{ $header->id }}">{{ $header->title }}</option>
+                    @endforeach
                 </select>
+                <div class="text-danger error-message" data-error-for="header_id"></div>
 
-                <textarea class="form-control" rows="4" placeholder="Reason*" required></textarea>
+                <!-- SUBHEADER DROPDOWN -->
+                <select name="subheader_id" id="enquiry_subheader_id" class="form-control">
+                    <option value="">Select Sub Category</option>
+                </select>
+                <div class="text-danger error-message" data-error-for="subheader_id"></div>
 
-                <button type="submit" class="btn-submit">Submit Inquiry</button>
+                <textarea name="message" class="form-control" rows="4" placeholder="Message*" ></textarea>
+                <div class="text-danger error-message" data-error-for="message"></div>
 
+                <button type="submit" class="btn-submit" id="submitEnquiryBtn">Submit Inquiry</button>
             </form>
 
         </div>
@@ -224,16 +314,7 @@
         <main>
             @yield('content')
         </main>
-        <!-- Scroll Controls -->
-        <div class="scroll-controls">
-            <button id="scrollUp" class="scroll-btn up" title="Scroll Up">
-                <i class="bi bi-arrow-up"></i>
-            </button>
-            <button id="scrollDown" class="scroll-btn down" title="Scroll Down">
-                <i class="bi bi-arrow-down"></i>
-            </button>
-        </div>
-
+       
         <!-- FOOTER -->
         <footer class="footer">
             <div class="container">
@@ -254,15 +335,12 @@
                         Pharma Industries and Other system Integrators
                         </p>
                         <div class="social-links">
-                            <a href="#" class="btn-read"><i class="bi bi-facebook"></i></a>
-                            <a href="#"  class="btn-read"><i class="bi bi-instagram"></i></a>
-                            <a href="https://www.linkedin.com/company/brainstar-technologies-private-limited/?viewAsMember=true" 
-                            target="_blank" 
-                            class="btn-read">
-                                <i class="bi bi-linkedin"></i>
-                            </a>
-                            <a href="#"  class="btn-read"><i class="bi bi-youtube"></i></a>
+                            <a href="{{ $facebook ?: '#' }}" class="btn-read" target="_blank"><i class="bi bi-facebook"></i></a>
+                            <a href="{{ $instagram ?: '#' }}" class="btn-read" target="_blank"><i class="bi bi-instagram"></i></a>
+                            <a href="{{ $linkedin ?: '#' }}" class="btn-read" target="_blank"><i class="bi bi-linkedin"></i></a>
+                            <a href="{{ $youtube ?: '#' }}" class="btn-read" target="_blank"><i class="bi bi-youtube"></i></a>
                         </div>
+
                     </div>
 
                     <!-- Column 2 -->
@@ -283,8 +361,9 @@
                         <h3>Contact Info</h3>
 
                         <p><i class="bi bi-building"></i> Brainstar Technologies Pvt. Ltd.</p>
-                        <p><i class="bi bi-envelope"></i> support@brainstar.com</p>
-                        <p><i class="bi bi-telephone"></i> +91 98765 43210</p>
+                        <p><i class="bi bi-envelope"></i> {{ $email ?: 'support@brainstar.com' }}</p>
+                        <p><i class="bi bi-telephone"></i> {{ $mobile ?: '+91 98765 43210' }}</p>
+
                         <p><i class="bi bi-geo-alt"></i> Pune, Maharashtra, India</p>
                     </div>
                 </div>
@@ -309,22 +388,6 @@
         </style>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-        <!-- Hamburger js -->
-        <script>
-            const hamburger = document.getElementById("hamburger");
-            const mobileMenu = document.getElementById("mobileMenu");
-
-            hamburger.addEventListener("click", () => {
-                mobileMenu.classList.toggle("active");
-            });
-
-            // Close menu when clicking link
-            document.querySelectorAll(".mobile-menu a").forEach(link => {
-                link.addEventListener("click", () => {
-                    mobileMenu.classList.remove("active");
-                });
-            });
-        </script>
         <!-- Slider code -->
         <script>
             document.addEventListener('DOMContentLoaded', function () {
@@ -450,56 +513,70 @@
                 inquiryDrawer.classList.remove("active");
             });
         </script>
-
-        <!-- SCROLL TOP BOTTOM JS -->
         <script>
             document.addEventListener("DOMContentLoaded", function () {
-                const scrollUpBtn = document.getElementById("scrollUp");
-                const scrollDownBtn = document.getElementById("scrollDown");
 
-                const sectionHeight = window.innerHeight;
+            const hamburger = document.getElementById("hamburger");
+            const mobileMenu = document.getElementById("mobileMenu");
+            const closeMenu = document.getElementById("closeMenu");
 
-                // Scroll Down 100vh
-                scrollDownBtn.addEventListener("click", () => {
-                    window.scrollBy({
-                        top: sectionHeight,
-                        behavior: "smooth"
-                    });
+            // Open menu
+            hamburger.addEventListener("click", () => {
+                mobileMenu.classList.add("active");
+            });
+
+            // Close menu
+            closeMenu.addEventListener("click", () => {
+                mobileMenu.classList.remove("active");
+            });
+
+            // Main dropdown toggle
+            document.querySelectorAll(".mobile-dropdown-toggle").forEach(toggle => {
+                toggle.addEventListener("click", function () {
+                this.classList.toggle("active"); // rotate arrow
+                const dropdown = this.nextElementSibling;
+                if (dropdown) dropdown.classList.toggle("active");
                 });
+            });
 
-                // Scroll Up 100vh
-                scrollUpBtn.addEventListener("click", () => {
-                    window.scrollBy({
-                        top: -sectionHeight,
-                        behavior: "smooth"
-                    });
+            // Sub dropdown toggle
+            document.querySelectorAll(".mobile-sub-title").forEach(toggle => {
+                toggle.addEventListener("click", function () {
+                this.classList.toggle("active"); // rotate arrow
+                const sub = this.nextElementSibling;
+                if (sub) sub.classList.toggle("active");
                 });
+            });
 
-                // Show / Hide buttons based on position
-                function toggleButtons() {
-                    const scrollTop = window.scrollY;
-                    const docHeight = document.body.scrollHeight;
-                    const winHeight = window.innerHeight;
-
-                    // Top of page → hide up
-                    if (scrollTop < 50) {
-                        scrollUpBtn.classList.add("hide");
-                    } else {
-                        scrollUpBtn.classList.remove("hide");
-                    }
-
-                    // Bottom of page → hide down
-                    if (scrollTop + winHeight >= docHeight - 50) {
-                        scrollDownBtn.classList.add("hide");
-                    } else {
-                        scrollDownBtn.classList.remove("hide");
-                    }
-                }
-
-                toggleButtons();
-                window.addEventListener("scroll", toggleButtons);
             });
         </script>
+        <script>
+            $('#enquiry_header_id').on('change', function () 
+            {
+                const headerId = $(this).val();
+                const subHeaderSelect = $('#enquiry_subheader_id');
+
+                subHeaderSelect.html('<option value="">Loading...</option>');
+
+                if (!headerId) {
+                    subHeaderSelect.html('<option value="">Select Sub Category</option>');
+                    return;
+                }
+
+                $.get(`/get-subheaders/${headerId}`, function (res) {
+                    let options = '<option value="">Select Sub Category</option>';
+
+                    if (res.status && res.data.length > 0) {
+                        res.data.forEach(item => {
+                            options += `<option value="${item.id}">${item.name}</option>`;
+                        });
+                    }
+
+                    subHeaderSelect.html(options);
+                });
+            });
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="{{ asset('assets/js/enquiry/enquiry.js') }}"></script>
     </body>
-  
 </html>

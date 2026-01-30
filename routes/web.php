@@ -9,6 +9,7 @@ use App\Http\Controllers\Web\CompanyController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\TrainerController;
 use App\Http\Controllers\Web\PolicyController;
+use App\Http\Controllers\Web\ContactUsController;
 use App\Http\Controllers\Web\TermsConditionController;
 use App\Http\Controllers\Web\EnquiryController;
 use App\Http\Controllers\Web\BlogsController;
@@ -46,6 +47,7 @@ Route::get('/careers', [CareerController::class, 'index'])
 Route::get('/faqs', [FAQController::class, 'faq'])->name('faqs');
 
 Route::get('/privacy_policy', [PolicyController::class, 'privacy_policy'])->name('privacy_policy');
+
 Route::get('/terms_and_conditions', [TermsConditionController::class, 'terms_conditions'])->name('terms_and_conditions');
 Route::get('/gallary', [GallaryController::class, 'show_front'])->name('gallary');
 Route::get('/gallary_details/{id}', [GallaryController::class, 'gallary_details'])->name('gallary_details');
@@ -114,7 +116,7 @@ Route::middleware(['auth.custom', 'session.timeout','auth.admin'])->group(functi
     // Home Bannner Route:-
     Route::get('/home_banner', [HomeBannerController::class, 'list'])->name('home_banner');
     Route::get('/home_banner_add', [HomeBannerController::class, 'add'])->name('home_banner_add');
-    Route::get('/home_banner_edit/{id}', [HomeBannerController::class, 'edit'])->name('home_banner_edit');
+    Route::get('/home_banner_edit/{id}', [HomeBannerController::class, 'edit'])->name('homse_banner_edit');
     Route::get('/home_banner_delete/{id}', [HomeBannerController::class, 'delete_banner'])->name('home_banner_delete');
     Route::get('/list_deleted_banner', [HomeBannerController::class, 'list_deleted_banner'])->name('list_deleted_banner');
     
@@ -126,7 +128,9 @@ Route::middleware(['auth.custom', 'session.timeout','auth.admin'])->group(functi
         
     // Policy route:-
     Route::get('/add_policy', [PolicyController::class, 'add'])->name('add_policy');
-
+    // Save form
+    Route::post('/admin/contactus-submit', [ContactUsController::class, 'submit'])
+        ->name('admin.contactus.submit');
     // Terms & Conditions route:-
     Route::get('/add_terms_conditions', [TermsConditionController::class, 'add'])
         ->name('add_terms_conditions');
@@ -299,6 +303,11 @@ Route::middleware(['auth.custom', 'session.timeout','auth.admin'])->group(functi
 
         Route::post('/activate_subheader/{id}', [SubHeaderController::class, 'activate'])
         ->name('activate_subheader');
+
+        
+        // Admin Contact Us route
+        Route::get('/admin/contactus', [ContactUsController::class, 'contactus'])->name('admin.contactus');
+
 
         // Submenu:-
         Route::post('/store_submenu', [SubmenuController::class, 'store'])

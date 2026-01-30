@@ -89,7 +89,7 @@
             <div class="d-flex align-items-center gap-4">
             <div class="welcome-text d-none d-md-block">
                     <span class="admin_text">
-                        Welcome back, {{ Auth::user()->name ?? 'Admin' }}
+                        Welcome back, Brainstar
                     </span>
                    
                 </div>
@@ -175,6 +175,11 @@
             <a href="{{ route('list_gallery') }}" 
             class="{{ request()->routeIs('list_gallery','add_gallery','edit_gallery','list_deleted_gallery') ? 'active' : '' }}">
                 <i class="bi bi-camera me-2"></i>Gallary
+            </a>
+
+            <a href="{{ route('admin.contactus') }}" 
+            class="{{ request()->routeIs('admin.contactus') ? 'active' : '' }}">
+                <i class="bi bi-telephone me-2"></i>Contact US
             </a>
            
 

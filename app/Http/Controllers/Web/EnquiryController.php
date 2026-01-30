@@ -21,35 +21,47 @@ class EnquiryController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email',
-            'message' => 'nullable|string|max:100',
+            'email' => 'required|email|max:255',
+            'mobile' => 'required|string|max:15',
+            'header_id' => 'required|exists:headers,id',
+            'subheader_id' => 'nullable|exists:subheaders,id',
+            'message' => 'required|string|max:500',
         ]);
-
-        // Generate request_id: Name + 6 digit random
+    
+        // Generate request_id: name + random 6 digits
         $randomNumber = rand(100000, 999999);
-        $requestId = strtolower(str_replace(' ', '', $request->name)) . $randomNumber;
-
+        $requestId = strtolower(preg_replace('/\s+/', '', $request->name)) . $randomNumber;
+    
         // Save enquiry
-        $enquiry = Enquiry::create([
+        Enquiry::create([
             'name' => $request->name,
             'email' => $request->email,
+            'mobile' => $request->mobile,
+            'header_id' => $request->header_id,
+            'subheader_id' => $request->subheader_id,
             'message' => $request->message,
             'request_id' => $requestId,
+            'status' => '0' // ✅ ENUM value as string (pending)
         ]);
-
-        // Send email
+    
+        // Send confirmation email
         Mail::send('template.enquiry', [
             'name'        => $request->name,
             'requestId'   => $requestId,
-            'messageText' => $request->message, // avoid using variable name "message"
+            'messageText' => $request->message,
         ], function ($message) use ($request) {
             $message->to($request->email)
                     ->subject('Enquiry Confirmation - Brainstar Support');
         });
-        return redirect()->route('home')
-        ->with('success', 'Enquiry submitted successfully. A confirmation email has been sent. Your Request ID is: ' . $requestId);
     
+        return response()->json([
+            'status' => true,
+            'message' => 'Enquiry submitted successfully',
+            'request_id' => $requestId
+        ]);
     }
+    
+    
 
     public function list_enquiry()
     {

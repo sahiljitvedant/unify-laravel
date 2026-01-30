@@ -12,23 +12,27 @@
             <p class="contact-subtitle">We’d love to hear from you</p>
             <div class="title-underline"></div>
         </div>
+        @php
+            $adminContact = DB::table('tbl_admin_contact')->first();
+
+            if($adminContact){
+                $email1 = $adminContact->email_address1 ? $adminContact->email_address1 : 'support@yourdomain.com';
+                $email2 = $adminContact->email_address2 ? $adminContact->email_address2 : 'info@yourdomain.com';
+
+                $phone1 = $adminContact->mobile_number1 ? $adminContact->mobile_number1 : '+91 98765 43210';
+                $phone2 = $adminContact->mobile_number2 ? $adminContact->mobile_number2 : '+91 91234 56789';
+            } else {
+                $email1 = 'support@yourdomain.com';
+                $email2 = 'info@yourdomain.com';
+                $phone1 = '+91 98765 43210';
+                $phone2 = '+91 91234 56789';
+            }
+        @endphp
 
         <!-- Contact Cards -->
         <div class="row g-4 justify-content-center mb-5">
 
-            <!-- Nashik Office -->
-            <!-- <div class="col-lg-3 col-md-6">
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <i class="bi bi-geo-alt-fill"></i>
-                    </div>
-                    <h5 class="contact-card-title">Nashik Office</h5>
-                    <p class="contact-text">
-                        Business Bay, Office No. 58, 6th Floor,<br>
-                        Mumbai Naka, Nashik – 422009
-                    </p>
-                </div>
-            </div> -->
+         
 
             <!-- Pune Office -->
             <div class="col-lg-4 col-md-6">
@@ -43,34 +47,33 @@
                     </p>
                 </div>
             </div>
+<!-- Email -->
+<div class="col-lg-4 col-md-6">
+    <div class="contact-card">
+        <div class="contact-icon">
+            <i class="bi bi-envelope-fill"></i>
+        </div>
+        <h5 class="contact-card-title">Email Us</h5>
+        <p class="contact-text">
+           {{ $email1 }}<br>
+            {{ $email2 }}
+        </p>
+    </div>
+</div>
 
-            <!-- Email -->
-            <div class="col-lg-4 col-md-6">
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <i class="bi bi-envelope-fill"></i>
-                    </div>
-                    <h5 class="contact-card-title">Email Us</h5>
-                    <p class="contact-text">
-                        support@yourdomain.com<br>
-                        info@yourdomain.com
-                    </p>
-                </div>
-            </div>
-
-            <!-- Call -->
-            <div class="col-lg-4 col-md-6">
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <i class="bi bi-telephone-fill"></i>
-                    </div>
-                    <h5 class="contact-card-title">Call Us</h5>
-                    <p class="contact-text">
-                        +91 98765 43210<br>
-                        +91 91234 56789
-                    </p>
-                </div>
-            </div>
+<!-- Call -->
+<div class="col-lg-4 col-md-6">
+    <div class="contact-card">
+        <div class="contact-icon">
+            <i class="bi bi-telephone-fill"></i>
+        </div>
+        <h5 class="contact-card-title">Call Us</h5>
+        <p class="contact-text">
+         +91 {{ $phone1 }}<br>
+         +91 {{ $phone2 }}
+        </p>
+    </div>
+</div>
 
         </div>
 

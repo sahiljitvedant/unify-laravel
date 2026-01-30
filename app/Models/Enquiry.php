@@ -12,8 +12,13 @@ class Enquiry extends Model
     protected $fillable = [
         'name',
         'email',
+        'mobile',
+        'header_id',
+        'subheader_id',
         'message',
         'request_id',
-        'reply', 'status'
+        'reply',
+        'status'
     ];
+    
 }

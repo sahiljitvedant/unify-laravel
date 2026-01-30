@@ -7,8 +7,8 @@
 @section('content')
 <section id="faq-section" class="faq-section py-5">
     <div class="container">
-        <h2 class="mb-4" style="color: var(--sidebar_color);">FAQ</h2>
-        <div class="faq-description" style="background: var(--other_color_fff); padding:20px; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1);">
+        <h2 class="mb-4" style="color: var(--sidebar_color);">FAQ's</h2>
+        <div class="faq-description" style="background: var(--other_color_fff); padding:20px; border-radius:10px;">
         <div class="accordion" id="faqAccordion">
             @foreach ($faqs as $faq)
                 <div class="accordion-item mb-3">
@@ -29,7 +29,7 @@
                          aria-labelledby="heading{{ $faq->id }}" 
                          data-bs-parent="#faqAccordion">
                         <div class="accordion-body">
-                            <p>{{ $faq->answer }}</p>
+                            <p>{!! $faq->answer !!}</p>
 
                             <div class="faq-media-row">
                                 {{-- If YouTube link exists, embed video --}}
@@ -80,50 +80,117 @@
 @endsection
 
 <style>
-    .faq-section {
-        background: var(--theme-color);
-        min-height: 100vh;
+    /* ===== FAQ SECTION ===== */
+.faq-section {
+    background: var(--theme-color);
+    padding: 80px 0;
+}
+
+/* Container Card */
+.faq-description {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 12px 35px rgba(0,0,0,0.08);
+}
+
+/* ===== ACCORDION ===== */
+.accordion-item {
+    border: none;
+    border-radius: 12px !important;
+    overflow: hidden;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.06);
+    transition: all 0.3s ease;
+}
+
+.accordion-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 35px rgba(0,0,0,0.12);
+}
+
+/* Question Button */
+.accordion-button {
+    font-weight: 600;
+    font-size: 15px;
+    color: #0B1061;
+    background: #f9fbfc;
+    padding: 16px 18px;
+}
+
+.accordion-button:not(.collapsed) {
+    color: var(--sidebar_color) !important;
+    background-color: #eaf6f3 !important;
+    box-shadow: none !important;
+}
+
+.accordion-button:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0,150,136,0.25) !important;
+}
+
+/* Answer Body */
+.accordion-body {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.7;
+    background: #ffffff;
+    padding: 18px;
+    border-top: 1px solid #f1f1f1;
+}
+
+/* ===== MEDIA (Video + Image) ===== */
+.faq-media-row {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+    align-items: flex-start;
+}
+
+/* Video */
+.faq-video iframe {
+    width: 320px;
+    height: 180px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* Image */
+.faq-image img {
+    max-width: 240px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 768px) 
+{
+
+    .faq-description {
+        padding: 18px;
     }
 
     .accordion-button {
-        font-weight: 700;         /* bold question */
-        font-size: 14px;          /* question font size */
-        color: #0B1061;
-    }
-
-    .accordion-button:not(.collapsed) {
-        color: var(--sidebar_color) !important;
-        background-color: var(--theme-color) !important;
-        box-shadow: 0 4px 6px #052c65 !important;
-    }
-
-    .accordion-button:focus {
-        box-shadow: 0 4px 6px #052c65 !important;
+        font-size: 14px;
+        padding: 14px;
     }
 
     .accordion-body {
-        font-size: 14px;         /* answer font size */
-        color: #555;
-        line-height: 1.6;
+        font-size: 13px;
+        padding: 15px;
     }
 
-    /* Video & Image side by side */
     .faq-media-row {
-        display: flex;
-        gap: 15px;
-        flex-wrap: wrap;
-        margin-top: 10px;
+        flex-direction: column;
     }
 
     .faq-video iframe {
-        width: 280px;
-        height: 160px;
-        border-radius: 8px;
+        width: 100%;
+        height: 200px;
     }
 
     .faq-image img {
-        max-width: 200px;
-        height: auto;
-        border-radius: 8px;
+        max-width: 100%;
     }
+}
+
 </style>
