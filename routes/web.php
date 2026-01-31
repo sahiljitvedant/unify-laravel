@@ -116,7 +116,7 @@ Route::middleware(['auth.custom', 'session.timeout','auth.admin'])->group(functi
     // Home Bannner Route:-
     Route::get('/home_banner', [HomeBannerController::class, 'list'])->name('home_banner');
     Route::get('/home_banner_add', [HomeBannerController::class, 'add'])->name('home_banner_add');
-    Route::get('/home_banner_edit/{id}', [HomeBannerController::class, 'edit'])->name('homse_banner_edit');
+    Route::get('/home_banner_edit/{id}', [HomeBannerController::class, 'edit'])->name('home_banner_edit');
     Route::get('/home_banner_delete/{id}', [HomeBannerController::class, 'delete_banner'])->name('home_banner_delete');
     Route::get('/list_deleted_banner', [HomeBannerController::class, 'list_deleted_banner'])->name('list_deleted_banner');
     
@@ -496,3 +496,9 @@ Route::post('/delete_job/{id}', [JobController::class, 'deleteJob'])->name('dele
 
 Route::get('/{slug}', [ProductPageController::class, 'show'])
     ->name('product.page');
+
+    Route::get('/clear-config', function () {
+        \Artisan::call('config:clear');
+        \Artisan::call('cache:clear');
+        return 'Cleared';
+    });

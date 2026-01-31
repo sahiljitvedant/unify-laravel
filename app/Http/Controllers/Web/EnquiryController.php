@@ -45,20 +45,48 @@ class EnquiryController extends Controller
         ]);
     
         // Send confirmation email
-        Mail::send('template.enquiry', [
+        // Mail::send('template.enquiry', [
+        //     'name'        => $request->name,
+        //     'requestId'   => $requestId,
+        //     'messageText' => $request->message,
+        // ], function ($message) use ($request) {
+        //     $message->to($request->email)
+        //             ->subject('Enquiry Confirmation - Brainstar Support');
+        // });
+        $to =$request->email;
+        $subject = "Enquiry Confirmation - Brainstar Support";
+
+        $message = view('template.enquiry', [
             'name'        => $request->name,
             'requestId'   => $requestId,
             'messageText' => $request->message,
-        ], function ($message) use ($request) {
-            $message->to($request->email)
-                    ->subject('Enquiry Confirmation - Brainstar Support');
-        });
+        ])->render();
+
+        $headers  = "MIME-Version: 1.0" . "\r\n";
+        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+        $headers .= "From: Your Website <info@brainstartech.com>" . "\r\n";
+        $headers .= "Reply-To: info@brainstartech.com" . "\r\n";
+        $headers .= "X-Mailer: PHP/" . phpversion();
+
+        if (mail($to, $subject, $message, $headers)) {
+            return response()->json([
+                'status' => true,
+                'message' => 'Enquiry submitted successfully',
+                'request_id' => $requestId
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Enquiry not submitted successfully',
+                'request_id' => $requestId
+            ]);
+        }
     
-        return response()->json([
-            'status' => true,
-            'message' => 'Enquiry submitted successfully',
-            'request_id' => $requestId
-        ]);
+        // return response()->json([
+        //     'status' => true,
+        //     'message' => 'Enquiry submitted successfully',
+        //     'request_id' => $requestId
+        // ]);
     }
     
     
@@ -166,6 +194,7 @@ class EnquiryController extends Controller
     }
     public function send_enquiry_reply(Request $request, $id)
     {
+        dd(1);
         // dd($id);
         // dd($request->all());
         $request->validate([

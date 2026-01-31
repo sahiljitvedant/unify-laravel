@@ -44,12 +44,10 @@
 @endsection
 @push('scripts')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
 <script>
-const submitContact = "{{ route('admin.contactus.submit') }}";
+const submitPolicy = "{{ route('add_policy') }}";
 </script>
-
-<script src="{{ asset('assets/js/admin/admin_contact.js') }}"></script>
+<script src="{{ asset('assets\js\policy\add_policy.js') }}"></script>
 @endpush
-
