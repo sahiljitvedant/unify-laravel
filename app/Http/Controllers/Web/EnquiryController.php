@@ -41,34 +41,44 @@ class EnquiryController extends Controller
             'subheader_id' => $request->subheader_id,
             'message' => $request->message,
             'request_id' => $requestId,
-            'status' => '0' // ✅ ENUM value as string (pending)
+            'status' => '0'
         ]);
     
-        // Send confirmation email
-        // Mail::send('template.enquiry', [
-        //     'name'        => $request->name,
-        //     'requestId'   => $requestId,
-        //     'messageText' => $request->message,
-        // ], function ($message) use ($request) {
-        //     $message->to($request->email)
-        //             ->subject('Enquiry Confirmation - Brainstar Support');
-        // });
-        $to =$request->email;
+        // ===== USER CONFIRMATION EMAIL =====
+        $to = $request->email;
         $subject = "Enquiry Confirmation - Brainstar Support";
-
+    
         $message = view('template.enquiry', [
             'name'        => $request->name,
             'requestId'   => $requestId,
             'messageText' => $request->message,
         ])->render();
-
+    
         $headers  = "MIME-Version: 1.0" . "\r\n";
         $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
         $headers .= "From: Your Website <info@brainstartech.com>" . "\r\n";
         $headers .= "Reply-To: info@brainstartech.com" . "\r\n";
         $headers .= "X-Mailer: PHP/" . phpversion();
-
-        if (mail($to, $subject, $message, $headers)) {
+    
+        $mailSent = mail($to, $subject, $message, $headers);
+    
+        // ===== ADMIN STATIC NOTIFICATION EMAIL =====
+        $adminTo = "sahilsunilj@gmail.com";
+        $adminSubject = "Enquiry coming";
+    
+        $adminMessage = "
+            <h3>New Enquiry Received</h3>
+            <p><strong>Name:</strong> {$request->name}</p>
+            <p><strong>Email:</strong> {$request->email}</p>
+            <p><strong>Mobile:</strong> {$request->mobile}</p>
+            <p><strong>Message:</strong> {$request->message}</p>
+            <p><strong>Request ID:</strong> {$requestId}</p>
+        ";
+    
+        mail($adminTo, $adminSubject, $adminMessage, $headers);
+    
+        // ===== RESPONSE =====
+        if ($mailSent) {
             return response()->json([
                 'status' => true,
                 'message' => 'Enquiry submitted successfully',
@@ -81,13 +91,8 @@ class EnquiryController extends Controller
                 'request_id' => $requestId
             ]);
         }
-    
-        // return response()->json([
-        //     'status' => true,
-        //     'message' => 'Enquiry submitted successfully',
-        //     'request_id' => $requestId
-        // ]);
     }
+    
     
     
 

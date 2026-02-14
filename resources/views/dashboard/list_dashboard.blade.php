@@ -43,12 +43,12 @@
                     <div>
                         <h5 class="card-title text-start fw-bold mb-2">
                         <i class="bi bi-book text-icon me-2 fs-4"></i>
-                        <span class="fs-3 counter" data-target="{{ $membership }}">0</span>
+                        <span class="fs-3 counter" data-target="{{ $pendingEnquiriesCount }}">0</span>
                         </h5>
-                        <p class="card-text text-muted text-start mb-0">Membership Count</p>
+                        <p class="card-text text-muted text-start mb-0">Pending Enquiry Count</p>
                     </div>
                     <div class="mt-auto d-flex justify-content-end">
-                        <a href="{{ route('list_membership') }}" 
+                        <a href="{{ route('list_enquiry') }}" 
                         class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm text-icon"
                         style="width: 36px; height: 36px; background-color: #f0f4ff;">
                         <i class="bi bi-box-arrow-up-right fs-5"></i>
@@ -64,13 +64,13 @@
                     <div class="card-body d-flex flex-column p-4">
                     <div>
                         <h5 class="card-title text-start fw-bold mb-2">
-                        <i class="bi bi-person-plus me-2 fs-4"></i>
-                        <span class="fs-3 counter" data-target="{{ $trainer }}">0</span>
+                        <i class="bi bi-book text-icon me-2 fs-4"></i>
+                        <span class="fs-3 counter" data-target="{{ $repliedEnquiriesCount }}">0</span>
                         </h5>
-                        <p class="card-text text-muted text-start mb-0">Active Trainers</p>
+                        <p class="card-text text-muted text-start mb-0">Resolved Enquiry Count</p>
                     </div>
                     <div class="mt-auto d-flex justify-content-end">
-                        <a href="{{ route('list_trainer') }}" 
+                        <a href="{{ route('list_enquiry') }}" 
                         class="d-inline-flex align-items-center justify-content-center rounded-circle shadow-sm text-icon"
                         style="width: 36px; height: 36px; background-color: #f0f4ff;">
                         <i class="bi bi-box-arrow-up-right fs-5"></i>

@@ -155,26 +155,44 @@
             </a>
             <a href="{{ route('list_subheaders') }}" 
             class="{{ request()->routeIs('list_subheaders','add_subheader','edit_subheader','list_deleted_headers') ? 'active' : '' }}">
-                <i class="bi bi-diagram-2 me-2"></i>Sub-Headers
-            </a>
+                <i class="bi bi-diagram-2 me-2"></i>Level 1 Subherader
+            </a>  
             
+            <a href="{{ route('about_page') }}" 
+            class="{{ request()->routeIs('about_page','list_deleted_about_page','about_page_add','about_page_edit') ? 'active' : '' }}">
+                <i class="bi bi-chat-left-text me-2"></i>Level 2 Subherader
+            </a>
+
             <a href="{{ route('home_banner') }}" 
             class="{{ request()->routeIs('home_banner','home_banner_add','home_banner_edit','list_deleted_banner') ? 'active' : '' }}">
                 <i class="bi bi-image me-2"></i>Home Banner
             </a>
-            
-            <a href="{{ route('about_page') }}" 
-            class="{{ request()->routeIs('about_page','list_deleted_about_page','about_page_add','about_page_edit') ? 'active' : '' }}">
-                <i class="bi bi-chat-left-text me-2"></i>About Page
-            </a>
-            
             <!-- <a href="{{ route('list_payment') }}" 
             class="{{ request()->routeIs('list_payment','add_member_payment','view_admin_invoice') ? 'active' : '' }}">
                 <i class="bi bi-credit-card me-2"></i>Payments
             </a> -->
+            <a href="{{ route('list_customers') }}" 
+                class="{{ request()->routeIs('list_customers','add_customer','edit_customer','list_deleted_customers') ? 'active' : '' }}">
+                <i class="bi bi-people me-2"></i>Customers
+            </a>
+            <a href="{{ route('list_locations') }}" 
+            class="{{ request()->routeIs('list_locations','add_location','edit_location','list_deleted_locations') ? 'active' : '' }}">
+                <i class="bi bi-geo-alt me-2"></i>Locations
+            </a>
+            <a href="{{ route('list_timesheets') }}"
+                class="{{ request()->routeIs('list_timesheets','add_timesheet','edit_timesheet','list_deleted_timesheets') ? 'active' : '' }}">
+                <i class="bi bi-clock-history me-2"></i>Timesheet
+            </a>
+
+
+
             <a href="{{ route('list_gallery') }}" 
             class="{{ request()->routeIs('list_gallery','add_gallery','edit_gallery','list_deleted_gallery') ? 'active' : '' }}">
                 <i class="bi bi-camera me-2"></i>Gallary
+            </a>
+            <a href="{{ route('list_testimonials') }}" 
+            class="{{ request()->routeIs('list_testimonials','add_testimonial','edit_testimonial','list_deleted_testimonials') ? 'active' : '' }}">
+                <i class="bi bi-people me-2"></i>Testimonials
             </a>
 
             <a href="{{ route('admin.contactus') }}" 

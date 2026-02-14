@@ -14,17 +14,18 @@
         </div>
 
         <!-- Company Intro -->
-        <div class="row align-items-center mb-5">
+        <div class="row align-items-start mb-5">
             <div class="col-lg-6">
-            <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200" class="img-fluid about-img" alt="About Company">
-
-
+            
+            <img src="{{ asset('assets/img/integared.jpg') }}"
+            class="img-fluid w-100 about-img"
+            alt="About Company">
             </div>
             <div class="col-lg-6">
                 <h3 class="about-heading">Who We Are</h3>
                 <p class="about-text">
                     Brainstar Technologies is a leading system integrator delivering advanced safety,
-                    security and automation solutions across India. With over 5+ years of experience,
+                    security and automation solutions across India. With over 20+ years of experience,
                     we specialize in designing, implementing and maintaining mission-critical systems.
                 </p>
 
@@ -72,23 +73,20 @@
         <!-- Founder 1 -->
         <div class="row align-items-center founder-card mb-5">
             <div class="col-lg-4 text-center">
-                <img src="https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=600" class="founder-img" alt="Founder">
-
+                <img src="{{ asset('assets/img/ratikanta_sir.jpg') }}" class="founder-img" alt="Founder">
+                <!-- C:\Users\HP\laravel\public\assets\img\ratikanta_sir.jpg -->
             </div>
             <div class="col-lg-8">
-                <h4 class="founder-name">Rahul Sharma</h4>
-                <span class="founder-role">Co-Founder & CEO</span>
+                <h4 class="founder-name">Ratikanta Mohanty</h4>
+                <span class="founder-role">Founder & CEO</span>
                 <p class="founder-text">
-                    Rahul Sharma is a visionary entrepreneur with over a decade of experience
-                    in industrial automation and security systems. His leadership has helped
-                    Brainstar scale rapidly across multiple sectors including manufacturing,
-                    logistics and IT.
+                With 20+ years of expertise in integrated security systems, Ratikanta Mohanty leads Brainstar with a strong focus on engineering excellence, reliability, and customer trust. His hands-on leadership spans CCTV, Access Control, Fire Alarm, Intrusion, and Command & Control systems, delivering secure and future-ready solutions across industries.
                 </p>
             </div>
         </div>
 
         <!-- Founder 2 -->
-        <div class="row align-items-center founder-card mb-5 flex-row-reverse">
+        <!-- <div class="row align-items-center founder-card mb-5 flex-row-reverse">
             <div class="col-lg-4 text-center">
                 <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=600" class="founder-img" alt="Founder">
 
@@ -102,7 +100,7 @@
                     every project meets the highest global standards.
                 </p>
             </div>
-        </div>
+        </div> -->
 
         <!-- Why Choose Us -->
         <div class="text-center mb-5">
@@ -118,7 +116,7 @@
                     <div class="about-icon"><i class="bi bi-award"></i></div>
                     <h5>Proven Expertise</h5>
                     <p>
-                        5+ years of experience delivering enterprise-grade solutions
+                        20+ years of experience delivering enterprise-grade solutions
                         across multiple industries.
                     </p>
                 </div>

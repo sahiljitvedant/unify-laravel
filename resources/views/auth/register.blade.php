@@ -66,7 +66,7 @@
         {
             'required': true,
             'minlength': 6,
-            'maxlength': 30
+            'maxlength': 10
         }
     };
     var addValidationMessages =
@@ -88,7 +88,7 @@
         {
             'required': 'Password field is required',
             'minlength': 'Password must be at least 6 characters long',
-            'maxlength': 'Password cannot exceed 30 characters',
+            'maxlength': 'Password cannot exceed 10 characters',
             'pattern': 'Password must contain at least one uppercase letter, one number, and one special character (@$!%*?&)'
         }
     };

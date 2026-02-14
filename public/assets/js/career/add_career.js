@@ -2,42 +2,64 @@
 // Career Add JS
 // ===============================
 
+let jobEditor; // CKEditor instance
+
+// Initialize CKEditor
+ClassicEditor
+    .create(document.querySelector('#job_description'), {
+        toolbar: [
+            'heading', '|',
+            'bold', 'italic', 'underline', 'strikethrough', 'link',
+            'bulletedList', 'numberedList', 'blockQuote',
+            'undo', 'redo',
+            'fontSize'
+        ],
+        fontSize: {
+            options: [10, 12, 14, 'default', 18, 20, 24, 28]
+        },
+        removePlugins: [
+            'EasyImage',
+            'Image',
+            'ImageUpload',
+            'CKFinder',
+            'CKFinderUploadAdapter',
+            'MediaEmbed'
+        ]
+    })
+    .then(editor => {
+        jobEditor = editor;
+        console.log('Career Job Description Editor Loaded');
+    })
+    .catch(error => console.error(error));
+
+
+// ===============================
 // Validation Rules
+// ===============================
 const validationRules = {
     designation: { required: true, maxlength: 255 },
-    experience: { required: true, maxlength: 255 },
     years_of_experience: { required: true },
     location: { required: true, maxlength: 255 },
     work_type: { required: true },
+    vacancies: { required: true },
+    application_start_date: { required: true },
+    application_end_date: { required: true },
     job_description: { required: true },
     status: { required: true },
 };
 
-// Validation Messages
 const validationMessages = {
-    designation: {
-        required: "Designation is required",
-        maxlength: "Designation must not exceed 255 characters",
-    },
-    experience: {
-        required: "Experience is required",
-    },
-    years_of_experience: {
-        required: "Years of experience is required",
-    },
-    location: {
-        required: "Location is required",
-    },
-    work_type: {
-        required: "Please select work type",
-    },
-    job_description: {
-        required: "Job description is required",
-    },
-    status: {
-        required: "Please select status",
-    },
+    designation: { required: "Designation is required" },
+    years_of_experience: { required: "Years of experience is required" },
+    location: { required: "Location is required" },
+    work_type: { required: "Please select work type" },
+    vacancies: { required: "Number of vacancies is required" },
+    application_start_date: { required: "Application start date is required" },
+    application_end_date: { required: "Application end date is required" },
+    job_description: { required: "Job description is required" },
+    status: { required: "Please select status" },
 };
+
 
 // ===============================
 // Validate Form
@@ -46,6 +68,21 @@ function validateForm() {
     let isValid = true;
     $('.error-message').text('');
 
+    // 🔹 Sync CKEditor content
+    let descriptionData = '';
+    if (jobEditor) {
+        descriptionData = jobEditor.getData().trim();
+        $('#job_description').val(descriptionData); // keep textarea synced
+    }
+
+    // 🔹 Validate CKEditor content (strip HTML)
+    let plainText = descriptionData.replace(/<[^>]*>/g, '').trim();
+    if (!plainText) {
+        $('[data-error-for="job_description"]').text(validationMessages.job_description.required);
+        isValid = false;
+    }
+
+    // 🔹 Validate other inputs
     $('#career_add_form :input').each(function () {
         const name = $(this).attr('name');
         const value = $(this).val();
@@ -53,23 +90,31 @@ function validateForm() {
         const messages = validationMessages[name];
         const errorDiv = $(`.error-message[data-error-for="${name}"]`);
 
-        if (!rules) return true;
+        if (!rules || name === 'job_description') return;
 
-        if (rules.required && (!value || value.toString().trim() === '')) {
+        if (rules.required && (!value || value.trim() === '')) {
             errorDiv.text(messages.required);
             isValid = false;
-            return;
         }
 
         if (rules.maxlength && value && value.length > rules.maxlength) {
             errorDiv.text(messages.maxlength);
             isValid = false;
-            return;
         }
     });
 
+    // 🔹 Date validation
+    let start = $('input[name="application_start_date"]').val();
+    let end = $('input[name="application_end_date"]').val();
+
+    if (start && end && end < start) {
+        $('[data-error-for="application_end_date"]').text("End date must be after start date");
+        isValid = false;
+    }
+
     return isValid;
 }
+
 
 // ===============================
 // Submit Form
@@ -112,8 +157,7 @@ $('#submitBtn').on('click', function (e) {
             if (xhr.status === 422) {
                 let errors = xhr.responseJSON.errors;
                 for (let key in errors) {
-                    $(`.error-message[data-error-for="${key}"]`)
-                        .text(errors[key][0]);
+                    $(`.error-message[data-error-for="${key}"]`).text(errors[key][0]);
                 }
             } else {
                 Swal.fire({
@@ -125,6 +169,7 @@ $('#submitBtn').on('click', function (e) {
         }
     });
 });
+
 
 // ===============================
 // Live Error Removal
@@ -138,7 +183,7 @@ $('#career_add_form :input').on('input change', function () {
     if (!rules) return;
 
     let valid = true;
-    if (rules.required && (!value || value.toString().trim() === '')) valid = false;
+    if (rules.required && (!value || value.trim() === '')) valid = false;
     if (rules.maxlength && value && value.length > rules.maxlength) valid = false;
 
     if (valid) errorDiv.text('');

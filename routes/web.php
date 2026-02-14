@@ -20,12 +20,14 @@ use App\Http\Controllers\Web\HomeBannerController;
 use App\Http\Controllers\Web\AboutPageController;
 use App\Http\Controllers\Web\ProductPageController;
 use App\Http\Controllers\Web\HeaderController;
+use App\Http\Controllers\Web\CustomerController;
 use App\Http\Controllers\Web\SubHeaderController;
 use App\Http\Controllers\Web\SubmenuController;
 use App\Http\Controllers\Web\ThemeController;
 use App\Http\Controllers\Web\CareerController;
+use App\Http\Controllers\Web\TestimonialController;
 use App\Http\Controllers\Web\TicketController;
-
+use App\Http\Controllers\Web\LocationController;
 // Route::get('', function () {
 //     return view('front.index');
 // })->name('home');
@@ -49,7 +51,7 @@ Route::get('/faqs', [FAQController::class, 'faq'])->name('faqs');
 Route::get('/privacy_policy', [PolicyController::class, 'privacy_policy'])->name('privacy_policy');
 
 Route::get('/terms_and_conditions', [TermsConditionController::class, 'terms_conditions'])->name('terms_and_conditions');
-Route::get('/gallary', [GallaryController::class, 'show_front'])->name('gallary');
+// Route::get('/gallary', [GallaryController::class, 'show_front'])->name('gallary');
 Route::get('/gallary_details/{id}', [GallaryController::class, 'gallary_details'])->name('gallary_details');
 // Route::get('/blogs_read_more', function () 
 // {
@@ -148,6 +150,20 @@ Route::middleware(['auth.custom', 'session.timeout','auth.admin'])->group(functi
     Route::get('/list_deleted_careers', [CareerController::class, 'list_deleted_careers'])
     ->name('list_deleted_careers');
 
+    // Testimonial Routes
+    Route::get('/list_testimonials', [TestimonialController::class, 'list'])
+    ->name('list_testimonials');
+
+    Route::get('/add_testimonial', [TestimonialController::class, 'add'])
+    ->name('add_testimonial');
+
+    Route::get('/edit_testimonial/{id}', [TestimonialController::class, 'edit'])
+    ->name('edit_testimonial');
+
+    Route::get('/list_deleted_testimonials', [TestimonialController::class, 'list_deleted_testimonials'])
+    ->name('list_deleted_testimonials');
+
+
 
     // Edit Admin:-
     Route::get('/edit_admin/{id}', [ProfileController::class, 'edit_admin'])->name('edit_admin');
@@ -231,7 +247,40 @@ Route::middleware(['auth.custom', 'session.timeout','auth.admin'])->group(functi
 
     Route::get('/list_replied_ticket', [TicketController::class, 'list_replied_ticket'])
     ->name('list_replied_ticket');
-   
+    // Customer Master
+    Route::get('/list_customers', [CustomerController::class, 'list'])->name('list_customers');
+    Route::get('/add_customer', [CustomerController::class, 'add'])->name('add_customer');
+    Route::get('/edit_customer/{id}', [CustomerController::class, 'edit'])->name('edit_customer');
+    Route::get('/list_deleted_customers', [CustomerController::class, 'list_deleted_customers'])
+        ->name('list_deleted_customers');
+    // Location
+    Route::get('/list_locations', [LocationController::class, 'list'])->name('list_locations');
+    Route::get('/add_location', [LocationController::class, 'add'])->name('add_location');
+    Route::get('/edit_location/{id}', [LocationController::class, 'edit'])->name('edit_location');
+    Route::get('/list_deleted_locations', [LocationController::class, 'list_deleted_locations'])->name('list_deleted_locations');
+
+    // =======================
+    // TIMESHEET
+    // =======================
+
+    // Pages
+    Route::get('/list_timesheets', function () {
+        return view('timesheet.list_timesheet');
+    })->name('list_timesheets');
+
+    Route::get('/add_timesheet', function () {
+        return view('timesheet.add_timesheet');
+    })->name('add_timesheet');
+
+    Route::get('/edit_timesheet/{id}', function ($id) {
+        return view('timesheet.edit_timesheet');
+    })->name('edit_timesheet');
+
+    Route::get('/list_deleted_timesheets', function () {
+        return view('timesheet.list_deleted_timesheet');
+    })->name('list_deleted_timesheets');
+
+
     Route::middleware(['web'])->group(function () 
     {
         Route::post('/update_member_password/{id}', [GymPackageController::class, 'update_member_password'])->name('update_member_password');
@@ -284,6 +333,51 @@ Route::middleware(['auth.custom', 'session.timeout','auth.admin'])->group(functi
 
         Route::post('/activate_header/{id}', [HeaderController::class, 'activate'])
             ->name('activate_header');
+        // LOCATION MASTER
+        Route::get('/fetch_locations', [LocationController::class, 'fetch_locations'])->name('fetch_locations');
+        Route::get('/fetch_deleted_locations', [LocationController::class, 'fetch_deleted_locations'])->name('fetch_deleted_locations');
+
+        Route::post('/store_location', [LocationController::class, 'store'])->name('store_location');
+        Route::post('/update_location/{id}', [LocationController::class, 'update'])->name('update_location');
+
+        Route::post('/delete_location/{id}', [LocationController::class, 'delete'])->name('delete_location');
+        Route::post('/activate_location/{id}', [LocationController::class, 'activate'])->name('activate_location');
+
+        // =======================
+        // TIMESHEET MASTER
+        // =======================
+
+        Route::get('/fetch_timesheets', [TimesheetController::class, 'fetch_timesheets'])
+        ->name('fetch_timesheets');
+
+        Route::get('/fetch_deleted_timesheets', [TimesheetController::class, 'fetch_deleted_timesheets'])
+        ->name('fetch_deleted_timesheets');
+
+        Route::post('/store_timesheet', [TimesheetController::class, 'store'])
+        ->name('store_timesheet');
+
+        Route::post('/update_timesheet/{id}', [TimesheetController::class, 'update'])
+        ->name('update_timesheet');
+
+        Route::post('/delete_timesheet/{id}', [TimesheetController::class, 'delete'])
+        ->name('delete_timesheet');
+
+        Route::post('/activate_timesheet/{id}', [TimesheetController::class, 'activate'])
+        ->name('activate_timesheet');
+
+
+        // Custmor 
+        Route::get('/fetch_customers', [CustomerController::class, 'fetch_customers'])->name('fetch_customers');
+        Route::get('/fetch_deleted_customers', [CustomerController::class, 'fetch_deleted_customers'])->name('fetch_deleted_customers');
+
+        // Store / Update
+        Route::post('/store_customer', [CustomerController::class, 'store'])->name('store_customer');
+        Route::post('/update_customer/{id}', [CustomerController::class, 'update'])->name('update_customer');
+
+        // Soft Delete / Restore
+        Route::post('/delete_customer/{id}', [CustomerController::class, 'delete'])->name('delete_customer');
+        Route::post('/activate_customer/{id}', [CustomerController::class, 'activate'])->name('activate_customer');
+
 
         // Sub Header:-
         Route::post('/store_subheader', [SubHeaderController::class, 'store'])
@@ -347,7 +441,25 @@ Route::middleware(['auth.custom', 'session.timeout','auth.admin'])->group(functi
         
         Route::post('/activate_career/{id}', [CareerController::class, 'activate'])
         ->name('activate_career');
-        
+        // Testimonial Action Routes
+        Route::post('/store_testimonial', [TestimonialController::class, 'store'])
+        ->name('store_testimonial');
+
+        Route::get('/fetch_testimonials', [TestimonialController::class, 'fetch_testimonials'])
+        ->name('fetch_testimonials');
+
+        Route::post('/delete_testimonial/{id}', [TestimonialController::class, 'delete'])
+        ->name('delete_testimonial');
+
+        Route::post('/update_testimonial/{id}', [TestimonialController::class, 'update'])
+        ->name('update_testimonial');
+
+        Route::get('/fetch_deleted_testimonials', [TestimonialController::class, 'fetch_deleted_testimonials'])
+        ->name('fetch_deleted_testimonials');
+
+        Route::post('/activate_testimonial/{id}', [TestimonialController::class, 'activate'])
+        ->name('activate_testimonial');
+
         // Themme:-
         Route::post('/theme/update', [ThemeController::class, 'update'])->name('theme.update');
         // Memebrship Routes:-

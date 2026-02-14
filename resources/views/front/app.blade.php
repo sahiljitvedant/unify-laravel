@@ -199,7 +199,7 @@
                         @endforeach
 
                         <li><a href="/contact_us">Contact Us</a></li>
-                        <li><a href="/careers">Carrers</a></li>
+                        <li><a href="/careers">Careers</a></li>
                         <!-- <li><a target="_blank" href="{{ route('login_get') }}">Login</a></li> -->
                     </ul>
 
@@ -378,14 +378,8 @@
             </div>
         </footer>
 
-        <style>
-            /* Logo */
-            .logo img {
-                height: 40px;
-                width: auto;
-                border-radius: 8px;
-            }
-        </style>
+ 
+       
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <!-- Slider code -->
@@ -578,5 +572,8 @@
         </script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="{{ asset('assets/js/enquiry/enquiry.js') }}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+@stack('scripts')
+
     </body>
 </html>

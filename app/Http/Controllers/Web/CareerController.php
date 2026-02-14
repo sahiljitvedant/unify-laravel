@@ -95,50 +95,55 @@ class CareerController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'designation'          => 'required|string|max:255',
-            'years_of_experience'  => 'required|numeric|min:0',
-            'experience'           => 'nullable|string|max:100',
-            'job_description'      => 'required|string',
-            'location'             => 'nullable|string|max:255',
-            'work_type'            => 'required|in:wfo,wfh,remote',
-            'status'               => 'required|boolean',
+            'designation'             => 'required|string|max:255',
+            'years_of_experience'     => 'required|numeric|min:0',
+            'job_description'         => 'required|string',
+            'location'                => 'nullable|string|max:255',
+            'work_type'               => 'required|in:wfo,wfh,remote',
+            'vacancies'               => 'required|integer|min:1',
+            'application_start_date'  => 'required|date',
+            'application_end_date'    => 'required|date|after_or_equal:application_start_date',
+            'status'                  => 'required|boolean',
         ];
-
+    
         $validator = Validator::make($request->all(), $rules);
-
+    
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
                 'errors' => $validator->messages()
             ], 422);
         }
-
+    
         try {
             Career::create([
-                'designation'         => $request->designation,
-                'experience'          => $request->experience,
-                'years_of_experience' => $request->years_of_experience,
-                'job_description'     => $request->job_description,
-                'location'            => $request->location,
-                'work_type'           => $request->work_type,
-                'status'              => $request->status,
-                'is_deleted'          => 0,
+                'designation'             => $request->designation,
+                'years_of_experience'     => $request->years_of_experience,
+                'job_description'         => $request->job_description,
+                'location'                => $request->location,
+                'work_type'               => $request->work_type,
+                'vacancies'               => $request->vacancies,
+                'application_start_date'  => $request->application_start_date,
+                'application_end_date'    => $request->application_end_date,
+                'status'                  => $request->status,
+                'is_deleted'              => 0,
             ]);
-
+    
             return response()->json([
                 'status'  => 'success',
                 'message' => 'Career added successfully'
             ]);
+    
         } catch (\Exception $e) {
             Log::error('Career Store Error: ' . $e->getMessage());
-
+    
             return response()->json([
                 'status'  => 'error',
                 'message' => 'Something went wrong'
             ], 500);
         }
     }
-
+    
     /* =======================
      * EDIT PAGE
      * ======================= */
@@ -159,50 +164,39 @@ class CareerController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'designation'          => 'required|string|max:255',
-            'years_of_experience'  => 'required|numeric|min:0',
-            'experience'           => 'nullable|string|max:100',
-            'job_description'      => 'required|string',
-            'location'             => 'nullable|string|max:255',
-            'work_type'            => 'required|in:wfo,wfh,remote',
-            'status'               => 'required|boolean',
+            'designation' => 'required|string|max:255',
+            'years_of_experience' => 'required|numeric|min:0',
+            'vacancies' => 'required|integer|min:1',
+            'application_start_date' => 'required|date',
+            'application_end_date' => 'required|date|after_or_equal:application_start_date',
+            'job_description' => 'required|string',
+            'location' => 'nullable|string|max:255',
+            'work_type' => 'required|in:wfo,wfh,remote',
+            'status' => 'required|boolean',
         ];
-
+    
         $validator = Validator::make($request->all(), $rules);
-
+    
         if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'errors' => $validator->messages()
-            ], 422);
+            return response()->json(['status' => 'error', 'errors' => $validator->messages()], 422);
         }
-
-        try {
-            Career::where('id', $id)->update([
-                'designation'         => $request->designation,
-                'experience'          => $request->experience,
-                'years_of_experience' => $request->years_of_experience,
-                'job_description'     => $request->job_description,
-                'location'            => $request->location,
-                'work_type'           => $request->work_type,
-                'status'              => $request->status,
-                'updated_at'          => now(),
-            ]);
-
-            return response()->json([
-                'status'  => 'success',
-                'message' => 'Career updated successfully'
-            ]);
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Something went wrong'
-            ], 500);
-        }
+    
+        Career::where('id', $id)->update([
+            'designation' => $request->designation,
+            'years_of_experience' => $request->years_of_experience,
+            'vacancies' => $request->vacancies,
+            'application_start_date' => $request->application_start_date,
+            'application_end_date' => $request->application_end_date,
+            'job_description' => $request->job_description,
+            'location' => $request->location,
+            'work_type' => $request->work_type,
+            'status' => $request->status,
+            'updated_at' => now(),
+        ]);
+    
+        return response()->json(['status' => 'success', 'message' => 'Career updated successfully']);
     }
-
+    
     /* =======================
      * DELETE CAREER
      * ======================= */
@@ -321,6 +315,7 @@ class CareerController extends Controller
             ->where('status', 1)
             ->orderBy('created_at', 'desc')
             ->get();
+            // dd($careers);
 
         return view('front.careers', compact('careers'));
     }

@@ -24,54 +24,60 @@
 
         <div class="row g-3">
 
-            <!-- Designation -->
             <div class="col-12">
                 <label class="form-label required">Designation</label>
                 <input type="text" class="form-control" name="designation">
                 <div class="text-danger error-message" data-error-for="designation"></div>
             </div>
 
-            <!-- Experience Text -->
-            <div class="col-md-6 col-12">
-                <label class="form-label required">Experience (Text)</label>
-                <input type="text" class="form-control" name="experience">
-                <div class="text-danger error-message" data-error-for="experience"></div>
-            </div>
-
-            <!-- Years of Experience -->
             <div class="col-md-6 col-12">
                 <label class="form-label required">Years of Experience</label>
                 <input type="number" class="form-control" name="years_of_experience">
                 <div class="text-danger error-message" data-error-for="years_of_experience"></div>
             </div>
 
-            <!-- Location -->
             <div class="col-md-6 col-12">
                 <label class="form-label required">Location</label>
                 <input type="text" class="form-control" name="location">
                 <div class="text-danger error-message" data-error-for="location"></div>
             </div>
 
-            <!-- Work Type -->
             <div class="col-md-6 col-12">
                 <label class="form-label required">Work Type</label>
                 <select class="form-control" name="work_type">
                     <option disabled selected>Select work type</option>
                     <option value="wfo">Work From Office</option>
                     <option value="wfh">Work From Home</option>
-                    <option value="remote">Remote</option>
+                    <option value="remote">On Field</option>
                 </select>
                 <div class="text-danger error-message" data-error-for="work_type"></div>
             </div>
 
-            <!-- Job Description -->
+            <div class="col-md-6 col-12">
+                <label class="form-label required">Number of Vacancies</label>
+                <input type="number" class="form-control" name="vacancies">
+                <div class="text-danger error-message" data-error-for="vacancies"></div>
+            </div>
+
+            <div class="col-md-6 col-12">
+                <label class="form-label required">Application Start Date</label>
+                <input type="date" class="form-control" name="application_start_date">
+                <div class="text-danger error-message" data-error-for="application_start_date"></div>
+            </div>
+
+            <div class="col-md-6 col-12">
+                <label class="form-label required">Application End Date</label>
+                <input type="date" class="form-control" name="application_end_date">
+                <div class="text-danger error-message" data-error-for="application_end_date"></div>
+            </div>
+
+            <!-- ✅ CKEDITOR FIELD ADDED -->
             <div class="col-12">
                 <label class="form-label required">Job Description</label>
-                <textarea class="form-control" name="job_description" rows="4"></textarea>
+                <textarea class="form-control" id="job_description" name="job_description" rows="4"></textarea>
                 <div class="text-danger error-message" data-error-for="job_description"></div>
             </div>
 
-            <!-- Status -->
             <div class="col-md-6 col-12">
                 <label class="form-label required">Status</label>
                 <select class="form-control" name="status">
@@ -85,20 +91,24 @@
         </div>
 
         <div class="text-end mt-4">
-            <a href="{{ route('list_careers') }}" class="btn btn-secondary me-2 cncl_btn">
-                Cancel
-            </a>
-            <button type="submit" class="btn" id="submitBtn">
-                Submit
-            </button>
+            <a href="{{ route('list_careers') }}" class="btn btn-secondary me-2 cncl_btn">Cancel</a>
+            <button type="submit" class="btn" id="submitBtn">Submit</button>
         </div>
     </form>
+
 </div>
 @endsection
 
+
 @push('scripts')
+
+<!-- CKEDITOR CDN (same as policy page) -->
+<script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
+
 <script>
     const submitCareerUrl = "{{ route('store_career') }}";
 </script>
+
 <script src="{{ asset('assets/js/career/add_career.js') }}"></script>
+
 @endpush

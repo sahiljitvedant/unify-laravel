@@ -2,65 +2,38 @@
 @section('title', 'Home')
 @section('content')
     <!-- HERO -->
-    <section id="hero" class="hero-slider hero-slider snap-section" aria-label="Hero slider">
-        <!-- <div class="slides">
-            <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1558611848-73f7eb4001a1?w=1200');" aria-hidden="false">
-            <div class="slide-content">
-                <h1>Transform Your Body</h1>
-                <p>Join our gym and start your fitness journey today.</p>
-                <a class="btn-see-more btn-read" href="#about">Get Started</a>
-            </div>
-            </div>
-
-            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=1200');" aria-hidden="true">
-            <div class="slide-content">
-                <h1>Push Your Limits</h1>
-                <p>Cardio, strength, yoga & more — all in one place.</p>
-                <a class="btn-see-more btn-read" href="#classes">Join Now</a>
-            </div>
-            </div>
-
-            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1579758629938-03607ccdbaba?w=1200');" aria-hidden="true">
-            <div class="slide-content">
-                <h1>Feel the Energy</h1>
-                <p>Group classes, personal training, and motivation.</p>
-                <a class="btn-see-more btn-read" href="#contact">Start Today</a>
-            </div>
-            </div>
-        </div> -->
-
-        <!-- dots -->
-        <!-- <div class="slider-dots" role="tablist" aria-label="Slides">
-            <button class="dot active" aria-label="Slide 1" data-index="0"></button>
-            <button class="dot" aria-label="Slide 2" data-index="1"></button>
-            <button class="dot" aria-label="Slide 3" data-index="2"></button>
-        </div> -->
+    <section id="hero" class="hero-slider snap-section" aria-label="Hero slider">
         <div class="slides">
             @foreach($banners as $key => $banner)
-                <div class="slide {{ $key == 0 ? 'active' : '' }}"
-                    style="background-image: url('{{ asset($banner->banner_image) }}');">
+                <div class="slide {{ $key == 0 ? 'active' : '' }}">
+                    <div class="slide-inner">
 
-                    <div class="slide-content">
-                        <h1>{{ $banner->title }}</h1>
-                        <p>{{ $banner->sub_title }}</p>
-                        <!-- <a class="btn-see-more btn-read" href="#about">Get Started</a> -->
+                        <!-- LEFT TEXT -->
+                        <div class="slide-text">
+                            <h1>{{ $banner->title }}</h1>
+                            <p>{{ $banner->sub_title }}</p>
+                        </div>
+
+                        <!-- RIGHT IMAGE -->
+                        <div class="slide-image">
+                            <img src="{{ asset($banner->banner_image) }}" alt="Banner Image">
+                        </div>
+
                     </div>
-
                 </div>
             @endforeach
         </div>
-        <!-- Slider Navigation -->
-        <div class="slider-nav">
-            <button class="slider-btn prev-btn" aria-label="Previous Slide">
-                <i class="bi bi-chevron-left"></i>
-            </button>
 
-            <button class="slider-btn next-btn" aria-label="Next Slide">
-                <i class="bi bi-chevron-right"></i>
-            </button>
+        <div class="slider-nav">
+            <button class="slider-btn prev-btn">&#10094;</button>
+            <button class="slider-btn next-btn">&#10095;</button>
         </div>
 
-
+        <div class="slider-dots">
+            @foreach($banners as $key => $banner)
+                <button class="dot {{ $key == 0 ? 'active' : '' }}" data-index="{{ $key }}"></button>
+            @endforeach
+        </div>
     </section>
     <!-- ABOUT -->
     <section id="about" class="about-section about-section snap-section">
@@ -130,6 +103,20 @@
         </div>
     </section>
     <!-- Testimonial -->
+    <!-- @php
+        use App\Models\Testimonial;
+
+        // Default online avatar
+        $defaultImage = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+
+        // Fetch top 3 active & not deleted
+        $testimonials = Testimonial::where('is_active', 1)
+                        ->where('is_deleted', 0)
+                        ->latest()
+                        ->take(3)
+                        ->get();
+    @endphp
+
     <section class="testimonial-section testimonial-section snap-section">
         <div class="container">
             <h2 class="section-title">What Our Clients Say</h2>
@@ -137,82 +124,64 @@
 
             <div class="row g-4 mt-4">
 
-                <!-- Card 1 -->
-                <div class="col-md-4">
-                    <div class="testimonial-card">
-                        <img src="https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg
-                        " class="testimonial-img" alt="User">
+                @forelse($testimonials as $t)
 
-                        <p class="testimonial-text">
-                            “Excellent service and quick support. Their solutions helped our business grow significantly.”
-                        </p>
+                    @php
+                        $name = $t->name ?: 'NA';
+                        $position = $t->position ?: 'NA';
+                        $text = $t->testimonial_text ?: 'NA';
 
-                        <h5 class="testimonial-name">Rahul Mehta</h5>
-                        <span class="testimonial-role">Operations Manager</span>
+                        // Character limits
+                        $name = strlen($name) > 22 ? substr($name,0,22).'...' : $name;
+                        $position = strlen($position) > 35 ? substr($position,0,35).'...' : $position;
+                        $text = strlen($text) > 140 ? substr($text,0,140).'...' : $text;
 
-                        <!-- <div class="testimonial-socials">
-                            <a href="https://instagram.com" target="_blank">
-                                <i class="bi bi-instagram"></i>
-                            </a>
-                            <a href="https://facebook.com" target="_blank">
-                                <i class="bi bi-facebook"></i>
-                            </a>
-                        </div> -->
-                    </div>
-                </div>
+                        // Image path check
+                        $image = (!empty($t->profile_pic) && file_exists(public_path($t->profile_pic)))
+                                    ? asset($t->profile_pic)
+                                    : $defaultImage;
+                    @endphp
 
-                <!-- Card 2 -->
-                <div class="col-md-4">
-                    <div class="testimonial-card">
-                        <img src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg
-                        " class="testimonial-img" alt="User">
+                    <div class="col-md-4">
+                        <div class="testimonial-card">
 
-                        <p class="testimonial-text">
-                            “Very professional team. Implementation was smooth and the support is outstanding.”
-                        </p>
+                            <img src="{{ $image }}"
+                                class="testimonial-img"
+                                alt="User"
+                                onerror="this.onerror=null;this.src='{{ $defaultImage }}';">
 
-                        <h5 class="testimonial-name">Anita Sharma</h5>
-                        <span class="testimonial-role">Founder</span>
+                            <p class="testimonial-text">
+                                “{{ $text }}”
+                            </p>
 
-                        <!-- <div class="testimonial-socials">
-                            <a href="https://instagram.com" target="_blank">
-                                <i class="bi bi-instagram"></i>
-                            </a>
-                            <a href="https://facebook.com" target="_blank">
-                                <i class="bi bi-facebook"></i>
-                            </a>
-                        </div> -->
-                    </div>
-                </div>
+                            <h5 class="testimonial-name">{{ $name }}</h5>
 
-                <!-- Card 3 -->
-                <div class="col-md-4">
-                    <div class="testimonial-card">
-                        <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg
-                        " class="testimonial-img" alt="User">
+                            <span class="testimonial-role">{{ $position }}</span>
 
-                        <p class="testimonial-text">
-                            “Reliable, scalable, and easy to use. Highly recommended for growing companies.”
-                        </p>
-
-                        <h5 class="testimonial-name">Vikram Patel</h5>
-                        <span class="testimonial-role">Tech Lead</span>
-
-                        <!-- <div class="testimonial-socials">
-                            <a href="https://instagram.com" target="_blank">
-                                <i class="bi bi-instagram"></i>
-                            </a>
-                            <a href="https://facebook.com" target="_blank">
-                                <i class="bi bi-facebook"></i>
-                            </a> -->
                         </div>
                     </div>
-                </div>
+
+                @empty
+
+                    {{-- If no data, show 3 NA cards --}}
+                    @for($i = 0; $i < 3; $i++)
+                        <div class="col-md-4">
+                            <div class="testimonial-card">
+                                <img src="{{ $defaultImage }}" class="testimonial-img" alt="User">
+                                <p class="testimonial-text">“NA”</p>
+                                <h5 class="testimonial-name">NA</h5>
+                                <span class="testimonial-role">NA</span>
+                            </div>
+                        </div>
+                    @endfor
+
+                @endforelse
 
             </div>
         </div>
-    </section>
+    </section> -->
 
+   
     <!-- Our Clients -->
     <section class="home-trusted-section">
         <div class="container">
@@ -221,24 +190,33 @@
             <div class="home-logo-slider">
                 <div class="home-logo-track">
 
-                    <!-- Real Brand Logos (online placeholders) -->
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Microsoft">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple">
+                    @php
+                        $partners = [
+                            'apm.png',
+                            'bosch.png',
+                        
+                            'dblogo.png',
+                            'download.png',
+                            'psa.png',
+                            'siemens.png'
+                        ];
+                    @endphp
 
-                    <!-- Duplicate for infinite scroll -->
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="">
+                    {{-- First Loop --}}
+                    @foreach($partners as $logo)
+                        <img src="{{ asset('assets/img/partners/' . $logo) }}" alt="Partner Logo">
+                    @endforeach
+
+                    {{-- Duplicate for infinite scroll --}}
+                    @foreach($partners as $logo)
+                        <img src="{{ asset('assets/img/partners/' . $logo) }}" alt="">
+                    @endforeach
 
                 </div>
             </div>
         </div>
     </section>
+
     @php
         $adminContact = DB::table('tbl_admin_contact')->first();
 
@@ -276,7 +254,8 @@
                     <div class="home-contact-card">
                         <div class="home-contact-icon"><i class="bi bi-geo-alt"></i></div>
                         <h5>Our Location</h5>
-                        <p>1363 Naskarhat Madhya Para,<br>Kolkata – 700039</p>
+                        <p>1st Floor, Office A 107 Sr.No 55/1/2/1,  <br>Sun City Ambegaon
+                        PUNE Maharashtra 411046</p>
                     </div>
                 </div>
 
@@ -469,8 +448,8 @@
     }
 
     .home-logo-track img {
-        height: 40px;
-        filter: grayscale(100%);
+        height: 60px;
+        /* filter: grayscale(100%); */
         opacity: 0.7;
         transition: 0.3s;
     }

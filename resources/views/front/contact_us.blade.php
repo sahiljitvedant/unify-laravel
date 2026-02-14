@@ -42,56 +42,59 @@
                     </div>
                     <h5 class="contact-card-title">Pune Office</h5>
                     <p class="contact-text">
-                        Office 809, 8th Floor, Niyati Emporius,<br>
-                        Mahalunge, Pune – 411045
+                    1st Floor, Office A 107 Sr.No 55/1/2/1, Sun City Ambegaon
+                    PUNE Maharashtra 411046
                     </p>
                 </div>
             </div>
-<!-- Email -->
-<div class="col-lg-4 col-md-6">
-    <div class="contact-card">
-        <div class="contact-icon">
-            <i class="bi bi-envelope-fill"></i>
-        </div>
-        <h5 class="contact-card-title">Email Us</h5>
-        <p class="contact-text">
-           {{ $email1 }}<br>
-            {{ $email2 }}
-        </p>
-    </div>
-</div>
+            <!-- Email -->
+            <div class="col-lg-4 col-md-6">
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="bi bi-envelope-fill"></i>
+                    </div>
+                    <h5 class="contact-card-title">Email Us</h5>
+                    <p class="contact-text">
+                    {{ $email1 }}<br>
+                        {{ $email2 }}
+                    </p>
+                </div>
+            </div>
 
-<!-- Call -->
-<div class="col-lg-4 col-md-6">
-    <div class="contact-card">
-        <div class="contact-icon">
-            <i class="bi bi-telephone-fill"></i>
-        </div>
-        <h5 class="contact-card-title">Call Us</h5>
-        <p class="contact-text">
-         +91 {{ $phone1 }}<br>
-         +91 {{ $phone2 }}
-        </p>
-    </div>
-</div>
+            <!-- Call -->
+            <div class="col-lg-4 col-md-6">
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="bi bi-telephone-fill"></i>
+                    </div>
+                    <h5 class="contact-card-title">Call Us</h5>
+                    <p class="contact-text">
+                    +91 {{ $phone1 }}<br>
+                    +91 {{ $phone2 }}
+                    </p>
+                </div>
+            </div>
 
         </div>
 
         <!-- Map Section (Same as before) -->
-        <div class="row justify-content-center">
-            <div class="col-lg-6 col-md-10">
-                <div class="map-card">
-                    <iframe
-                        src="https://www.google.com/maps?q=Narhe+Maharashtra&output=embed"
-                        width="100%"
-                        height="350"
-                        style="border:0;"
-                        allowfullscreen=""
-                        loading="lazy">
-                    </iframe>
-                </div>
-            </div>
-        </div>
+        
+        <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3784.760638841392!2d73.8324883742356!3d18.44917397135318!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f17!3m3!1m2!1s0x3bc2eb2b89376603%3A0x4aeee8283eb0fd05!2sSun%20City%20Ambegaon!5e0!3m2!1sen!2sin"
+                width="100%"
+                height="350"
+                style="border:0;"
+                allowfullscreen
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+
+            </iframe>
+
+
+
+
+
 
     </div>
 </section>

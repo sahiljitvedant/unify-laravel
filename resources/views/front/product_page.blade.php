@@ -41,7 +41,7 @@
 
 <section class="solution-section">
     <div class="container">
-        <div class="row align-items-center gy-5">
+        <div class="row align-items-start  gy-5">
             <div class="col-lg-5">
                 <div class="solution-image-card">
                     <img src="{{ asset($product->image) }}" alt="{{ $product->title }}">
@@ -64,7 +64,7 @@
 
 <section class="solution-section"> {{-- reuse same spacing style --}}
     <div class="container">
-        <div class="row align-items-center gy-5">
+        <div class="row align-items-start gy-5">
 
             <!-- CONTENT LEFT -->
             <div class="col-lg-7">
@@ -116,23 +116,32 @@
 
     /* ================= PRODUCTS ================= */
     .product-hero-top {
-        padding: 90px 0 50px;
+        padding: 40px 0 20px;
         background: linear-gradient(135deg, #f9fbfc, #eef6f5);
     }
     .product-title { font-size: 42px; font-weight: 700; color: var(--sidebar_color); }
     .product-subtitle { color: #666; }
 
-    .product-image-banner { padding: 40px 0 70px; background: var(--theme-color); }
+    .product-image-banner { padding: 10px 0 10px; background: var(--theme-color); }
     .product-image-card {
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0 30px 70px rgba(0,0,0,0.2);
+        margin: 0 auto;   /* center card */
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
+
+  
+
     .product-image-card img {
-        width: 100%;
-        height: 340px;
-        object-fit: cover;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;   /* full image visible */
+        border: 2px solid #ddd; /* simple border */
+        border-radius: 8px;     /* optional soft corners */
     }
+
+
+
 
     .product-content-section { padding: 80px 0; }
     .product-content { max-width: 900px; margin: auto; line-height: 1.9; }

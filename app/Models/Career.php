@@ -1,10 +1,8 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Model; 
 class Career extends Model
 {
     use HasFactory;
@@ -13,12 +11,14 @@ class Career extends Model
 
     protected $fillable = [
         'designation',
-        'experience',
         'years_of_experience',
         'job_description',
         'location',
         'work_type',
         'status',
+        'application_start_date',
+        'application_end_date',
+        'vacancies',
         'is_deleted',
     ];
 }

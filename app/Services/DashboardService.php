@@ -4,7 +4,7 @@ namespace App\Services;
 use DB;
 use App\Models\GymMember;
 use App\Models\Header;
-
+use App\Models\Enquiry;
 class DashboardService
 {
     public function getDashboardData($selectedYear)
@@ -65,6 +65,12 @@ class DashboardService
         $membershipLabels = $membership_distribution->pluck('membership_name');
         $membershipValues = $membership_distribution->pluck('total');
 
+        // Pending enquiries (no reply yet)
+        $pendingEnquiriesCount = Enquiry::where('status', '0')->count();
+
+        // Resolved / replied enquiries
+        $repliedEnquiriesCount = Enquiry::where('status', '1')->count();
+
         return compact(
             'members',
             'membership',
@@ -76,7 +82,9 @@ class DashboardService
             'membership_distribution',
             'membershipLabels',
             'membershipValues',
-            'activeHeaders'
+            'activeHeaders',
+            'repliedEnquiriesCount',
+            'pendingEnquiriesCount'
         );
     }
 }

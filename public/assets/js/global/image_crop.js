@@ -86,8 +86,23 @@ $(document).ready(function () {
 
             if (cropper) cropper.destroy();
 
-            let aspect = imageType === "blog_image" ? 16 / 9 : 1; // blog 16:9, profile/faq/gallery 1:1
+            let aspect;
 
+            switch (imageType) {
+                case "blog_image":
+                    aspect = 21 / 7;
+                    break;
+                case "faq_image":   // 🔥 THIS MAKES IT HORIZONTAL
+                    aspect =NaN;  // Wide banner ratio
+                    break;
+                case "testimonial_image":
+                    aspect = 1; // square crop for profile pic
+                    break;
+                default:
+                    aspect = NaN;
+
+            }
+            
             cropper = new Cropper($imageToCrop[0], {
                 aspectRatio: aspect,
                 viewMode: 0,
@@ -110,15 +125,15 @@ $(document).ready(function () {
             case "blog_image":
                 width = 1280; height = 720; break;
             case "faq_image":
-                width = 500; height = 500; break;
+                width = 1536; height = 1024; break;
             case "gallary_image":
                 width = 700; height = 700; break;
             case "gallery_multiple":
                 width = 500; height = 500; break;
             case "about_image":                      // ✅ NEW
-                width = 1000; height = 1000; break;
+                width = 500; height = 500; break;
             default:
-                width = 600; height = 600; // profile_image default
+                width = 1280; height = 720; // profile_image default
         }
 
         cropper.getCroppedCanvas({ width, height }).toBlob(function (blob) {
@@ -171,12 +186,32 @@ $(document).ready(function () {
                         } else if (imageType === "faq_image") {
                             $("#previewFaqImage").attr("src", data.url);
                             $("#faqImageWrapper").removeClass("d-none");
-                            if ($("#faq_image_path").length === 0) {
-                                $("#faq_add_form").append('<input type="hidden" name="faq_image" id="faq_image_path">');
+                        
+                            // FAQ ADD FORM
+                            if ($("#faq_add_form").length) {
+                                if ($("#faq_image_path").length === 0) {
+                                    $("#faq_add_form").append('<input type="hidden" name="faq_image" id="faq_image_path">');
+                                }
+                                $("#faq_image_path").val(data.path);
                             }
-                            
-                            $("#faq_image_path").val(data.path);
-                        } 
+                        
+                            // TESTIMONIAL ADD FORM
+                            if ($("#testimonial_add_form").length) {
+                                if ($("#profile_pic").length === 0) {
+                                    $("#testimonial_add_form").append('<input type="hidden" name="profile_pic" id="profile_pic">');
+                                }
+                                $("#profile_pic").val(data.path);
+                            }
+                        
+                            // TESTIMONIAL EDIT FORM  ✅ THIS IS WHAT WAS MISSING
+                            // TESTIMONIAL EDIT FORM
+                            if ($("#testimonial_edit_form").length) {
+                                $("#profile_pic").val(data.path);
+                            }
+
+                        }
+                        
+                        
                         // else if (imageType === "about_image") {
                         //     $("#previewAboutImage").attr("src", data.url);
                         //     $("#aboutImageWrapper").removeClass("d-none");
@@ -189,6 +224,11 @@ $(document).ready(function () {
                         
                             // ✅ ADD THIS LINE
                             $('[data-error-for="page_image"]').text('');
+                        }
+                        else if (imageType === "testimonial_image") {
+                            $("#previewTestimonialImage").attr("src", data.url);
+                            $("#testimonialImageWrapper").removeClass("d-none");
+                            $("#testimonial_image_path").val(data.path);
                         }
                         
                         else if (imageType === "gallary_image") {

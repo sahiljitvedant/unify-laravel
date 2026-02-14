@@ -100,21 +100,6 @@
                         });
                     },
 
-                    // success: function (response) 
-                    // {
-                    //     Swal.close();
-
-                    //     if (response.status === 'success' && response.redirect) {
-                    //         window.location.href = response.redirect; // conditional redirect
-                    //     } else {
-                    //         Swal.fire({
-                    //             icon: 'error',
-                    //             title: 'Login Failed',
-                    //             text: response.message || 'Unexpected error occurred.',
-                    //         });
-                    //         $submitBtn.prop('disabled', false);
-                    //     }
-                    // },
 
                     success: function (response) 
                     {
