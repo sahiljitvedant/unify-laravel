@@ -122,6 +122,41 @@
         border-radius: 6px;
     }
 
+    .brochure-btn {
+        position: fixed;
+        right: 0;               /* visible */
+        top: 55%;               /* below enquiry */
+        background: var(--sidebar_color);
+        color: #fff;
+        padding: 12px 16px;
+        border-radius: 8px 0 0 8px;
+        cursor: pointer;
+        z-index: 9999;          /* above everything */
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        transition: 0.3s ease;
+    }
+
+    .brochure-btn i {
+        font-size: 20px;
+    }
+
+    /* hide text */
+    .brochure-btn .tooltip-text {
+        max-width: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        transition: 0.3s ease;
+    }
+
+    /* expand */
+    .brochure-btn:hover .tooltip-text {
+        max-width: 180px;
+    }
+
+
   </style>
 </head>
     @php
@@ -135,7 +170,6 @@
         $email  = $adminContact->email_address1 ?? 'support@brainstar.com';
         $mobile = $adminContact->mobile_number1 ?? '+91 98765 43210';
     @endphp
-
     <body>
         <!-- HEADER -->
         <header class="header">
@@ -309,6 +343,21 @@
             </form>
 
         </div>
+        @php
+            $brochure = \App\Models\CompanyBrochure::first();
+        @endphp
+
+        @if($brochure && $brochure->file_path)
+        <a href="{{ asset($brochure->file_path) }}"
+            id="brochureBtn"
+            class="brochure-btn"
+            download="brainstar_company_brochure.pdf">
+            <i class="bi bi-file-earmark-pdf"></i>
+            <span class="tooltip-text">Company Brochure</span>
+        </a>
+
+        @endif
+
 
         <!-- ABOUT US INFO SECTION -->
         <main>
@@ -501,10 +550,13 @@
 
             openInquiry.addEventListener("click", () => {
                 inquiryDrawer.classList.add("active");
+                if (brochureBtn) brochureBtn.style.display = "none";
             });
 
             closeInquiry.addEventListener("click", () => {
                 inquiryDrawer.classList.remove("active");
+
+                if (brochureBtn) brochureBtn.style.display = "flex";
             });
         </script>
         <script>
@@ -573,7 +625,7 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="{{ asset('assets/js/enquiry/enquiry.js') }}"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-@stack('scripts')
+        @stack('scripts')
 
     </body>
 </html>

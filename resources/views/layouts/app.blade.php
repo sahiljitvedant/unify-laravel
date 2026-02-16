@@ -167,22 +167,27 @@
             class="{{ request()->routeIs('home_banner','home_banner_add','home_banner_edit','list_deleted_banner') ? 'active' : '' }}">
                 <i class="bi bi-image me-2"></i>Home Banner
             </a>
+            <a href="{{ route('add_company_brochure') }}" 
+            class="{{ request()->routeIs('add_company_brochure') ? 'active' : '' }}">
+                <i class="bi bi-file-earmark-pdf me-2"></i>Company Brochure
+            </a>
+
             <!-- <a href="{{ route('list_payment') }}" 
             class="{{ request()->routeIs('list_payment','add_member_payment','view_admin_invoice') ? 'active' : '' }}">
                 <i class="bi bi-credit-card me-2"></i>Payments
             </a> -->
-            <a href="{{ route('list_customers') }}" 
+            <!-- <a href="{{ route('list_customers') }}" 
                 class="{{ request()->routeIs('list_customers','add_customer','edit_customer','list_deleted_customers') ? 'active' : '' }}">
                 <i class="bi bi-people me-2"></i>Customers
             </a>
             <a href="{{ route('list_locations') }}" 
             class="{{ request()->routeIs('list_locations','add_location','edit_location','list_deleted_locations') ? 'active' : '' }}">
                 <i class="bi bi-geo-alt me-2"></i>Locations
-            </a>
-            <a href="{{ route('list_timesheets') }}"
+            </a> -->
+            <!-- <a href="{{ route('list_timesheets') }}"
                 class="{{ request()->routeIs('list_timesheets','add_timesheet','edit_timesheet','list_deleted_timesheets') ? 'active' : '' }}">
                 <i class="bi bi-clock-history me-2"></i>Timesheet
-            </a>
+            </a> -->
 
 
 

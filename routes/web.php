@@ -28,6 +28,8 @@ use App\Http\Controllers\Web\CareerController;
 use App\Http\Controllers\Web\TestimonialController;
 use App\Http\Controllers\Web\TicketController;
 use App\Http\Controllers\Web\LocationController;
+use App\Http\Controllers\Web\CompanyBrochureController;
+
 // Route::get('', function () {
 //     return view('front.index');
 // })->name('home');
@@ -49,7 +51,7 @@ Route::get('/careers', [CareerController::class, 'index'])
 Route::get('/faqs', [FAQController::class, 'faq'])->name('faqs');
 
 Route::get('/privacy_policy', [PolicyController::class, 'privacy_policy'])->name('privacy_policy');
-
+Route::get('/company_brochure', [CompanyBrochureController::class, 'view'])->name('company_brochure.view');
 Route::get('/terms_and_conditions', [TermsConditionController::class, 'terms_conditions'])->name('terms_and_conditions');
 // Route::get('/gallary', [GallaryController::class, 'show_front'])->name('gallary');
 Route::get('/gallary_details/{id}', [GallaryController::class, 'gallary_details'])->name('gallary_details');
@@ -130,6 +132,10 @@ Route::middleware(['auth.custom', 'session.timeout','auth.admin'])->group(functi
         
     // Policy route:-
     Route::get('/add_policy', [PolicyController::class, 'add'])->name('add_policy');
+    Route::get('/add_company_brochure', [CompanyBrochureController::class, 'add'])->name('add_company_brochure');
+
+
+
     // Save form
     Route::post('/admin/contactus-submit', [ContactUsController::class, 'submit'])
         ->name('admin.contactus.submit');
@@ -532,6 +538,10 @@ Route::middleware(['auth.custom', 'session.timeout','auth.admin'])->group(functi
         Route::post('/delete_company/{id}', [CompanyController::class, 'delete_comapny'])->name('delete_company');
         Route::post('/update_home_profile/{id}', [CompanyController::class, 'update_home_profile'])->name('update_home_profile');
         Route::post('/update_company_profile/{id}', [CompanyController::class, 'update_company_profile'])->name('update_company_profile');
+
+        Route::post('/submit_company_brochure', [CompanyBrochureController::class, 'submit'])->name('submit_company_brochure');
+
+       
     });
 });
 // Route::middleware(['auth.custom', 'session.timeout','auth.member'])->group(function () 

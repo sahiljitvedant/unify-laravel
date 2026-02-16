@@ -62,24 +62,50 @@
 {{-- ================= SERVICES LAYOUT ================= --}}
 @elseif($type === 'services')
 
-<section class="solution-section"> {{-- reuse same spacing style --}}
-    <div class="container">
-        <div class="row align-items-start gy-5">
 
-            <!-- CONTENT LEFT -->
+<section class="certificate-section">
+    <div class="container">
+        <div class="row gy-5">
+
+            <!-- LEFT -->
+            <div class="col-lg-5">
+                <div class="certificate-preview">
+
+                    <!-- IMAGE -->
+                    <div class="zoom-wrapper">
+                        <img id="certificateImage"
+                             src="{{ asset($product->image) }}"
+                             alt="{{ $product->title }}">
+                    </div>
+
+                    <!-- ZOOM BUTTONS -->
+                    <div class="zoom-controls">
+                        <button type="button" id="zoomIn">+</button>
+                        <button type="button" id="zoomOut">−</button>
+                        <button type="button" id="zoomReset">Reset</button>
+                    </div>
+
+                    <!-- DOWNLOAD PDF -->
+                    @if(!empty($product->pdf))
+                    <div class="certificate-actions">
+                        <a href="{{ asset($product->pdf) }}"
+                           download="brainstar_certificate.pdf"
+                           class="btn-download">
+                            Download PDF
+                        </a>
+                    </div>
+                    @endif
+
+                </div>
+            </div>
+
+            <!-- RIGHT -->
             <div class="col-lg-7">
-                <span class="product-badge">Our Services</span>
+                <span class="product-badge">Certificate</span>
                 <h1 class="solution-title">{{ $product->title }}</h1>
 
                 <div class="solution-content">
                     {!! $product->description !!}
-                </div>
-            </div>
-
-            <!-- IMAGE RIGHT -->
-            <div class="col-lg-5">
-                <div class="solution-image-card">
-                    <img src="{{ asset($product->image) }}" alt="{{ $product->title }}">
                 </div>
             </div>
 
@@ -88,6 +114,68 @@
 </section>
 
 
+{{-- ================= CERTIFICATES ================= --}}
+@elseif($type === 'certificates')
+<section class="certificate-section">
+    <div class="container">
+        <div class="row gy-5">
+
+            <!-- LEFT -->
+            <div class="col-lg-5">
+                <div class="certificate-preview">
+
+                    <!-- PREVIEW -->
+                    <div class="zoom-wrapper">
+
+                        <!-- IMAGE -->
+                        <img id="certificateImage"
+                             src="{{ asset($product->image) }}"
+                             alt="{{ $product->title }}">
+
+                        <!-- PDF -->
+                        <iframe id="certificatePdf"
+                                src="{{ asset($product->image) }}"
+                                style="display:none; width:100%; height:100%; border:none;">
+                        </iframe>
+
+                    </div>
+
+                    <!-- ZOOM -->
+                    <div class="zoom-controls">
+                        <button type="button" id="zoomIn">+</button>
+                        <button type="button" id="zoomOut">−</button>
+                        <button type="button" id="zoomReset">Reset</button>
+                    </div>
+
+                    <!-- BUTTONS -->
+                    <!-- <div class="certificate-actions">
+                        <button type="button" id="togglePdf" class="btn-view">
+                            View PDF
+                        </button>
+
+                        <a href="{{ asset($product->image) }}"
+                           download="brainstar_certificate.pdf"
+                           class="btn-download">
+                            Download PDF
+                        </a>
+                    </div> -->
+
+                </div>
+            </div>
+
+            <!-- RIGHT -->
+            <div class="col-lg-7">
+                <span class="product-badge">Certificate</span>
+                <h1 class="solution-title">{{ $product->title }}</h1>
+
+                <div class="solution-content">
+                    {!! $product->description !!}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
 @endif
 
 
@@ -189,5 +277,118 @@
         transform: translateY(-4px);
         box-shadow: 0 12px 30px rgba(0,0,0,0.25);
     }
+   /* ================= CERTIFICATES ================= */
+   .certificate-section {
+    padding: 80px 0;
+    background: #fff;
+    }
+
+    .certificate-preview {
+        position: sticky;
+        top: 120px;
+    }
+
+    .zoom-wrapper {
+        height: 420px;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f9f9f9;
+    }
+
+    .zoom-wrapper img,
+    .zoom-wrapper iframe {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    .zoom-controls {
+        margin-top: 12px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .zoom-controls button {
+        padding: 6px 14px;
+        border: none;
+        background: var(--sidebar_color);
+        color: #fff;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    .certificate-actions {
+        margin-top: 15px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn-view {
+        flex: 1;
+        background: #3498db;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 10px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .btn-download {
+        flex: 1;
+        background: #2ecc71;
+        color: white;
+        border-radius: 6px;
+        padding: 10px;
+        font-weight: 600;
+        text-align: center;
+        text-decoration: none;
+    }
+
 
 </style>
+<script src="https://unpkg.com/@panzoom/panzoom/dist/panzoom.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () 
+    {
+
+        const image = document.getElementById("certificateImage");
+        const pdf = document.getElementById("certificatePdf");
+        const toggleBtn = document.getElementById("togglePdf");
+
+        if (!image) return;
+
+        const panzoom = Panzoom(image, {
+            maxScale: 5,
+            minScale: 1
+        });
+
+        document.getElementById("zoomIn").addEventListener("click", () => panzoom.zoomIn());
+        document.getElementById("zoomOut").addEventListener("click", () => panzoom.zoomOut());
+        document.getElementById("zoomReset").addEventListener("click", () => panzoom.reset());
+
+        let showingPdf = false;
+
+        toggleBtn.addEventListener("click", function () {
+            if (!showingPdf) {
+                image.style.display = "none";
+                pdf.style.display = "block";
+                toggleBtn.innerText = "View Image";
+                showingPdf = true;
+            } else {
+                image.style.display = "block";
+                pdf.style.display = "none";
+                toggleBtn.innerText = "View PDF";
+                showingPdf = false;
+            }
+        });
+
+    });
+</script>
+
+
+
