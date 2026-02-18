@@ -90,7 +90,9 @@
                 <!-- RIGHT IMAGE -->
                 <div class="col-lg-6">
                     <div class="about-image-card">
-                        <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200" alt="Brainstar Office">
+                    <img src="{{ asset('assets/img/integared.jpg') }}"
+            class="img-fluid w-100 about-img"
+            alt="About Company">
 
                         <div class="about-badge">
                             <h4>5+ Years</h4>

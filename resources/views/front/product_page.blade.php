@@ -59,59 +59,33 @@
 </section>
 
 
-{{-- ================= SERVICES LAYOUT ================= --}}
 @elseif($type === 'services')
 
-
-<section class="certificate-section">
+<section class="services-section">
     <div class="container">
-        <div class="row gy-5">
+        <div class="row align-items-start gy-5">
 
-            <!-- LEFT -->
-            <div class="col-lg-5">
-                <div class="certificate-preview">
-
-                    <!-- IMAGE -->
-                    <div class="zoom-wrapper">
-                        <img id="certificateImage"
-                             src="{{ asset($product->image) }}"
-                             alt="{{ $product->title }}">
-                    </div>
-
-                    <!-- ZOOM BUTTONS -->
-                    <div class="zoom-controls">
-                        <button type="button" id="zoomIn">+</button>
-                        <button type="button" id="zoomOut">−</button>
-                        <button type="button" id="zoomReset">Reset</button>
-                    </div>
-
-                    <!-- DOWNLOAD PDF -->
-                    @if(!empty($product->pdf))
-                    <div class="certificate-actions">
-                        <a href="{{ asset($product->pdf) }}"
-                           download="brainstar_certificate.pdf"
-                           class="btn-download">
-                            Download PDF
-                        </a>
-                    </div>
-                    @endif
-
+            <!-- LEFT CONTENT -->
+            <div class="col-lg-7">
+                <span class="product-badge">Our Services</span>
+                <h1 class="services-title">{{ $product->title }}</h1>
+                <div class="services-content">
+                    {!! $product->description !!}
                 </div>
             </div>
 
-            <!-- RIGHT -->
-            <div class="col-lg-7">
-                <span class="product-badge">Certificate</span>
-                <h1 class="solution-title">{{ $product->title }}</h1>
-
-                <div class="solution-content">
-                    {!! $product->description !!}
+            <!-- RIGHT IMAGE -->
+            <div class="col-lg-5">
+                <div class="services-image-card">
+                    <img src="{{ asset($product->image) }}" alt="{{ $product->title }}">
                 </div>
             </div>
 
         </div>
     </div>
 </section>
+
+
 
 
 {{-- ================= CERTIFICATES ================= --}}
@@ -245,17 +219,32 @@
     .solution-title { font-size: 34px; color: var(--sidebar_color); }
 
     /* ================= SERVICES ================= */
-    .service-hero {
-        padding: 90px 0 40px;
-        background: linear-gradient(135deg, #f0f7f6, #e5f1ef);
-    }
-    .service-title {
-        font-size: 38px;
-        font-weight: 700;
-        color: var(--sidebar_color);
-    }
-    .service-content-section { padding: 70px 0; }
-    .service-content { max-width: 900px; margin: auto; line-height: 1.9; }
+    .services-section {
+    padding: 80px 0;
+    background: #fff;
+}
+
+.services-image-card {
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 20px 55px rgba(0, 0, 0, 0.15);
+}
+
+.services-image-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.services-title {
+    font-size: 34px;
+    color: var(--sidebar_color);
+}
+
+.services-content {
+    margin-top: 15px;
+}
+
 
     /* ================= CTA ================= */
     .product-cta {
