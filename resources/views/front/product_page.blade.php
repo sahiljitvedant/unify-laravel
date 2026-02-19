@@ -220,30 +220,30 @@
 
     /* ================= SERVICES ================= */
     .services-section {
-    padding: 80px 0;
-    background: #fff;
-}
+        padding: 80px 0;
+        background: #fff;
+    }
 
-.services-image-card {
-    border-radius: 18px;
-    overflow: hidden;
-    box-shadow: 0 20px 55px rgba(0, 0, 0, 0.15);
-}
+    .services-image-card {
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 20px 55px rgba(0, 0, 0, 0.15);
+    }
 
-.services-image-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
+    .services-image-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 
-.services-title {
-    font-size: 34px;
-    color: var(--sidebar_color);
-}
+    .services-title {
+        font-size: 34px;
+        color: var(--sidebar_color);
+    }
 
-.services-content {
-    margin-top: 15px;
-}
+    .services-content {
+        margin-top: 15px;
+    }
 
 
     /* ================= CTA ================= */
@@ -335,6 +335,34 @@
         font-weight: 600;
         text-align: center;
         text-decoration: none;
+    }
+    /* ===== FIX BULLETS FOR PRODUCT/SERVICE/SOLUTION DESCRIPTION ===== */
+
+    .product-content ul,
+    .solution-content ul,
+    .services-content ul {
+        list-style-type: disc;
+        padding-left: 22px;
+        margin-bottom: 12px;
+    }
+
+    .product-content ul ul,
+    .solution-content ul ul,
+    .services-content ul ul {
+        list-style-type: circle;
+        padding-left: 22px;
+    }
+
+    .product-content ul ul ul,
+    .solution-content ul ul ul,
+    .services-content ul ul ul {
+        list-style-type: square;
+    }
+
+    .product-content li,
+    .solution-content li,
+    .services-content li {
+        margin-bottom: 6px;
     }
 
 

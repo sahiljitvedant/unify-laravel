@@ -261,6 +261,24 @@
     color: var(--sidebar_color);
     font-weight: 600;
 }
+.career-description-box ul {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin-bottom: 10px;
+}
+
+.career-description-box ul ul {
+    list-style-type: circle;
+    padding-left: 20px;
+}
+
+.career-description-box ul ul ul {
+    list-style-type: square;
+}
+
+.career-description-box li {
+    margin-bottom: 6px;
+}
 
 </style>
 

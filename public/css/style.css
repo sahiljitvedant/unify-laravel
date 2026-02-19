@@ -429,7 +429,7 @@ main {
 /* ========== ABOUT ========== */
 .about-section {
   background: var(--theme-color);
-  padding: 60px 0;
+  padding: 40px 0;
 }
 
 .about-content {
@@ -664,7 +664,7 @@ main {
 .contact 
 {
   min-height: 100vh;
-  padding: 60px 20px;
+  padding: 30px 20px;
   text-align: center;
   background: var(--theme_color);
 }
@@ -753,6 +753,7 @@ main {
   font-weight: 600;
   font-size:var(--front_font_size);
   margin-bottom: 1rem;
+  text-align: center;
 }
 
 .footer p {
@@ -760,7 +761,7 @@ main {
   margin-bottom: 0.75rem;
   line-height: 1.5;
   color: var(--other_color_fff);
-  text-align: justify;
+  /* text-align: justify; */
   
 }
 .footer_p

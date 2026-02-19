@@ -355,7 +355,6 @@
             <i class="bi bi-file-earmark-pdf"></i>
             <span class="tooltip-text">Company Brochure</span>
         </a>
-
         @endif
 
 
@@ -426,83 +425,138 @@
                 </div>
             </div>
         </footer>
-
- 
-       
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <!-- Slider code -->
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const slider = document.querySelector('.hero-slider');
+        <!-- <script>
+            document.addEventListener('DOMContentLoaded', function () 
+            {
+
+                const slider = document.querySelector('#hero');
                 if (!slider) return;
 
                 const slides = slider.querySelectorAll('.slide');
+                const dots = slider.querySelectorAll('.dot');
                 const prevBtn = slider.querySelector('.prev-btn');
                 const nextBtn = slider.querySelector('.next-btn');
 
                 if (!slides.length) return;
 
                 let current = 0;
-                const autoplayInterval = 5000; // 5 seconds
-                let autoplayTimer = null;
+                const intervalTime = 2000; // 2 seconds
+                let sliderInterval;
 
-                function showSlide(index) {
-                    index = (index + slides.length) % slides.length;
+                function updateSlider(index) {
+                    current = (index + slides.length) % slides.length;
 
-                    slides.forEach((s, i) => {
-                        s.classList.toggle('active', i === index);
-                        s.setAttribute('aria-hidden', i === index ? 'false' : 'true');
+                    slides.forEach((slide, i) => {
+                        slide.classList.toggle('active', i === current);
                     });
 
-                    current = index;
+                    dots.forEach((dot, i) => {
+                        dot.classList.toggle('active', i === current);
+                    });
+
+                    console.log("Slide:", current); // test log
                 }
 
                 function nextSlide() {
-                    showSlide(current + 1);
-                    restartAutoplay();
+                    updateSlider(current + 1);
                 }
 
                 function prevSlide() {
-                    showSlide(current - 1);
-                    restartAutoplay();
+                    updateSlider(current - 1);
                 }
 
                 function startAutoplay() {
-                    stopAutoplay();
-                    autoplayTimer = setInterval(() => showSlide(current + 1), autoplayInterval);
+                    clearInterval(sliderInterval);
+                    sliderInterval = setInterval(nextSlide, intervalTime);
+                    console.log("Autoplay started");
                 }
 
-                function stopAutoplay() {
-                    if (autoplayTimer) clearInterval(autoplayTimer);
-                    autoplayTimer = null;
-                }
-
-                function restartAutoplay() {
+                // Button Events
+                nextBtn.addEventListener('click', () => {
+                    nextSlide();
                     startAutoplay();
-                }
-
-                // Button events
-                nextBtn.addEventListener('click', nextSlide);
-                prevBtn.addEventListener('click', prevSlide);
-
-                // Keyboard arrows
-                document.addEventListener('keydown', (e) => {
-                    if (e.key === 'ArrowLeft') prevSlide();
-                    if (e.key === 'ArrowRight') nextSlide();
                 });
 
-                // Pause on hover
-                slider.addEventListener('mouseenter', stopAutoplay);
-                slider.addEventListener('mouseleave', startAutoplay);
-                slider.addEventListener('touchstart', stopAutoplay);
-                slider.addEventListener('touchend', startAutoplay);
+                prevBtn.addEventListener('click', () => {
+                    prevSlide();
+                    startAutoplay();
+                });
+
+                // Dot Click
+                dots.forEach(dot => {
+                    dot.addEventListener('click', function () {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        updateSlider(index);
+                        startAutoplay();
+                    });
+                });
 
                 // Init
-                showSlide(0);
+                updateSlider(0);
                 startAutoplay();
+
+            });
+        </script> -->
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', function () 
+            {
+
+                const slider = document.querySelector('#hero');
+                if (!slider) return;
+
+                const slides = slider.querySelectorAll('.slide');
+                const dots = slider.querySelectorAll('.dot');
+
+                if (!slides.length) return;
+
+                let current = 0;
+                const intervalTime = 2000; // 2 seconds
+                let sliderInterval;
+
+                function updateSlider(index) {
+                    current = (index + slides.length) % slides.length;
+
+                    slides.forEach((slide, i) => {
+                        slide.classList.toggle('active', i === current);
+                    });
+
+                    dots.forEach((dot, i) => {
+                        dot.classList.toggle('active', i === current);
+                    });
+
+                    console.log("Slide:", current);
+                }
+
+                function nextSlide() {
+                    updateSlider(current + 1);
+                }
+
+                function startAutoplay() {
+                    clearInterval(sliderInterval);
+                    sliderInterval = setInterval(nextSlide, intervalTime);
+                }
+
+                // Dot Click
+                dots.forEach(dot => {
+                    dot.addEventListener('click', function () {
+                        const index = parseInt(this.dataset.index);
+                        updateSlider(index);
+                        startAutoplay();
+                    });
+                });
+
+                // Init
+                updateSlider(0);
+                startAutoplay();
+
             });
         </script>
+
+
         <script>
             $(document).ready(function () {
                 $("#enquiryForm").on("submit", function () {
@@ -541,7 +595,6 @@
             });
 
         </script>
-
         <!-- Enquiry Model -->
         <script>
             const openInquiry = document.getElementById("openInquiry");
@@ -626,6 +679,5 @@
         <script src="{{ asset('assets/js/enquiry/enquiry.js') }}"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
         @stack('scripts')
-
     </body>
 </html>

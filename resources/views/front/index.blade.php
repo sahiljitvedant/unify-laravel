@@ -24,10 +24,10 @@
             @endforeach
         </div>
 
-        <div class="slider-nav">
+        <!-- <div class="slider-nav">
             <button class="slider-btn prev-btn">&#10094;</button>
             <button class="slider-btn next-btn">&#10095;</button>
-        </div>
+        </div> -->
 
         <div class="slider-dots">
             @foreach($banners as $key => $banner)
@@ -95,7 +95,7 @@
             alt="About Company">
 
                         <div class="about-badge">
-                            <h4>5+ Years</h4>
+                            <h4>20+ Years</h4>
                             <span>Industry Experience</span>
                         </div>
                     </div>
@@ -346,7 +346,7 @@
 
                 if (targetSection) {
                     window.scrollTo({
-                        top: targetSection.offsetTop,
+                        top: targetSection.offsetTop - headerOffset,
                         behavior: "smooth"
                     });
                 }
@@ -384,6 +384,8 @@
 
 @endsection
 <style>
+
+
     /* Slider Navigation */
     .slider-nav {
         position: absolute;
@@ -397,7 +399,7 @@
         pointer-events: none;
     }
 
-    .slider-btn {
+    /* .slider-btn {
         pointer-events: all;
         width: 52px;
         height: 52px;
@@ -418,16 +420,16 @@
         background: var(--sidebar_color);
         transform: scale(1.12);
         box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-    }
+    } */
 
     /* Mobile size */
-    @media(max-width:768px){
+    /* @media(max-width:768px){
         .slider-btn{
             width:42px;
             height:42px;
             font-size:20px;
         }
-    }
+    } */
    
 
     /* ================= TRUSTED CLIENTS ================= */

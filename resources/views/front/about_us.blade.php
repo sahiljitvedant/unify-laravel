@@ -27,6 +27,7 @@
                     Brainstar Technologies is a leading system integrator delivering advanced safety,
                     security and automation solutions across India. With over 20+ years of experience,
                     we specialize in designing, implementing and maintaining mission-critical systems.
+                    Brainstar Technologies is a leading system integrator delivering advanced safety, security and automation solutions across India. With over 20+ years of experience, we specialize in designing, implementing and maintaining mission-critical systems
                 </p>
 
                 <p class="about-text">
@@ -71,7 +72,7 @@
         </div>
 
         <!-- Founder 1 -->
-        <div class="row align-items-center founder-card mb-5">
+        <div class="row align-items-center founder-card g-4 mb-5" style="margin:0">
             <div class="col-lg-4 text-center">
                 <img src="{{ asset('assets/img/ratikanta_sir.jpg') }}" class="founder-img" alt="Founder">
                 <!-- C:\Users\HP\laravel\public\assets\img\ratikanta_sir.jpg -->
@@ -180,11 +181,16 @@
     font-weight: 600;
     margin-bottom: 15px;
 }
-
+@media (max-width: 768px) {
+    .about-heading {
+        margin-top: 10px;
+    }
+}
 .about-text {
     font-size: 15px;
     line-height: 1.7;
     color: #555;
+    text-align: justify;
 }
 
 /* Cards */
@@ -214,6 +220,7 @@
 .founder-card {
     background: var(--other_color_fff);
     padding: 35px;
+    margin: 0px;
     border-radius: 14px;
     box-shadow: 0 10px 28px rgba(0,0,0,0.12);
 }
@@ -243,6 +250,7 @@
     font-size: 15px;
     line-height: 1.7;
     color: #555;
+    text-align:justify
 }
 
 </style>
